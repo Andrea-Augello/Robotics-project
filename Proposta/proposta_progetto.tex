@@ -1,0 +1,82 @@
+\documentclass[a4paper]{article}
+
+\usepackage{graphicx}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{color,soul}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb}
+\usepackage{caption}
+\usepackage{listings}
+
+% figure support
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+	\title{Proposta progetto d'esame per il corso di Robotica}
+	\author{Andrea Augello \and Francesco Paolo Castigione \and Marco La Martina}
+	\maketitle
+	
+	\section{Tecnologie}\label{sec:Tecnologie}
+	\subsection{Software}\label{subsec:Software}
+	Simulatore Webots con ROS \hl{[Decidere versione in base a compatibilita col Pi]}. Libreria di computer vision OpenCV 4.5.
+	\subsection{Hardware}\label{subsec:Hardware}
+	Il simulatore è in esecuzione su un personal computer con sistema operativo Ubuntu o macOS \hl{[Specificare versioni e specifiche testate]}.
+
+	Al fine di rendere la simulazione più realistica, e tenere conto della potenza computazionale ridotta del dispositivo reale rispetto alla macchina usata per gestire la simulazione, l'elaborazione dei dati non avviene nel dispositivo che esegue la simulazione, ma piuttosto su un SoC con risorse più limitate quale un Raspberry Pi 4B o 3B+.
+
+	Sul Pi sarà in esecuzione un nodo ROS collegato alla macchina principale tramite WiFi/Ethernet OTG che farà il subscribe ai topic dei sensori virtualizzati e pubblicherà i comandi per gli attuatori del robot in simulazione.
+
+	\section{Possibili applicazioni}\label{sec:Possibili-applicazioni}
+	\subsection{Distanziamento sociale}\label{subsec:Distanziamento-sociale}
+	Tramite object detection (magari con una camera a 360°? Anche se la matematica diventa fastidiosa\ldots) si individuano gli esseri umani in una scena e se ne stima la posizione.
+
+	Se la distanza tra più persone nella scena è inferiore ad una data soglia il robot procede verso di loro per invitare al rispetto del distanziamento sociale. In assenza di target esplora l'ambiente.
+
+	\subsection{Cane guida}\label{subsec:Cane-guida}
+	\subsubsection{Fuga}\label{subsubsec:Fuga}
+	Il robot deve essere in grado di seguire i cartelli per le uscite di emergenza al fine di portare in salvo un utente con disabilità visiva in caso di emergenza.
+
+	Avere un umano al seguito impone particolari vincoli sulla cinematica e sul tipo di movimenti consentiti (e.g. Il cambiamento di direzione non può avvenire ruotando sul posto, bisogna seguire traiettorie particolarmente morbide).
+	\subsubsection{Navigazione simbolica}\label{subsubsec:Navigazione-simbolica}
+	Il robot deve guidare un utente con disabilità visiva, a tal fine è necessario che possa comprendere istruzioni nulla navigazione di alto livello (immessi in forma testuale ben codificata, il NLP e il riconoscimento del linguaggio sono ben oltre i nostri obiettivi). Per esempio all'istruzione ``Entra nella seconda porta a destra'' deve corrispondere un comportamento come nell'algoritmo~\ref{alg:high-level-navigation}
+
+
+	\begin{algorithm}[H]
+	\caption{Comportamento per entrare nella seconda porta a destra}\label{alg:high-level-navigation}
+		\DontPrintSemicolon
+		\SetAlgoLined
+		\SetKwData{Porte}{porteIncontrate}
+		\SetKwData{img}{latestImage}
+		\Porte $\gets$ 0\;
+		\While{\Porte $\le$ 2} {
+			continua ad andare avanti\;
+			\img $\gets$ acquisisci una nuova immagine\;
+			\If{L'immagine contiene una porta nella parte destra \textbf{and} non era già stata individuata in un frame precedente}{
+				\Porte $\gets$ \Porte + 1 \;
+			}
+		}
+		entra nella porta\;
+	\end{algorithm}
+
+	\subsection{Disaster rescue}\label{subsec:Disaster-rescue}
+	Il robot deve entrare in un ambiente sconosciuto per trovare persone rimaste all'interno di un edificio in uno scenario di emergenza. Come semplificazione, invece che esplorare l'intero edificio, segue in direzione opposta le indicazioni per le uscite di emergenza.
+
+	\subsection{Maggiordomo}\label{subsec:Maggiordomo}
+	Il robot si muove in un ambiente noto, eventualmente fornito di sensori tipo UWB per il posizionamento. L'obbiettivo è eseguire compiti semplici, indicati da un umano, che comprendano spostamento da una stanza all'altra, individuazione e spostamento di oggetti.\\
+	\textbf{Estensione 1:} Mantenere lo stato degli elementi con cui si è interagito, e.g. associare ad ogni oggetto noto la posizione in cui lo si è lasciato.\\
+	\textbf{Estensione 2:} In caso di fallimento di una missione fornire una spiegazione del perché non è stato possibile svolgere il compito assegnato (e.g. ``Non è stato trovato l'oggetto richiesto'', ``Non esiste la stanza che mi hai indicato'', ``So che l'oggetto X si trova nella stanza Y, ma tu mi hai detto di prenderlo nella stanza Z'').
+
+	% Bibliography
+	\bibliographystyle{unsrt}
+	\bibliography{references.bib}
+\end{document}
