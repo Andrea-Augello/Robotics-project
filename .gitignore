@@ -59,4 +59,6 @@ build/*
 *.mtc
 *.mtc1
 *.out
+*.fbd_latexmk
+*.fls
 *.synctex.gz
