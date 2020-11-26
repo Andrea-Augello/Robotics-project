@@ -30,3 +30,33 @@
 *.exe
 *.out
 *.app
+
+# Build directories
+
+build/*
+
+# Latex intermediate files (pdf is kept for ease of referencing)
+
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.synctex.gz
