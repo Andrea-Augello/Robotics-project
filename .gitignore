@@ -33,8 +33,8 @@
 
 # Build directories
 
-build/*
-devel/*
+*/build/*
+*/devel/*
 
 # Latex intermediate files (pdf is kept for ease of referencing)
 
