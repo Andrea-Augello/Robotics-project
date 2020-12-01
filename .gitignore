@@ -34,6 +34,7 @@
 # Build directories
 
 build/*
+devel/*
 
 # Latex intermediate files (pdf is kept for ease of referencing)
 
