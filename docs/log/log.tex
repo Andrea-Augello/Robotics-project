@@ -1,0 +1,50 @@
+\documentclass[a4paper]{article}
+
+\usepackage{graphicx}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{color,soul}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb}
+\usepackage{caption}
+\usepackage{listings}
+
+% figure support
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage[hidelinks]{hyperref}
+\usepackage{multirow}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+	\title{Project log - Robotica}
+	\author{Augello Andrea \and Castiglione Francesco Paolo \and La Martina Marco}
+	\maketitle
+	\tableofcontents
+
+	\section{Setup}\label{sec:Setup}
+	\begin{tabular}{|l|r|}
+		\hline
+		\multirow{2}{4em}{OS} & Ubuntu 18.04 \\
+							  & Ubuntu 20.04 \\ \hline
+		\multirow{2}{6em}{ROS version} & melodic \\
+									   & noetic \\ \hline
+		Webots & R2020b revision 1\\ \hline
+		\multirow{2}{11em}{Target hardware} & Raspberry Pi 4B \\
+											& Raspberry Pi 3B+ \\ \hline
+	\end{tabular}
+
+
+	
+
+	% Bibliography
+	\bibliographystyle{unsrt}
+	\bibliography{references.bib}
+\end{document}
