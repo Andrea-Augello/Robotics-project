@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.7866687337008447 -0.6038137798374442 -0.12869041415710844 0.5729476515439423
-  position -3.1722448378939996 2.414527973659478 2.7141538104608083
+  orientation -0.5173075503603537 0.8358821433369568 0.18355909345653598 0.768307542591715
+  position 2.961742891805861 3.8541254831638425 6.534436033646575
 }
 TexturedBackground {
 }
@@ -25,6 +25,10 @@ Pioneer2 {
     Servo {
       translation 0 0.23 0.06
       children [
+        Monitor {
+          translation 0 0.84 0
+          color 0 0 0
+        }
         Solid {
           translation 0 0.04 0
           children [
@@ -45,7 +49,7 @@ Pioneer2 {
           boundingObject USE Cylinder_shape
         }
         Solid {
-          translation 0 0.65 -0.03
+          translation 0 0.8 -0.03
           rotation 1 0 0 1.5708
           children [
             Camera {
@@ -126,6 +130,55 @@ Sofa {
   translation -4.44 0 0
 }
 RoundTable {
+}
+Solid {
+  translation 0 0.9 0.8
+  children [
+    DEF Sanitizer_shape Shape {
+      appearance DEF Sanitizer_appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.2
+        radius 0.05
+      }
+    }
+    Solid {
+      translation 0 0.1 0
+      children [
+        DEF Ejection_tube_shape Shape {
+          appearance USE Sanitizer_appearance
+          geometry Cylinder {
+            height 0.07
+            radius 0.01
+          }
+        }
+        Solid {
+          translation 0 0.04 0.05
+          rotation 1 0 0 -1.5707953071795862
+          children [
+            DEF Ejection_tube_oriz_shape Shape {
+              appearance USE Sanitizer_appearance
+              geometry Cylinder {
+                height 0.15
+                radius 0.01
+              }
+            }
+          ]
+          boundingObject USE Ejection_tube_oriz_shape
+        }
+      ]
+    }
+  ]
+  boundingObject DEF Sanitizer_shape Shape {
+    appearance DEF Sanitizer_appearance PBRAppearance {
+      metalness 0
+    }
+    geometry Cylinder {
+      height 0.2
+      radius 0.05
+    }
+  }
 }
 FruitBowl {
   translation 0 0.759803 0
