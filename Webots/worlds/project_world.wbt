@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.9913332135972872 -0.13093388789232285 -0.010713385098835704 0.4003882192982225
-  position -0.7181806720188445 3.9293107924622532 8.825455217745214
+  orientation -0.7866687337008447 -0.6038137798374442 -0.12869041415710844 0.5729476515439423
+  position -3.1722448378939996 2.414527973659478 2.7141538104608083
 }
 TexturedBackground {
 }
@@ -15,7 +15,75 @@ RectangleArena {
   floorAppearance Parquetry {
     type "light strip"
   }
-  wallHeight 1
+  wallHeight 3
+}
+Pioneer2 {
+  translation -1.99 0 -0.369986
+  rotation 0 1 0 -3.1415853071795863
+  controller "ros"
+  extensionSlot [
+    Servo {
+      translation 0 0.23 0.06
+      children [
+        Solid {
+          translation 0 0.04 0
+          children [
+            Speaker {
+            }
+            DEF Cylinder_shape Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+                metalness 0
+              }
+              geometry Cylinder {
+                height 1.6
+                radius 0.03
+              }
+            }
+          ]
+          name "cylinder"
+          boundingObject USE Cylinder_shape
+        }
+        Solid {
+          translation 0 0.65 -0.03
+          rotation 1 0 0 1.5708
+          children [
+            Camera {
+              rotation -1 1.87158e-06 9.58983e-09 1.57079
+              fieldOfView 1
+              width 640
+              height 480
+              noise 0.007
+              lens Lens {
+              }
+              focus Focus {
+                focalLength 0.0036
+                maxFocalDistance 1000000
+                minFocalDistance 1
+              }
+              zoom Zoom {
+              }
+              recognition Recognition {
+              }
+            }
+            DEF Camera_shape Shape {
+              appearance PBRAppearance {
+                baseColor 1 1 0
+                emissiveColor 1 1 1
+                emissiveIntensity 0.8
+              }
+              geometry Cylinder {
+                height 0.02
+                radius 0.01
+              }
+            }
+          ]
+          name "camera_solid"
+          boundingObject USE Camera_shape
+        }
+      ]
+    }
+  ]
 }
 Pedestrian {
   translation 3 1.27 2
