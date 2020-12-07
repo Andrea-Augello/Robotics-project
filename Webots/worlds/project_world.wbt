@@ -1,0 +1,67 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation -0.9913332135972872 -0.13093388789232285 -0.010713385098835704 0.4003882192982225
+  position -0.7181806720188445 3.9293107924622532 8.825455217745214
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 10 10
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallHeight 1
+}
+Pedestrian {
+  translation 3 1.27 2
+  rotation 0 1 0 3.14159
+}
+Pedestrian {
+  translation -0.179997 1.27 -3.25
+  rotation 0 1 0 -5.307179586466759e-06
+  name "pedestrian(3)"
+  shirtColor 0.671351 0 0.652461
+  pantsColor 0.130205 0.135622 0.26186
+  shoesColor 1 0.85745 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation -2.04 1.27 2.1
+  rotation 0 1 0 3.14159
+  name "pedestrian(2)"
+  shirtColor 0.788479 0.967712 0.084123
+  pantsColor 0 0 0
+  leftHandSlot [
+    BeerBottle {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation 3 1.27 1.2
+  rotation 0 1 0 -5.307179586466759e-06
+  name "pedestrian(1)"
+  shirtColor 0.739193 0 0.0918135
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
+Sofa {
+  translation -4.44 0 0
+}
+RoundTable {
+}
+FruitBowl {
+  translation 0 0.759803 0
+}
+Apple {
+  translation 0 0.819508 0
+}
