@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.5173075503603537 0.8358821433369568 0.18355909345653598 0.768307542591715
-  position 2.961742891805861 3.8541254831638425 6.534436033646575
+  orientation -0.8151127715527926 0.5522023842881802 0.17511052634828583 0.7055500905496798
+  position 1.6155836649644857 5.180578003800912 6.245869702086446
 }
 TexturedBackground {
 }
@@ -25,9 +25,38 @@ Pioneer2 {
     Servo {
       translation 0 0.23 0.06
       children [
-        Monitor {
-          translation 0 0.84 0
-          color 0 0 0
+        Solid {
+          translation 0 1.04 0.001
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+              }
+              geometry Box {
+                size 0.725 0.41 0.02
+              }
+            }
+          ]
+        }
+        Display {
+          translation 0 1.04 -0.01
+          children [
+            Shape {
+              appearance Appearance {
+                material Material {
+                  emissiveColor 1 1 1
+                }
+                texture ImageTexture {
+                  filtering 0
+                }
+              }
+              geometry Rectangle {
+                size 0.72 0.405
+              }
+            }
+          ]
+          width 720
+          height 405
         }
         Solid {
           translation 0 0.04 0
