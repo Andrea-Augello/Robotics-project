@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.9913332135972872 -0.13093388789232285 -0.010713385098835704 0.4003882192982225
-  position -0.7181806720188445 3.9293107924622532 8.825455217745214
+  orientation -0.8151127715527926 0.5522023842881802 0.17511052634828583 0.7055500905496798
+  position 1.6155836649644857 5.180578003800912 6.245869702086446
 }
 TexturedBackground {
 }
@@ -15,7 +15,108 @@ RectangleArena {
   floorAppearance Parquetry {
     type "light strip"
   }
-  wallHeight 1
+  wallHeight 3
+}
+Pioneer2 {
+  translation -1.99 0 -0.369986
+  rotation 0 1 0 -3.1415853071795863
+  controller "ros"
+  extensionSlot [
+    Servo {
+      translation 0 0.23 0.06
+      children [
+        Solid {
+          translation 0 1.04 0.001
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+              }
+              geometry Box {
+                size 0.725 0.41 0.02
+              }
+            }
+          ]
+        }
+        Display {
+          translation 0 1.04 -0.01
+          children [
+            Shape {
+              appearance Appearance {
+                material Material {
+                  emissiveColor 1 1 1
+                }
+                texture ImageTexture {
+                  filtering 0
+                }
+              }
+              geometry Rectangle {
+                size 0.72 0.405
+              }
+            }
+          ]
+          width 720
+          height 405
+        }
+        Solid {
+          translation 0 0.04 0
+          children [
+            Speaker {
+            }
+            DEF Cylinder_shape Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+                metalness 0
+              }
+              geometry Cylinder {
+                height 1.6
+                radius 0.03
+              }
+            }
+          ]
+          name "cylinder"
+          boundingObject USE Cylinder_shape
+        }
+        Solid {
+          translation 0 0.8 -0.03
+          rotation 1 0 0 1.5708
+          children [
+            Camera {
+              rotation -1 1.87158e-06 9.58983e-09 1.57079
+              fieldOfView 1
+              width 640
+              height 480
+              noise 0.007
+              lens Lens {
+              }
+              focus Focus {
+                focalLength 0.0036
+                maxFocalDistance 1000000
+                minFocalDistance 1
+              }
+              zoom Zoom {
+              }
+              recognition Recognition {
+              }
+            }
+            DEF Camera_shape Shape {
+              appearance PBRAppearance {
+                baseColor 1 1 0
+                emissiveColor 1 1 1
+                emissiveIntensity 0.8
+              }
+              geometry Cylinder {
+                height 0.02
+                radius 0.01
+              }
+            }
+          ]
+          name "camera_solid"
+          boundingObject USE Camera_shape
+        }
+      ]
+    }
+  ]
 }
 Pedestrian {
   translation 3 1.27 2
@@ -58,6 +159,55 @@ Sofa {
   translation -4.44 0 0
 }
 RoundTable {
+}
+Solid {
+  translation 0 0.9 0.8
+  children [
+    DEF Sanitizer_shape Shape {
+      appearance DEF Sanitizer_appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.2
+        radius 0.05
+      }
+    }
+    Solid {
+      translation 0 0.1 0
+      children [
+        DEF Ejection_tube_shape Shape {
+          appearance USE Sanitizer_appearance
+          geometry Cylinder {
+            height 0.07
+            radius 0.01
+          }
+        }
+        Solid {
+          translation 0 0.04 0.05
+          rotation 1 0 0 -1.5707953071795862
+          children [
+            DEF Ejection_tube_oriz_shape Shape {
+              appearance USE Sanitizer_appearance
+              geometry Cylinder {
+                height 0.15
+                radius 0.01
+              }
+            }
+          ]
+          boundingObject USE Ejection_tube_oriz_shape
+        }
+      ]
+    }
+  ]
+  boundingObject DEF Sanitizer_shape Shape {
+    appearance DEF Sanitizer_appearance PBRAppearance {
+      metalness 0
+    }
+    geometry Cylinder {
+      height 0.2
+      radius 0.05
+    }
+  }
 }
 FruitBowl {
   translation 0 0.759803 0
