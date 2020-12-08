@@ -63,3 +63,5 @@
 *.fdb_latexmk
 *.fls
 *.synctex.gz
+
+catkin_ws/src/CMakeLists.txt
