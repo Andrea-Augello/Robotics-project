@@ -183,49 +183,6 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  // enable gps
-  ros::ServiceClient set_GPS_client;
-  robotics_project::set_int GPS_srv;
-  ros::Subscriber sub_GPS;
-  set_GPS_client = n->serviceClient<robotics_project::set_int>("pioneer2/gps/enable");
-  GPS_srv.request.value = 32;
-  if (set_GPS_client.call(GPS_srv) && GPS_srv.response.success) {
-    sub_GPS = n->subscribe("pioneer2/gps/values", 1, GPSCallback);
-    while (sub_GPS.getNumPublishers() == 0) {
-    }
-    ROS_INFO("GPS enabled.");
-  } else {
-    if (!GPS_srv.response.success)
-      ROS_ERROR("Sampling period is not valid.");
-    ROS_ERROR("Failed to enable GPS.");
-    return 1;
-  }
-
-  // enable inertial unit
-  ros::ServiceClient set_inertial_unit_client;
-  robotics_project::set_int inertial_unit_srv;
-  ros::Subscriber sub_inertial_unit;
-  set_inertial_unit_client = n->serviceClient<robotics_project::set_int>("pioneer2/inertial_unit/enable");
-  inertial_unit_srv.request.value = 32;
-  if (set_inertial_unit_client.call(inertial_unit_srv) && inertial_unit_srv.response.success) {
-    sub_inertial_unit = n->subscribe("pioneer2/inertial_unit/roll_pitch_yaw", 1, inertialUnitCallback);
-    while (sub_inertial_unit.getNumPublishers() == 0) {
-    }
-    ROS_INFO("Inertial unit enabled.");
-  } else {
-    if (!inertial_unit_srv.response.success)
-      ROS_ERROR("Sampling period is not valid.");
-    ROS_ERROR("Failed to enable inertial unit.");
-    return 1;
-  }
-
-  // enable accelerometer
-  ros::ServiceClient set_accelerometer_client;
-  robotics_project::set_int accelerometer_srv;
-  ros::Subscriber sub_accelerometer;
-  set_accelerometer_client = n->serviceClient<robotics_project::set_int>("pioneer2/accelerometer/enable");
-  accelerometer_srv.request.value = 32;
-  set_accelerometer_client.call(accelerometer_srv);
   // enable camera
   ros::ServiceClient set_camera_client;
   robotics_project::set_int camera_srv;
@@ -233,13 +190,6 @@ int main(int argc, char **argv) {
   set_camera_client = n->serviceClient<robotics_project::set_int>("pioneer2/camera/enable");
   camera_srv.request.value = 64;
   set_camera_client.call(camera_srv);
-  // enable gyro
-  ros::ServiceClient set_gyro_client;
-  robotics_project::set_int gyro_srv;
-  ros::Subscriber sub_gyro;
-  set_gyro_client = n->serviceClient<robotics_project::set_int>("pioneer2/gyro/enable");
-  gyro_srv.request.value = 32;
-  set_gyro_client.call(gyro_srv);
 
   ROS_INFO("You can now start the creation of the map using 'rosrun gmapping slam_gmapping "
            "scan:=/pioneer2/Sick_LMS_291/laser_scan/layer0 _xmax:=30 _xmin:=-30 _ymax:=30 _ymin:=-30 _delta:=0.2'.");
