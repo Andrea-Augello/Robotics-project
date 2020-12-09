@@ -39,8 +39,6 @@
 
 ros::NodeHandle *n;
 
-static std::vector<float> lidarValues;
-
 static int controllerCount;
 static std::vector<std::string> controllerList;
 
@@ -160,27 +158,6 @@ int main(int argc, char **argv) {
       ROS_INFO("Velocity set to 0.0 for motor %s.", motorNames[i]);
     else
       ROS_ERROR("Failed to call service set_velocity on motor %s.", motorNames[i]);
-  }
-
-  // enable lidar
-  ros::ServiceClient set_lidar_client;
-  robotics_project::set_int lidar_srv;
-  ros::Subscriber sub_lidar_scan;
-
-  set_lidar_client = n->serviceClient<robotics_project::set_int>("pioneer2/Sick_LMS_291/enable");
-  lidar_srv.request.value = TIME_STEP;
-  if (set_lidar_client.call(lidar_srv) && lidar_srv.response.success) {
-    ROS_INFO("Lidar enabled.");
-    sub_lidar_scan = n->subscribe("pioneer2/Sick_LMS_291/laser_scan/layer0", 10, lidarCallback);
-    ROS_INFO("Topic for lidar initialized.");
-    while (sub_lidar_scan.getNumPublishers() == 0) {
-    }
-    ROS_INFO("Topic for lidar scan connected.");
-  } else {
-    if (!lidar_srv.response.success)
-      ROS_ERROR("Sampling period is not valid.");
-    ROS_ERROR("Failed to enable lidar.");
-    return 1;
   }
 
   // enable camera
