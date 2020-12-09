@@ -14,7 +14,7 @@
 
 /*
  * To run gmapping you should start gmapping:
- * rosrun gmapping slam_gmapping scan:=/pioneer2/Sick_LMS_291/laser_scan/layer0 _xmax:=30 _xmin:=-30 _ymax:=30 _ymin:=-30
+ * rosrun gmapping slam_gmapping scan:=/change/Sick_LMS_291/laser_scan/layer0 _xmax:=30 _xmin:=-30 _ymax:=30 _ymin:=-30
  * _delta:=0.2
  */
 
@@ -38,8 +38,6 @@
 #define BACK_SLOWDOWN 0.9
 
 ros::NodeHandle *n;
-
-static std::vector<float> lidarValues;
 
 static int controllerCount;
 static std::vector<std::string> controllerList;
@@ -76,7 +74,7 @@ void updateSpeed() {
   for (int i = 0; i < NMOTORS; ++i) {
     ros::ServiceClient set_velocity_client;
     robotics_project::set_float set_velocity_srv;
-	set_velocity_client = n->serviceClient<robotics_project::set_float>(std::string("pioneer2/") + std::string(motorNames[i]) + std::string("/set_velocity"));
+	set_velocity_client = n->serviceClient<robotics_project::set_float>(std::string("change/") + std::string(motorNames[i]) + std::string("/set_velocity"));
     set_velocity_srv.request.value = speeds[i];
     set_velocity_client.call(set_velocity_srv);
   }
@@ -90,7 +88,7 @@ void controllerNameCallback(const std_msgs::String::ConstPtr &name) {
 }
 
 void quit(int sig) {
-  ROS_INFO("User stopped the 'pioneer2' node.");
+  ROS_INFO("User stopped the 'change' node.");
   timeStepSrv.request.value = 0;
   timeStepClient.call(timeStepSrv);
   ros::shutdown();
@@ -99,8 +97,8 @@ void quit(int sig) {
 
 int main(int argc, char **argv) {
   std::string controllerName;
-  // create a node named 'pioneer2' on ROS network
-  ros::init(argc, argv, "pioneer2", ros::init_options::AnonymousName);
+  // create a node named 'change' on ROS network
+  ros::init(argc, argv, "change", ros::init_options::AnonymousName);
   n = new ros::NodeHandle;
 
   signal(SIGINT, quit);
@@ -114,7 +112,7 @@ int main(int argc, char **argv) {
   }
   ros::spinOnce();
 
-  timeStepClient = n->serviceClient<robotics_project::set_int>("pioneer2/robot/time_step");
+  timeStepClient = n->serviceClient<robotics_project::set_int>("change/robot/time_step");
   timeStepSrv.request.value = TIME_STEP;
 
   // if there is more than one controller available, it let the user choose
@@ -140,7 +138,7 @@ int main(int argc, char **argv) {
     // position
     ros::ServiceClient set_position_client;
     robotics_project::set_float set_position_srv;
-    set_position_client = n->serviceClient<robotics_project::set_float>(std::string("pioneer2/") + std::string(motorNames[i]) +
+    set_position_client = n->serviceClient<robotics_project::set_float>(std::string("change/") + std::string(motorNames[i]) +
                                                                   std::string("/set_position"));
 
     set_position_srv.request.value = INFINITY;
@@ -152,7 +150,7 @@ int main(int argc, char **argv) {
     // speed
     ros::ServiceClient set_velocity_client;
     robotics_project::set_float set_velocity_srv;
-    set_velocity_client = n->serviceClient<robotics_project::set_float>(std::string("pioneer2/") + std::string(motorNames[i]) +
+    set_velocity_client = n->serviceClient<robotics_project::set_float>(std::string("change/") + std::string(motorNames[i]) +
                                                                   std::string("/set_velocity"));
 
     set_velocity_srv.request.value = 0.0;
@@ -162,37 +160,16 @@ int main(int argc, char **argv) {
       ROS_ERROR("Failed to call service set_velocity on motor %s.", motorNames[i]);
   }
 
-  // enable lidar
-  ros::ServiceClient set_lidar_client;
-  robotics_project::set_int lidar_srv;
-  ros::Subscriber sub_lidar_scan;
-
-  set_lidar_client = n->serviceClient<robotics_project::set_int>("pioneer2/Sick_LMS_291/enable");
-  lidar_srv.request.value = TIME_STEP;
-  if (set_lidar_client.call(lidar_srv) && lidar_srv.response.success) {
-    ROS_INFO("Lidar enabled.");
-    sub_lidar_scan = n->subscribe("pioneer2/Sick_LMS_291/laser_scan/layer0", 10, lidarCallback);
-    ROS_INFO("Topic for lidar initialized.");
-    while (sub_lidar_scan.getNumPublishers() == 0) {
-    }
-    ROS_INFO("Topic for lidar scan connected.");
-  } else {
-    if (!lidar_srv.response.success)
-      ROS_ERROR("Sampling period is not valid.");
-    ROS_ERROR("Failed to enable lidar.");
-    return 1;
-  }
-
   // enable camera
   ros::ServiceClient set_camera_client;
   robotics_project::set_int camera_srv;
   ros::Subscriber sub_camera;
-  set_camera_client = n->serviceClient<robotics_project::set_int>("pioneer2/camera/enable");
+  set_camera_client = n->serviceClient<robotics_project::set_int>("change/camera/enable");
   camera_srv.request.value = 64;
   set_camera_client.call(camera_srv);
 
   ROS_INFO("You can now start the creation of the map using 'rosrun gmapping slam_gmapping "
-           "scan:=/pioneer2/Sick_LMS_291/laser_scan/layer0 _xmax:=30 _xmin:=-30 _ymax:=30 _ymin:=-30 _delta:=0.2'.");
+           "scan:=/change/Sick_LMS_291/laser_scan/layer0 _xmax:=30 _xmin:=-30 _ymax:=30 _ymin:=-30 _delta:=0.2'.");
   ROS_INFO("You can now visualize the sensors output in rqt using 'rqt'.");
 
   // main loop

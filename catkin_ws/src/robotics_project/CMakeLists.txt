@@ -230,7 +230,7 @@ add_message_files(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES webots_test
+#  LIBRARIES robotics_project
   CATKIN_DEPENDS message_runtime roscpp rospy sensor_msgs std_msgs tf
 #  DEPENDS system_lib
 )
