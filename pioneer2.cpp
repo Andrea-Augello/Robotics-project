@@ -70,82 +70,16 @@ void updateSpeed() {
   double speeds[NMOTORS];
   // apply the braitenberg coefficients on the resulted values of the lms291
   // near obstacle sensed on the left side
-  for (int i = 0; i < halfResolution; ++i) {
-    if (lidarValues[i] < rangeThreshold)  // far obstacles are ignored
-      leftObstacle += braitenbergCoefficients[i] * (1.0 - lidarValues[i] / maxRange);
-    // near obstacle sensed on the right side
-    int j = lms291Resolution - i - 1;
-    if (lidarValues[j] < rangeThreshold)
-      rightObstacle += braitenbergCoefficients[i] * (1.0 - lidarValues[j] / maxRange);
-  }
-  // overall front obstacle
-  obstacle = leftObstacle + rightObstacle;
-  // compute the speed according to the information on
-  // obstacles
-  if (obstacle > OBSTACLE_THRESHOLD) {
-    const double speedFactor = (1.0 - DECREASE_FACTOR * obstacle) * MAX_SPEED / obstacle;
-    speeds[0] = speedFactor * leftObstacle;
-    speeds[1] = speedFactor * rightObstacle;
-  } else {
-    speeds[0] = MAX_SPEED;
-    speeds[1] = MAX_SPEED;
-  }
+  speeds[0] = MAX_SPEED;
+  speeds[1] = MAX_SPEED;
   // set speeds
   for (int i = 0; i < NMOTORS; ++i) {
     ros::ServiceClient set_velocity_client;
     robotics_project::set_float set_velocity_srv;
-    set_velocity_client = n->serviceClient<robotics_project::set_float>(std::string("pioneer2/") + std::string(motorNames[i]) +
-                                                                  std::string("/set_velocity"));
+	set_velocity_client = n->serviceClient<robotics_project::set_float>(std::string("pioneer2/") + std::string(motorNames[i]) + std::string("/set_velocity"));
     set_velocity_srv.request.value = speeds[i];
     set_velocity_client.call(set_velocity_srv);
   }
-}
-
-void broadcastTransform() {
-  static tf::TransformBroadcaster br;
-  tf::Transform transform;
-  transform.setOrigin(tf::Vector3(-GPSValues[2], GPSValues[0], GPSValues[1]));
-  tf::Quaternion q(inertialUnitValues[0], inertialUnitValues[1], inertialUnitValues[2], inertialUnitValues[3]);
-  q = q.inverse();
-  transform.setRotation(q);
-  br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "odom", "base_link"));
-  transform.setIdentity();
-  br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_link", "pioneer2/Sick_LMS_291"));
-}
-
-void GPSCallback(const sensor_msgs::NavSatFix::ConstPtr &values) {
-  GPSValues[0] = values->latitude;
-  GPSValues[1] = values->altitude;
-  GPSValues[2] = values->longitude;
-  broadcastTransform();
-}
-
-void inertialUnitCallback(const sensor_msgs::Imu::ConstPtr &values) {
-  inertialUnitValues[0] = values->orientation.x;
-  inertialUnitValues[1] = values->orientation.y;
-  inertialUnitValues[2] = values->orientation.z;
-  inertialUnitValues[3] = values->orientation.w;
-  broadcastTransform();
-}
-
-void lidarCallback(const sensor_msgs::LaserScan::ConstPtr &scan) {
-  int scanSize = scan->ranges.size();
-  lidarValues.resize(scanSize);
-  for (int i = 0; i < scanSize; ++i)
-    lidarValues[i] = scan->ranges[i];
-
-  lms291Resolution = scanSize;
-  halfResolution = scanSize / 2;
-  maxRange = scan->range_max;
-  rangeThreshold = maxRange / 20.0;
-  if (!areBraitenbergCoefficientsinitialized) {
-    braitenbergCoefficients.resize(lms291Resolution);
-    for (int i = 0; i < lms291Resolution; ++i)
-      braitenbergCoefficients[i] = gaussian(i, halfResolution, lms291Resolution / 5);
-    areBraitenbergCoefficientsinitialized = true;
-  }
-
-  updateSpeed();
 }
 
 // catch names of the controllers availables on ROS network
@@ -313,6 +247,7 @@ int main(int argc, char **argv) {
 
   // main loop
   while (ros::ok()) {
+	updateSpeed();
     if (!timeStepClient.call(timeStepSrv) || !timeStepSrv.response.success) {
       ROS_ERROR("Failed to call service time_step for next step.");
       break;
