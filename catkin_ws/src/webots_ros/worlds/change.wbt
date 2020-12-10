@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.2959815646161965 0.9517135179701871 0.08146344652762079 0.4746670841580937
-  position -0.19626678685844476 1.2210472876507596 3.6001350420172704
+  orientation -0.2608794127615786 0.9533976101175489 0.15157482976840309 1.0530165346826696
+  position 0.09742055100931091 1.9985567877092432 0.6379583921137888
 }
 TexturedBackground {
 }
@@ -31,7 +31,7 @@ Pioneer2 {
         Solid {
           translation 0 1.04 0.001
           children [
-            Shape {
+            DEF Screen_shape Shape {
               appearance PBRAppearance {
                 baseColor 0 0 0
               }
@@ -40,6 +40,9 @@ Pioneer2 {
               }
             }
           ]
+          boundingObject USE Screen_shape
+          physics Physics {
+          }
         }
         Display {
           translation 0 1.04 -0.01
@@ -79,6 +82,8 @@ Pioneer2 {
           ]
           name "cylinder"
           boundingObject USE Cylinder_shape
+          physics Physics {
+          }
         }
         Solid {
           translation 0 0.8 -0.03
@@ -116,6 +121,8 @@ Pioneer2 {
           ]
           name "camera_solid"
           boundingObject USE Camera_shape
+          physics Physics {
+          }
         }
       ]
     }
@@ -124,6 +131,7 @@ Pioneer2 {
 Pedestrian {
   translation 3 1.27 2
   rotation 0 1 0 3.14159
+  enableBoundingObject TRUE
 }
 Pedestrian {
   translation -0.179997 1.27 -3.25
@@ -132,6 +140,7 @@ Pedestrian {
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
+  enableBoundingObject TRUE
   rightHandSlot [
     Can {
       rotation 1 0 0 1.5708
@@ -144,6 +153,7 @@ Pedestrian {
   name "pedestrian(2)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
+  enableBoundingObject TRUE
   leftHandSlot [
     BeerBottle {
       rotation 1 0 0 1.5708
@@ -157,11 +167,16 @@ Pedestrian {
   shirtColor 0.739193 0 0.0918135
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
+  enableBoundingObject TRUE
 }
 Sofa {
   translation -4.44 0 0
+  physics Physics {
+  }
 }
 RoundTable {
+  physics Physics {
+  }
 }
 Solid {
   translation 0 0.9 0.8
@@ -210,6 +225,8 @@ Solid {
       height 0.2
       radius 0.05
     }
+  }
+  physics Physics {
   }
 }
 FruitBowl {
