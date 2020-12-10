@@ -2,4 +2,4 @@
 
 cd ~/git/Robotics-project/catkin_ws;
 source devel/setup.bash;
-roslaunch robotics_project change.launch;
+roslaunch webots_ros change.launch;
