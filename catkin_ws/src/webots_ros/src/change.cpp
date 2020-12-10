@@ -1,23 +1,3 @@
-// Copyright 1996-2020 Cyberbotics Ltd.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-/*
- * To run gmapping you should start gmapping:
- * rosrun gmapping slam_gmapping scan:=/change/Sick_LMS_291/laser_scan/layer0 _xmax:=30 _xmin:=-30 _ymax:=30 _ymin:=-30
- * _delta:=0.2
- */
-
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/LaserScan.h>
@@ -80,10 +60,11 @@ void updateSpeed() {
   }
 }
 
-
 /* @todo 
- * Output to display and play audio
+ * Video and audio output
+ * todo
  */
+
 // catch names of the controllers availables on ROS network
 void controllerNameCallback(const std_msgs::String::ConstPtr &name) {
   controllerCount++;
