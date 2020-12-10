@@ -2,12 +2,12 @@
 <launch>
   <!-- start Webots -->
   <arg name="no_gui" default="false," doc="Start Webots with minimal GUI"/>
-  <include file="$(find robotics_project)/launch/webots.launch">
+  <include file="$(find webots_ros)/launch/webots.launch">
     <arg name="mode" value="realtime"/>
     <arg name="no_gui" value="$(arg no_gui)"/>
-    <arg name="world" value="$(find robotics_project)/worlds/change.wbt"/>
+    <arg name="world" value="$(find webots_ros)/worlds/change.wbt"/>
   </include>
 
   <arg name="auto_close" default="false" doc="Startup mode"/>
-  <node name="change_controller" pkg="robotics_project" type="change" required="$(arg auto_close)"/>
+  <node name="change_controller" pkg="webots_ros" type="change" required="$(arg auto_close)"/>
 </launch>

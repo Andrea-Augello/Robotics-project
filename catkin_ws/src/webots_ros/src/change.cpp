@@ -27,8 +27,8 @@
 #include <tf/transform_broadcaster.h>
 #include "ros/ros.h"
 
-#include <robotics_project/set_float.h>
-#include <robotics_project/set_int.h>
+#include <webots_ros/set_float.h>
+#include <webots_ros/set_int.h>
 
 #define TIME_STEP 32
 #define NMOTORS 2
@@ -43,7 +43,7 @@ static int controllerCount;
 static std::vector<std::string> controllerList;
 
 ros::ServiceClient timeStepClient;
-robotics_project::set_int timeStepSrv;
+webots_ros::set_int timeStepSrv;
 
 static const char *motorNames[NMOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 
@@ -73,8 +73,8 @@ void updateSpeed() {
   // set speeds
   for (int i = 0; i < NMOTORS; ++i) {
     ros::ServiceClient set_velocity_client;
-    robotics_project::set_float set_velocity_srv;
-	set_velocity_client = n->serviceClient<robotics_project::set_float>(std::string("change/") + std::string(motorNames[i]) + std::string("/set_velocity"));
+    webots_ros::set_float set_velocity_srv;
+	set_velocity_client = n->serviceClient<webots_ros::set_float>(std::string("change/") + std::string(motorNames[i]) + std::string("/set_velocity"));
     set_velocity_srv.request.value = speeds[i];
     set_velocity_client.call(set_velocity_srv);
   }
@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
   }
   ros::spinOnce();
 
-  timeStepClient = n->serviceClient<robotics_project::set_int>("change/robot/time_step");
+  timeStepClient = n->serviceClient<webots_ros::set_int>("change/robot/time_step");
   timeStepSrv.request.value = TIME_STEP;
 
   // if there is more than one controller available, it let the user choose
@@ -137,8 +137,8 @@ int main(int argc, char **argv) {
   for (int i = 0; i < NMOTORS; ++i) {
     // position
     ros::ServiceClient set_position_client;
-    robotics_project::set_float set_position_srv;
-    set_position_client = n->serviceClient<robotics_project::set_float>(std::string("change/") + std::string(motorNames[i]) +
+    webots_ros::set_float set_position_srv;
+    set_position_client = n->serviceClient<webots_ros::set_float>(std::string("change/") + std::string(motorNames[i]) +
                                                                   std::string("/set_position"));
 
     set_position_srv.request.value = INFINITY;
@@ -151,8 +151,8 @@ int main(int argc, char **argv) {
 
     // speed
     ros::ServiceClient set_velocity_client;
-    robotics_project::set_float set_velocity_srv;
-    set_velocity_client = n->serviceClient<robotics_project::set_float>(std::string("change/") + std::string(motorNames[i]) +
+    webots_ros::set_float set_velocity_srv;
+    set_velocity_client = n->serviceClient<webots_ros::set_float>(std::string("change/") + std::string(motorNames[i]) +
                                                                   std::string("/set_velocity"));
 
     set_velocity_srv.request.value = 0.0;
@@ -164,9 +164,9 @@ int main(int argc, char **argv) {
 
   // enable camera
   ros::ServiceClient set_camera_client;
-  robotics_project::set_int camera_srv;
+  webots_ros::set_int camera_srv;
   ros::Subscriber sub_camera;
-  set_camera_client = n->serviceClient<robotics_project::set_int>("change/camera/enable");
+  set_camera_client = n->serviceClient<webots_ros::set_int>("change/camera/enable");
   camera_srv.request.value = 64;
   set_camera_client.call(camera_srv);
 
