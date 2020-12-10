@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.8151127715527926 0.5522023842881802 0.17511052634828583 0.7055500905496798
-  position 1.6155836649644857 5.180578003800912 6.245869702086446
+  orientation -0.2959815646161965 0.9517135179701871 0.08146344652762079 0.4746670841580937
+  position -0.19626678685844476 1.2210472876507596 3.6001350420172704
 }
 TexturedBackground {
 }
@@ -59,7 +59,7 @@ Pioneer2 {
           height 405
         }
         Solid {
-          translation 0 0.04 0
+          translation 0 0.34 0
           children [
             Speaker {
             }
@@ -69,7 +69,7 @@ Pioneer2 {
                 metalness 0
               }
               geometry Cylinder {
-                height 1.6
+                height 1
                 radius 0.03
               }
             }
