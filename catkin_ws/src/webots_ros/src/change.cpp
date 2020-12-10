@@ -80,6 +80,10 @@ void updateSpeed() {
   }
 }
 
+/* TODO 
+ * Video and audio output
+ */
+
 // catch names of the controllers availables on ROS network
 void controllerNameCallback(const std_msgs::String::ConstPtr &name) {
   controllerCount++;
