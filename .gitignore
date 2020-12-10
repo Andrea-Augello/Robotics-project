@@ -65,3 +65,5 @@
 *.synctex.gz
 
 catkin_ws/src/CMakeLists.txt
+
+catkin_ws/src/robotics_project/worlds/.change.wbproj
