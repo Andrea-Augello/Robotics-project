@@ -25,6 +25,10 @@ Pioneer2 {
     "--name=change"
   ]
   extensionSlot [
+    Gyro {
+    }
+    Accelerometer {
+    }
     Servo {
       translation 0 0.23 0.06
       children [
@@ -121,8 +125,6 @@ Pioneer2 {
           ]
           name "camera_solid"
           boundingObject USE Camera_shape
-          physics Physics {
-          }
         }
       ]
     }

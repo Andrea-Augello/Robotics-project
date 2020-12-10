@@ -9,6 +9,11 @@
 
 #include <webots_ros/set_float.h>
 #include <webots_ros/set_int.h>
+#include <webots_ros/set_string.h>
+#include <webots_ros/speaker_play_sound.h>
+#include <webots_ros/speaker_speak.h>
+#include <webots_ros/display_image_load.h>
+#include <webots_ros/display_image_paste.h>
 
 #define TIME_STEP 32
 #define NMOTORS 2
@@ -26,8 +31,10 @@ ros::ServiceClient timeStepClient;
 webots_ros::set_int timeStepSrv;
 
 static const char *motorNames[NMOTORS] = {"left_wheel_motor", "right_wheel_motor"};
+static const char *motorNamesComplete[NMOTORS+1] = {"left_wheel_motor", "right_wheel_motor","servo"};
 const std::string name = "change";
-
+const std::string display = "display";
+const std::string path_to_repo = "/Github/Robotics-project"
 
 // gaussian function
 double gaussian(double x, double mu, double sigma) {
@@ -49,10 +56,91 @@ void maxSpeed() {
   }
 }
 
-/* @todo 
- * Video and audio output
- * todo
- */
+
+void imageLoad(const std::string imageName) {
+  ros::ServiceClient display_image_load_client;
+  webots_ros::display_image_load display_image_load_srv;
+  display_image_load_client = n.serviceClient<webots_ros::display_image_load>(name + "/display/image_load");
+
+  display_image_load_srv.request.filename = std::string(getenv("HOME")) + path_to_repo +std::string("/Media/Image/")+ imageName +std::string(".jpg");
+  display_image_load_client.call(display_image_load_srv);
+  ROS_INFO("Image successfully loaded to clipboard.");
+  uint64_t loaded_image = display_image_load_srv.response.ir;
+
+  display_image_paste_srv.request.ir = loaded_image;
+  if (display_image_paste_client.call(display_image_paste_srv) && display_image_paste_srv.response.success == 1)
+    ROS_INFO("Image successfully load and paste.");
+  else
+    ROS_ERROR("Failed to call service display_image_paste to paste image.");
+
+  display_image_load_client.shutdown();
+  time_step_client.call(time_step_srv);
+}
+
+// play a .mp3 from filesystem with volume between 0.0 and 1.0 
+void playSound(const std::string soundName, double volume, bool loop) {
+  ros::ServiceClient speaker_play_sound_client;
+  webots_ros::speaker_play_sound speaker_play_sound_srv;
+  speaker_play_sound_client = n.serviceClient<webots_ros::speaker_play_sound>(name + "/speaker/play_sound");
+
+  speaker_play_sound_srv.request.sound = std::string(getenv("HOME")) + path_to_repo +std::string("/Media/Audio/")+ soundName +std::string(".mp3");
+  speaker_play_sound_srv.request.volume = volume;
+  speaker_play_sound_srv.request.pitch = 1.0;
+  speaker_play_sound_srv.request.balance = 0.0;
+  speaker_play_sound_srv.request.loop = loop;
+  
+  if (speaker_play_sound_client.call(speaker_play_sound_srv) && speaker_play_sound_srv.response.success == 1)
+    ROS_INFO("Sound successfully load and played.");
+  else
+    ROS_ERROR("Failed to call service speaker_play_sound to play a sound.");
+  
+  display_image_paste_client.shutdown();
+  time_step_client.call(time_step_srv);
+}
+
+
+// speak a text with volume between 0.0 and 1.0 
+void speak(const std::string &text, double volume) {
+  ros::ServiceClient speaker_speak_client;
+  webots_ros::speaker_speak speaker_speak_srv;
+  speaker_speak_client = n.serviceClient<webots_ros::speaker_speak>(name + "/speaker/speak");
+
+  speaker_speak_srv.request.text = text;
+  speaker_speak_srv.request.volume = volume;
+  
+  if (speaker_speak_client.call(speaker_play_sound_srv) && speaker_speak_srv.response.success == 1)
+    ROS_INFO("Text successfully readed.");
+  else
+    ROS_ERROR("Failed to call service speaker_speak to read a text.");
+  
+  speaker_speak_client.shutdown();
+  time_step_client.call(time_step_srv);
+}
+
+
+// Set speaker's language
+// 0 for American English.
+// 1 for British English.
+// 2 for German.
+// 3 for Spanish.
+// 4 for French.
+// 5 for Italian.
+void setLanguage(const int language) {
+  const std::string languages[6] = {"en-US", "en-UK", "de-DE", "es-ES", "fr-FR", "it-IT"};
+  ros::ServiceClient speaker_set_language_client;
+  webots_ros::speaker_speak speaker_set_language_srv;
+  speaker_set_language_client = n.serviceClient<webots_ros::set_string>(name + "/speaker/set_language");
+
+  speaker_set_language_srv.request.value = languages[language];
+  
+  if (speaker_set_language_client.call(speaker_set_language_srv) && speaker_speak_srv.response.success == 1)
+    ROS_INFO("Language successfully setted.");
+  else
+    ROS_ERROR("Failed to call service set_language to set speaker's language.");
+  
+  speaker_set_language_client.shutdown();
+  time_step_client.call(time_step_srv);
+}
 
 // catch names of the controllers availables on ROS network
 void controllerNameCallback(const std_msgs::String::ConstPtr &name) {
@@ -108,33 +196,35 @@ int main(int argc, char **argv) {
   nameSub.shutdown();
 
   // init motors
-  for (int i = 0; i < NMOTORS; ++i) {
+  for (int i = 0; i < NMOTORS+1; ++i) {
     // position
     ros::ServiceClient set_position_client;
     webots_ros::set_float set_position_srv;
-    set_position_client = n->serviceClient<webots_ros::set_float>(name + std::string("/") + std::string(motorNames[i]) +
+    set_position_client = n->serviceClient<webots_ros::set_float>(name + std::string("/") + std::string(motorNamesComplete[i]) +
                                                                   std::string("/set_position"));
 
     set_position_srv.request.value = INFINITY;
     
     
     if (set_position_client.call(set_position_srv) && set_position_srv.response.success)
-      ROS_INFO("Position set to INFINITY for motor %s.", motorNames[i]);
+      ROS_INFO("Position set to INFINITY for motor %s.", motorNamesComplete[i]);
     else
-      ROS_ERROR("Failed to call service set_position on motor %s.", motorNames[i]);
+      ROS_ERROR("Failed to call service set_position on motor %s.", motorNamesComplete[i]);
 
     // speed
     ros::ServiceClient set_velocity_client;
     webots_ros::set_float set_velocity_srv;
-    set_velocity_client = n->serviceClient<webots_ros::set_float>(name + std::string("/") + std::string(motorNames[i]) +
+    set_velocity_client = n->serviceClient<webots_ros::set_float>(name + std::string("/") + std::string(motorNamesComplete[i]) +
                                                                   std::string("/set_velocity"));
 
     set_velocity_srv.request.value = 0.0;
     if (set_velocity_client.call(set_velocity_srv) && set_velocity_srv.response.success == 1)
-      ROS_INFO("Velocity set to 0.0 for motor %s.", motorNames[i]);
+      ROS_INFO("Velocity set to 0.0 for motor %s.", motorNamesComplete[i]);
     else
-      ROS_ERROR("Failed to call service set_velocity on motor %s.", motorNames[i]);
+      ROS_ERROR("Failed to call service set_velocity on motor %s.", motorNamesComplete[i]);
   }
+
+  
 
   // enable accelerometer
   ros::ServiceClient set_accelerometer_client;
@@ -161,18 +251,12 @@ int main(int argc, char **argv) {
   set_gyro_client.call(gyro_srv);
 
 
-  // enable servo
-  ros::ServiceClient set_gyro_client;
-  webots_ros::set_int gyro_srv;
-  ros::Subscriber sub_gyro;
-  set_gyro_client = n->serviceClient<webots_ros::set_int>(name+"/gyro/enable");
-  gyro_srv.request.value = 32;
-  set_gyro_client.call(gyro_srv);
-
   ROS_INFO("You can now visualize the sensors output in rqt using 'rqt'.");
 
   // for test
   maxSpeed();
+  imageLoad("warning");
+  playSound("warning");
   // main loop
   while (ros::ok()) {
     if (!timeStepClient.call(timeStepSrv) || !timeStepSrv.response.success) {
