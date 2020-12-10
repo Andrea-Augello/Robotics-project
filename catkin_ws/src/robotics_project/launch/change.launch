@@ -9,5 +9,5 @@
   </include>
 
   <arg name="auto_close" default="false" doc="Startup mode"/>
-  <node name="change" pkg="robotics_project" type="change" required="$(arg auto_close)"/>
+  <node name="change_controller" pkg="robotics_project" type="change" required="$(arg auto_close)"/>
 </launch>

@@ -142,6 +142,8 @@ int main(int argc, char **argv) {
                                                                   std::string("/set_position"));
 
     set_position_srv.request.value = INFINITY;
+    
+    
     if (set_position_client.call(set_position_srv) && set_position_srv.response.success)
       ROS_INFO("Position set to INFINITY for motor %s.", motorNames[i]);
     else

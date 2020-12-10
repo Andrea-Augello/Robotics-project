@@ -21,6 +21,9 @@ Pioneer2 {
   translation -1.99 0 -0.369986
   rotation 0 1 0 -3.1415853071795863
   controller "ros"
+  controllerArgs [
+    "--name=change"
+  ]
   extensionSlot [
     Servo {
       translation 0 0.23 0.06
