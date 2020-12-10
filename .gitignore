@@ -64,4 +64,8 @@
 *.fls
 *.synctex.gz
 
+# Symlinks
 catkin_ws/src/CMakeLists.txt
+# Temp files
+*.wbproj
+*.swp
