@@ -45,7 +45,7 @@ static std::vector<std::string> controllerList;
 ros::ServiceClient timeStepClient;
 robotics_project::set_int timeStepSrv;
 
-static const char *motorNames[NMOTORS] = {"left_wheel", "right_wheel"};
+static const char *motorNames[NMOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 
 static double GPSValues[3] = {0, 0, 0};
 static double inertialUnitValues[4] = {0, 0, 0, 0};
