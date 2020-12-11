@@ -15,6 +15,7 @@ RectangleArena {
   floorAppearance Parquetry {
     type "light strip"
   }
+  wallThickness 0.3
   wallHeight 3
 }
 Pioneer2 {
