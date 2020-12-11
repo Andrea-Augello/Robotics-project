@@ -21,7 +21,6 @@
 - i robot fanno bordello e non si sente un cazzo
 - giroscopio e accelerometro hanno bisogno di un padre con una fisica ma a quanto pare il robot non l'ha e non si possono mettere solidi con fisica perché non si attaccano al robot
 - gli audio da file non li legge
-- il robot esce dalle mura
 - il divano con una fisica sprofonda
 - secondo me bisogna cambiare robot e prenderne uno che abbia già qualche sensore in più
 
