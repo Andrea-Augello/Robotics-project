@@ -27,14 +27,14 @@ ros::NodeHandle *n;
 static int controllerCount;
 static std::vector<std::string> controllerList;
 
-ros::ServiceClient timeStepClient;
-webots_ros::set_int timeStepSrv;
+ros::ServiceClient time_step_client;
+webots_ros::set_int time_step_srv;
 
 static const char *motorNames[NMOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 static const char *motorNamesComplete[NMOTORS+1] = {"left_wheel_motor", "right_wheel_motor","servo"};
 const std::string name = "change";
 const std::string display = "display";
-const std::string path_to_repo = "/Github/Robotics-project"
+const std::string path_to_repo = "/Github/Robotics-project";
 
 // gaussian function
 double gaussian(double x, double mu, double sigma) {
@@ -56,16 +56,20 @@ void maxSpeed() {
   }
 }
 
-
+// Show on the display an image from filesystem
 void imageLoad(const std::string imageName) {
   ros::ServiceClient display_image_load_client;
   webots_ros::display_image_load display_image_load_srv;
-  display_image_load_client = n.serviceClient<webots_ros::display_image_load>(name + "/display/image_load");
+  display_image_load_client = n->serviceClient<webots_ros::display_image_load>(name + "/display/image_load");
 
   display_image_load_srv.request.filename = std::string(getenv("HOME")) + path_to_repo +std::string("/Media/Image/")+ imageName +std::string(".jpg");
   display_image_load_client.call(display_image_load_srv);
   ROS_INFO("Image successfully loaded to clipboard.");
   uint64_t loaded_image = display_image_load_srv.response.ir;
+
+  ros::ServiceClient display_image_paste_client;
+  webots_ros::display_image_paste display_image_paste_srv;
+  display_image_paste_client = n->serviceClient<webots_ros::display_image_paste>(name + "/display/image_paste");
 
   display_image_paste_srv.request.ir = loaded_image;
   if (display_image_paste_client.call(display_image_paste_srv) && display_image_paste_srv.response.success == 1)
@@ -74,6 +78,7 @@ void imageLoad(const std::string imageName) {
     ROS_ERROR("Failed to call service display_image_paste to paste image.");
 
   display_image_load_client.shutdown();
+  display_image_paste_client.shutdown();
   time_step_client.call(time_step_srv);
 }
 
@@ -81,7 +86,7 @@ void imageLoad(const std::string imageName) {
 void playSound(const std::string soundName, double volume, bool loop) {
   ros::ServiceClient speaker_play_sound_client;
   webots_ros::speaker_play_sound speaker_play_sound_srv;
-  speaker_play_sound_client = n.serviceClient<webots_ros::speaker_play_sound>(name + "/speaker/play_sound");
+  speaker_play_sound_client = n->serviceClient<webots_ros::speaker_play_sound>(name + "/speaker/play_sound");
 
   speaker_play_sound_srv.request.sound = std::string(getenv("HOME")) + path_to_repo +std::string("/Media/Audio/")+ soundName +std::string(".mp3");
   speaker_play_sound_srv.request.volume = volume;
@@ -94,7 +99,7 @@ void playSound(const std::string soundName, double volume, bool loop) {
   else
     ROS_ERROR("Failed to call service speaker_play_sound to play a sound.");
   
-  display_image_paste_client.shutdown();
+  speaker_play_sound_client.shutdown();
   time_step_client.call(time_step_srv);
 }
 
@@ -103,12 +108,12 @@ void playSound(const std::string soundName, double volume, bool loop) {
 void speak(const std::string &text, double volume) {
   ros::ServiceClient speaker_speak_client;
   webots_ros::speaker_speak speaker_speak_srv;
-  speaker_speak_client = n.serviceClient<webots_ros::speaker_speak>(name + "/speaker/speak");
+  speaker_speak_client = n->serviceClient<webots_ros::speaker_speak>(name + "/speaker/speak");
 
   speaker_speak_srv.request.text = text;
   speaker_speak_srv.request.volume = volume;
   
-  if (speaker_speak_client.call(speaker_play_sound_srv) && speaker_speak_srv.response.success == 1)
+  if (speaker_speak_client.call(speaker_speak_srv) && speaker_speak_srv.response.success == 1)
     ROS_INFO("Text successfully readed.");
   else
     ROS_ERROR("Failed to call service speaker_speak to read a text.");
@@ -128,12 +133,12 @@ void speak(const std::string &text, double volume) {
 void setLanguage(const int language) {
   const std::string languages[6] = {"en-US", "en-UK", "de-DE", "es-ES", "fr-FR", "it-IT"};
   ros::ServiceClient speaker_set_language_client;
-  webots_ros::speaker_speak speaker_set_language_srv;
-  speaker_set_language_client = n.serviceClient<webots_ros::set_string>(name + "/speaker/set_language");
+  webots_ros::set_string speaker_set_language_srv;
+  speaker_set_language_client = n->serviceClient<webots_ros::set_string>(name + "/speaker/set_language");
 
   speaker_set_language_srv.request.value = languages[language];
   
-  if (speaker_set_language_client.call(speaker_set_language_srv) && speaker_speak_srv.response.success == 1)
+  if (speaker_set_language_client.call(speaker_set_language_srv) && speaker_set_language_srv.response.success == 1)
     ROS_INFO("Language successfully setted.");
   else
     ROS_ERROR("Failed to call service set_language to set speaker's language.");
@@ -150,9 +155,9 @@ void controllerNameCallback(const std_msgs::String::ConstPtr &name) {
 }
 
 void quit(int sig) {
-  ROS_INFO("User stopped the "+name+" node.");
-  timeStepSrv.request.value = 0;
-  timeStepClient.call(timeStepSrv);
+  ROS_INFO("User stopped the 'change' node.");
+  time_step_srv.request.value = 0;
+  time_step_client.call(time_step_srv);
   ros::shutdown();
   exit(0);
 }
@@ -174,8 +179,8 @@ int main(int argc, char **argv) {
   }
   ros::spinOnce();
 
-  timeStepClient = n->serviceClient<webots_ros::set_int>(name+"/robot/time_step");
-  timeStepSrv.request.value = TIME_STEP;
+  time_step_client = n->serviceClient<webots_ros::set_int>(name+"/robot/time_step");
+  time_step_srv.request.value = TIME_STEP;
 
   // if there is more than one controller available, it let the user choose
   if (controllerCount == 1)
@@ -256,17 +261,19 @@ int main(int argc, char **argv) {
   // for test
   maxSpeed();
   imageLoad("warning");
-  playSound("warning");
+  playSound("warning",1.0,0);
+  setLanguage(5);
+  speak("ciao come va tutto bene?",1.0);
   // main loop
   while (ros::ok()) {
-    if (!timeStepClient.call(timeStepSrv) || !timeStepSrv.response.success) {
+    if (!time_step_client.call(time_step_srv) || !time_step_srv.response.success) {
       ROS_ERROR("Failed to call service time_step for next step.");
       break;
     }
     ros::spinOnce();
   }
-  timeStepSrv.request.value = 0;
-  timeStepClient.call(timeStepSrv);
+  time_step_srv.request.value = 0;
+  time_step_client.call(time_step_srv);
 
   ros::shutdown();
   return 0;

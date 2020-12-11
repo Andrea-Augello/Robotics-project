@@ -4,7 +4,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.2608794127615786 0.9533976101175489 0.15157482976840309 1.0530165346826696
-  position 0.09742055100931091 1.9985567877092432 0.6379583921137888
+  position -0.146526170273892 1.4562105822986697 1.348135269701476
 }
 TexturedBackground {
 }
@@ -25,10 +25,6 @@ Pioneer2 {
     "--name=change"
   ]
   extensionSlot [
-    Gyro {
-    }
-    Accelerometer {
-    }
     Servo {
       translation 0 0.23 0.06
       children [
@@ -45,8 +41,6 @@ Pioneer2 {
             }
           ]
           boundingObject USE Screen_shape
-          physics Physics {
-          }
         }
         Display {
           translation 0 1.04 -0.01
@@ -86,8 +80,6 @@ Pioneer2 {
           ]
           name "cylinder"
           boundingObject USE Cylinder_shape
-          physics Physics {
-          }
         }
         Solid {
           translation 0 0.8 -0.03
@@ -173,8 +165,6 @@ Pedestrian {
 }
 Sofa {
   translation -4.44 0 0
-  physics Physics {
-  }
 }
 RoundTable {
   physics Physics {
