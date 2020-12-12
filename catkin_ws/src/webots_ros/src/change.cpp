@@ -7,9 +7,11 @@
 #include <tf/transform_broadcaster.h>
 #include "ros/ros.h"
 
+
 #include <webots_ros/set_float.h>
 #include <webots_ros/set_int.h>
 #include <webots_ros/set_string.h>
+#include <webots_ros/get_bool.h>
 #include <webots_ros/speaker_play_sound.h>
 #include <webots_ros/speaker_speak.h>
 #include <webots_ros/display_image_load.h>
@@ -42,13 +44,12 @@ double gaussian(double x, double mu, double sigma) {
   return (1.0 / (sigma * sqrt(2.0 * M_PI))) * exp(-((x - mu) * (x - mu)) / (2 * sigma * sigma));
 }
 
-void max_speed() {
+void set_motor_speed(double speed_left, double speed_right) {
   // init variables
-  double speeds[N_MOTORS];
+  double speeds[N_MOTORS]= {speed_left, speed_right};
 
   // set speeds
   for (int i = 0; i < N_MOTORS; ++i) {
-    speeds[i] = MAX_SPEED;
     ros::ServiceClient set_velocity_client;
     webots_ros::set_float set_velocity_srv;
 	  set_velocity_client = n->serviceClient<webots_ros::set_float>(name + std::string("/") + std::string(motor_names[i]) + std::string("/set_velocity"));
@@ -57,10 +58,7 @@ void max_speed() {
   }
 }
 
-void spin_servo() {
-  // init variables
-  speed = MAX_SPEED;
-
+void spin_servo(double speed) {
   // set speeds
   ros::ServiceClient set_velocity_client;
   webots_ros::set_float set_velocity_srv;
@@ -68,6 +66,24 @@ void spin_servo() {
   set_velocity_srv.request.value = speed;
   set_velocity_client.call(set_velocity_srv);
 
+}
+
+// DONT WORK
+// Get true if speaker is speaking, false otherwise
+bool is_speaking() {
+  bool is_speaking=false;
+  ros::ServiceClient speaker_is_speaking_client;
+  webots_ros::get_bool speaker_is_speaking_srv;
+  speaker_is_speaking_client = n->serviceClient<webots_ros::get_bool>(name + "/speaker/is_speaking");
+
+  if (speaker_is_speaking_client.call(speaker_is_speaking_srv)) {
+    is_speaking=speaker_is_speaking_srv.response.value;
+  } else
+    ROS_ERROR("Failed to call service is_speaking.");
+
+  speaker_is_speaking_client.shutdown();
+  time_step_client.call(time_step_srv);
+  return is_speaking;
 }
 
 // Show on the display an image from filesystem
@@ -164,8 +180,9 @@ void set_language(const int language) {
 
 void speak_polyglot(const std::vector<std::string> text, double volume) {
   for (int i = 0; i < text.size(); ++i) {
+    while (is_speaking()){}
     set_language(i);
-    speak(text[i]+"       ", volume);
+    speak(text[i], volume);
   }  
 }
 
@@ -252,7 +269,6 @@ int main(int argc, char **argv) {
   }
 
   
-
   // enable accelerometer
   ros::ServiceClient set_accelerometer_client;
   webots_ros::set_int accelerometer_srv;
@@ -281,11 +297,19 @@ int main(int argc, char **argv) {
   ROS_INFO("You can now visualize the sensors output in rqt using 'rqt'.");
 
   // for test
-  max_speed();
-  spin_servo()
+  set_motor_speed(MAX_SPEED/4,MAX_SPEED/4);
+  spin_servo(MAX_SPEED/4);
   image_load("warning");
-  std::vector<std::string> ciao {"Ciao", "Hello", "Halo", "Hola", "Salut"};
-  speak_polyglot(ciao, 1.0);
+  set_language(0);
+  speak("Ciao sono ciangà e sugnu troppu fuoitti",1.0);
+
+  /* TO FIX
+  * std::vector<std::string> ciao {"Ciao", "Hello", "Halo", "Hola", "Salut"};
+  * speak_polyglot(ciao, 1.0);
+  * play_sound("warning", 1.0, 0);
+  */
+  
+  
   // main loop
   while (ros::ok()) {
     if (!time_step_client.call(time_step_srv) || !time_step_srv.response.success) {
