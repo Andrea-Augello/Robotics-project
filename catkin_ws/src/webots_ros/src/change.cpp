@@ -68,7 +68,7 @@ void spin_servo(double speed) {
 
 }
 
-// DONT WORK
+// TO FIX
 // Get true if speaker is speaking, false otherwise
 bool is_speaking() {
   bool is_speaking=false;
@@ -112,6 +112,7 @@ void image_load(const std::string imageName) {
   time_step_client.call(time_step_srv);
 }
 
+// TO FIX
 // play a .mp3 from filesystem with volume between 0.0 and 1.0 
 void play_sound(const std::string soundName, double volume, bool loop) {
   ros::ServiceClient speaker_play_sound_client;
