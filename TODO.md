@@ -19,8 +19,9 @@
 ## Other
 
 - [ ] too much noise
-- [ ] play_sound from file don't work, 
+- [ ] play_sound from file don't work
 - [ ] the sofa with physics go down
 - [ ] is_speaking and speak_polyglopt don't work. I think is for asynchrony.
+- [ ] webots tutorial 5 for fusing solids
 
 
