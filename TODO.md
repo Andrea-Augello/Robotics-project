@@ -18,9 +18,9 @@
 
 ## Other
 
-- i robot fanno bordello e non si sente un cazzo
-- gli audio da file non li legge
-- il divano con una fisica sprofonda
-- non funzionano is_speaking e nemmeno speak_polyglopt penso perché i comandi arrivano asincroni e sballa tutto
+- [ ] too much noise
+- [ ] play_sound from file don't work, 
+- [ ] the sofa with physics go down
+- [ ] is_speaking and speak_polyglopt don't work. I think is for asynchrony.
 
 
