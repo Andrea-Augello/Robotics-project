@@ -60,8 +60,8 @@ Pioneer2 {
               }
             }
           ]
-          width 240
-          height 135
+          width 720
+          height 405
         }
         Solid {
           translation 0 0.34 0
