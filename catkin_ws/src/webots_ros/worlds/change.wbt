@@ -4,7 +4,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.2608794127615786 0.9533976101175489 0.15157482976840309 1.0530165346826696
-  position -0.146526170273892 1.4562105822986697 1.348135269701476
+  position -0.17206214977134082 1.732841252529797 1.154999040425497
 }
 TexturedBackground {
 }
@@ -37,7 +37,7 @@ Pioneer2 {
                 baseColor 0 0 0
               }
               geometry Box {
-                size 0.725 0.41 0.02
+                size 0.24 0.135 0.02
               }
             }
           ]
@@ -60,8 +60,8 @@ Pioneer2 {
               }
             }
           ]
-          width 720
-          height 405
+          width 240
+          height 135
         }
         Solid {
           translation 0 0.34 0
