@@ -4,7 +4,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.2608794127615786 0.9533976101175489 0.15157482976840309 1.0530165346826696
-  position -0.17206214977134082 1.732841252529797 1.154999040425497
+  position -1.3218005145165388 1.306670277091577 0.4346051048527761
 }
 TexturedBackground {
 }
@@ -30,7 +30,7 @@ Pioneer2 {
       translation 0 0.23 0.06
       children [
         Solid {
-          translation 0 1.04 0.001
+          translation 0 0.9 0.001
           children [
             DEF Screen_shape Shape {
               appearance PBRAppearance {
@@ -44,7 +44,7 @@ Pioneer2 {
           boundingObject USE Screen_shape
         }
         Display {
-          translation 0 1.04 -0.01
+          translation 0 0.9 -0.01
           children [
             Shape {
               appearance Appearance {
@@ -56,7 +56,7 @@ Pioneer2 {
                 }
               }
               geometry Rectangle {
-                size 0.72 0.405
+                size 0.24 0.135
               }
             }
           ]
