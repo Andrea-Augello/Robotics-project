@@ -36,8 +36,7 @@ webots_ros::set_int time_step_srv;
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor","servo"};
 const std::string name = "change";
-const std::string display = "display";
-const std::string path_to_repo = "/git/Robotics-project";
+
 
 // gaussian function
 double gaussian(double x, double mu, double sigma) {
@@ -91,7 +90,7 @@ void image_load(const std::string imageName) {
   webots_ros::display_image_load display_image_load_srv;
   display_image_load_client = n->serviceClient<webots_ros::display_image_load>(name + "/display/image_load");
 
-  display_image_load_srv.request.filename = std::string(getenv("HOME")) + path_to_repo +std::string("/Media/Image/")+ imageName +std::string(".jpg");
+  display_image_load_srv.request.filename = std::string("../../../../../Media/Image/")+ imageName +std::string(".jpg");
   display_image_load_client.call(display_image_load_srv);
   ROS_INFO("Image successfully loaded to clipboard.");
   uint64_t loaded_image = display_image_load_srv.response.ir;
@@ -118,7 +117,7 @@ void play_sound(const std::string soundName, double volume, bool loop) {
   webots_ros::speaker_play_sound speaker_play_sound_srv;
   speaker_play_sound_client = n->serviceClient<webots_ros::speaker_play_sound>(name + "/speaker/play_sound");
 
-  speaker_play_sound_srv.request.sound = std::string(getenv("HOME")) + path_to_repo +std::string("/Media/Audio/")+ soundName +std::string(".mp3");
+  speaker_play_sound_srv.request.sound = std::string("../../../../../Media/Audio/")+ soundName +std::string(".mp3");
   speaker_play_sound_srv.request.volume = volume;
   speaker_play_sound_srv.request.pitch = 1.0;
   speaker_play_sound_srv.request.balance = 0.0;
