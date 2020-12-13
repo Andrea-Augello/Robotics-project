@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.2608794127615786 0.9533976101175489 0.15157482976840309 1.0530165346826696
-  position -1.3218005145165388 1.306670277091577 0.4346051048527761
+  orientation 0.10439552338955944 0.9942643466593789 -0.0232375484554268 0.6265451794318814
+  position 0.641610294621203 1.0285649757747666 3.1212184646924177
 }
 TexturedBackground {
 }
@@ -42,11 +42,13 @@ Pioneer2 {
             }
           ]
           boundingObject USE Screen_shape
+          physics Physics {
+          }
         }
         Display {
           translation 0 0.9 -0.01
           children [
-            Shape {
+            DEF display_shape Shape {
               appearance Appearance {
                 material Material {
                   emissiveColor 1 1 1
@@ -55,11 +57,14 @@ Pioneer2 {
                   filtering 0
                 }
               }
-              geometry Rectangle {
-                size 0.24 0.135
+              geometry Box {
+                size 0.24 0.135 0.01
               }
             }
           ]
+          boundingObject USE display_shape
+          physics Physics {
+          }
           width 720
           height 405
         }
@@ -81,6 +86,8 @@ Pioneer2 {
           ]
           name "cylinder"
           boundingObject USE Cylinder_shape
+          physics Physics {
+          }
         }
         Solid {
           translation 0 0.8 -0.03
@@ -118,8 +125,15 @@ Pioneer2 {
           ]
           name "camera_solid"
           boundingObject USE Camera_shape
+          physics Physics {
+          }
         }
       ]
+      boundingObject Sphere {
+        radius 0.001
+      }
+      physics Physics {
+      }
     }
   ]
 }
@@ -166,13 +180,15 @@ Pedestrian {
 }
 Sofa {
   translation -4.44 0 0
+  physics Physics {
+  }
 }
 RoundTable {
   physics Physics {
   }
 }
 Solid {
-  translation 0 0.9 0.8
+  translation 0 0.87 0.8
   children [
     DEF Sanitizer_shape Shape {
       appearance DEF Sanitizer_appearance PBRAppearance {
@@ -218,6 +234,8 @@ Solid {
       height 0.2
       radius 0.05
     }
+  }
+  physics Physics {
   }
 }
 FruitBowl {
