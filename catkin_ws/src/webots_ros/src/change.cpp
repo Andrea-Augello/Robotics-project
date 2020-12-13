@@ -24,6 +24,7 @@
 #define OBSTACLE_THRESHOLD 0.1
 #define DECREASE_FACTOR 0.9
 #define BACK_SLOWDOWN 0.9
+#define N_DISTANCE_SENSORS 16
 
 ros::NodeHandle *n;
 
@@ -33,6 +34,7 @@ static std::vector<std::string> controller_list;
 ros::ServiceClient time_step_client;
 webots_ros::set_int time_step_srv;
 
+static const char *distance_sensor_names[N_DISTANCE_SENSORS] = {"ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8", "ds9", "ds10", "ds11", "ds12", "ds13", "ds14", "ds15"};
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor","servo"};
 const std::string name = "change";
@@ -41,6 +43,22 @@ const std::string name = "change";
 // gaussian function
 double gaussian(double x, double mu, double sigma) {
   return (1.0 / (sigma * sqrt(2.0 * M_PI))) * exp(-((x - mu) * (x - mu)) / (2 * sigma * sigma));
+}
+
+void enable_sensors(){
+  ros::ServiceClient enable_sensor_client;
+  webots_ros::set_int enable_sensor_srv;
+  for (int i = 0; i < N_DISTANCE_SENSORS; ++i) {
+    enable_sensor_client = n->serviceClient<webots_ros::set_int>(name + std::string("/") + std::string(distance_sensor_names[i]) + std::string("/enable"));
+    if(enable_sensor_client.call(enable_sensor_srv)){
+      ROS_INFO("Distance sensor %s succefully enabled.", distance_sensor_names[i]);
+    }else{
+      ROS_ERROR("Failed to call service enable_sensor.");
+    }
+
+  }
+  enable_sensor_client.shutdown();
+  time_step_client.call(time_step_srv); 
 }
 
 void set_motor_speed(double speed_left, double speed_right) {
@@ -298,6 +316,7 @@ int main(int argc, char **argv) {
   // for test
   set_motor_speed(MAX_SPEED/4,MAX_SPEED/4);
   spin_servo(MAX_SPEED/4);
+  enable_sensors();
   image_load("warning");
   set_language(0);
   speak("Ciao sono ciangà e sugnu troppu fuoitti",1.0);
