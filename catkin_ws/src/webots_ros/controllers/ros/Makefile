@@ -35,7 +35,7 @@ ifeq ($(OSTYPE),linux)
  CFLAGS = -std=c++11
 endif
 
-PYTHON_COMMAND ?= python
+PYTHON_COMMAND ?= python3	
 ifeq (, $(shell which $(PYTHON_COMMAND) 2> /dev/null))
 release debug profile clean:
 	@echo "# \033[0;33mPython not installed, impossible to generate services/messages required by the ros controller, skipping ros controller\033[0m"

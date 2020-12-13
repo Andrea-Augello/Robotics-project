@@ -37,7 +37,7 @@ static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_mot
 static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor","servo"};
 const std::string name = "change";
 const std::string display = "display";
-const std::string path_to_repo = "/Github/Robotics-project";
+const std::string path_to_repo = "/git/Robotics-project";
 
 // gaussian function
 double gaussian(double x, double mu, double sigma) {
@@ -68,10 +68,9 @@ void spin_servo(double speed) {
 
 }
 
-// TO FIX
 // Get true if speaker is speaking, false otherwise
 bool is_speaking() {
-  bool is_speaking=false;
+  bool is_speaking=true;
   ros::ServiceClient speaker_is_speaking_client;
   webots_ros::get_bool speaker_is_speaking_srv;
   speaker_is_speaking_client = n->serviceClient<webots_ros::get_bool>(name + "/speaker/is_speaking");
@@ -143,7 +142,7 @@ void speak(const std::string &text, double volume) {
 
   speaker_speak_srv.request.text = text;
   speaker_speak_srv.request.volume = volume;
-  
+  while (is_speaking()){}
   if (speaker_speak_client.call(speaker_speak_srv) && speaker_speak_srv.response.success == 1)
     ROS_INFO("Text successfully readed.");
   else
@@ -303,12 +302,13 @@ int main(int argc, char **argv) {
   image_load("warning");
   set_language(0);
   speak("Ciao sono ciangà e sugnu troppu fuoitti",1.0);
-
-  /* TO FIX
-  * std::vector<std::string> ciao {"Ciao", "Hello", "Halo", "Hola", "Salut"};
-  * speak_polyglot(ciao, 1.0);
-  * play_sound("warning", 1.0, 0);
-  */
+  speak("Mi chiamo ROBOT SENZA INGEGNO",1.0);
+  std::vector<std::string> ciao {"Ciao", "Hello", "Halo", "Hola", "Salut"};
+  speak_polyglot(ciao, 1.0);
+  
+  /* TO FIX */
+  //play_sound("warning", 1.0, 0);
+  
   
   
   // main loop
