@@ -185,6 +185,7 @@ Pedestrian {
 Sofa {
   translation -4.44 0 0
   physics Physics {
+    density 100
   }
 }
 RoundTable {
