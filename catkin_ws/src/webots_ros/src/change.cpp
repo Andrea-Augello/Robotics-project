@@ -268,6 +268,7 @@ int main(int argc, char **argv) {
   enable_device("gyro");
   enable_device("accelerometer");
   enable_device("camera");
+  enable_device("compass");
 
   for (int i = 0; i < N_DISTANCE_SENSORS; ++i) {
     enable_device("ds"+std::to_string(i));
