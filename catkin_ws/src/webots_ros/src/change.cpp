@@ -34,9 +34,8 @@ static std::vector<std::string> controller_list;
 ros::ServiceClient time_step_client;
 webots_ros::set_int time_step_srv;
 
-static const char *distance_sensor_names[N_DISTANCE_SENSORS] = {"ds0", "ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8", "ds9", "ds10", "ds11", "ds12", "ds13", "ds14", "ds15"};
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
-static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor","servo"};
+static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor", "servo"};
 const std::string name = "change";
 
 
@@ -45,44 +44,47 @@ double gaussian(double x, double mu, double sigma) {
   return (1.0 / (sigma * sqrt(2.0 * M_PI))) * exp(-((x - mu) * (x - mu)) / (2 * sigma * sigma));
 }
 
-void enable_sensors(){
-  ros::ServiceClient enable_sensor_client;
-  webots_ros::set_int enable_sensor_srv;
-  for (int i = 0; i < N_DISTANCE_SENSORS; ++i) {
-    enable_sensor_client = n->serviceClient<webots_ros::set_int>(name + std::string("/") + std::string(distance_sensor_names[i]) + std::string("/enable"));
-    if(enable_sensor_client.call(enable_sensor_srv)){
-      ROS_INFO("Distance sensor %s succefully enabled.", distance_sensor_names[i]);
-    }else{
-      ROS_ERROR("Failed to call service enable_sensor.");
-    }
-
+void enable_device(const std::string device){
+  ros::ServiceClient set_device_client;
+  webots_ros::set_int set_device_srv;
+  ros::Subscriber sub_camera;
+  set_device_client = n->serviceClient<webots_ros::set_int>(name+"/"+device+"/enable");
+  set_device_srv.request.value = TIME_STEP;
+  if(set_device_client.call(set_device_srv)){
+    ROS_INFO("%s succefully enabled.", device.c_str());
+  }else{
+    ROS_ERROR("Failed to call service %s/enable.", device.c_str());
   }
-  enable_sensor_client.shutdown();
-  time_step_client.call(time_step_srv); 
+  set_device_client.shutdown();
+  time_step_client.call(time_step_srv);
 }
 
-void set_motor_speed(double speed_left, double speed_right) {
-  // init variables
-  double speeds[N_MOTORS]= {speed_left, speed_right};
-
-  // set speeds
-  for (int i = 0; i < N_MOTORS; ++i) {
-    ros::ServiceClient set_velocity_client;
-    webots_ros::set_float set_velocity_srv;
-	  set_velocity_client = n->serviceClient<webots_ros::set_float>(name + std::string("/") + std::string(motor_names[i]) + std::string("/set_velocity"));
-    set_velocity_srv.request.value = speeds[i];
-    set_velocity_client.call(set_velocity_srv);
+void set_motor_position(const std::string motor, double position) {
+  ros::ServiceClient set_position_client;
+  webots_ros::set_float set_position_srv;
+  set_position_client = n->serviceClient<webots_ros::set_float>(name + "/" + motor + "/set_position");
+  set_position_srv.request.value = position;
+  if(set_position_client.call(set_position_srv)){
+    ROS_INFO("%s's position succefully setted.", motor.c_str());
+  }else{
+    ROS_ERROR("Failed to call service %s/set_position.", motor.c_str());
   }
+  set_position_client.shutdown();
+  time_step_client.call(time_step_srv);
 }
 
-void spin_servo(double speed) {
-  // set speeds
+void set_motor_speed(const std::string motor, double speed) {
   ros::ServiceClient set_velocity_client;
   webots_ros::set_float set_velocity_srv;
-  set_velocity_client = n->serviceClient<webots_ros::set_float>(name + std::string("/servo/set_velocity"));
+  set_velocity_client = n->serviceClient<webots_ros::set_float>(name + "/" + motor + "/set_velocity");
   set_velocity_srv.request.value = speed;
-  set_velocity_client.call(set_velocity_srv);
-
+  if(set_velocity_client.call(set_velocity_srv)){
+    ROS_INFO("%s's velocity succefully setted.", motor.c_str());
+  }else{
+    ROS_ERROR("Failed to call service %s/set_velocity.", motor.c_str());
+  }
+  set_velocity_client.shutdown();
+  time_step_client.call(time_step_srv);
 }
 
 // Get true if speaker is speaking, false otherwise
@@ -258,65 +260,26 @@ int main(int argc, char **argv) {
 
   // init motors
   for (int i = 0; i < N_MOTORS+1; ++i) {
-    // position
-    ros::ServiceClient set_position_client;
-    webots_ros::set_float set_position_srv;
-    set_position_client = n->serviceClient<webots_ros::set_float>(name + std::string("/") + std::string(motor_names_complete[i]) +
-                                                                  std::string("/set_position"));
-
-    set_position_srv.request.value = INFINITY;
-    
-    
-    if (set_position_client.call(set_position_srv) && set_position_srv.response.success)
-      ROS_INFO("Position set to INFINITY for motor %s.", motor_names_complete[i]);
-    else
-      ROS_ERROR("Failed to call service set_position on motor %s.", motor_names_complete[i]);
-
-    // speed
-    ros::ServiceClient set_velocity_client;
-    webots_ros::set_float set_velocity_srv;
-    set_velocity_client = n->serviceClient<webots_ros::set_float>(name + std::string("/") + std::string(motor_names_complete[i]) +
-                                                                  std::string("/set_velocity"));
-
-    set_velocity_srv.request.value = 0.0;
-    if (set_velocity_client.call(set_velocity_srv) && set_velocity_srv.response.success == 1)
-      ROS_INFO("Velocity set to 0.0 for motor %s.", motor_names_complete[i]);
-    else
-      ROS_ERROR("Failed to call service set_velocity on motor %s.", motor_names_complete[i]);
+    set_motor_position(motor_names_complete[i],INFINITY);
+    set_motor_speed(motor_names_complete[i],0.0);
   }
 
-  
-  // enable accelerometer
-  ros::ServiceClient set_accelerometer_client;
-  webots_ros::set_int accelerometer_srv;
-  ros::Subscriber sub_accelerometer;
-  set_accelerometer_client = n->serviceClient<webots_ros::set_int>(name+"/accelerometer/enable");
-  accelerometer_srv.request.value = 32;
-  set_accelerometer_client.call(accelerometer_srv);
+  // enable devices
+  enable_device("gyro");
+  enable_device("accelerometer");
+  enable_device("camera");
 
-  // enable camera
-  ros::ServiceClient set_camera_client;
-  webots_ros::set_int camera_srv;
-  ros::Subscriber sub_camera;
-  set_camera_client = n->serviceClient<webots_ros::set_int>(name+"/camera/enable");
-  camera_srv.request.value = 64;
-  set_camera_client.call(camera_srv);
-
-  // enable gyro
-  ros::ServiceClient set_gyro_client;
-  webots_ros::set_int gyro_srv;
-  ros::Subscriber sub_gyro;
-  set_gyro_client = n->serviceClient<webots_ros::set_int>(name+"/gyro/enable");
-  gyro_srv.request.value = 32;
-  set_gyro_client.call(gyro_srv);
+  for (int i = 0; i < N_DISTANCE_SENSORS; ++i) {
+    enable_device("ds"+std::to_string(i));
+  }  
 
 
   ROS_INFO("You can now visualize the sensors output in rqt using 'rqt'.");
 
   // for test
-  set_motor_speed(MAX_SPEED/4,MAX_SPEED/4);
-  spin_servo(MAX_SPEED/4);
-  enable_sensors();
+  for (int i = 0; i < N_MOTORS; ++i) {
+    set_motor_speed(motor_names_complete[i],MAX_SPEED/4);
+  }
   image_load("warning");
   set_language(0);
   speak("Ciao sono ciangà e sugnu troppu fuoitti",1.0);

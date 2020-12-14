@@ -4,7 +4,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.10439552338955944 0.9942643466593789 -0.0232375484554268 0.6265451794318814
-  position 0.641610294621203 1.0285649757747666 3.1212184646924177
+  position 0.5822537646897918 0.7173355721200987 3.1386962666114333
 }
 TexturedBackground {
 }
@@ -32,6 +32,8 @@ Pioneer2 {
         Solid {
           translation 0 0.9 0.001
           children [
+            Speaker {
+            }
             DEF Screen_shape Shape {
               appearance PBRAppearance {
                 baseColor 0 0 0
@@ -71,8 +73,6 @@ Pioneer2 {
         Solid {
           translation 0 0.34 0
           children [
-            Speaker {
-            }
             DEF Cylinder_shape Shape {
               appearance PBRAppearance {
                 baseColor 0 0 0
@@ -134,6 +134,10 @@ Pioneer2 {
       }
       physics Physics {
       }
+    }
+    Gyro {
+    }
+    Accelerometer {
     }
   ]
 }
