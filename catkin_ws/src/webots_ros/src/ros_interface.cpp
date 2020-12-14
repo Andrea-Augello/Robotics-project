@@ -37,6 +37,21 @@ double gaussian(double x, double mu, double sigma) {
 	return (1.0 / (sigma * sqrt(2.0 * M_PI))) * exp(-((x - mu) * (x - mu)) / (2 * sigma * sigma));
 }
 
+void compassCallback(const sensor_msgs::MagneticField::ConstPtr &values) {
+  compassValues[0] = values->magnetic_field.x;
+  compassValues[1] = values->magnetic_field.y;
+  compassValues[2] = values->magnetic_field.z;
+
+  ROS_INFO("Compass values are x=%f y=%f z=%f (time: %d:%d).", compassValues[0], compassValues[1], compassValues[2],
+           values->header.stamp.sec, values->header.stamp.nsec);
+  callbackCalled = true;
+}
+
+void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
+  ROS_INFO("Distance from object is %f (time: %d:%d).", value->range, value->header.stamp.sec, value->header.stamp.nsec);
+  callbackCalled = true;
+}
+
 void enable_device(const std::string device){
 	ros::ServiceClient set_device_client;
 	webots_ros::set_int set_device_srv;
@@ -171,7 +186,6 @@ void speak(const std::string &text, double volume) {
 // 3 for Spanish.
 // 4 for French.
 // 5 for British English.
-
 void set_language(const int language) {
 	const std::string languages[N_LANGUAGES] = {"it-IT", "en-US", "de-DE", "es-ES", "fr-FR", "en-UK"};
 	ros::ServiceClient speaker_set_language_client;
