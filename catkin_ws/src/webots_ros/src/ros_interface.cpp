@@ -40,7 +40,6 @@ double gaussian(double x, double mu, double sigma) {
 void enable_device(const std::string device){
 	ros::ServiceClient set_device_client;
 	webots_ros::set_int set_device_srv;
-	ros::Subscriber sub_camera;
 	set_device_client = n->serviceClient<webots_ros::set_int>(name+"/"+device+"/enable");
 	set_device_srv.request.value = TIME_STEP;
 	if(set_device_client.call(set_device_srv)){
