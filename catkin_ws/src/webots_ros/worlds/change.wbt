@@ -139,6 +139,8 @@ Pioneer2 {
         mass 0.1
       }
     }
+    Compass {
+    }
     Gyro {
     }
     Accelerometer {
