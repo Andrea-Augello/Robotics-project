@@ -19,6 +19,8 @@ RectangleArena {
   wallHeight 3
 }
 Pioneer2 {
+  hidden translation_1 1.1441193957418953e-06 -7.537563833998061e-05 -6.527101952410673e-06
+  hidden rotation_1 -0.00018282986264872578 -0.9999999783879152 9.898186986331588e-05 0.00468640188001591
   translation -1.99 0 -0.369986
   rotation 0 1 0 -3.1415853071795863
   controller "ros"
@@ -133,6 +135,8 @@ Pioneer2 {
         radius 0.001
       }
       physics Physics {
+        density -1
+        mass 0.1
       }
     }
     Gyro {

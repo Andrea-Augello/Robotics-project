@@ -277,7 +277,7 @@ int main(int argc, char **argv) {
   ROS_INFO("You can now visualize the sensors output in rqt using 'rqt'.");
 
   // for test
-  for (int i = 0; i < N_MOTORS; ++i) {
+  for (int i = 0; i < N_MOTORS+1; ++i) {
     set_motor_speed(motor_names_complete[i],MAX_SPEED/4);
   }
   image_load("warning");
