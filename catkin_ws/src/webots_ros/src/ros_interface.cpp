@@ -30,7 +30,9 @@ ros::ServiceClient time_step_client;
 webots_ros::set_int time_step_srv;
 
 ros::Subscriber camera_sub,
-	compass_sub;
+	compass_sub,
+	gyro_sub,
+	accelerometer_sub;
 
 /*
  * Protos
@@ -42,6 +44,7 @@ void enable_device(const std::string device);
 
 static int controller_count;
 static std::vector<std::string> controller_list;
+
 static double compassValue = 0;
 static double GyroValues[3] = {0, 0, 0};
 static double accelerometerValues[3] = {0, 0, 0};
@@ -76,14 +79,16 @@ void accelerometerCallback(const sensor_msgs::Imu::ConstPtr &values) {
 }
 
 void cameraCallback(const sensor_msgs::Image::ConstPtr &values) {
-  ROS_INFO("CAMERA CALLBACK");
   int i = 0, width, height;
   char *data;
   width  = (int)values->width;
   height = (int) values->height;
   data = new char[values->step*height];
+  memcpy(data, &(values->data[0]),values->step*height);
 
-  image = cv::Mat(height, width, CV_8UC3, data);
+  image = cv::Mat(height, width, CV_8UC4, data);
+  image = image.clone();
+  delete data;
 }
 
 void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
@@ -291,7 +296,7 @@ void quit(int sig) {
 
 void init(int argc, char **argv){
 	std::string controllerName;
-	// create a node named as "name" variable on ROS network
+	// create a node named as "model_name" variable on ROS network
 	ros::init(argc, argv, model_name, ros::init_options::AnonymousName);
 	n = new ros::NodeHandle;
 
@@ -337,10 +342,10 @@ void init(int argc, char **argv){
 		set_motor_speed(motor_names_complete[i],MAX_SPEED/4);
 	}
 
-	compass_sub = get_device_values("compass");
-	ROS_ERROR("%f", compassValue);
-	//camera_sub  = get_device_values("camera");
-	ROS_ERROR("%f", compassValue);
+	compass_sub 		= get_device_values("compass");
+	camera_sub  		= get_device_values("camera");
+	gyro_sub			= get_device_values("gyro");
+	accelerometer_sub	= get_device_values("accelerometer");
 
 	
 	

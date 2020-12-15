@@ -6,6 +6,7 @@ int main(int argc, char **argv) {
 	init(argc, argv);
 	// main loop
 	while (isOk()) {
+		processCallbacks();
 		if(!timeStep())
 			break;
 	}
