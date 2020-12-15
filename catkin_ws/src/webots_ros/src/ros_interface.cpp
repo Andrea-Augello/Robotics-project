@@ -34,6 +34,7 @@ ros::Subscriber camera_sub,
 	gyro_sub,
 	accelerometer_sub;
 
+ros::Subscriber distance_sensor_sub[N_DISTANCE_SENSORS];
 /*
  * Protos
  */
@@ -50,7 +51,7 @@ static std::vector<std::string> controller_list;
 static double compass_value = 0;
 static double gyro_values[3] = {0, 0, 0};
 static double accelerometer_values[3] = {0, 0, 0};
-static double distance_sensor_values[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static double distance_sensor_values[N_DISTANCE_SENSORS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static cv::Mat image;
 
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
@@ -58,7 +59,7 @@ static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "righ
 const std::string model_name = "change";
 
 void compassCallback(const sensor_msgs::MagneticField::ConstPtr &values) {
-	compassValue = 180*atan2(values->magnetic_field.x, values->magnetic_field.z)/M_PI;
+	compass_value = 180*atan2(values->magnetic_field.x, values->magnetic_field.z)/M_PI;
 	ROS_INFO("Compass value is %f (time: %d:%d).", compass_value, values->header.stamp.sec, values->header.stamp.nsec);	   
 }
 
@@ -95,8 +96,10 @@ void cameraCallback(const sensor_msgs::Image::ConstPtr &values) {
 }
 
 void distance_sensor_callback(const sensor_msgs::Range::ConstPtr &value, int sensor_number) {
-	distance_sensor_values[sensor_number] = value->range;
+	
   	ROS_INFO("Distance from object is %f (time: %d:%d).", value->range, value->header.stamp.sec, value->header.stamp.nsec);
+	distance_sensor_values[sensor_number] = value->range;
+	ROS_ERROR("%d %f", sensor_number, value->range);
 }
 
 
@@ -110,11 +113,15 @@ ros::Subscriber get_device_values(const std::string device){
 		sub = n->subscribe(model_name + "/" + device + "/values", 1, gyroCallback);
 	} else if ( !device.compare("accelerometer") ){
 		sub = n->subscribe(model_name + "/" + device + "/values", 1, accelerometerCallback);
-	} else if ( !device.substr(0,2).compare("ds") ){
-		sub = n->subscribe(model_name + "/" + device + "/value", 1, [&value]() { distance_sensor_callback(value, atoi(device.substr(2,device.length())); });
 	} else {
-		exit(1);
-	}
+		int sensor_number=atoi(device.c_str());
+		boost::function<void (const sensor_msgs::Range::ConstPtr &)> callback = 
+    	[&] (const sensor_msgs::Range::ConstPtr & value) {
+			distance_sensor_callback(value,sensor_number);
+    	};
+		sub = n->subscribe(model_name + "/ds" + device + "/value", 1, callback);
+		
+	} 
 	while (sub.getNumPublishers() == 0) {
 		ros::spinOnce();
 		time_step_client.call(time_step_srv);
@@ -347,6 +354,12 @@ void init(int argc, char **argv){
 	camera_sub  		= get_device_values("camera");
 	gyro_sub			= get_device_values("gyro");
 	accelerometer_sub	= get_device_values("accelerometer");
+
+
+	for (int i = 0; i < N_DISTANCE_SENSORS; ++i) {
+		distance_sensor_sub[i]=get_device_values(std::to_string(i));
+	}  
+	
 	
 	image_load("warning");
 	
@@ -393,5 +406,5 @@ cv::Mat get_image(){
 	return image.clone();
 }
 double get_angle(){
-	return compassValue;
+	return compass_value;
 }
