@@ -30,7 +30,6 @@ webots_ros::set_int time_step_srv;
 static int controller_count;
 static std::vector<std::string> controller_list;
 static double compassValues[3] = {0, 0, 0};
-static bool callbackCalled = false;
 
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor", "servo"};
@@ -47,93 +46,29 @@ void compassCallback(const sensor_msgs::MagneticField::ConstPtr &values) {
 	compassValues[1] = values->magnetic_field.y;
 	compassValues[2] = values->magnetic_field.z;
 
-	ROS_ERROR("Compass values are x=%f y=%f z=%f (time: %d:%d).", compassValues[0], compassValues[1], compassValues[2],
-			values->header.stamp.sec, values->header.stamp.nsec);
-	callbackCalled = true;		   
+	ROS_INFO("Compass values are x=%f y=%f z=%f (time: %d:%d).", compassValues[0], compassValues[1], compassValues[2],
+			values->header.stamp.sec, values->header.stamp.nsec);	   
 }
 
 void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
   	ROS_INFO("Distance from object is %f (time: %d:%d).", value->range, value->header.stamp.sec, value->header.stamp.nsec);
-  	callbackCalled = true;
 }
 
-void get_compass_values2(){
-	ros::ServiceClient set_compass_client;
-	webots_ros::set_int compass_srv;
-	ros::Subscriber sub_compass_32;
-	set_compass_client = n->serviceClient<webots_ros::set_int>(name + "/compass/enable");
 
-	ros::ServiceClient sampling_period_compass_client;
-	webots_ros::get_int sampling_period_compass_srv;
-	sampling_period_compass_client = n->serviceClient<webots_ros::get_int>(name + "/compass/get_sampling_period");
-
-	compass_srv.request.value = 32;
-	if (set_compass_client.call(compass_srv) && compass_srv.response.success == 1) {
-		ROS_INFO("Compass enabled.");
-		sub_compass_32 = n->subscribe(name + "/compass/values", 1, compassCallback);
-		callbackCalled = false;
-		while (sub_compass_32.getNumPublishers() == 0 && !callbackCalled) {
-		ros::spinOnce();
-		time_step_client.call(time_step_srv);
-		}
-	} else {
-		if (compass_srv.response.success == -1)
-		ROS_ERROR("Sampling period is not valid.");
-		ROS_ERROR("Failed to enable compass.");
-	}
-
-	ros::ServiceClient lookup_table_compass_client;
-	webots_ros::get_float_array lookup_table_compass_srv;
-	lookup_table_compass_client = n->serviceClient<webots_ros::get_float_array>(name + "/compass/get_lookup_table");
-	if (lookup_table_compass_client.call(lookup_table_compass_srv))
-		ROS_INFO("Compass lookup table size = %lu.", lookup_table_compass_srv.response.value.size());
-	else
-		ROS_ERROR("Failed to get the lookup table of 'compass'.");
-	if (lookup_table_compass_srv.response.value.size() != 0)
-		ROS_ERROR("Size of lookup table of 'compass' is wrong.");
-	lookup_table_compass_client.shutdown();
-
-	sub_compass_32.shutdown();
-
-	time_step_client.call(time_step_srv);
-
-	sampling_period_compass_client.call(sampling_period_compass_srv);
-	ROS_INFO("Compass is enabled with a sampling period of %d.", sampling_period_compass_srv.response.value);
-
-	time_step_client.call(time_step_srv);
-
-	time_step_client.call(time_step_srv);
-	time_step_client.call(time_step_srv);
-	time_step_client.call(time_step_srv);
-
-	sampling_period_compass_client.call(sampling_period_compass_srv);
-	ROS_INFO("Compass is disabled (sampling period is %d).", sampling_period_compass_srv.response.value);
-
-	set_compass_client.shutdown();
-	sampling_period_compass_client.shutdown();
-	time_step_client.call(time_step_srv);
-}	
-
-void get_compass_values(){
-	ros::ServiceClient sampling_period_compass_client;
-	webots_ros::get_int sampling_period_compass_srv;
-	sampling_period_compass_client = n->serviceClient<webots_ros::get_int>(name + "/compass/get_sampling_period");
-
-	ros::Subscriber sub_compass_32;
-	sub_compass_32 = n->subscribe(name + "/compass/values", 10, compassCallback);
-	callbackCalled = false;
-	while (sub_compass_32.getNumPublishers() == 0 && !callbackCalled) {
+void get_device_values(const std::string device, const void* callback){
+	ros::Subscriber sub;
+	sub = n->subscribe(name + "/" + device + "/values", 1, callback);
+	while (sub.getNumPublishers() == 0) {
 		ros::spinOnce();
 		time_step_client.call(time_step_srv);
 	}
+	ros::spinOnce();
+	time_step_client.call(time_step_srv);
+	ros::spinOnce();
 
-	sub_compass_32.shutdown();
+	sub.shutdown();
 	time_step_client.call(time_step_srv);
 
-	sampling_period_compass_client.call(sampling_period_compass_srv);
-	ROS_INFO("Compass is enabled with a sampling period of %d.", sampling_period_compass_srv.response.value);
-
-	time_step_client.call(time_step_srv);  
 }	
 
 void enable_device(const std::string device){
@@ -372,12 +307,13 @@ void init(int argc, char **argv){
 	for (int i = 0; i < N_MOTORS+1; ++i) {
 		set_motor_speed(motor_names_complete[i],MAX_SPEED/4);
 	}
-	get_compass_values2();
-	image_load("warning");
 
-	for (int i = 0; i < 100; ++i) {
-		ROS_ERROR("%f %f %f", compassValues[0], compassValues[1], compassValues[2]);
-	}
+	get_device_values("compass", compassCallback);
+	ROS_ERROR("%f %f %f", compassValues[0], compassValues[1], compassValues[2]);
+	
+	
+	image_load("warning");
+	
 
 	set_language(0);
 	speak("Ciao sono ciangà e sugnu troppu fuoitti",1.0);
