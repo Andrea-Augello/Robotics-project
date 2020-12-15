@@ -47,9 +47,10 @@ void set_motor_speed(const std::string motor, double speed) ;
 static int controller_count;
 static std::vector<std::string> controller_list;
 
-static double compassValue = 0;
-static double GyroValues[3] = {0, 0, 0};
-static double accelerometerValues[3] = {0, 0, 0};
+static double compass_value = 0;
+static double gyro_values[3] = {0, 0, 0};
+static double accelerometer_values[3] = {0, 0, 0};
+static double distance_sensor_values[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static cv::Mat image;
 
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
@@ -58,26 +59,26 @@ const std::string model_name = "change";
 
 void compassCallback(const sensor_msgs::MagneticField::ConstPtr &values) {
 	compassValue = 180*atan2(values->magnetic_field.x, values->magnetic_field.z)/M_PI;
-	ROS_INFO("Compass value is %f (time: %d:%d).", compassValue, values->header.stamp.sec, values->header.stamp.nsec);	   
+	ROS_INFO("Compass value is %f (time: %d:%d).", compass_value, values->header.stamp.sec, values->header.stamp.nsec);	   
 }
 
 
 void gyroCallback(const sensor_msgs::Imu::ConstPtr &values) {
-  GyroValues[0] = values->angular_velocity.x;
-  GyroValues[1] = values->angular_velocity.y;
-  GyroValues[2] = values->angular_velocity.z;
+  gyro_values[0] = values->angular_velocity.x;
+  gyro_values[1] = values->angular_velocity.y;
+  gyro_values[2] = values->angular_velocity.z;
 
-  ROS_INFO("Gyro values are x=%f y=%f z=%f (time: %d:%d).", GyroValues[0], GyroValues[1], GyroValues[2],
+  ROS_INFO("Gyro values are x=%f y=%f z=%f (time: %d:%d).", gyro_values[0], gyro_values[1], gyro_values[2],
            values->header.stamp.sec, values->header.stamp.nsec);
 }
 
 void accelerometerCallback(const sensor_msgs::Imu::ConstPtr &values) {
-  accelerometerValues[0] = values->linear_acceleration.x;
-  accelerometerValues[1] = values->linear_acceleration.y;
-  accelerometerValues[2] = values->linear_acceleration.z;
+  accelerometer_values[0] = values->linear_acceleration.x;
+  accelerometer_values[1] = values->linear_acceleration.y;
+  accelerometer_values[2] = values->linear_acceleration.z;
 
-  ROS_INFO("Accelerometer values are x=%f y=%f z=%f (time: %d:%d).", accelerometerValues[0], accelerometerValues[1],
-           accelerometerValues[2], values->header.stamp.sec, values->header.stamp.nsec);
+  ROS_INFO("Accelerometer values are x=%f y=%f z=%f (time: %d:%d).", accelerometer_values[0], accelerometer_values[1],
+           accelerometer_values[2], values->header.stamp.sec, values->header.stamp.nsec);
 }
 
 void cameraCallback(const sensor_msgs::Image::ConstPtr &values) {
@@ -93,7 +94,8 @@ void cameraCallback(const sensor_msgs::Image::ConstPtr &values) {
   delete data;
 }
 
-void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
+void distance_sensor_callback(const sensor_msgs::Range::ConstPtr &value, int sensor_number) {
+	distance_sensor_values[sensor_number] = value->range;
   	ROS_INFO("Distance from object is %f (time: %d:%d).", value->range, value->header.stamp.sec, value->header.stamp.nsec);
 }
 
@@ -108,6 +110,8 @@ ros::Subscriber get_device_values(const std::string device){
 		sub = n->subscribe(model_name + "/" + device + "/values", 1, gyroCallback);
 	} else if ( !device.compare("accelerometer") ){
 		sub = n->subscribe(model_name + "/" + device + "/values", 1, accelerometerCallback);
+	} else if ( !device.substr(0,2).compare("ds") ){
+		sub = n->subscribe(model_name + "/" + device + "/value", 1, [&value]() { distance_sensor_callback(value, atoi(device.substr(2,device.length())); });
 	} else {
 		exit(1);
 	}
