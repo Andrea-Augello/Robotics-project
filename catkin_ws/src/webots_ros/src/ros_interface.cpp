@@ -32,7 +32,8 @@ webots_ros::set_int time_step_srv;
 ros::Subscriber camera_sub,
 	compass_sub,
 	gyro_sub,
-	accelerometer_sub;
+	accelerometer_sub,
+	lidar_sub;
 
 ros::Subscriber distance_sensor_sub[N_DISTANCE_SENSORS];
 /*
@@ -51,76 +52,72 @@ static std::vector<std::string> controller_list;
 static double compass_value = 0;
 static double gyro_values[3] = {0, 0, 0};
 static double accelerometer_values[3] = {0, 0, 0};
-static double distance_sensor_values[N_DISTANCE_SENSORS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static cv::Mat image;
+static std::vector<float> lidar_values;
 
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor", "servo"};
 const std::string model_name = "change";
 
-void compassCallback(const sensor_msgs::MagneticField::ConstPtr &values) {
+void compass_callback(const sensor_msgs::MagneticField::ConstPtr &values) {
 	compass_value = 180*atan2(values->magnetic_field.x, values->magnetic_field.z)/M_PI;
 	ROS_INFO("Compass value is %f (time: %d:%d).", compass_value, values->header.stamp.sec, values->header.stamp.nsec);	   
 }
 
 
-void gyroCallback(const sensor_msgs::Imu::ConstPtr &values) {
-  gyro_values[0] = values->angular_velocity.x;
-  gyro_values[1] = values->angular_velocity.y;
-  gyro_values[2] = values->angular_velocity.z;
+void gyro_callback(const sensor_msgs::Imu::ConstPtr &values) {
+	gyro_values[0] = values->angular_velocity.x;
+	gyro_values[1] = values->angular_velocity.y;
+	gyro_values[2] = values->angular_velocity.z;
 
-  ROS_INFO("Gyro values are x=%f y=%f z=%f (time: %d:%d).", gyro_values[0], gyro_values[1], gyro_values[2],
-           values->header.stamp.sec, values->header.stamp.nsec);
+	ROS_INFO("Gyro values are x=%f y=%f z=%f (time: %d:%d).", gyro_values[0], gyro_values[1], gyro_values[2],
+			values->header.stamp.sec, values->header.stamp.nsec);
 }
 
-void accelerometerCallback(const sensor_msgs::Imu::ConstPtr &values) {
-  accelerometer_values[0] = values->linear_acceleration.x;
-  accelerometer_values[1] = values->linear_acceleration.y;
-  accelerometer_values[2] = values->linear_acceleration.z;
+void accelerometer_callback(const sensor_msgs::Imu::ConstPtr &values) {
+	accelerometer_values[0] = values->linear_acceleration.x;
+	accelerometer_values[1] = values->linear_acceleration.y;
+	accelerometer_values[2] = values->linear_acceleration.z;
 
-  ROS_INFO("Accelerometer values are x=%f y=%f z=%f (time: %d:%d).", accelerometer_values[0], accelerometer_values[1],
-           accelerometer_values[2], values->header.stamp.sec, values->header.stamp.nsec);
+	ROS_INFO("Accelerometer values are x=%f y=%f z=%f (time: %d:%d).", accelerometer_values[0], accelerometer_values[1],
+			accelerometer_values[2], values->header.stamp.sec, values->header.stamp.nsec);
 }
 
-void cameraCallback(const sensor_msgs::Image::ConstPtr &values) {
-  int i = 0, width, height;
-  char *data;
-  width  = (int)values->width;
-  height = (int) values->height;
-  data = new char[values->step*height];
-  memcpy(data, &(values->data[0]),values->step*height);
+void lidar_callback(const sensor_msgs::LaserScan::ConstPtr &scan) {
+	int scanSize = scan->ranges.size();
+	lidar_values.resize(scanSize);
+	for (int i = 0; i < scanSize; ++i)
+		lidar_values[i] = scan->ranges[i];
+}	
 
-  image = cv::Mat(height, width, CV_8UC4, data);
-  image = image.clone();
-  delete data;
-}
+void camera_callback(const sensor_msgs::Image::ConstPtr &values) {
+	int i = 0, width, height;
+	char *data;
+	width  = (int)values->width;
+	height = (int) values->height;
+	data = new char[values->step*height];
+	memcpy(data, &(values->data[0]),values->step*height);
 
-void distance_sensor_callback(const sensor_msgs::Range::ConstPtr &value, int sensor_number) {
-	
-  	ROS_INFO("Distance from object is %f (time: %d:%d).", value->range, value->header.stamp.sec, value->header.stamp.nsec);
-	distance_sensor_values[sensor_number] = value->range;
-	ROS_ERROR("%d %f", sensor_number, value->range);
+	image = cv::Mat(height, width, CV_8UC4, data);
+	image = image.clone();
+	delete data;
 }
 
 
 ros::Subscriber get_device_values(const std::string device){
 	ros::Subscriber sub;
 	if ( !device.compare("compass") ){
-		sub = n->subscribe(model_name + "/" + device + "/values", 1, compassCallback);
+		sub = n->subscribe(model_name + "/" + device + "/values", 1, compass_callback);
 	} else if ( !device.compare("camera") ){
-		sub = n->subscribe(model_name + "/" + device + "/image", 1, cameraCallback);
+		sub = n->subscribe(model_name + "/" + device + "/image", 1, camera_callback);
 	} else if ( !device.compare("gyro") ){
-		sub = n->subscribe(model_name + "/" + device + "/values", 1, gyroCallback);
+		sub = n->subscribe(model_name + "/" + device + "/values", 1, gyro_callback);
 	} else if ( !device.compare("accelerometer") ){
-		sub = n->subscribe(model_name + "/" + device + "/values", 1, accelerometerCallback);
+		sub = n->subscribe(model_name + "/" + device + "/values", 1, accelerometer_callback);
+	} else if ( !device.compare("lidar") ){
+		sub = n->subscribe(model_name + "/" + device + "/laser_scan/layer0", 1, lidar_callback);
 	} else {
-		int sensor_number=atoi(device.c_str());
-		boost::function<void (const sensor_msgs::Range::ConstPtr &)> callback = 
-    	[&] (const sensor_msgs::Range::ConstPtr & value) {
-			distance_sensor_callback(value,sensor_number);
-    	};
-		sub = n->subscribe(model_name + "/ds" + device + "/value", 1, callback);
-		
+		exit(1);
 	} 
 	while (sub.getNumPublishers() == 0) {
 		ros::spinOnce();
@@ -342,11 +339,7 @@ void init(int argc, char **argv){
 	enable_device("accelerometer");
 	enable_device("camera");
 	enable_device("compass");
-
-	for (int i = 0; i < N_DISTANCE_SENSORS; ++i) {
-		enable_device("ds"+std::to_string(i));
-	}  
-
+	enable_device("lidar");
 
 	ROS_INFO("You can now visualize the sensors output in rqt using 'rqt'.");
 
@@ -354,11 +347,7 @@ void init(int argc, char **argv){
 	camera_sub  		= get_device_values("camera");
 	gyro_sub			= get_device_values("gyro");
 	accelerometer_sub	= get_device_values("accelerometer");
-
-
-	for (int i = 0; i < N_DISTANCE_SENSORS; ++i) {
-		distance_sensor_sub[i]=get_device_values(std::to_string(i));
-	}  
+	lidar_sub			= get_device_values("lidar");
 	
 	
 	image_load("warning");
