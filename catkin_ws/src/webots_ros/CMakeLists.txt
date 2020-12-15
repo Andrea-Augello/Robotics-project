@@ -173,7 +173,7 @@ include_directories(
 
 ## Instructions for change node
 
-add_executable(change src/change.cpp src/ros_interface.cpp)
+add_executable(change src/change.cpp src/ros_interface.cpp src/movement_primitives.cpp)
 
 add_dependencies(change webots_ros_generate_messages_cpp)
 
