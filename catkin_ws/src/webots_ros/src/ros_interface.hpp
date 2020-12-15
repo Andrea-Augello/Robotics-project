@@ -1,8 +1,6 @@
 #ifndef __ROS_INTERFACE_H__
 #define __ROS_INTERFACE_H__
 
-#include <webots_ros/set_int.h>
-
 #define TIME_STEP 32
 #define N_MOTORS 2
 #define N_LANGUAGES 6
@@ -11,11 +9,6 @@
 #define DECREASE_FACTOR 0.9
 #define BACK_SLOWDOWN 0.9
 #define N_DISTANCE_SENSORS 16
-
-extern ros::NodeHandle *n;
-
-extern ros::ServiceClient time_step_client;
-extern webots_ros::set_int time_step_srv;
 
 // gaussian function
 double gaussian(double x, double mu, double sigma);
@@ -53,12 +46,11 @@ void set_language(const int language) ;
 
 void speak_polyglot(const std::vector<std::string> text, double volume) ;
 
-// catch names of the controllers availables on ROS network
-void controller_name_callback(const std_msgs::String::ConstPtr &name) ;
-
-
 void quit(int sig) ;
 
 void init(int argc, char **argv);
 
+int isOk();
+void processCallbacks();
+int timeStep();
 #endif

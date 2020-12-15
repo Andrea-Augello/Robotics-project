@@ -22,10 +22,13 @@
 #include <webots_ros/display_image_load.h>
 #include <webots_ros/display_image_paste.h>
 
-// Implementing variables in header
 ros::NodeHandle *n;
 ros::ServiceClient time_step_client;
 webots_ros::set_int time_step_srv;
+// catch names of the controllers availables on ROS network
+void controller_name_callback(const std_msgs::String::ConstPtr &name) ;
+
+
 
 static int controller_count;
 static std::vector<std::string> controller_list;
@@ -78,7 +81,6 @@ void get_device_values(const std::string device){
 
 	sub.shutdown();
 	time_step_client.call(time_step_srv);
-
 }	
 
 void enable_device(const std::string device){
@@ -332,4 +334,19 @@ void init(int argc, char **argv){
 
 	/* TO FIX */
 	//play_sound("warning", 1.0, 0);
+}
+
+int isOk(){
+	return ros::ok();
+}
+void processCallbacks(){
+	ros::spinOnce();
+}
+int timeStep(){
+	if (!time_step_client.call(time_step_srv) ||
+			!time_step_srv.response.success) {
+		ROS_ERROR("Failed to call service time_step for next step.");
+		return 0;
+	}
+	return 1;
 }
