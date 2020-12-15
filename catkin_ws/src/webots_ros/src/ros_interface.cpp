@@ -8,6 +8,10 @@
 #include <std_msgs/String.h>
 #include <tf/transform_broadcaster.h>
 #include "ros/ros.h"
+#include <cmath>
+#include "cv_bridge/CvBridge.h"
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 #include "ros_interface.hpp"
 
@@ -36,19 +40,47 @@ void enable_device(const std::string device);
 
 static int controller_count;
 static std::vector<std::string> controller_list;
-static double compassValues[3] = {0, 0, 0};
+static double compassValue = 0;
+static double GyroValues[3] = {0, 0, 0};
+static double accelerometerValues[3] = {0, 0, 0};
+static cv::Mat image;
+static vector<unsigned char> imageColor;
 
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor", "servo"};
-const std::string name = "change";
+const std::string model_name = "change";
 
 void compassCallback(const sensor_msgs::MagneticField::ConstPtr &values) {
-	compassValues[0] = values->magnetic_field.x;
-	compassValues[1] = values->magnetic_field.y;
-	compassValues[2] = values->magnetic_field.z;
+	compassValue = 180*atan2(values->magnetic_field.x, values->magnetic_field.z)/M_PI;
+	ROS_INFO("Compass value is %f (time: %d:%d).", compassValue, values->header.stamp.sec, values->header.stamp.nsec);	   
+}
 
-	ROS_INFO("Compass values are x=%f y=%f z=%f (time: %d:%d).", compassValues[0], compassValues[1], compassValues[2],
-			values->header.stamp.sec, values->header.stamp.nsec);	   
+
+void gyroCallback(const sensor_msgs::Imu::ConstPtr &values) {
+  GyroValues[0] = values->angular_velocity.x;
+  GyroValues[1] = values->angular_velocity.y;
+  GyroValues[2] = values->angular_velocity.z;
+
+  ROS_INFO("Gyro values are x=%f y=%f z=%f (time: %d:%d).", GyroValues[0], GyroValues[1], GyroValues[2],
+           values->header.stamp.sec, values->header.stamp.nsec);
+}
+
+void accelerometerCallback(const sensor_msgs::Imu::ConstPtr &values) {
+  accelerometerValues[0] = values->linear_acceleration.x;
+  accelerometerValues[1] = values->linear_acceleration.y;
+  accelerometerValues[2] = values->linear_acceleration.z;
+
+  ROS_INFO("Accelerometer values are x=%f y=%f z=%f (time: %d:%d).", accelerometerValues[0], accelerometerValues[1],
+           accelerometerValues[2], values->header.stamp.sec, values->header.stamp.nsec);
+}
+
+void cameraCallback(const sensor_msgs::Image::ConstPtr &values) {
+  int i = 0;
+  imageColor.resize(values->step * values->height);
+  for (std::vector<unsigned char>::const_iterator it = values->data.begin(); it != values->data.end(); ++it) {
+    imageColor[i] = *it;
+    i++;
+  }
 }
 
 void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
@@ -59,13 +91,13 @@ void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
 void get_device_values(const std::string device){
 	ros::Subscriber sub;
 	if ( !device.compare("compass") ){
-		sub = n->subscribe(name + "/" + device + "/values", 1, compassCallback);
+		sub = n->subscribe(model_name + "/" + device + "/values", 1, compassCallback);
 	} else if ( !device.compare("camera") ){
-		exit(1);
+		sub = n->subscribe(model_name + "/" + device + "/values", 1, cameraCallback);
 	} else if ( !device.compare("gyro") ){
-		exit(1);
+		sub = n->subscribe(model_name + "/" + device + "/values", 1, gyroCallback);
 	} else if ( !device.compare("accelerometer") ){
-		exit(1);
+		sub = n->subscribe(model_name + "/" + device + "/values", 1, accelerometerCallback);
 	} else {
 		exit(1);
 	}
@@ -84,7 +116,7 @@ void get_device_values(const std::string device){
 void enable_device(const std::string device){
 	ros::ServiceClient set_device_client;
 	webots_ros::set_int set_device_srv;
-	set_device_client = n->serviceClient<webots_ros::set_int>(name+"/"+device+"/enable");
+	set_device_client = n->serviceClient<webots_ros::set_int>(model_name+"/"+device+"/enable");
 	set_device_srv.request.value = TIME_STEP;
 	if(set_device_client.call(set_device_srv)){
 		ROS_INFO("%s succefully enabled.", device.c_str());
@@ -98,7 +130,7 @@ void enable_device(const std::string device){
 void set_motor_position(const std::string motor, double position) {
 	ros::ServiceClient set_position_client;
 	webots_ros::set_float set_position_srv;
-	set_position_client = n->serviceClient<webots_ros::set_float>(name + "/" + motor + "/set_position");
+	set_position_client = n->serviceClient<webots_ros::set_float>(model_name + "/" + motor + "/set_position");
 	set_position_srv.request.value = position;
 	if(set_position_client.call(set_position_srv)){
 		ROS_INFO("%s's position succefully setted.", motor.c_str());
@@ -112,7 +144,7 @@ void set_motor_position(const std::string motor, double position) {
 void set_motor_speed(const std::string motor, double speed) {
 	ros::ServiceClient set_velocity_client;
 	webots_ros::set_float set_velocity_srv;
-	set_velocity_client = n->serviceClient<webots_ros::set_float>(name + "/" + motor + "/set_velocity");
+	set_velocity_client = n->serviceClient<webots_ros::set_float>(model_name + "/" + motor + "/set_velocity");
 	set_velocity_srv.request.value = speed;
 	if(set_velocity_client.call(set_velocity_srv)){
 		ROS_INFO("%s's velocity succefully setted.", motor.c_str());
@@ -128,7 +160,7 @@ bool is_speaking() {
 	bool is_speaking=true;
 	ros::ServiceClient speaker_is_speaking_client;
 	webots_ros::get_bool speaker_is_speaking_srv;
-	speaker_is_speaking_client = n->serviceClient<webots_ros::get_bool>(name + "/speaker/is_speaking");
+	speaker_is_speaking_client = n->serviceClient<webots_ros::get_bool>(model_name + "/speaker/is_speaking");
 
 	if (speaker_is_speaking_client.call(speaker_is_speaking_srv)) {
 		is_speaking=speaker_is_speaking_srv.response.value;
@@ -144,7 +176,7 @@ bool is_speaking() {
 void image_load(const std::string imageName) {
 	ros::ServiceClient display_image_load_client;
 	webots_ros::display_image_load display_image_load_srv;
-	display_image_load_client = n->serviceClient<webots_ros::display_image_load>(name + "/display/image_load");
+	display_image_load_client = n->serviceClient<webots_ros::display_image_load>(model_name + "/display/image_load");
 
 	display_image_load_srv.request.filename = std::string("../../../../../Media/Image/")+ imageName +std::string(".jpg");
 	display_image_load_client.call(display_image_load_srv);
@@ -153,7 +185,7 @@ void image_load(const std::string imageName) {
 
 	ros::ServiceClient display_image_paste_client;
 	webots_ros::display_image_paste display_image_paste_srv;
-	display_image_paste_client = n->serviceClient<webots_ros::display_image_paste>(name + "/display/image_paste");
+	display_image_paste_client = n->serviceClient<webots_ros::display_image_paste>(model_name + "/display/image_paste");
 
 	display_image_paste_srv.request.ir = loaded_image;
 	if (display_image_paste_client.call(display_image_paste_srv) && display_image_paste_srv.response.success == 1)
@@ -171,7 +203,7 @@ void image_load(const std::string imageName) {
 void play_sound(const std::string soundName, double volume, bool loop) {
 	ros::ServiceClient speaker_play_sound_client;
 	webots_ros::speaker_play_sound speaker_play_sound_srv;
-	speaker_play_sound_client = n->serviceClient<webots_ros::speaker_play_sound>(name + "/speaker/play_sound");
+	speaker_play_sound_client = n->serviceClient<webots_ros::speaker_play_sound>(model_name + "/speaker/play_sound");
 
 	speaker_play_sound_srv.request.sound = std::string("../../../../../Media/Audio/")+ soundName +std::string(".mp3");
 	speaker_play_sound_srv.request.volume = volume;
@@ -193,7 +225,7 @@ void play_sound(const std::string soundName, double volume, bool loop) {
 void speak(const std::string &text, double volume) {
 	ros::ServiceClient speaker_speak_client;
 	webots_ros::speaker_speak speaker_speak_srv;
-	speaker_speak_client = n->serviceClient<webots_ros::speaker_speak>(name + "/speaker/speak");
+	speaker_speak_client = n->serviceClient<webots_ros::speaker_speak>(model_name + "/speaker/speak");
 
 	speaker_speak_srv.request.text = text;
 	speaker_speak_srv.request.volume = volume;
@@ -219,7 +251,7 @@ void set_language(const int language) {
 	const std::string languages[N_LANGUAGES] = {"it-IT", "en-US", "de-DE", "es-ES", "fr-FR", "en-UK"};
 	ros::ServiceClient speaker_set_language_client;
 	webots_ros::set_string speaker_set_language_srv;
-	speaker_set_language_client = n->serviceClient<webots_ros::set_string>(name + "/speaker/set_language");
+	speaker_set_language_client = n->serviceClient<webots_ros::set_string>(model_name + "/speaker/set_language");
 
 	speaker_set_language_srv.request.value = languages[language];
 
@@ -241,9 +273,9 @@ void speak_polyglot(const std::vector<std::string> text, double volume) {
 }
 
 // catch names of the controllers availables on ROS network
-void controller_name_callback(const std_msgs::String::ConstPtr &name) {
+void controller_name_callback(const std_msgs::String::ConstPtr &model_name) {
 	controller_count++;
-	controller_list.push_back(name->data);
+	controller_list.push_back(model_name->data);
 	ROS_INFO("Controller #%d: %s.", controller_count, controller_list.back().c_str());
 }
 
@@ -259,7 +291,7 @@ void quit(int sig) {
 void init(int argc, char **argv){
 	std::string controllerName;
 	// create a node named as "name" variable on ROS network
-	ros::init(argc, argv, name, ros::init_options::AnonymousName);
+	ros::init(argc, argv, model_name, ros::init_options::AnonymousName);
 	n = new ros::NodeHandle;
 
 	signal(SIGINT, quit);
@@ -273,23 +305,9 @@ void init(int argc, char **argv){
 	}
 	ros::spinOnce();
 
-	time_step_client = n->serviceClient<webots_ros::set_int>(name+"/robot/time_step");
+	time_step_client = n->serviceClient<webots_ros::set_int>(model_name+"/robot/time_step");
 	time_step_srv.request.value = TIME_STEP;
-
-	// if there is more than one controller available, it let the user choose
-	if (controller_count == 1)
-		controllerName = controller_list[0];
-	else {
-		int wantedController = 0;
-		std::cout << "Choose the # of the controller you want to use:\n";
-		std::cin >> wantedController;
-		if (1 <= wantedController && wantedController <= controller_count)
-			controllerName = controller_list[wantedController - 1];
-		else {
-			ROS_ERROR("Invalid number for controller choice.");
-			exit(1);
-		}
-	}
+	controllerName = controller_list[0];
 	ROS_INFO("Using controller: '%s'", controllerName.c_str());
 	// leave topic once it is not necessary anymore
 	nameSub.shutdown();
@@ -319,7 +337,7 @@ void init(int argc, char **argv){
 	}
 
 	get_device_values("compass");
-	ROS_ERROR("%f %f %f", compassValues[0], compassValues[1], compassValues[2]);
+	ROS_ERROR("%f", compassValue);
 	
 	
 	image_load("warning");
