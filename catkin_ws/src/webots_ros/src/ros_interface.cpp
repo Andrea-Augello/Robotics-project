@@ -9,9 +9,8 @@
 #include <tf/transform_broadcaster.h>
 #include "ros/ros.h"
 #include <cmath>
-#include "cv_bridge/CvBridge.h"
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include "ros_interface.hpp"
 
@@ -30,6 +29,9 @@ ros::NodeHandle *n;
 ros::ServiceClient time_step_client;
 webots_ros::set_int time_step_srv;
 
+ros::Subscriber camera_sub,
+	compass_sub;
+
 /*
  * Protos
  */
@@ -44,7 +46,6 @@ static double compassValue = 0;
 static double GyroValues[3] = {0, 0, 0};
 static double accelerometerValues[3] = {0, 0, 0};
 static cv::Mat image;
-static vector<unsigned char> imageColor;
 
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor", "servo"};
@@ -75,12 +76,14 @@ void accelerometerCallback(const sensor_msgs::Imu::ConstPtr &values) {
 }
 
 void cameraCallback(const sensor_msgs::Image::ConstPtr &values) {
-  int i = 0;
-  imageColor.resize(values->step * values->height);
-  for (std::vector<unsigned char>::const_iterator it = values->data.begin(); it != values->data.end(); ++it) {
-    imageColor[i] = *it;
-    i++;
-  }
+  ROS_INFO("CAMERA CALLBACK");
+  int i = 0, width, height;
+  char *data;
+  width  = (int)values->width;
+  height = (int) values->height;
+  data = new char[values->step*height];
+
+  image = cv::Mat(height, width, CV_8UC3, data);
 }
 
 void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
@@ -88,12 +91,12 @@ void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
 }
 
 
-void get_device_values(const std::string device){
+ros::Subscriber get_device_values(const std::string device){
 	ros::Subscriber sub;
 	if ( !device.compare("compass") ){
 		sub = n->subscribe(model_name + "/" + device + "/values", 1, compassCallback);
 	} else if ( !device.compare("camera") ){
-		sub = n->subscribe(model_name + "/" + device + "/values", 1, cameraCallback);
+		sub = n->subscribe(model_name + "/" + device + "/image", 1, cameraCallback);
 	} else if ( !device.compare("gyro") ){
 		sub = n->subscribe(model_name + "/" + device + "/values", 1, gyroCallback);
 	} else if ( !device.compare("accelerometer") ){
@@ -108,9 +111,7 @@ void get_device_values(const std::string device){
 	ros::spinOnce();
 	time_step_client.call(time_step_srv);
 	ros::spinOnce();
-
-	sub.shutdown();
-	time_step_client.call(time_step_srv);
+	return sub;
 }	
 
 void enable_device(const std::string device){
@@ -133,7 +134,7 @@ void set_motor_position(const std::string motor, double position) {
 	set_position_client = n->serviceClient<webots_ros::set_float>(model_name + "/" + motor + "/set_position");
 	set_position_srv.request.value = position;
 	if(set_position_client.call(set_position_srv)){
-		ROS_INFO("%s's position succefully setted.", motor.c_str());
+		ROS_INFO("%s's position succefully set.", motor.c_str());
 	}else{
 		ROS_ERROR("Failed to call service %s/set_position.", motor.c_str());
 	}
@@ -147,7 +148,7 @@ void set_motor_speed(const std::string motor, double speed) {
 	set_velocity_client = n->serviceClient<webots_ros::set_float>(model_name + "/" + motor + "/set_velocity");
 	set_velocity_srv.request.value = speed;
 	if(set_velocity_client.call(set_velocity_srv)){
-		ROS_INFO("%s's velocity succefully setted.", motor.c_str());
+		ROS_INFO("%s's velocity succefully set.", motor.c_str());
 	}else{
 		ROS_ERROR("Failed to call service %s/set_velocity.", motor.c_str());
 	}
@@ -231,7 +232,7 @@ void speak(const std::string &text, double volume) {
 	speaker_speak_srv.request.volume = volume;
 	while (is_speaking()){}
 	if (speaker_speak_client.call(speaker_speak_srv) && speaker_speak_srv.response.success == 1)
-		ROS_INFO("Text successfully readed.");
+		ROS_INFO("Text successfully read.");
 	else
 		ROS_ERROR("Failed to call service speaker_speak to read a text.");
 
@@ -336,8 +337,11 @@ void init(int argc, char **argv){
 		set_motor_speed(motor_names_complete[i],MAX_SPEED/4);
 	}
 
-	get_device_values("compass");
+	compass_sub = get_device_values("compass");
 	ROS_ERROR("%f", compassValue);
+	//camera_sub  = get_device_values("camera");
+	ROS_ERROR("%f", compassValue);
+
 	
 	
 	image_load("warning");

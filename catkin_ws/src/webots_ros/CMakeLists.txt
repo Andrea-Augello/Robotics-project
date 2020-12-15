@@ -180,6 +180,7 @@ add_dependencies(change webots_ros_generate_messages_cpp)
 target_link_libraries(change
 	${catkin_LIBRARIES}
 	${OpenCV_LIBS}
+	pthread
 )
 
 
