@@ -55,9 +55,19 @@ void distance_sensorCallback(const sensor_msgs::Range::ConstPtr &value) {
 }
 
 
-void get_device_values(const std::string device, const void* callback){
+void get_device_values(const std::string device){
 	ros::Subscriber sub;
-	sub = n->subscribe(name + "/" + device + "/values", 1, callback);
+	if ( !device.compare("compass") ){
+		sub = n->subscribe(name + "/" + device + "/values", 1, compassCallback);
+	} else if ( !device.compare("camera") ){
+		exit(1);
+	} else if ( !device.compare("gyro") ){
+		exit(1);
+	} else if ( !device.compare("accelerometer") ){
+		exit(1);
+	} else {
+		exit(1);
+	}
 	while (sub.getNumPublishers() == 0) {
 		ros::spinOnce();
 		time_step_client.call(time_step_srv);
@@ -308,7 +318,7 @@ void init(int argc, char **argv){
 		set_motor_speed(motor_names_complete[i],MAX_SPEED/4);
 	}
 
-	get_device_values("compass", compassCallback);
+	get_device_values("compass");
 	ROS_ERROR("%f %f %f", compassValues[0], compassValues[1], compassValues[2]);
 	
 	
