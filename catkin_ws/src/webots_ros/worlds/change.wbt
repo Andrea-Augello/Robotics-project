@@ -95,13 +95,14 @@ Pioneer2 {
           translation 0 0.8 -0.03
           rotation 1 0 0 1.5708
           children [
-            RangeFinder {
+            Lidar {
               rotation -1 1.87158e-06 9.58983e-09 1.57079
-              width 640
-              height 480
-              noise 0.007
-              lens Lens {
-              }
+              fieldOfView 0.35
+              verticalFieldOfView 0.35
+              numberOfLayers 16
+              maxRange 4
+              noise 0.02
+              resolution 0.001
             }
             Camera {
               rotation -1 1.87158e-06 9.58983e-09 1.57079
