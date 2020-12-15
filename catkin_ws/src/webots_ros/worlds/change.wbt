@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.10439552338955944 0.9942643466593789 -0.0232375484554268 0.6265451794318814
-  position 0.5822537646897918 0.7173355721200987 3.1386962666114333
+  orientation -0.00382902774045432 0.9999230825231494 0.011796931124902708 0.6130112800417034
+  position 1.164791091494449 1.260010777167488 4.057365943984729
 }
 TexturedBackground {
 }
@@ -95,6 +95,14 @@ Pioneer2 {
           translation 0 0.8 -0.03
           rotation 1 0 0 1.5708
           children [
+            RangeFinder {
+              rotation -1 1.87158e-06 9.58983e-09 1.57079
+              width 640
+              height 480
+              noise 0.007
+              lens Lens {
+              }
+            }
             Camera {
               rotation -1 1.87158e-06 9.58983e-09 1.57079
               fieldOfView 1
