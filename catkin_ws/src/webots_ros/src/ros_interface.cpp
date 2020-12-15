@@ -39,6 +39,8 @@ ros::Subscriber camera_sub,
  */
 void controller_name_callback(const std_msgs::String::ConstPtr &name) ;
 void enable_device(const std::string device);
+void set_motor_position(const std::string motor, double position) ;
+void set_motor_speed(const std::string motor, double speed) ;
 
 
 
@@ -337,17 +339,10 @@ void init(int argc, char **argv){
 
 	ROS_INFO("You can now visualize the sensors output in rqt using 'rqt'.");
 
-	// for test
-	for (int i = 0; i < N_MOTORS+1; ++i) {
-		set_motor_speed(motor_names_complete[i],MAX_SPEED/4);
-	}
-
 	compass_sub 		= get_device_values("compass");
 	camera_sub  		= get_device_values("camera");
 	gyro_sub			= get_device_values("gyro");
 	accelerometer_sub	= get_device_values("accelerometer");
-
-	
 	
 	image_load("warning");
 	
@@ -374,4 +369,25 @@ int timeStep(){
 		return 0;
 	}
 	return 1;
+}
+
+// Movement low-level primitives
+void set_linear_velocity(double speed){
+		set_motor_speed(motor_names[0],speed);
+		set_motor_speed(motor_names[1],speed);
+}
+void set_angular_velocity(double speed){
+		set_motor_speed(motor_names[0],-speed*330/2);
+		set_motor_speed(motor_names[1], speed*330/2);
+}
+void stop(){
+	set_linear_velocity(0);
+}
+
+// Retrieve data
+cv::Mat get_image(){
+	return image.clone();
+}
+double get_angle(){
+	return compassValue;
 }

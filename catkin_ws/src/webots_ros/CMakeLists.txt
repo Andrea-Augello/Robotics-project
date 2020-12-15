@@ -4,7 +4,7 @@ project(webots_ros)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package( OpenCV 4.5 REQUIRED)
+find_package( OpenCV REQUIRED)
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs sensor_msgs message_generation tf)
 
 ## System dependencies are found with CMake's conventions
@@ -173,7 +173,7 @@ include_directories(
 
 ## Instructions for change node
 
-add_executable(change src/change.cpp src/ros_interface.cpp)
+add_executable(change src/change.cpp src/ros_interface.cpp src/movement_primitives.cpp)
 
 add_dependencies(change webots_ros_generate_messages_cpp)
 

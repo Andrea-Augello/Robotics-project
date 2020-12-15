@@ -1,6 +1,8 @@
 #ifndef __ROS_INTERFACE_H__
 #define __ROS_INTERFACE_H__
 
+#include <opencv2/opencv.hpp>
+
 #define TIME_STEP 32
 #define N_MOTORS 2
 #define N_LANGUAGES 6
@@ -10,9 +12,14 @@
 #define BACK_SLOWDOWN 0.9
 #define N_DISTANCE_SENSORS 16
 
-void set_motor_position(const std::string motor, double position) ;
 
-void set_motor_speed(const std::string motor, double speed) ;
+// Movement low-level primitives
+void set_linear_velocity(double speed);
+void set_angular_velocity(double speed);
+void stop();
+// Retreive data
+cv::Mat get_image();
+double get_angle();
 
 // Get true if speaker is speaking, false otherwise
 bool is_speaking() ;
