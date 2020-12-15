@@ -25,8 +25,12 @@
 ros::NodeHandle *n;
 ros::ServiceClient time_step_client;
 webots_ros::set_int time_step_srv;
-// catch names of the controllers availables on ROS network
+
+/*
+ * Protos
+ */
 void controller_name_callback(const std_msgs::String::ConstPtr &name) ;
+void enable_device(const std::string device);
 
 
 
@@ -37,12 +41,6 @@ static double compassValues[3] = {0, 0, 0};
 static const char *motor_names[N_MOTORS] = {"left_wheel_motor", "right_wheel_motor"};
 static const char *motor_names_complete[N_MOTORS+1] = {"left_wheel_motor", "right_wheel_motor", "servo"};
 const std::string name = "change";
-
-
-// gaussian function
-double gaussian(double x, double mu, double sigma) {
-	return (1.0 / (sigma * sqrt(2.0 * M_PI))) * exp(-((x - mu) * (x - mu)) / (2 * sigma * sigma));
-}
 
 void compassCallback(const sensor_msgs::MagneticField::ConstPtr &values) {
 	compassValues[0] = values->magnetic_field.x;

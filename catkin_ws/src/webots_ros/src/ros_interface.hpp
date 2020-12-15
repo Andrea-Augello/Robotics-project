@@ -10,11 +10,6 @@
 #define BACK_SLOWDOWN 0.9
 #define N_DISTANCE_SENSORS 16
 
-// gaussian function
-double gaussian(double x, double mu, double sigma);
-
-void enable_device(const std::string device);
-
 void set_motor_position(const std::string motor, double position) ;
 
 void set_motor_speed(const std::string motor, double speed) ;
