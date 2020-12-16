@@ -7,7 +7,13 @@
     <arg name="no_gui" value="$(arg no_gui)"/>
     <arg name="world" value="$(find webots_ros)/worlds/change.wbt"/>
   </include>
-
+  
+  
   <arg name="auto_close" default="false" doc="Startup mode"/>
-  <node name="change_controller" pkg="webots_ros" type="change" required="$(arg auto_close)"/>
+    <env name="LD_LIBRARY_PATH" value="$(env LD_LIBRARY_PATH):$(env WEBOTS_HOME)/lib/controller"/>
+    <env name="PYTHONPATH" value="$(env PYTHONPATH):$(env WEBOTS_HOME)/lib/controller/python27" unless="$(eval '1' if env('ROS_DISTRO') == 'noetic' else '0')" />
+    <env name="PYTHONPATH" value="$(env PYTHONPATH):$(env WEBOTS_HOME)/lib/controller/python38" if="$(eval '1' if env('ROS_DISTRO') == 'noetic' else '0')" />
+    <node name="webots_ros_python" pkg="webots_ros" type="ros_python.py" required="$(arg auto_close)"/>
+    <node name="change_controller" pkg="webots_ros" type="change.py" required="$(arg auto_close)"/>
+
 </launch>

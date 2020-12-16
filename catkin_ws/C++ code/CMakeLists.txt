@@ -171,6 +171,20 @@ include_directories(
 )
 
 
+## Instructions for change node
+
+add_executable(change src/change.cpp src/ros_interface.cpp src/movement_primitives.cpp)
+
+add_dependencies(change webots_ros_generate_messages_cpp)
+
+target_link_libraries(change
+	${catkin_LIBRARIES}
+	${OpenCV_LIBS}
+	pthread
+)
+
+
+
 
 #############
 ## Install ##
@@ -186,11 +200,6 @@ catkin_install_python(PROGRAMS scripts/ros_controller.py
 
 catkin_install_python(PROGRAMS scripts/webots_launcher.py
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
-
-catkin_install_python(PROGRAMS scripts/change.py
-        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
 
 install(DIRECTORY launch
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
