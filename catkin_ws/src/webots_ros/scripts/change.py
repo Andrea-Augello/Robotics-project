@@ -1,7 +1,10 @@
 import rospy
-from std_msgs.msg import Float64
-from controller import Robot
+from std_msgs.msg import *
+from webots_ros.srv import *
 import os
+
+model_name = 'change'
+time_step = 32
 
 
 def callback(data):
@@ -10,7 +13,37 @@ def callback(data):
     message = 'Received velocity value: ' + str(data.data)
     velocity = data.data
 
+def motor_set_position(motor,position):
+	service = model_name+"/"+motor+ "/set_position"
+	rospy.wait_for_service(service)
+	try:
+		motor_set_position_service = rospy.ServiceProxy(service,_set_float)
+		resp = motor_set_position_service(position)
+		return resp
+	except rospy.ServiceException as e:
+		print("Service call failed: %s"%e)	
+
+def motor_set_velocity(motor,velocity):
+	service = model_name+"/"+motor+ "/set_velocity"
+	rospy.wait_for_service(service)
+	try:
+		motor_set_velocity_service = rospy.ServiceProxy(service,_set_float)
+		resp = motor_set_velocity_service(velocity)
+		return resp
+	except rospy.ServiceException as e:
+		print("Service call failed: %s"%e)			
+
 def main():
+	while not rospy.is_shutdown():
+		rospy.loginfo('Initializing ROS: connecting to ' + os.environ['ROS_MASTER_URI'])
+		rospy.loginfo('Time step: ' + str(time_step))
+		motor_set_position('left_wheel_motor',float('inf'))
+		motor_set_velocity('left_wheel_motor',5.0)
+		rospy.init_node(model_name, anonymous=True)
+
+		
+
+def main2():
 	robot = Robot()
 	timeStep = int(robot.getBasicTimeStep())
 	left = robot.getMotor('motor.left')
