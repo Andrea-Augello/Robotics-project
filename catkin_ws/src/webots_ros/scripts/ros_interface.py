@@ -1,6 +1,7 @@
 import rospy
 from std_msgs.msg import *
-from webots_ros.srv import *
+from sensor_msgs.msg import *
+from webots_ros.msg import *
 import os
 import rosservice
 
@@ -25,7 +26,8 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
         "wheel_left_joint_sensor":False,
         "wheel_right_joint_sensor":False
         }
-motors = ["head_1_joint", "head_2_joint", "torso_lift_joint", "wheel_left_joint", "wheel_right_joint"]
+motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint", "torso_lift_joint"]
+compass_values = {'x':0, 'y':0, 'z':0}
 
 
 def call_service(device_name,service_name,*args):
@@ -73,6 +75,19 @@ def speak_polyglot(it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=
 		if text is not None:
 			call_service('speaker', 'set_language', language.replace("_","-"))
 			speak(text)
+
+
+def compassCallback(values):
+	global compass_values
+	compass_value['x'] = values.values.magnetic_field.x
+	compass_value['y'] = values.values.magnetic_field.y
+	compass_value['z'] = values.values.magnetic_field.z
+	rospy.logerr("%f %f %f"%(values.values.magnetic_field.x,values.values.magnetic_field.y,values.values.magnetic_field.z))
+
+
+def get_compass_values(sensor_name):
+	service_string = "/%s/%s/values" % (model_name, sensor_name)
+	rospy.Subscriber(sensor_name, MagneticField, compassCallback)			
 	
 
   
