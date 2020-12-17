@@ -7,12 +7,25 @@ import rosservice
 
 model_name = 'change'
 time_step = 32
-sensors = {"Hokuyo_URG_04LX_UG01":True, 		"accelerometer":True, 				"base_cover_link":True, 
-			"base_sonar_01_link":True,  		"base_sonar_02_link":True,  		"base_sonar_03_link":True, 
-			"battery_sensor":False, 			"camera":True, 						"compass":True, 
-			"gyro":True, 						"head_1_joint_sensor":False, 		"head_2_joint_sensor":False, 
-			"inertial_unit":False, 				"joystick":False, 					"keyboard":False, 					
-			"torso_lift_joint_sensor":False, 	"wheel_left_joint_sensor":False,	"wheel_right_joint_sensor":False}
+sensors = {"Hokuyo_URG_04LX_UG01":True,
+        "accelerometer":True,
+        "base_cover_link":True, 
+        "base_sonar_01_link":True,
+        "base_sonar_02_link":True,
+        "base_sonar_03_link":True, 
+        "battery_sensor":False,
+        "camera":True,
+        "compass":True,
+        "gyro":True, 	
+        "head_1_joint_sensor":False,
+        "head_2_joint_sensor":False, 
+        "inertial_unit":False,
+        "joystick":False,
+        "keyboard":False,
+        "torso_lift_joint_sensor":False,
+        "wheel_left_joint_sensor":False,
+        "wheel_right_joint_sensor":False
+        }
 motors = ["head_1_joint", "head_2_joint", "torso_lift_joint", "wheel_left_joint", "wheel_right_joint"]
 
 
@@ -48,6 +61,10 @@ def play_sound(sound):
 
 def is_speaking():
 	response = call_service('speaker','is_speaking')
+<<<<<<< HEAD
+=======
+	#rospy.logerr(response.value)
+>>>>>>> main
 	return response.value
 
 def speak(text):
