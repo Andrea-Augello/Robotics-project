@@ -87,7 +87,7 @@ def compassCallback(values):
 
 def get_compass_values(sensor_name):
 	service_string = "/%s/%s/values" % (model_name, sensor_name)
-	rospy.Subscriber(sensor_name, MagneticField, compassCallback)			
+	rospy.Subscriber(service_string, MagneticField, compassCallback)			
 	
 
   
