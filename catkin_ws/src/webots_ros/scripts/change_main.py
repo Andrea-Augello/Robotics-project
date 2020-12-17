@@ -5,6 +5,7 @@ from webots_ros.srv import *
 from ros_interface import *
 import os
 import rosservice
+from ros_interface import *
 
 
 def testing():
