@@ -1,5 +1,7 @@
 # Python cache
 *.pyc
+# merged junk, fml
+*/change.py
 # Prerequisites
 *.d
 

@@ -26,5 +26,6 @@ def main():
 		
 
 if __name__ == "__main__":
+	rospy.logerr(os.environ["PYTHONPATH"])    
 	main()    
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import rospy
 from std_msgs.msg import *
 from webots_ros.srv import *
