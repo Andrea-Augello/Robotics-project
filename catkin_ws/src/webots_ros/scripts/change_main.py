@@ -3,6 +3,7 @@ import rospy
 from std_msgs.msg import *
 from webots_ros.srv import *
 from ros_interface import *
+from movement_primitives import *
 import os
 import rosservice
 from ros_interface import *
