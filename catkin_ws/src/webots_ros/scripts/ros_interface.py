@@ -82,12 +82,13 @@ def compassCallback(values):
 	compass_value['x'] = values.values.magnetic_field.x
 	compass_value['y'] = values.values.magnetic_field.y
 	compass_value['z'] = values.values.magnetic_field.z
+	rospy.logerr(values)
 	rospy.logerr("%f %f %f"%(values.values.magnetic_field.x,values.values.magnetic_field.y,values.values.magnetic_field.z))
 
 
 def get_compass_values(sensor_name):
 	service_string = "/%s/%s/values" % (model_name, sensor_name)
-	rospy.Subscriber(service_string, MagneticField, compassCallback)			
+	return rospy.Subscriber(service_string, MagneticField, compassCallback)			
 	
 
   
