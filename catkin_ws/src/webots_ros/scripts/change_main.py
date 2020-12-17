@@ -4,7 +4,6 @@ from std_msgs.msg import *
 from webots_ros.srv import *
 import os
 import rosservice
-from ros_interface import *
 
 
 def testing():
@@ -25,7 +24,6 @@ def main():
 
 		
 
-if __name__ == "__main__":
-	rospy.logerr(os.environ["PYTHONPATH"])    
+if __name__ == "__main__":  
 	main()    
 
