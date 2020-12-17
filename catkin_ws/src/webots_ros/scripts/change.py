@@ -79,15 +79,18 @@ def speak_polyglot(it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=
 
 def compassCallback(values):
 	global compass_values
-	compass_value['x'] = values.values.magnetic_field.x
-	compass_value['y'] = values.values.magnetic_field.y
-	compass_value['z'] = values.values.magnetic_field.z
-	rospy.logerr("%f %f %f"%(values.values.magnetic_field.x,values.values.magnetic_field.y,values.values.magnetic_field.z))
+	compass_values['x'] = values.magnetic_field.x
+	compass_values['y'] = values.magnetic_field.y
+	compass_values['z'] = values.magnetic_field.z
 
 
 def get_compass_values(sensor_name):
 	service_string = "/%s/%s/values" % (model_name, sensor_name)
-	rospy.Subscriber(sensor_name, MagneticField, compassCallback)			
+	return rospy.Subscriber(service_string, MagneticField, eval("compassCallback"))
+
+
+def get_sensor_values():
+	get_compass_values('compass')				
 	
 
   
@@ -167,11 +170,11 @@ def rotate(rotation, precision):
 import rospy
 from std_msgs.msg import *
 from webots_ros.srv import *
-from ros_interface import *
 from movement_primitives import *
+from ros_interface import *
 import os
 import rosservice
-from ros_interface import *
+
 
 
 def testing():
@@ -180,8 +183,7 @@ def testing():
     call_service('speaker', 'set_language', 'it-IT')
     speak("Ciao sono ciangà e sugnu troppu fuoitti")
     speak_polyglot(it_IT="ciao", en_UK="Hello")
-    get_compass_values('compass')
-    rospy.logerr("%d %d %d"%(compass_values['x'],compass_values['y'],compass_values['z']))
+    rospy.logerr(rospy.get_published_topics(namespace='/%s'%model_name))
 	
 
 def main():
@@ -191,7 +193,9 @@ def main():
         rospy.loginfo('Time step: ' + str(time_step))
         motor_init()
         enable_sensors()
+        get_sensor_values()
         testing()
+        rospy.spin()
 
                 
 

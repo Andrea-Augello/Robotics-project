@@ -79,16 +79,18 @@ def speak_polyglot(it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=
 
 def compassCallback(values):
 	global compass_values
-	compass_value['x'] = values.values.magnetic_field.x
-	compass_value['y'] = values.values.magnetic_field.y
-	compass_value['z'] = values.values.magnetic_field.z
-	rospy.logerr(values)
-	rospy.logerr("%f %f %f"%(values.values.magnetic_field.x,values.values.magnetic_field.y,values.values.magnetic_field.z))
+	compass_values['x'] = values.magnetic_field.x
+	compass_values['y'] = values.magnetic_field.y
+	compass_values['z'] = values.magnetic_field.z
 
 
-def get_compass_values(sensor_name):
+def get_sensor_value(sensor_name, msg_type):
 	service_string = "/%s/%s/values" % (model_name, sensor_name)
-	return rospy.Subscriber(service_string, MagneticField, compassCallback)			
+	return rospy.Subscriber(service_string, msg_type, eval("%sCallback"%sensor_name))
+
+
+def get_sensor_values():
+	get_sensor_value('compass', MagneticField)				
 	
 
   
