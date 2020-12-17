@@ -61,10 +61,6 @@ def play_sound(sound):
 
 def is_speaking():
 	response = call_service('speaker','is_speaking')
-<<<<<<< HEAD
-=======
-	#rospy.logerr(response.value)
->>>>>>> main
 	return response.value
 
 def speak(text):
