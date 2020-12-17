@@ -3,77 +3,83 @@ import rospy
 from std_msgs.msg import *
 from webots_ros.srv import *
 import os
+import rosservice
 
 model_name = 'change'
 time_step = 32
+sensors = {"Hokuyo_URG_04LX_UG01":True, 		"accelerometer":True, 				"base_cover_link":True, 
+			"base_sonar_01_link":True,  		"base_sonar_02_link":True,  		"base_sonar_03_link":True, 
+			"battery_sensor":False, 			"camera":True, 						"compass":True, 
+			"gyro":True, 						"head_1_joint_sensor":False, 		"head_2_joint_sensor":False, 
+			"inertial_unit":False, 				"joystick":False, 					"keyboard":False, 					
+			"torso_lift_joint_sensor":False, 	"wheel_left_joint_sensor":False,	"wheel_right_joint_sensor":False}
+motors = ["head_1_joint", "head_2_joint", "torso_lift_joint", "wheel_left_joint", "wheel_right_joint"]
 
 
-def callback(data):
-    global velocity
-    global message
-    message = 'Received velocity value: ' + str(data.data)
-    velocity = data.data
-
-def motor_set_position(motor,position):
-	service = model_name+"/"+motor+ "/set_position"
-	rospy.wait_for_service(service)
+def call_service(device_name,service_name,*args):
+	service_string = "/%s/%s/%s" % (model_name, device_name, service_name)
+	rospy.loginfo(service_string)
+	rospy.wait_for_service(service_string)
 	try:
-		motor_set_position_service = rospy.ServiceProxy(service,_set_float)
-		resp = motor_set_position_service(position)
-		return resp
+		service = rospy.ServiceProxy(service_string,rosservice.get_service_class_by_name(service_string))
+		response = service(*args)
+		rospy.loginfo("Service %s called" % service_string)
+		return response
 	except rospy.ServiceException as e:
-		print("Service call failed: %s"%e)	
+		rospy.logerr("Service call failed: %s" % e)
 
-def motor_set_velocity(motor,velocity):
-	service = model_name+"/"+motor+ "/set_velocity"
-	rospy.wait_for_service(service)
-	try:
-		motor_set_velocity_service = rospy.ServiceProxy(service,_set_float)
-		resp = motor_set_velocity_service(velocity)
-		return resp
-	except rospy.ServiceException as e:
-		print("Service call failed: %s"%e)			
+def enable_sensors():
+	for sensor, flag in sensors.items():
+		if(flag):
+			call_service(sensor,"enable",time_step)
+
+def motor_init():
+	for motor in motors:
+		call_service(motor,'set_position',float('inf'))
+		call_service(motor,'set_velocity',0.0)
+
+def load_image(image):
+	image_loaded = call_service('display','image_load','../../../../../Media/Image/%s.jpg' % image)
+	call_service('display','image_paste',image_loaded.ir,0,0,False)
+
+#Don't work
+def play_sound(sound):
+	call_service('speaker','play_sound','../../../../../Media/Audio/%s.mp3' % sound, 1.0, 1.0, 0.0, False)
+
+def is_speaking():
+	response = call_service('speaker','is_speaking')
+	rospy.logerr(response.value)
+	return response.value
+
+def speak(text):
+	while(is_speaking()):
+		pass
+	call_service('speaker','speak', text, 1.0)
+
+def testing():
+	call_service('wheel_left_joint','set_velocity',5.0)
+	load_image('warning')
+	call_service('speaker', 'set_language', 'it-IT')
+	speak("Ciao sono ciangà e sugnu troppu fuoitti")
+	speak_polyglot(it_IT="ciao", en_UK="Hello")
+
+def speak_polyglot(it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):
+	for language, text in locals().items():
+		if text is not None:
+			call_service('speaker', 'set_language', language.replace("_","-"))
+			speak(text)
+	
 
 def main():
-	while not rospy.is_shutdown():
+	if not rospy.is_shutdown():
+		rospy.init_node(model_name, anonymous=True)
 		rospy.loginfo('Initializing ROS: connecting to ' + os.environ['ROS_MASTER_URI'])
 		rospy.loginfo('Time step: ' + str(time_step))
-		motor_set_position('left_wheel_motor',float('inf'))
-		motor_set_velocity('left_wheel_motor',5.0)
-		rospy.init_node(model_name, anonymous=True)
+		motor_init()
+		enable_sensors()
+		testing()
 
 		
-
-def main2():
-	robot = Robot()
-	timeStep = int(robot.getBasicTimeStep())
-	left = robot.getMotor('motor.left')
-	right = robot.getMotor('motor.right')
-	sensor = robot.getDistanceSensor('prox.horizontal.2')  # front central proximity sensor
-	sensor.enable(timeStep)
-	left.setPosition(float('inf'))  # turn on velocity control for both motors
-	right.setPosition(float('inf'))
-	velocity = 0
-	left.setVelocity(velocity)
-	right.setVelocity(velocity)
-	message = ''
-	print('Initializing ROS: connecting to ' + os.environ['ROS_MASTER_URI'])
-	robot.step(timeStep)
-	rospy.init_node('listener', anonymous=True)
-	print('Subscribing to "motor" topic')
-	robot.step(timeStep)
-	rospy.Subscriber('motor', Float64, callback)
-	pub = rospy.Publisher('sensor', Float64, queue_size=10)
-	print('Running the control loop')
-	while robot.step(timeStep) != -1 and not rospy.is_shutdown():
-		pub.publish(sensor.getValue())
-		print('Published sensor value: ', sensor.getValue())
-		if message:
-			print(message)
-			message = ''
-		left.setVelocity(velocity)
-		right.setVelocity(velocity)
-
 
 if __name__ == "__main__":
 	main()    
