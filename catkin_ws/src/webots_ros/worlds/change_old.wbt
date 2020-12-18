@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.7003047393676012 0.6977916055664684 0.15053287753924743 0.5541000308736249
-  position -2.2057301792428095 0.9477946419382074 0.5417309165787437
+  orientation -0.7368869435610678 -0.6743737454932917 -0.04709229022437497 0.27727854586504724
+  position -2.6681732464063597 1.1179979917848537 2.1451984875565815
 }
 TexturedBackground {
 }
@@ -275,27 +275,34 @@ TiagoIron {
       translation -0.2 -0.4 0
       rotation 0 1 0 -1.5708
       children [
+        Display {
+          translation 0 0.026 -0.069
+          rotation 1 0 0 0.261799
+          children [
+            DEF display_shape Shape {
+              appearance Appearance {
+                material Material {
+                  emissiveColor 1 1 1
+                }
+                texture ImageTexture {
+                  filtering 0
+                }
+              }
+              geometry Box {
+                size 0.24 0.135 0.01
+              }
+            }
+          ]
+          boundingObject USE Screen_shape
+          physics Physics {
+          }
+          width 720
+          height 405
+        }
         DEF G0 Group {
           children [
-            Transform {
-              translation 0 0.026 -0.069
-              rotation 1 0 0 0.261799
-              children [
-                Shape {
-                  appearance Appearance {
-                    material Material {
-                    }
-                    texture ImageTexture {
-                    }
-                  }
-                  geometry Box {
-                    size 0.24 0.135 0.01
-                  }
-                }
-              ]
-            }
             Shape {
-              appearance PBRAppearance {
+              appearance Plaster {
               }
               geometry Cylinder {
                 height 0.1
@@ -307,7 +314,7 @@ TiagoIron {
               rotation 1 0 0 0.261799
               children [
                 Shape {
-                  appearance PBRAppearance {
+                  appearance Plaster {
                   }
                   geometry Box {
                     size 0.24 0.135 0.02
@@ -321,47 +328,6 @@ TiagoIron {
       boundingObject USE G0
       physics Physics {
       }
-    }
-    Solid {
-      translation -0.1 -0.4 0.001
-      rotation 0 1 0 -1.5707996938995747
-      children [
-        DEF Screen_shape Shape {
-          appearance PBRAppearance {
-            baseColor 0 0 0
-          }
-          geometry Box {
-            size 0.24 0.135 0.02
-          }
-        }
-      ]
-      boundingObject USE Screen_shape
-      physics Physics {
-      }
-    }
-    Display {
-      translation -0.09 -0.4 0.001
-      rotation 0 1 0 -1.5707996938995747
-      children [
-        DEF display_shape Shape {
-          appearance Appearance {
-            material Material {
-              emissiveColor 1 1 1
-            }
-            texture ImageTexture {
-              filtering 0
-            }
-          }
-          geometry Box {
-            size 0.24 0.135 0.01
-          }
-        }
-      ]
-      boundingObject USE display_shape
-      physics Physics {
-      }
-      width 720
-      height 405
     }
     Speaker {
     }

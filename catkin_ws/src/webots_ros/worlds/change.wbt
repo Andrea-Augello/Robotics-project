@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.7003047393676012 0.6977916055664684 0.15053287753924743 0.5541000308736249
-  position -1.5683263643383092 1.6447187834662023 2.0904203319134815
+  orientation -0.035709291495126805 0.9978817105698 0.05437773635602994 1.8646924688199584
+  position -0.20758519351552346 0.9366451441185939 -1.003188029212415
 }
 TexturedBackground {
 }
@@ -138,27 +138,31 @@ TiagoIron {
       translation -0.2 -0.4 0
       rotation 0 1 0 -1.5708
       children [
+        Display {
+          translation 0 0.026 -0.069
+          rotation 1 0 0 0.261799
+          children [
+            DEF display_shape Shape {
+              appearance Appearance {
+                material Material {
+                  emissiveColor 1 1 1
+                }
+                texture ImageTexture {
+                  filtering 0
+                }
+              }
+              geometry Box {
+                size 0.24 0.135 0.01
+              }
+            }
+          ]
+          width 720
+          height 405
+        }
         DEF G0 Group {
           children [
-            Transform {
-              translation 0 0.026 -0.069
-              rotation 1 0 0 0.261799
-              children [
-                Shape {
-                  appearance Appearance {
-                    material Material {
-                    }
-                    texture ImageTexture {
-                    }
-                  }
-                  geometry Box {
-                    size 0.24 0.135 0.01
-                  }
-                }
-              ]
-            }
             Shape {
-              appearance PBRAppearance {
+              appearance Plaster {
               }
               geometry Cylinder {
                 height 0.1
@@ -170,7 +174,7 @@ TiagoIron {
               rotation 1 0 0 0.261799
               children [
                 Shape {
-                  appearance PBRAppearance {
+                  appearance Plaster {
                   }
                   geometry Box {
                     size 0.24 0.135 0.02
@@ -182,8 +186,6 @@ TiagoIron {
         }
       ]
       boundingObject USE G0
-      physics Physics {
-      }
     }
     Speaker {
     }
