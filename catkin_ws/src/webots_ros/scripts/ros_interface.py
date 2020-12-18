@@ -89,7 +89,15 @@ def get_sensor_value(sensor_name, msg_type):
 
 
 def get_sensor_values():
-    get_sensor_value('compass', MagneticField)                                
+    for sensor in rospy.get_published_topics(namespace='/%s'%model_name):
+        msg_type=sensor[1]
+        components=sensor[0].split("/")
+        device=components[2]
+        topic=components[3]
+        rospy.logerr("%s %s %s %s %s"%(sensor[0],sensor[1],type(sensor[1]), device,topic))
+    get_sensor_value('compass', MagneticField)
+    
+                                    
         
 def get_angle():
     global compass_value
