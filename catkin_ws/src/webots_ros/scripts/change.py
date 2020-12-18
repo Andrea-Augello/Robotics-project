@@ -12,10 +12,8 @@ import rosservice
 
 def testing():
     load_image('warning')
-    rospy.logerr("%f "%(get_angle()))
     rotate(-90,1)
     rotate(90,1)
-    rospy.logerr("%f "%(get_angle()))
     set_linear_velocity(3.0)
     call_service('speaker', 'set_language', 'it-IT')
     speak("Ciao sono ciangà e sugnu troppu fuoitti")
@@ -28,7 +26,7 @@ def main():
         rospy.loginfo('Time step: ' + str(time_step))
         motor_init()
         enable_sensors()
-        get_sensor_values()
+        get_sensors_values()
         testing()
         rospy.spin()
 

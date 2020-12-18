@@ -10,10 +10,10 @@ model_name = 'change'
 time_step = 32
 sensors = {"Hokuyo_URG_04LX_UG01":True,
         "accelerometer":True,
-        "base_cover_link":True, 
-        "base_sonar_01_link":True,
-        "base_sonar_02_link":True,
-        "base_sonar_03_link":True, 
+        "base_cover_link":False, 
+        "base_sonar_01_link":False,
+        "base_sonar_02_link":False,
+        "base_sonar_03_link":False, 
         "battery_sensor":False,
         "camera":True,
         "compass":True,
@@ -29,6 +29,8 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
         }
 motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint", "torso_lift_joint"]
 compass_value = 0
+gyro_values = {'x':0, 'y':0, 'z':0}
+accelerometer_values = {'x':0, 'y':0, 'z':0}
 
 
 def call_service(device_name,service_name,*args):
@@ -78,30 +80,58 @@ def speak_polyglot(it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=
             speak(text)
 
 
-def compassCallback(values):
+def Hokuyo_URG_04LX_UG01_callback(values):
+    pass
+
+def accelerometer_callback(values):
+    global accelerometer_values
+    accelerometer_values['x'] = values.linear_acceleration.x
+    accelerometer_values['y'] = values.linear_acceleration.y
+    accelerometer_values['z'] = values.linear_acceleration.z
+
+def camera_callback(values):
+	pass
+
+def gyro_callback(values):
+    global gyro_values
+    gyro_values['x']=values.angular_velocity.x
+    gyro_values['y']=values.angular_velocity.y
+    gyro_values['z']=values.angular_velocity.z
+
+
+def compass_callback(values):
     global compass_value    
-    compass_value = 180*math.atan2(values.magnetic_field.x, values.magnetic_field.z)/math.pi;
+    compass_value = 180*math.atan2(values.magnetic_field.x, values.magnetic_field.z)/math.pi;    
 
 
-def get_sensor_value(sensor_name, msg_type):
-    service_string = "/%s/%s/values" % (model_name, sensor_name)
-    return rospy.Subscriber(service_string, msg_type, eval("%sCallback"%sensor_name))
-
-
-def get_sensor_values():
-    for sensor in rospy.get_published_topics(namespace='/%s'%model_name):
-        msg_type=sensor[1]
-        components=sensor[0].split("/")
-        device=components[2]
-        topic=components[3]
-        rospy.logerr("%s %s %s %s %s"%(sensor[0],sensor[1],type(sensor[1]), device,topic))
-    get_sensor_value('compass', MagneticField)
+def get_sensor_value(topic, device, msg_type):
+    try:
+        return rospy.Subscriber(topic, msg_type, eval("%s_callback"%device))
+    except NameError as e:
+        rospy.logerr(str(e))
     
-                                    
-        
+
+
+def get_sensors_values():
+    for sensor in rospy.get_published_topics(namespace='/%s'%model_name):
+        if 'range_image' not in sensor[0]: 
+            msg_type=globals()[sensor[1].split("/")[1]]
+            topic=sensor[0]
+            device=sensor[0].split("/")[2]
+            get_sensor_value(topic, device, msg_type)
+    
+                                        
 def get_angle():
     global compass_value
     return compass_value
+
+def get_accelerometer_values():
+    global accelerometer_values
+    return accelerometer_values
+
+def get_gyro_values():
+    global gyro_values
+    return gyro_values         
 
   
 
