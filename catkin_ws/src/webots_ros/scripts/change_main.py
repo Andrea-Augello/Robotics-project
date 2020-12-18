@@ -11,13 +11,14 @@ import rosservice
 
 
 def testing():
-    set_linear_velocity(3.0)
     load_image('warning')
+    rospy.logerr("%f "%(get_angle()))
+    rotate(90,1)
+    rospy.logerr("%f "%(get_angle()))
+    set_linear_velocity(3.0)
     call_service('speaker', 'set_language', 'it-IT')
     speak("Ciao sono ciangà e sugnu troppu fuoitti")
     speak_polyglot(it_IT="ciao", en_UK="Hello")
-    get_compass_values('compass')
-    rospy.logerr("%d %d %d"%(compass_values['x'],compass_values['y'],compass_values['z']))
         
 def main():
     if not rospy.is_shutdown():

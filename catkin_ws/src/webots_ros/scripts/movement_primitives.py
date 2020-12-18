@@ -1,12 +1,12 @@
 from ros_interface import *
 import cv2
 
-angular_velocity = 3.0
+angular_velocity = 0.01
 linear_velocity  = 3.0
 
 def set_angular_velocity(speed):
-    call_service(motors[0], 'set_velocity',-speed*330/2);
-    call_service(motors[1], 'set_velocity', speed*330/2);
+    call_service(motors[0], 'set_velocity', -speed*330/2);
+    call_service(motors[1], 'set_velocity',  speed*330/2);
 
 
 def set_linear_velocity(speed):
@@ -28,6 +28,7 @@ def rotate(rotation, precision):
         no sense.
     """
     stop()
+    r = rospy.Rate(10) # 10hz
     curr_angular_velocity = angular_velocity
     framenum=1
     #processCallbacks()
@@ -44,6 +45,7 @@ def rotate(rotation, precision):
     elif (difference < -180):
         difference = difference + 360
 
+    starting_difference=difference
     direction =  1 if difference > 0 else -1
     while(abs(difference)>precision):
         #update_frame()
@@ -66,6 +68,8 @@ def rotate(rotation, precision):
             curr_angular_velocity*=0.8
             direction=-direction
 
-        set_angular_velocity(curr_angular_velocity*(-direction))
+        # applies rudimentary PID
+        set_angular_velocity(curr_angular_velocity*(-direction)\
+                * (0.5 + abs(difference/starting_difference)) )
     stop()
 
