@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import rospy
+import time
 from std_msgs.msg import *
 from webots_ros.srv import *
 from ros_interface import *
@@ -10,14 +11,14 @@ from ros_interface import *
 
 
 def testing():
-    #set_linear_velocity(3.0)
+    set_linear_velocity(3.0)
     load_image('warning')
     call_service('speaker', 'set_language', 'it-IT')
     speak("Ciao sono ciangà e sugnu troppu fuoitti")
     speak_polyglot(it_IT="ciao", en_UK="Hello")
     get_compass_values('compass')
     rospy.logerr("%d %d %d"%(compass_values['x'],compass_values['y'],compass_values['z']))
-	
+        
 
 def main():
     if not rospy.is_shutdown():

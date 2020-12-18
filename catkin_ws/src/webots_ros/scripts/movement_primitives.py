@@ -22,15 +22,15 @@ def rotate(rotation, precision):
     """
     :rotation:  The desired rotation in degrees. Note that a rotation greater
         than 180° in modulo will be substituted with a rotation in the opposite
-    direction.
+        direction.
     :precision: The     maximum difference from the required rotation and the
         actual rotation. If this value is smaller than the sensor noise it makes
         no sense.
     """
     stop()
     curr_angular_velocity = angular_velocity
-    direction, framenum=1
-    processCallbacks()
+    framenum=1
+    #processCallbacks()
     #update_frame()
     #update_object_roi()
     current_angle = get_angle()
