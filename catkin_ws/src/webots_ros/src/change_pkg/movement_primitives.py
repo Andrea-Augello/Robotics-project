@@ -1,5 +1,6 @@
 from change_pkg.ros_interface import *
 import cv2
+import time
 
 angular_velocity = 0.01
 linear_velocity  = 3.0
@@ -69,7 +70,7 @@ def rotate(rotation, precision):
 
         # applies rudimentary PID
         set_angular_velocity(curr_angular_velocity*(-direction)\
-                * (0.5 + abs(difference/180)) )
+                * (0.2 + 0.8*abs(difference/180)) )
     stop()
 
 
@@ -77,13 +78,15 @@ def move_forward(distance):
     stop()
     distance_traveled=0
     speed=0
-    last_update = rospy.get_rostime()
     while(distance_traveled < distance):
-        now = rospy.get_rostime()
-        accel = get_accel()
+        accel = get_accelerometer_values()
         speed = speed + accel["x"]
-        distance_traveled = distance_traveled + speed * (now.nsecs - last_update.nsecs) * 1e-9
-        set_linear_velocity( linear_velocity\
-                * (0.1 +( distance - distance_traveled )/distance ) )
+        rospy.logerr("Acceleration:    %f"%accel["x"])
+        rospy.logerr("Speed:           %f"%speed)
+        rospy.logerr("Distance:        %f"%distance_traveled)
+        distance_traveled = distance_traveled + speed * 0.01
+        set_linear_velocity( linear_velocity
+                * (0.8 +0.2*( distance - distance_traveled )/distance ) )
+        time.sleep(0.01)
 
     stop()

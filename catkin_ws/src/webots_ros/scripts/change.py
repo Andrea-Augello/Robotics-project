@@ -11,10 +11,11 @@ import rosservice
 
 
 def testing():
+    time.sleep(5)
     load_image('warning')
-    rotate(-90,1)
-    rotate(90,1)
-    set_linear_velocity(3.0)
+    for i in range(0,4):
+        rotate(90,1)
+        move_forward(2)
     call_service('speaker', 'set_language', 'it-IT')
     speak("Ciao sono ciangà e sugnu troppu fuoitti")
     speak_polyglot(it_IT="ciao", en_UK="Hello")
