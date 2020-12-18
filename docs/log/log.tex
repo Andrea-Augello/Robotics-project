@@ -51,31 +51,26 @@
 	\section{Task}
 	Our robot will be deployed in a room (such as the one showed in our demo) and its aim is to identify humans and estimate their relative positions. If the distance between said humans is less that a specified value, the robot will go towards them and invite them to respect social distancing (with both visual and audio output).
 	
-	\section{Pioneer 2}
-	The robot selected for the given task is the \textbf{Pioneer2}. \newline\textbf{Adept's Pioneer 2}\cite{pioneer2} is a three-wheeled robot (2 motorized wheels and one passive caster wheel) mounted with several sensors including 16 ultrasonic sensors.
+	\section{Tiago Iron} 
+	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm. The model is a modular mobile platform that allows human-robot interaction.
 	In order to achieve our goal, it was deemed necessary to add the following devices in the extension slot:
 		\begin{enumerate}
 			\item compass;
 			\item gyro;	
 			\item accelerometer;
-			\item servo;
-				\begin{enumerate}
-					\item display;
-				\end{enumerate}
 		\end{enumerate}
 	
 	\section{ROS}
-	Our team decided to write all the ROS related code in the file \texttt{ros\_interface.cpp}. The aim was to write a cleaner main function, which is located in the file \texttt{change.cpp}.
-	\subsection{Init}
+
 	
 	
 	\newpage
 	% Bibliography
 	\bibliographystyle{unsrt}
 	\begin{thebibliography}{9}
-		\bibitem{pioneer2} 
-		\textit{https://www.cyberbotics.com/doc/guide/pioneer2}. \newline
-		Webots Pioneer 2 documentation.
+		\bibitem{tiagoiron} 
+		\textit{https://cyberbotics.com/doc/guide/tiago-iron}. \newline
+		Webots TIAGo Iron documentation.
 		\bibitem{change4} 
 		\textit{https://www.theguardian.com/science/2019/jan/03/china-probe-change-4-land-far-side-moon-basin-crater}. \newline
 		The Guardian, 3 January 2019.
