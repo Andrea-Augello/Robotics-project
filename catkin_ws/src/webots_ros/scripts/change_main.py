@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import rospy
+import time
 from std_msgs.msg import *
 from webots_ros.srv import *
 from movement_primitives import *
@@ -10,14 +11,16 @@ import rosservice
 
 
 def testing():
-    #set_linear_velocity(3.0)
     load_image('warning')
+    rospy.logerr("%f "%(get_angle()))
+    rotate(-90,1)
+    rotate(90,1)
+    rospy.logerr("%f "%(get_angle()))
+    set_linear_velocity(3.0)
     call_service('speaker', 'set_language', 'it-IT')
     speak("Ciao sono ciangà e sugnu troppu fuoitti")
     speak_polyglot(it_IT="ciao", en_UK="Hello")
-    rospy.logerr(rospy.get_published_topics(namespace='/%s'%model_name))
-	
-
+        
 def main():
     if not rospy.is_shutdown():
         rospy.init_node(model_name, anonymous=True)

@@ -1,12 +1,12 @@
 from ros_interface import *
 import cv2
 
-angular_velocity = 3.0
+angular_velocity = 0.01
 linear_velocity  = 3.0
 
 def set_angular_velocity(speed):
-    call_service(motors[0], 'set_velocity',-speed*330/2);
-    call_service(motors[1], 'set_velocity', speed*330/2);
+    call_service(motors[0], 'set_velocity', -speed*330/2);
+    call_service(motors[1], 'set_velocity',  speed*330/2);
 
 
 def set_linear_velocity(speed):
@@ -22,15 +22,16 @@ def rotate(rotation, precision):
     """
     :rotation:  The desired rotation in degrees. Note that a rotation greater
         than 180° in modulo will be substituted with a rotation in the opposite
-    direction.
+        direction.
     :precision: The     maximum difference from the required rotation and the
         actual rotation. If this value is smaller than the sensor noise it makes
         no sense.
     """
     stop()
+    r = rospy.Rate(10) # 10hz
     curr_angular_velocity = angular_velocity
-    direction, framenum=1
-    processCallbacks()
+    framenum=1
+    #processCallbacks()
     #update_frame()
     #update_object_roi()
     current_angle = get_angle()
@@ -66,6 +67,23 @@ def rotate(rotation, precision):
             curr_angular_velocity*=0.8
             direction=-direction
 
-        set_angular_velocity(curr_angular_velocity*(-direction))
+        # applies rudimentary PID
+        set_angular_velocity(curr_angular_velocity*(-direction)\
+                * (0.5 + abs(difference/180)) )
     stop()
 
+
+def move_forward(distance):
+    stop()
+    distance_traveled=0
+    speed=0
+    last_update = rospy.get_rostime()
+    while(distance_traveled < distance):
+        now = rospy.get_rostime()
+        accel = get_accel()
+        speed = speed + accel["x"]
+        distance_traveled = distance_traveled + speed * (now.nsecs - last_update.nsecs) * 1e-9
+        set_linear_velocity( linear_velocity\
+                * (0.1 +( distance - distance_traveled )/distance ) )
+
+    stop()
