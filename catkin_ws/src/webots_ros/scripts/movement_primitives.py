@@ -72,3 +72,18 @@ def rotate(rotation, precision):
                 * (0.5 + abs(difference/180)) )
     stop()
 
+
+def move_forward(distance):
+    stop()
+    distance_traveled=0
+    speed=0
+    last_update = rospy.get_rostime()
+    while(distance_traveled < distance):
+        now = rospy.get_rostime()
+        accel = get_accel()
+        speed = speed + accel["x"]
+        distance_traveled = distance_traveled + speed * (now.nsecs - last_update.nsecs) * 1e-9
+        set_linear_velocity( linear_velocity\
+                * (0.1 +( distance - distance_traveled )/distance ) )
+
+    stop()
