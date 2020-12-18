@@ -1,4 +1,4 @@
-from ros_interface import *
+from change_pkg.ros_interface import *
 import cv2
 
 angular_velocity = 0.01

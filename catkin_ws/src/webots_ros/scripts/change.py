@@ -3,8 +3,8 @@ import rospy
 import time
 from std_msgs.msg import *
 from webots_ros.srv import *
-from movement_primitives import *
-from ros_interface import *
+from change_pkg.movement_primitives import *
+from change_pkg.ros_interface import *
 import os
 import rosservice
 
