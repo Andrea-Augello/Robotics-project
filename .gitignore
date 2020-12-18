@@ -1,7 +1,7 @@
 # Python cache
 *.pyc
 # merged junk, fml
-catkin_ws/src/webots_ros/scripts/change.py
+./catkin_ws/src/webots_ros/scripts/change.py 
 # Prerequisites
 *.d
 

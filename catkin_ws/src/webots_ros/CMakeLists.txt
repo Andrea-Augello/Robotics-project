@@ -184,6 +184,9 @@ catkin_install_python(PROGRAMS scripts/webots_launcher.py
 catkin_install_python(PROGRAMS scripts/ros_interface.py
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
+catkin_install_python(PROGRAMS scripts/movement_primitives.py
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
 catkin_install_python(PROGRAMS scripts/change.py
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 

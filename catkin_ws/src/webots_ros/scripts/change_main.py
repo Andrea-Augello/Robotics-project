@@ -3,11 +3,11 @@ import rospy
 import time
 from std_msgs.msg import *
 from webots_ros.srv import *
-from ros_interface import *
 from movement_primitives import *
+from ros_interface import *
 import os
 import rosservice
-from ros_interface import *
+
 
 
 def testing():
@@ -19,7 +19,6 @@ def testing():
     get_compass_values('compass')
     rospy.logerr("%d %d %d"%(compass_values['x'],compass_values['y'],compass_values['z']))
         
-
 def main():
     if not rospy.is_shutdown():
         rospy.init_node(model_name, anonymous=True)
@@ -27,7 +26,9 @@ def main():
         rospy.loginfo('Time step: ' + str(time_step))
         motor_init()
         enable_sensors()
+        get_sensor_values()
         testing()
+        rospy.spin()
 
                 
 
