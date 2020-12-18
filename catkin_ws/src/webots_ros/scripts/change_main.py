@@ -13,6 +13,7 @@ import rosservice
 def testing():
     load_image('warning')
     rospy.logerr("%f "%(get_angle()))
+    rotate(-90,1)
     rotate(90,1)
     rospy.logerr("%f "%(get_angle()))
     set_linear_velocity(3.0)

@@ -45,7 +45,6 @@ def rotate(rotation, precision):
     elif (difference < -180):
         difference = difference + 360
 
-    starting_difference=difference
     direction =  1 if difference > 0 else -1
     while(abs(difference)>precision):
         #update_frame()
@@ -70,6 +69,6 @@ def rotate(rotation, precision):
 
         # applies rudimentary PID
         set_angular_velocity(curr_angular_velocity*(-direction)\
-                * (0.5 + abs(difference/starting_difference)) )
+                * (0.5 + abs(difference/180)) )
     stop()
 
