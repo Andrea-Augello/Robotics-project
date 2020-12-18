@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.035709291495126805 0.9978817105698 0.05437773635602994 1.8646924688199584
-  position -0.20758519351552346 0.9366451441185939 -1.003188029212415
+  orientation 0.17160624566717067 -0.9674228874760661 -0.18612966780040538 4.631494302448485
+  position -1.4507658907267738 1.0337511140811029 -0.013492547802044539
 }
 TexturedBackground {
 }
@@ -134,59 +134,6 @@ TiagoIron {
     "--name=change"
   ]
   cameraSlot [
-    Solid {
-      translation -0.2 -0.4 0
-      rotation 0 1 0 -1.5708
-      children [
-        Display {
-          translation 0 0.026 -0.069
-          rotation 1 0 0 0.261799
-          children [
-            DEF display_shape Shape {
-              appearance Appearance {
-                material Material {
-                  emissiveColor 1 1 1
-                }
-                texture ImageTexture {
-                  filtering 0
-                }
-              }
-              geometry Box {
-                size 0.24 0.135 0.01
-              }
-            }
-          ]
-          width 720
-          height 405
-        }
-        DEF G0 Group {
-          children [
-            Shape {
-              appearance Plaster {
-              }
-              geometry Cylinder {
-                height 0.1
-                radius 0.05
-              }
-            }
-            Transform {
-              translation 0 0.0219067 -0.0544829
-              rotation 1 0 0 0.261799
-              children [
-                Shape {
-                  appearance Plaster {
-                  }
-                  geometry Box {
-                    size 0.24 0.135 0.02
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-      boundingObject USE G0
-    }
     Speaker {
     }
     Camera {
@@ -209,6 +156,66 @@ TiagoIron {
     }
   ]
   lidarSlot [
+    Solid {
+      translation 0.00948315 0.55751 0.142568
+      rotation 0.7071067811865439 0.7071067811865439 -1.0064096885675712e-07 0.189995
+      children [
+        Display {
+          translation 0.00183016 0.0237368 -0.0641422
+          rotation 0.7071067811865475 -0.7071067811865475 0 0.2617996938995747
+          children [
+            DEF display_shape Shape {
+              appearance Appearance {
+                material Material {
+                  emissiveColor 1 1 1
+                }
+                texture ImageTexture {
+                  filtering 0
+                }
+              }
+              geometry Box {
+                size 0.24 0.135 0.01
+              }
+            }
+          ]
+          boundingObject Box {
+            size 0.24 0.135 0.02
+          }
+          physics Physics {
+          }
+          width 720
+          height 405
+        }
+        DEF G0 Group {
+          children [
+            Shape {
+              appearance Plaster {
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.05
+              }
+            }
+            Transform {
+              translation 0 0.0219067 -0.0544829
+              rotation 0.7071067811865475 -0.7071067811865475 0 0.261799
+              children [
+                Shape {
+                  appearance Plaster {
+                  }
+                  geometry Box {
+                    size 0.24 0.135 0.02
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      boundingObject USE G0
+      physics Physics {
+      }
+    }
     Compass {
     }
     HokuyoUrg04lxug01 {
