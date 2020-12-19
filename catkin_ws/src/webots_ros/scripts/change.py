@@ -13,8 +13,8 @@ import rosservice
 def testing():
     load_image('warning')
     for i in range(0,4):
+        move_forward(3,0.01)
         rotate(180,1)
-        move_forward(2)
     call_service('speaker', 'set_language', 'it-IT')
     speak("Ciao sono ciangà e sugnu troppu fuoitti")
     speak_polyglot(it_IT="ciao", en_UK="Hello")

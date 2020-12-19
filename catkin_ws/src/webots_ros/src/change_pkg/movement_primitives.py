@@ -3,7 +3,7 @@ import cv2
 import time
 
 angular_velocity = 0.02
-linear_velocity  = 4.0
+linear_velocity  = 5.0
 
 def set_angular_velocity(speed):
     call_service(motors[0], 'set_velocity', -speed*330/2);
@@ -74,26 +74,27 @@ def rotate(rotation, precision):
     stop()
 
 
-def move_forward(distance):
+def move_forward(distance, precision):
     stop()
+    time.sleep(0.5)
     distance_traveled=0
     speed=0
     prev_speed= 0
     prev_stamp = False
     prev_accel = False
-    while(distance_traveled < distance):
+    while(abs(distance_traveled - distance) > precision):
         accel = get_accelerometer_values()
         timestamp = accel['timestamp']
-        accel = accel['x'] if abs(accel['x']) > 0.01 else 0
+        accel = accel['x']
         if(prev_stamp):
             elapsed_time = timestamp-prev_stamp
             elapsed_time = elapsed_time.to_sec()
             prev_speed = speed
-            speed = speed+((accel-prev_accel)/2+prev_accel)*elapsed_time
+            speed = max(0,speed+((accel-prev_accel)/2+prev_accel)*elapsed_time)
             distance_traveled = distance_traveled\
                     + (prev_speed+ (speed-prev_speed)/2 ) *elapsed_time
             set_linear_velocity(linear_velocity\
-                    *min(1, 2*(distance-distance_traveled)) )
+                    *(0.1+0.9*min(1, 2*(distance-distance_traveled)) ) )
             rospy.logerr("Acceleration:           %f"%accel)
             rospy.logerr("Distance traveled:      %f"%distance_traveled)
             rospy.logerr("Elapsed time:           %f"%elapsed_time)
