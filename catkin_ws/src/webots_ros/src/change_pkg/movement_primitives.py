@@ -81,6 +81,7 @@ def rotate(rotation, precision):
         prev_time = time
         prev_ang_vel = ang_vel
     stop()
+    return current_angle
 
 
 def move_forward(distance, precision):
