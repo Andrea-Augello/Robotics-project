@@ -2,11 +2,15 @@ import rospy
 from std_msgs.msg import *
 from sensor_msgs.msg import *
 from webots_ros.msg import *
+from cv_bridge import CvBridge
+import cv2
 import os
 import math
 import rosservice
 from scipy.spatial.transform import Rotation
 
+cv_image = None
+bridge =  CvBridge()
 model_name = 'change'
 time_step = 32
 sensors = {"Hokuyo_URG_04LX_UG01":True,
@@ -91,7 +95,13 @@ def accelerometer_callback(values):
     accelerometer_values['t'] = values.header.stamp
 
 def camera_callback(values):
-	pass
+    global cv_image
+    cv_image = bridge.imgmsg_to_cv2(values, desired_encoding='bgra8')
+    cv2.imshow('image', cv_image)
+    cv2.waitKey(1)
+ 
+    
+
 
 def gyro_callback(values):
     global gyro_values
