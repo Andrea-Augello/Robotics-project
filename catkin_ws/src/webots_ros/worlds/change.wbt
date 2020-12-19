@@ -12,6 +12,7 @@ TexturedBackgroundLight {
 }
 RectangleArena {
   floorSize 10 10
+  floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
   }
@@ -127,12 +128,14 @@ Apple {
   translation 0 0.819508 0
 }
 TiagoIron {
-  hidden translation_2 0 0 0.9
+
   translation -2.55 0.095 -2
   name "change"
   controller "ros"
   controllerArgs [
     "--name=change"
+    "--clock"
+    "--use-sim-time"
   ]
   cameraSlot [
     Speaker {
