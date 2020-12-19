@@ -30,7 +30,7 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
 motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint", "torso_lift_joint"]
 compass_value = 0
 gyro_values = {'x':0, 'y':0, 'z':0}
-accelerometer_values = {'x':0, 'y':0, 'z':0}
+accelerometer_values = {'x':0, 'y':0, 'z':0, 'timestamp':0}
 
 
 def call_service(device_name,service_name,*args):
@@ -88,6 +88,7 @@ def accelerometer_callback(values):
     accelerometer_values['x'] = values.linear_acceleration.x
     accelerometer_values['y'] = values.linear_acceleration.y
     accelerometer_values['z'] = values.linear_acceleration.z
+    accelerometer_values['timestamp'] = values.header.stamp
 
 def camera_callback(values):
 	pass

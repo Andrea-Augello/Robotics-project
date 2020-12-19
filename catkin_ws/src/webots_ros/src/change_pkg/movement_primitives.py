@@ -2,8 +2,8 @@ from change_pkg.ros_interface import *
 import cv2
 import time
 
-angular_velocity = 0.01
-linear_velocity  = 3.0
+angular_velocity = 0.02
+linear_velocity  = 4.0
 
 def set_angular_velocity(speed):
     call_service(motors[0], 'set_velocity', -speed*330/2);
@@ -68,9 +68,9 @@ def rotate(rotation, precision):
             curr_angular_velocity*=0.8
             direction=-direction
 
-        # applies rudimentary PID
+        # applies rudimentary proportional controller
         set_angular_velocity(curr_angular_velocity*(-direction)\
-                * (0.2 + 0.8*abs(difference/180)) )
+                * (min(1,abs(difference/45))) )
     stop()
 
 
@@ -78,15 +78,29 @@ def move_forward(distance):
     stop()
     distance_traveled=0
     speed=0
+    prev_speed= 0
+    r = rospy.Rate(5)
+    prev_stamp = False
+    prev_accel = False
     while(distance_traveled < distance):
         accel = get_accelerometer_values()
-        speed = speed + accel["x"]
-        rospy.logerr("Acceleration:    %f"%accel["x"])
-        rospy.logerr("Speed:           %f"%speed)
-        rospy.logerr("Distance:        %f"%distance_traveled)
-        distance_traveled = distance_traveled + speed * 0.01
-        set_linear_velocity( linear_velocity
-                * (0.8 +0.2*( distance - distance_traveled )/distance ) )
-        time.sleep(0.01)
-
+        timestamp = accel['timestamp']
+        accel = accel['x'] if abs(accel['x']) > 0.01 else 0
+        if( prev_accel and prev_stamp):
+            elapsed_time = timestamp-prev_stamp
+            elapsed_time = elapsed_time.to_sec()
+            prev_speed = speed
+            speed = speed+((accel-prev_accel)/2+accel)*elapsed_time
+            distance_traveled = distance_traveled\
+                    + (prev_speed+ (speed-prev_speed)/2 )\
+                    *elapsed_time
+            set_linear_velocity(linear_velocity\
+                    *min(1, 2*(distance-distance_traveled)) )
+            rospy.logerr("Acceleration:           %f"%accel)
+            rospy.logerr("Distance traveled:      %f"%distance_traveled)
+            rospy.logerr("Elapsed time:           %f"%elapsed_time)
+        prev_stamp = timestamp
+        prev_accel = accel
+        r.sleep()
     stop()
+    return distance_traveled
