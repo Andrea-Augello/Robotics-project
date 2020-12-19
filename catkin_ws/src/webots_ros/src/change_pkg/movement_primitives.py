@@ -76,25 +76,24 @@ def rotate(rotation, precision):
 
 def move_forward(distance, precision):
     stop()
-    time.sleep(0.5)
     distance_traveled=0
     speed=0
-    prev_speed= 0
-    prev_stamp = False
-    prev_accel = False
-    while(abs(distance_traveled - distance) > precision):
+    prev_speed = 0
+    prev_stamp = 0
+    prev_accel = 0
+    while(distance*1.1 - distance_traveled > precision):
         accel = get_accelerometer_values()
         timestamp = accel['timestamp']
-        accel = accel['x']
+        accel = accel['x'] if abs(accel['x']) > 0.01 else 0
         if(prev_stamp):
             elapsed_time = timestamp-prev_stamp
             elapsed_time = elapsed_time.to_sec()
             prev_speed = speed
-            speed = max(0,speed+((accel-prev_accel)/2+prev_accel)*elapsed_time)
+            speed = speed+((accel-prev_accel)/2+prev_accel)*elapsed_time
             distance_traveled = distance_traveled\
                     + (prev_speed+ (speed-prev_speed)/2 ) *elapsed_time
             set_linear_velocity(linear_velocity\
-                    *(0.1+0.9*min(1, 2*(distance-distance_traveled)) ) )
+                    *(min(1, (distance*1.1-distance_traveled)/0.2) ) )
             rospy.logerr("Acceleration:           %f"%accel)
             rospy.logerr("Distance traveled:      %f"%distance_traveled)
             rospy.logerr("Elapsed time:           %f"%elapsed_time)

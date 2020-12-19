@@ -5,6 +5,7 @@ from webots_ros.msg import *
 import os
 import math
 import rosservice
+from scipy.spatial.transform import Rotation
 
 model_name = 'change'
 time_step = 32
@@ -28,6 +29,7 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
         "wheel_right_joint_sensor":False
         }
 motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint", "torso_lift_joint"]
+yaw = 0
 compass_value = 0
 gyro_values = {'x':0, 'y':0, 'z':0}
 accelerometer_values = {'x':0, 'y':0, 'z':0, 'timestamp':0}
@@ -101,8 +103,16 @@ def gyro_callback(values):
 
 
 def compass_callback(values):
-    global compass_value    
-    compass_value = 180*math.atan2(values.magnetic_field.x, values.magnetic_field.z)/math.pi;    
+    global compass_value 
+    compass_value = 180*math.atan2(values.magnetic_field.x, values.magnetic_field.z)/math.pi
+
+
+def inertial_unit_callback(values):
+    global yaw       
+    q = values.orientation
+    rot = Rotation.from_quat([q.x,q.y,q.z,q.w])
+    rot_euler = rot.as_euler('xyz', degrees=True) 
+    yaw = 180*rot_euler[2]/math.pi
 
 
 def get_sensor_value(topic, device, msg_type):
