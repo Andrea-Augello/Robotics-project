@@ -17,7 +17,6 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
         "base_sonar_03_link":False, 
         "battery_sensor":False,
         "camera":True,
-        "compass":True,
         "gyro":True,    
         "head_1_joint_sensor":False,
         "head_2_joint_sensor":False, 
@@ -30,8 +29,7 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
         }
 motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint", "torso_lift_joint"]
 yaw = 0
-compass_value = 0
-gyro_values = {'x':0, 'y':0, 'z':0}
+gyro_values = {'x':0, 'y':0, 'z':0, 't':0}
 accelerometer_values = {'x':0, 'y':0, 'z':0, 'timestamp':0}
 
 
@@ -100,11 +98,7 @@ def gyro_callback(values):
     gyro_values['x']=values.angular_velocity.x
     gyro_values['y']=values.angular_velocity.y
     gyro_values['z']=values.angular_velocity.z
-
-
-def compass_callback(values):
-    global compass_value 
-    compass_value = 180*math.atan2(values.magnetic_field.x, values.magnetic_field.z)/math.pi
+    gyro_values['t']=values.header.stamp
 
 
 def inertial_unit_callback(values):
@@ -122,7 +116,6 @@ def get_sensor_value(topic, device, msg_type):
         rospy.logerr(str(e))
     
 
-
 def get_sensors_values():
     for sensor in rospy.get_published_topics(namespace='/%s'%model_name):
         if 'range_image' not in sensor[0]: 
@@ -132,13 +125,10 @@ def get_sensors_values():
             get_sensor_value(topic, device, msg_type)
     
                                         
-def get_angle():
-    global compass_value
-    return compass_value
-
 def get_accelerometer_values():
     global accelerometer_values
     return accelerometer_values
+
 
 def get_gyro_values():
     global gyro_values
