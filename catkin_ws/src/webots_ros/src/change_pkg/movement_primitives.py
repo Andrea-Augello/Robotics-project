@@ -93,7 +93,7 @@ def move_forward(distance, precision):
     prev_accel = 0
     while(distance*1.1 - distance_traveled > precision):
         accel = get_accelerometer_values()
-        timestamp = accel['timestamp']
+        timestamp = accel['t']
         accel = accel['x'] if abs(accel['x']) > 0.01 else 0
         if(prev_stamp):
             elapsed_time = timestamp-prev_stamp
