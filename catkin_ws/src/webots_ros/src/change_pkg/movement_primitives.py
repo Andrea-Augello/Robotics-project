@@ -79,21 +79,19 @@ def move_forward(distance):
     distance_traveled=0
     speed=0
     prev_speed= 0
-    r = rospy.Rate(5)
     prev_stamp = False
     prev_accel = False
     while(distance_traveled < distance):
         accel = get_accelerometer_values()
         timestamp = accel['timestamp']
         accel = accel['x'] if abs(accel['x']) > 0.01 else 0
-        if( prev_accel and prev_stamp):
+        if(prev_stamp):
             elapsed_time = timestamp-prev_stamp
             elapsed_time = elapsed_time.to_sec()
             prev_speed = speed
-            speed = speed+((accel-prev_accel)/2+accel)*elapsed_time
+            speed = speed+((accel-prev_accel)/2+prev_accel)*elapsed_time
             distance_traveled = distance_traveled\
-                    + (prev_speed+ (speed-prev_speed)/2 )\
-                    *elapsed_time
+                    + (prev_speed+ (speed-prev_speed)/2 ) *elapsed_time
             set_linear_velocity(linear_velocity\
                     *min(1, 2*(distance-distance_traveled)) )
             rospy.logerr("Acceleration:           %f"%accel)
@@ -101,6 +99,5 @@ def move_forward(distance):
             rospy.logerr("Elapsed time:           %f"%elapsed_time)
         prev_stamp = timestamp
         prev_accel = accel
-        r.sleep()
     stop()
     return distance_traveled
