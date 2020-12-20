@@ -32,10 +32,12 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
         "wheel_right_joint_sensor":True
         }
 motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint", "torso_lift_joint"]
-yaw = 0
-left_wheel_joint_position = 0
+yaw                        = 0
+left_wheel_joint_position  = 0
 right_wheel_joint_position = 0
-torso_lift_joint_position = 0
+head_1_joint_position      = 0
+head_2_joint_position      = 0
+torso_lift_joint_position  = 0
 gyro_values = {'x':0, 'y':0, 'z':0, 't':0}
 accelerometer_values = {'x':0, 'y':0, 'z':0, 't':0}
 
