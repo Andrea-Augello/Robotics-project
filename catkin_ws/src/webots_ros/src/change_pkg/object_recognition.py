@@ -68,18 +68,21 @@ def make_prediction(net, layer_names, labels, image, confidence, threshold):
     return boxes, confidences, classIDs, idxs
 
 def get_rois(image_list):
+    paths = os.path.split(os.path.realpath(__file__))
+    BASE_DIR = paths[0]
+    
     global collage 
     collage = np.hstack(image_list)
-    cv2.imwrite("test_images/collage.png", collage)
+    cv2.imwrite(BASE_DIR + "/test_images/collage.png", collage)
 
     #Path to label file
-    labels='model/coco.names' 
+    labels=BASE_DIR+'/model/coco.names' 
 
     #Path to configuration file
-    config='model/yolov3.cfg'
+    config=BASE_DIR+'/model/yolov3.cfg'
 
     #Path to model weights
-    weights='model/yolov3.weights'
+    weights=BASE_DIR+'/model/yolov3.weights'
 
     #Minimum confidence for a box to be detected
     confidence=0.8
@@ -100,7 +103,7 @@ def get_rois(image_list):
     layer_names = net.getLayerNames()
     layer_names = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
-    image = cv2.imread(collage)
+    image = cv2.imread(BASE_DIR + "/test_images/collage.png")
     boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
     # Test boxes
