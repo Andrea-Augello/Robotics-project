@@ -1,4 +1,5 @@
 from change_pkg.ros_interface import *
+import rospy
 import cv2
 import math
 FOCAL_LENGTH   = 0.0036
@@ -98,3 +99,8 @@ def clear_saved_frames():
 def save_frame(frame):
     global current_frames
     current_frames.append(frame)
+
+def get_current_frames():
+    global current_frames
+    return current_frames
+

@@ -16,8 +16,7 @@ def testing():
     #set_height(max_height)
     #set_height(0)
     scan()
-    global current_frames
-    get_rois(current_frames)
+    get_rois(get_current_frames())
     #rotate(90,1)
     for i in range(4):
         move_forward(2,0.05)
