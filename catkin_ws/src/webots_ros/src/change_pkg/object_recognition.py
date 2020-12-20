@@ -7,7 +7,6 @@ import time
 # TEST RUN : 
 # python3 object_recognition.py -w model/yolov3.weights -cfg model/yolov3.cfg -l model/coco.names -i test_images/img2.jpeg -s
 
-
 def extract_boxes_confidences_classids(outputs, confidence, width, height):
     boxes = []
     confidences = []
@@ -37,7 +36,7 @@ def extract_boxes_confidences_classids(outputs, confidence, width, height):
     return boxes, confidences, classIDs
 
 
-def draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors):
+def draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels):
     if len(idxs) > 0:
         for i in idxs.flatten():
             # extract bounding box coordinates
@@ -51,7 +50,6 @@ def draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors):
             cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
     return image
-
 
 def make_prediction(net, layer_names, labels, image, confidence, threshold):
     height, width = image.shape[:2]
@@ -80,10 +78,10 @@ def get_rois(image_path):
     weights='model/yolov3.weights'
 
     #Minimum confidence for a box to be detected
-    confidence=0.5 
+    confidence=0.8
 
     #Threshold for Non-Max Suppression
-    threshold=0.3
+    threshold=0.4
 
     # Get the labels
     labels = open(labels).read().strip().split('\n')
@@ -101,11 +99,19 @@ def get_rois(image_path):
     image = cv2.imread(image_path)
     boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
+    # Test boxes
+    image = draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels)
+    cv2.imshow('YOLO Object Detection', image)
+    cv2.waitKey(0)
+
     return boxes
 
+#Command line test
+if __name__ == '__main__':
+    print(get_rois('test_images/img2.jpeg'))
 
 #Command line call
-if __name__ == '__main__':
+def command_line():
     parser = argparse.ArgumentParser()
     parser.add_argument('-w', '--weights', type=str, default='model/yolov3.weights', help='Path to model weights')
     parser.add_argument('-cfg', '--config', type=str, default='model/yolov3.cfg', help='Path to configuration file')
