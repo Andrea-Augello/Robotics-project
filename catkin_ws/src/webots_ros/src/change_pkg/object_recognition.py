@@ -69,7 +69,42 @@ def make_prediction(net, layer_names, labels, image, confidence, threshold):
 
     return boxes, confidences, classIDs, idxs
 
+def get_rois(image_path):
+    #Path to label file
+    labels='model/coco.names' 
 
+    #Path to configuration file
+    config='model/yolov3.cfg'
+
+    #Path to model weights
+    weights='model/yolov3.weights'
+
+    #Minimum confidence for a box to be detected
+    confidence=0.5 
+
+    #Threshold for Non-Max Suppression
+    threshold=0.3
+
+    # Get the labels
+    labels = open(labels).read().strip().split('\n')
+
+    # Create a list of colors for the labels
+    colors = np.random.randint(0, 255, size=(len(labels), 3), dtype='uint8')
+
+    # Load weights using OpenCV
+    net = cv2.dnn.readNetFromDarknet(config, weights)
+
+    # Get the ouput layer names
+    layer_names = net.getLayerNames()
+    layer_names = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+
+    image = cv2.imread(image_path)
+    boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
+
+    return boxes
+
+
+#Command line call
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-w', '--weights', type=str, default='model/yolov3.weights', help='Path to model weights')
@@ -119,4 +154,4 @@ if __name__ == '__main__':
         
     if args.save:
         cv2.imwrite(f'output/{args.image_path.split("/")[-1]}', image)
-    cv2.destroyAllWindows()
+        cv2.destroyAllWindows()
