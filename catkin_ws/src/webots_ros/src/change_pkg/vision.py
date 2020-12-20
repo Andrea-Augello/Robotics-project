@@ -1,4 +1,4 @@
-from ros_interface import *
+from change_pkg.ros_interface import *
 import cv2
 import math
 FOCAL_LENGTH   = 0.0036
@@ -16,7 +16,7 @@ show_image = True
 
 def obj_dist(p1, p2, real_height):
     diff = (p1[0]-p2[0],p1[1]-p2[1])
-    pixel_height = math.sqrt(diff[0]**2 + diff[1]**2
+    pixel_height = math.sqrt(diff[0]**2 + diff[1]**2)
     return (real_height*FOCAL_LENGTH*IMAGE_HEIGHT)\
             /(pixel_height*SENSOR_HEIGHT)
 
@@ -63,15 +63,14 @@ def point_cylindrical_coords(p, distance):
     rho = math.sqrt(distance**2-z**2)
     return (rho, phi, z)
 
-roi_center(roi){
+def roi_center(roi):
 	return (roi[0]+roi[2]/2, roi[1]+roi[3]/2)
-}
 
 def toggle_roi():
     show_roi = not show_roi
 
 def update_frame():
-    current_frame = getImage()
+    current_frame = get_image()
     if(show_image):
         if show_roi and len(current_rois) != 0 :
             frame_copy = current_frame.copy()
@@ -81,5 +80,5 @@ def update_frame():
                 cv2.circle(frame_copy, roi_center(roi), 2, (0,255,0),-1)
             cv2.circle(frame_copy, (IMAGE_WIDTH/2, IMAGE_HEIGHT/2),2,(255,0,0),-1)
             cv2.imshow('feed', frame_copy)
-        else
+        else:
             cv2.imshow('feed', current_frame)

@@ -1,4 +1,5 @@
 from change_pkg.ros_interface import *
+from change_pkg.vision import *
 import cv2
 import time
 
@@ -32,8 +33,6 @@ def rotate(rotation, precision):
     r = rospy.Rate(10) # 10hz
     curr_angular_velocity = angular_velocity
     framenum=1
-    #processCallbacks()
-    #update_frame()
     #update_object_roi()
     # adjust for discontinuity at +/-180°
     current_angle = 0
@@ -49,11 +48,9 @@ def rotate(rotation, precision):
     direction =  1 if difference > 0 else -1
     while(abs(difference)>precision):
         # just for funzies
-        img = get_image()
-        if(img.any() != None):
-            cv2.imshow('feed',img)
-            if(cv2.waitKey(1) == ' '):
-                break
+        update_frame()
+        if(cv2.waitKey(1) == ' '):
+            break
 
         gyro = get_gyro_values()
         time = gyro['t']
@@ -93,11 +90,9 @@ def move_forward(distance, precision):
     prev_stamp = 0
     prev_accel = 0
     while(distance*1.1 - distance_traveled > precision):
-        #img = get_image()
-        #if(img.any() != None):
-            #cv2.imshow('feed',img)
-            #if(cv2.waitKey(1) == ' '):
-                #break
+        update_frame()
+        if(cv2.waitKey(1) == ' '):
+            break
 
         accel = get_accelerometer_values()
         timestamp = accel['t']
