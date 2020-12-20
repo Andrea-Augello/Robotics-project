@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.008372125324958674 -0.7403628546988431 -0.6721553026642897 3.132209977906549
-  position -1.5463029759635807 13.827955308513097 0.37225672417178113
+  orientation -0.31626354684270946 0.877475577459511 0.36057451365919785 1.8126820862894837
+  position 2.2345244644727966 4.527128929841202 -2.8595590104230926
 }
 TexturedBackground {
 }
@@ -128,7 +128,6 @@ Apple {
   translation 0 0.819508 0
 }
 TiagoIron {
-
   translation -2.55 0.095 -2
   name "change"
   controller "ros"
@@ -137,34 +136,13 @@ TiagoIron {
     "--clock"
     "--use-sim-time"
   ]
-  cameraSlot [
-    Speaker {
-    }
-    Camera {
-      rotation 0 1 0 -1.5707996938995747
-      fieldOfView 1
-	  near 0.003
-      width 640
-      height 480
-      noise 0.007
-      lens Lens {
-      }
-      focus Focus {
-        focalLength 0.0036
-        maxFocalDistance 1000000
-        minFocalDistance 1
-      }
-      zoom Zoom {
-      }
-      recognition Recognition {
-      }
-    }
-  ]
-  lidarSlot [
+  displaySlot [
     Solid {
-      translation 0.00948315 0.55751 0.142568
-      rotation 0.7071067811865439 0.7071067811865439 -1.0064096885675712e-07 0.189995
+      translation 0.1 0 -0.25
+      rotation 0.6353159295275 -0.5360478155388282 -0.5559014383365626 1.98
       children [
+        Speaker {
+        }
         Display {
           translation 0.00183016 0.0237368 -0.0641422
           rotation 0.7071067811865475 -0.7071067811865475 0 0.2617996938995747
@@ -221,9 +199,26 @@ TiagoIron {
       physics Physics {
       }
     }
-    Compass {
-    }
-    HokuyoUrg04lxug01 {
+  ]
+  cameraSlot [
+    Camera {
+      rotation 0 1 0 -1.5707996938995747
+      fieldOfView 1
+      width 640
+      height 480
+      near 0.003
+      noise 0.007
+      lens Lens {
+      }
+      focus Focus {
+        focalLength 0.0036
+        maxFocalDistance 1000000
+        minFocalDistance 1
+      }
+      zoom Zoom {
+      }
+      recognition Recognition {
+      }
     }
   ]
 }
