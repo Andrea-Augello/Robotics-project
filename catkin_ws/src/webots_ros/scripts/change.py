@@ -13,6 +13,8 @@ import rosservice
 
 def testing():
     load_image('warning')
+    set_height(max_height)
+    set_height(0)
     #rotate(90,1)
     for i in range(4):
         move_forward(2,0.5)
