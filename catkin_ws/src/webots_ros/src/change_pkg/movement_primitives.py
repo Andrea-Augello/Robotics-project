@@ -161,8 +161,7 @@ def scan():
     rotation = 0
     for i in range(7):
         rotation = rotation + rotate(57.29578,0.1)
-        update_frame()
-        save_frame(get_image())
+        save_frame(update_frame())
     offset = rotation % 360
     rotation = rotation + rotate(-offset,0.1)
     return rotation

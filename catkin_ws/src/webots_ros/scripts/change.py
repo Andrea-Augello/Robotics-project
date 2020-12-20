@@ -8,14 +8,16 @@ from change_pkg.movement_primitives import *
 from change_pkg.ros_interface import *
 import os
 import rosservice
-
-
+from change_pkg.object_recognition import *
+from change_pkg.vision import *
 
 def testing():
     load_image('warning')
     #set_height(max_height)
     #set_height(0)
-    #scan()
+    scan()
+    global current_frames
+    get_rois(current_frames)
     #rotate(90,1)
     for i in range(4):
         move_forward(2,0.05)

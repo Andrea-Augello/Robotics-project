@@ -67,7 +67,11 @@ def make_prediction(net, layer_names, labels, image, confidence, threshold):
 
     return boxes, confidences, classIDs, idxs
 
-def get_rois(image_path):
+def get_rois(image_list):
+    global collage 
+    collage = np.hstack(image_list)
+    cv2.imwrite("test_images/collage.png", collage)
+
     #Path to label file
     labels='model/coco.names' 
 
@@ -96,7 +100,7 @@ def get_rois(image_path):
     layer_names = net.getLayerNames()
     layer_names = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
-    image = cv2.imread(image_path)
+    image = cv2.imread(collage)
     boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
     # Test boxes
@@ -117,4 +121,4 @@ def get_rois(image_path):
 
 #Command line test
 if __name__ == '__main__':
-   print(get_rois('test_images/img2.jpeg'))
+   print(get_rois('test_images/img1.jpeg'))
