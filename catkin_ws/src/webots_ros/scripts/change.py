@@ -15,10 +15,10 @@ def testing():
     load_image('warning')
     #set_height(max_height)
     #set_height(0)
-    scan()
+    #scan()
     #rotate(90,1)
     for i in range(4):
-        move_forward(2,0.5)
+        move_forward(2,0.05)
         rotate(180,1)
     call_service('speaker', 'set_language', 'it-IT')
     speak("Ciao sono ciangà e sugnu troppu fuoitti")

@@ -30,13 +30,12 @@ def rotate(rotation, precision):
         no sense.
     """
     stop()
-    r = rospy.Rate(10) # 10hz
     curr_angular_velocity = angular_velocity
     framenum=1
     #update_object_roi()
     # adjust for discontinuity at +/-180°
+    difference = rotation
     current_angle = 0
-    difference = rotation-current_angle
     ang_vel = 0
     prev_ang_vel = 0
     prev_time = 0
