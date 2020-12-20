@@ -115,7 +115,6 @@ def wheel_right_joint_sensor_callback(values):
 def torso_lift_joint_sensor_callback(values):
     global torso_lift_joint_position
     torso_lift_joint_position = joint_sensor_callback(values) 
-    rospy.logerr(torso_lift_joint_position)   
 
 def accelerometer_callback(values):
     global accelerometer_values

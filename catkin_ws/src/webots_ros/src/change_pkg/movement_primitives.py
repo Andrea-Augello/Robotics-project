@@ -156,3 +156,15 @@ def move_forward_accel(distance, precision):
     stop()
     return distance_traveled
 """
+
+def scan():
+    clear_saved_frames()
+    rotation = 0
+    for i in range(7):
+        rotation = rotation + rotate(57.29578,0.1)
+        update_frame()
+        save_frame(get_image())
+    offset = rotation % 360
+    rotation = rotation + rotate(-offset,0.1)
+    return rotation
+

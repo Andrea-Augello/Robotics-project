@@ -12,7 +12,7 @@ HORIZONTAL_FOV = 57.29578
 current_frames = []
 current_rois = []
 show_roi = False
-show_image = False
+show_image = True
 
 def obj_dist_w(p1, p2, real_width):
     diff = (p1[0]-p2[0],p1[1]-p2[1])
@@ -88,12 +88,13 @@ def update_frame():
             cv2.imshow('feed', frame_copy)
         else:
             cv2.imshow('feed', current_frame)
+        cv2.waitKey(1)
     return current_frame
 
 def clear_saved_frames():
     global current_frames
     current_frames = []
 
-def save_frame():
+def save_frame(frame):
     global current_frames
-    current_frames.append(update_frame())
+    current_frames.append(frame)
