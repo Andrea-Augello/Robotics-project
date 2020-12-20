@@ -9,12 +9,18 @@ SENSOR_HEIGHT  = 0.003399832    # Rough guess, to be refined
 VERTICAL_FOV   = 44.56046121921962
 HORIZONTAL_FOV = 57.29578
 
-current_frame = False
+current_frames = []
 current_rois = []
 show_roi = False
-show_image = True
+show_image = False
 
-def obj_dist(p1, p2, real_height):
+def obj_dist_w(p1, p2, real_width):
+    diff = (p1[0]-p2[0],p1[1]-p2[1])
+    pixel_height = math.sqrt(diff[1]**2 + diff[1]**2)
+    return (real_width*FOCAL_LENGTH*IMAGE_WIDTH)\
+            /(pixel_height*SENSOR_WIDTH)
+
+def obj_dist_h(p1, p2, real_height):
     diff = (p1[0]-p2[0],p1[1]-p2[1])
     pixel_height = math.sqrt(diff[0]**2 + diff[1]**2)
     return (real_height*FOCAL_LENGTH*IMAGE_HEIGHT)\
@@ -82,3 +88,12 @@ def update_frame():
             cv2.imshow('feed', frame_copy)
         else:
             cv2.imshow('feed', current_frame)
+    return current_frame
+
+def clear_saved_frames():
+    global current_frames
+    current_frames = []
+
+def save_frame():
+    global current_frames
+    current_frames.append(update_frame())
