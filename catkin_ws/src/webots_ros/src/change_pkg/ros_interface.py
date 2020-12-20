@@ -9,6 +9,7 @@ import rosservice
 from scipy.spatial.transform import Rotation
 import numpy as np
 
+max_height = 0.35
 cv_image = None
 model_name = 'change'
 time_step = 32
@@ -26,7 +27,7 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
         "inertial_unit":False,
         "joystick":False,
         "keyboard":False,
-        "torso_lift_joint_sensor":False,
+        "torso_lift_joint_sensor":True,
         "wheel_left_joint_sensor":True,
         "wheel_right_joint_sensor":True
         }
@@ -34,7 +35,7 @@ motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint
 yaw = 0
 left_wheel_joint_position = 0
 right_wheel_joint_position = 0
-
+torso_lift_joint_position = 0
 gyro_values = {'x':0, 'y':0, 'z':0, 't':0}
 accelerometer_values = {'x':0, 'y':0, 'z':0, 't':0}
 
@@ -101,6 +102,11 @@ def wheel_right_joint_sensor_callback(values):
     global right_wheel_joint_position
     right_wheel_joint_position = joint_sensor_callback(values)
 
+def torso_lift_joint_sensor_callback(values):
+    global torso_lift_joint_position
+    torso_lift_joint_position = joint_sensor_callback(values) 
+    rospy.logerr(torso_lift_joint_position)   
+
 def accelerometer_callback(values):
     global accelerometer_values
     accelerometer_values['x'] = values.linear_acceleration.x
@@ -152,6 +158,15 @@ def get_sensors_values():
             topic=sensor[0]
             device=sensor[0].split("/")[2]
             get_sensor_value(topic, device, msg_type)
+
+def set_height(height):
+    if height>=0 and height<=max_height:
+        call_service(motors[4],'set_position',height)
+        call_service(motors[4],'set_velocity',0.07)
+        while get_torso_lift_joint_position() != height:
+            rospy.logerr(get_torso_lift_joint_position())
+
+
     
 def get_accelerometer_values():
     global accelerometer_values
@@ -178,3 +193,7 @@ def get_left_wheel_position():
 def get_right_wheel_position():
     global right_wheel_joint_position
     return right_wheel_joint_position
+
+def get_torso_lift_joint_position():
+    global torso_lift_joint_position
+    return torso_lift_joint_position
