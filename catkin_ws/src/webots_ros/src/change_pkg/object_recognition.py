@@ -104,60 +104,17 @@ def get_rois(image_path):
     cv2.imshow('YOLO Object Detection', image)
     cv2.waitKey(0)
 
-    return boxes
+    # The class ID for a person is 0.
+    # If a person is detected returs the corresponding bounding box
+    roi=[]
+    counter=0
+    for i in boxes:
+        classID=classIDs[counter]
+        if(classID==0):
+            roi.append(i)
+        counter=counter+1
+    return roi
 
 #Command line test
 if __name__ == '__main__':
-    print(get_rois('test_images/img2.jpeg'))
-
-#Command line call
-def command_line():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-w', '--weights', type=str, default='model/yolov3.weights', help='Path to model weights')
-    parser.add_argument('-cfg', '--config', type=str, default='model/yolov3.cfg', help='Path to configuration file')
-    parser.add_argument('-l', '--labels', type=str, default='model/coco.names', help='Path to label file')
-    parser.add_argument('-c', '--confidence', type=float, default=0.5, help='Minimum confidence for a box to be detected.')
-    parser.add_argument('-t', '--threshold', type=float, default=0.3, help='Threshold for Non-Max Suppression')
-    parser.add_argument('-u', '--use_gpu', default=False, action='store_true', help='Use GPU (OpenCV must be compiled for GPU). For more info checkout: https://www.pyimagesearch.com/2020/02/03/how-to-use-opencvs-dnn-module-with-nvidia-gpus-cuda-and-cudnn/')
-    parser.add_argument('-s', '--save', default=False, action='store_true', help='Whether or not the output should be saved')
-    parser.add_argument('-sh', '--show', default=True, action="store_false", help='Show output')
-    parser.add_argument('-i', '--image_path', type=str, default='', help='Path to the image file.')
-
-    args = parser.parse_args()
-
-    # Get the labels
-    labels = open(args.labels).read().strip().split('\n')
-
-    # Create a list of colors for the labels
-    colors = np.random.randint(0, 255, size=(len(labels), 3), dtype='uint8')
-
-    # Load weights using OpenCV
-    net = cv2.dnn.readNetFromDarknet(args.config, args.weights)
-
-    if args.use_gpu:
-        print('Using GPU')
-        net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
-
-    if args.save:
-        print('Creating output directory if it doesn\'t already exist')
-        os.makedirs('output', exist_ok=True)
-
-    # Get the ouput layer names
-    layer_names = net.getLayerNames()
-    layer_names = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
-
-    image = cv2.imread(args.image_path)
-
-    boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, args.confidence, args.threshold)
-
-    image = draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors)
-
-    # show the output image
-    if args.show:
-        cv2.imshow('YOLO Object Detection', image)
-        cv2.waitKey(0)
-        
-    if args.save:
-        cv2.imwrite(f'output/{args.image_path.split("/")[-1]}', image)
-        cv2.destroyAllWindows()
+   print(get_rois('test_images/img2.jpeg'))
