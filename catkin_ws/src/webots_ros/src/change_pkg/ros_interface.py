@@ -13,23 +13,23 @@ max_height = 0.35
 cv_image = None
 model_name = 'change'
 time_step = 32
-sensors = {"Hokuyo_URG_04LX_UG01":True,
-        "accelerometer":True,
-        "base_cover_link":False, 
-        "base_sonar_01_link":False,
-        "base_sonar_02_link":False,
-        "base_sonar_03_link":False, 
-        "battery_sensor":False,
-        "camera":True,
-        "gyro":True,    
-        "head_1_joint_sensor":True,
-        "head_2_joint_sensor":True, 
-        "inertial_unit":False,
-        "joystick":False,
-        "keyboard":False,
-        "torso_lift_joint_sensor":True,
-        "wheel_left_joint_sensor":True,
-        "wheel_right_joint_sensor":True
+sensors = { "Hokuyo_URG_04LX_UG01":     True,
+            "accelerometer":            True,
+            "base_cover_link":          False, 
+            "base_sonar_01_link":       False,
+            "base_sonar_02_link":       False,
+            "base_sonar_03_link":       False, 
+            "battery_sensor":           False,
+            "camera":                   True,
+            "gyro":                     True,    
+            "head_1_joint_sensor":      True,
+            "head_2_joint_sensor":      True, 
+            "inertial_unit":            False,
+            "joystick":                 False,
+            "keyboard":                 False,
+            "torso_lift_joint_sensor":  True,
+            "wheel_left_joint_sensor":  True,
+            "wheel_right_joint_sensor": True
         }
 motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint", "torso_lift_joint"]
 yaw                        = 0
@@ -173,7 +173,7 @@ def set_height(height):
     if height>=0 and height<=max_height:
         call_service(motors[4],'set_position',height)
         call_service(motors[4],'set_velocity',0.07)
-        while abs(torso_lift_joint_position - height) > 0.01:
+        while abs(torso_lift_joint_position - height) > 0.002:
             pass
 
 
