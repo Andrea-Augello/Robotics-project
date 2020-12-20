@@ -1,3 +1,5 @@
+# YOLO weights
+*.weights
 # Python cache
 *.pyc
 # merged junk, fml
