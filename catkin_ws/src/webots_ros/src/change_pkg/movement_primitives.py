@@ -84,7 +84,7 @@ def rotate(rotation, precision):
 
 def move_forward(distance, precision):
     """
-    :returns: traveled distance
+    :returns: traveled distance as a vector
 
     """
     stop()
@@ -99,6 +99,7 @@ def move_forward(distance, precision):
     angle = rotations * 2 * math.pi
     left_wheel_target = get_left_wheel_position() + angle
     right_wheel_target = get_right_wheel_position() + angle
+    precision = precision*2/0.24
 
     call_service(motors[0],'set_position',left_wheel_target)
     call_service(motors[1],'set_position',right_wheel_target)
