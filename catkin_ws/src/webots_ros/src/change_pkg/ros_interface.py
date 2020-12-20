@@ -21,17 +21,20 @@ sensors = {"Hokuyo_URG_04LX_UG01":True,
         "battery_sensor":False,
         "camera":True,
         "gyro":True,    
-        "head_1_joint_sensor":False,
-        "head_2_joint_sensor":False, 
+        "head_1_joint_sensor":True,
+        "head_2_joint_sensor":True, 
         "inertial_unit":False,
         "joystick":False,
         "keyboard":False,
         "torso_lift_joint_sensor":False,
-        "wheel_left_joint_sensor":False,
-        "wheel_right_joint_sensor":False
+        "wheel_left_joint_sensor":True,
+        "wheel_right_joint_sensor":True
         }
 motors = ["wheel_left_joint", "wheel_right_joint", "head_1_joint", "head_2_joint", "torso_lift_joint"]
 yaw = 0
+left_wheel_joint_position = 0
+right_wheel_joint_position = 0
+
 gyro_values = {'x':0, 'y':0, 'z':0, 't':0}
 accelerometer_values = {'x':0, 'y':0, 'z':0, 't':0}
 
@@ -86,6 +89,17 @@ def speak_polyglot(it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=
 def Hokuyo_URG_04LX_UG01_callback(values):
     pass
 
+
+def joint_sensor_callback(values):
+    return values.data
+
+def wheel_left_joint_sensor_callback(values):
+    global left_wheel_joint_position
+    left_wheel_joint_position = joint_sensor_callback(values)
+    
+def wheel_right_joint_sensor_callback(values):
+    global right_wheel_joint_position
+    right_wheel_joint_position = joint_sensor_callback(values)
 
 def accelerometer_callback(values):
     global accelerometer_values
@@ -156,3 +170,11 @@ def get_image():
 
     """
     return cv_image
+
+def get_left_wheel_position():
+    global left_wheel_joint_position
+    return left_wheel_joint_position
+
+def get_right_wheel_position():
+    global right_wheel_joint_position
+    return right_wheel_joint_position
