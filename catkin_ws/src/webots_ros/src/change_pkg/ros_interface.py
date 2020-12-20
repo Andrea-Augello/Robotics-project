@@ -2,15 +2,14 @@ import rospy
 from std_msgs.msg import *
 from sensor_msgs.msg import *
 from webots_ros.msg import *
-from cv_bridge import CvBridge
 import cv2
 import os
 import math
 import rosservice
 from scipy.spatial.transform import Rotation
+import numpy as np
 
 cv_image = None
-bridge =  CvBridge()
 model_name = 'change'
 time_step = 32
 sensors = {"Hokuyo_URG_04LX_UG01":True,
@@ -87,6 +86,7 @@ def speak_polyglot(it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=
 def Hokuyo_URG_04LX_UG01_callback(values):
     pass
 
+
 def accelerometer_callback(values):
     global accelerometer_values
     accelerometer_values['x'] = values.linear_acceleration.x
@@ -94,13 +94,18 @@ def accelerometer_callback(values):
     accelerometer_values['z'] = values.linear_acceleration.z
     accelerometer_values['t'] = values.header.stamp
 
+
 def camera_callback(values):
     global cv_image
-    cv_image = bridge.imgmsg_to_cv2(values, desired_encoding='bgra8')
-    cv2.imshow('image', cv_image)
-    cv2.waitKey(1)
- 
-    
+    image = np.ndarray(shape=(values.height, values.width, 4),
+            dtype=np.dtype('uint8'), buffer=values.data)
+    size = image.shape
+    if size[0] > 1 and size[1] > 1:
+        cv_image = image.copy()
+    else:
+        cv_image = None
+        #cv2.imshow('frame',get_image())
+        #cv2.waitKey(1)
 
 
 def gyro_callback(values):
@@ -144,4 +149,10 @@ def get_gyro_values():
     return gyro_values         
 
   
+def get_image():
+    """
+    
+    :returns: the latest acquired image
 
+    """
+    return cv_image

@@ -48,9 +48,10 @@ def rotate(rotation, precision):
 
     direction =  1 if difference > 0 else -1
     while(abs(difference)>precision):
-        #update_frame()
-        framenum = (framenum+1)%100
-        if(framenum == 0):
+        # just for funzies
+        img = get_image()
+        if(img.any() != None):
+            cv2.imshow('feed',img)
             if(cv2.waitKey(1) == ' '):
                 break
 
@@ -92,6 +93,12 @@ def move_forward(distance, precision):
     prev_stamp = 0
     prev_accel = 0
     while(distance*1.1 - distance_traveled > precision):
+        #img = get_image()
+        #if(img.any() != None):
+            #cv2.imshow('feed',img)
+            #if(cv2.waitKey(1) == ' '):
+                #break
+
         accel = get_accelerometer_values()
         timestamp = accel['t']
         accel = accel['x'] if abs(accel['x']) > 0.01 else 0
@@ -104,9 +111,6 @@ def move_forward(distance, precision):
                     + (prev_speed+ (speed-prev_speed)/2 ) *elapsed_time
             set_linear_velocity(linear_velocity\
                     *(min(1, (distance*1.1-distance_traveled)/0.2) ) )
-            rospy.logerr("Acceleration:           %f"%accel)
-            rospy.logerr("Distance traveled:      %f"%distance_traveled)
-            rospy.logerr("Elapsed time:           %f"%elapsed_time)
         prev_stamp = timestamp
         prev_accel = accel
     stop()

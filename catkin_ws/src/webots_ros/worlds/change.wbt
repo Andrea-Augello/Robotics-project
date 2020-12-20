@@ -143,6 +143,7 @@ TiagoIron {
     Camera {
       rotation 0 1 0 -1.5707996938995747
       fieldOfView 1
+	  near 0.003
       width 640
       height 480
       noise 0.007
