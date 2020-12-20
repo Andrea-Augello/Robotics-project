@@ -94,6 +94,14 @@ def Hokuyo_URG_04LX_UG01_callback(values):
 def joint_sensor_callback(values):
     return values.data
 
+def head_1_joint_sensor_callback(values):
+    global head_1_joint_position
+    head_1_joint_position = joint_sensor_callback(values)
+
+def head_2_joint_sensor_callback(values):
+    global head_2_joint_position
+    head_2_joint_position = joint_sensor_callback(values)    
+
 def wheel_left_joint_sensor_callback(values):
     global left_wheel_joint_position
     left_wheel_joint_position = joint_sensor_callback(values)
@@ -163,8 +171,8 @@ def set_height(height):
     if height>=0 and height<=max_height:
         call_service(motors[4],'set_position',height)
         call_service(motors[4],'set_velocity',0.07)
-        while get_torso_lift_joint_position() != height:
-            rospy.logerr(get_torso_lift_joint_position())
+        while abs(torso_lift_joint_position - height) > 0.01:
+            pass
 
 
     
@@ -197,3 +205,11 @@ def get_right_wheel_position():
 def get_torso_lift_joint_position():
     global torso_lift_joint_position
     return torso_lift_joint_position
+
+def get_head_1_position():
+    global head_1_joint_position
+    return head_1_joint_position
+ 
+def get_head_2_position():
+    global head_2_joint_position
+    return head_2_joint_position    

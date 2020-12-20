@@ -13,6 +13,9 @@ import rosservice
 
 def testing():
     load_image('warning')
+    set_height(max_height)
+    set_height(0)
+    set_height(0.21)
     #rotate(90,1)
     for i in range(4):
         move_forward(2,0.5)
@@ -29,9 +32,6 @@ def main():
         rospy.loginfo('Time step: ' + str(time_step))
         motor_init()
         enable_sensors()
-        set_height(max_height)
-        set_height(0)
-        set_height(0.21)
         get_sensors_values()
         testing()
         rospy.spin()
