@@ -13,7 +13,7 @@ def testing(robot):
     robot.motors.head_vertical.set_velocity(0.5)
     robot.motors.head_horizontal.set_position(0)
     robot.motors.head_horizontal.set_velocity(0.5)
-    robot.set_height(robot.motors.torso.max_height)
+    robot.set_height(robot.motors.torso.max_height/2)
     robot.movement.scan()
     robot.vision.locate_targets()
     rospy.logerr(robot.odometry)

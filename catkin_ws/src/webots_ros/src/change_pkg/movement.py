@@ -169,7 +169,7 @@ class Movement:
         rotation = 0
         self.robot.vision.save_frame(self.robot.vision.update_frame(self.robot.sensors.camera.value))
         for _ in range(6):
-            rotation = rotation + self.rotate(self.robot.vision.HORIZONTAL_FOV,0.1)
+            rotation = rotation + self.rotate(self.robot.vision.HORIZONTAL_FOV-2,0.1)
             self.robot.vision.save_frame(self.robot.vision.update_frame(self.robot.sensors.camera.value))
         offset = rotation % 360
         offset = offset if offset < 180 else offset-360

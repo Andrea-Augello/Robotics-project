@@ -115,8 +115,8 @@ def get_rois(image_list):
 
         # Test boxes
         image = draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels)
-        #cv2.imshow('YOLO Object Detection', image)
-        #cv2.waitKey(0)
+        cv2.imshow('YOLO Object Detection', image)
+        cv2.waitKey(0)
 
         # The class ID for a person is 0.
         # If a person is detected returs the corresponding bounding box
