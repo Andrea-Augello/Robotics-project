@@ -4,26 +4,21 @@ import cv2
 import time
 import math
 
-robot = None
-
 class Movement:
-    def __init__(self, r):
-        global robot
-        robot=r
+    def __init__(self, rboto):
+        self.robot=robot
         self.angular_velocity = 0.02
         self.linear_velocity  = 5.0
         
 
     def set_angular_velocity(self,angular_velocity):
-        global robot
-        robot.motors.left_wheel.set_velocity(-angular_velocity*330/2)
-        robot.motors.right_wheel.set_velocity(angular_velocity*330/2)
+        self.robot.motors.left_wheel.set_velocity(-angular_velocity*330/2)
+        self.robot.motors.right_wheel.set_velocity(angular_velocity*330/2)
 
 
     def set_linear_velocity(self,linear_velocity):
-        global robot
-        robot.motors.left_wheel.set_velocity(linear_velocity)
-        robot.motors.right_wheel.set_velocity(linear_velocity)
+        self.robot.motors.left_wheel.set_velocity(linear_velocity)
+        self.robot.motors.right_wheel.set_velocity(linear_velocity)
 
 
 
@@ -31,7 +26,7 @@ class Movement:
         self.set_linear_velocity(0)
 
 
-    def rotate(self,rotation, precision):
+    def rotate(self,rotation, precision=0.01):
         """
         :rotation:  The desired rotation in degrees. Note that a rotation greater
             than 180° in modulo will be substituted with a rotation in the opposite
@@ -89,11 +84,11 @@ class Movement:
             prev_time = time
             prev_ang_vel = ang_vel
         self.stop()
-        robot.odometry.update_theta(current_angle)
+        self.robot.odometry.update_theta(current_angle)
         return current_angle
 
 
-    def move_forward(self, distance, precision):
+    def move_forward(self, distance, precision=0.01):
         """
         :returns: traveled distance as a vector
 
@@ -112,8 +107,8 @@ class Movement:
         right_wheel_target = robot.sensors.right_wheel.value + angle
         precision = precision*2/diameter
 
-        robot.motors.left_wheel.set_position(left_wheel_target)
-        robot.motors.right_wheel.set_position(right_wheel_target)
+        self.robot.motors.left_wheel.set_position(left_wheel_target)
+        self.robot.motors.right_wheel.set_position(right_wheel_target)
 
         self.set_linear_velocity(self.linear_velocity)
 
@@ -133,16 +128,16 @@ class Movement:
                             + (prev_speed[i]+ (speed[i]-prev_speed[i])/2 ) *elapsed_time
             prev_stamp = timestamp
             prev_accel = accel
-        robot.motors.left_wheel.init()
-        robot.motors.right_wheel.init()
-        robot.odometry.update_position(distance_traveled)
+        self.robot.motors.left_wheel.init()
+        self.robot.motors.right_wheel.init()
+        self.robot.odometry.update_position(distance_traveled)
         return distance_traveled
 
         
 
 
     
-    def move_forward_accel(self, distance, precision):
+    def move_forward_accel(self, distance, precision=0.01):
         self.stop()
         distance_traveled=0
         speed=0
@@ -167,6 +162,7 @@ class Movement:
             prev_stamp = timestamp
             prev_accel = accel
         self.stop()
+        self.robot.odometry.update_position(distance_traveled)
         return distance_traveled
     
 

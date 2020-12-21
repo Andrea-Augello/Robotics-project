@@ -2,12 +2,9 @@ import rospy
 import cv2
 import math
 
-robot = None
-
 class Vision:
-    def __init__(self, r):
-        global robot
-        robot=r    
+    def __init__(self, robot):
+        self.robot=robot   
         self.FOCAL_LENGTH   = 0.0036
         self.IMAGE_HEIGHT   = 480
         self.IMAGE_WIDTH    = 640
@@ -101,10 +98,10 @@ class Vision:
         self.clear_saved_frames()
         rotation = 0
         for _ in range(7):
-            rotation = rotation + robot.movement.rotate(57.29578,0.1)
-            robot.vision.save_frame(self.update_frame())
+            rotation = rotation + self.robot.movement.rotate(57.29578,0.1)
+            self.robot.vision.save_frame(self.update_frame())
         offset = rotation % 360
-        rotation = rotation + robot.movement.rotate(-offset,0.1)
+        rotation = rotation + self.robot.movement.rotate(-offset,0.1)
         return rotation
 
     def clear_saved_frames(self):
