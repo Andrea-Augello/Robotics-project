@@ -108,18 +108,19 @@ class Vision:
         for roi in self.current_rois:
             p1 = (roi[0], roi[1])
             p2 = (roi[0] + roi[2], roi[1] + roi[3])
-            polar_coords = self.point_cylindrical_coords(
+            cylindrical_coords = self.point_cylindrical_coords(
                 self.roi_center(roi),
                 self.obj_dist_w(p1,p2,0.6))
             # Drops z coordinate as our robot only has two translational DoF
             # and polar coordinates suffice
-            coords.append(polar_coords[0:2])
+            coords.append(cylindrical_coords[0:2])
         x = [0]
         y = [0]
         for c in coords:
-            x.append(c[0]*math.cos(math.pi*c[1]/180))
-            y.append(c[0]*math.sin(math.pi*c[1]/180))
-        plt.plot(x, y, "ro") # lines from 0,0 to the 
+            x.append(c[0]*math.sin(math.pi*c[1]/180))
+            y.append(c[0]*math.cos(math.pi*c[1]/180))
+            rospy.logerr(c)
+        plt.plot(x, y, "r.") # lines from 0,0 to the 
         plt.grid(True)
         plt.show()    
         return coords

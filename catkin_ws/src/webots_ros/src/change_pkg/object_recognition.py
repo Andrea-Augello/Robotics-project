@@ -1,4 +1,5 @@
 import numpy as np
+from imutils.object_detection import non_max_suppression
 import rospy
 import argparse
 import cv2
@@ -83,7 +84,7 @@ def get_rois(image_list):
     weights=BASE_DIR+'/model/yolov3-tiny.weights'
 
     #Minimum confidence for a box to be detected
-    confidence=0.4
+    confidence=0.3
 
     #Threshold for Non-Max Suppression
     threshold=0.3
@@ -114,8 +115,8 @@ def get_rois(image_list):
         boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
         # Test boxes
-        image = draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels)
-        cv2.imshow('YOLO Object Detection', image)
+        image2 = draw_bounding_boxes(image.copy(), boxes, confidences, classIDs, idxs, colors,labels)
+        cv2.imshow('YOLO Object Detection', image2)
         cv2.waitKey(0)
 
         # The class ID for a person is 0.
@@ -124,11 +125,11 @@ def get_rois(image_list):
         for j in boxes:
             classID=classIDs[counter]
             if(classID==0):
-                j[0]=j[0]*i+320
+                j[0]=j[0]+i*320
                 roi.append(j)
             counter=counter+1
-    #rospy.logerr(roi)
-    return roi    
+    pick = non_max_suppression( np.array([[x, y, x + w, y + h] for (x, y, w, h) in roi]), probs=None, overlapThresh=0.50)
+    return np.array([[x1, y1, x2-x1, y2-y1] for (x1, y1, x2, y2) in pick])
 
 #Command line test
 if __name__ == '__main__':
