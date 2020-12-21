@@ -1,4 +1,5 @@
 import numpy as np
+import rospy
 import argparse
 import cv2
 import os
@@ -106,16 +107,16 @@ def get_rois(image_list):
     image = cv2.imread(BASE_DIR + "/test_images/collage.png")
 
     samples = []
-    for i in range(13):
+    for i in range(2*len(image_list)-1):
         sample = image[0:480, 320*i:320*i+640]
         samples.append(sample)
 
     roi=[]
-    for i in range(13):
+    for i in range(2*len(image_list)-1):
         image=samples[i]
         boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
-            # Test boxes
+        # Test boxes
         image = draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels)
         #cv2.imshow('YOLO Object Detection', image)
         #cv2.waitKey(0)
@@ -163,12 +164,12 @@ def test_method():
     image = cv2.imread("test_images/collage.png")
 
     samples = []
-    for i in range(13):
+    for i in range(2*len(image_list)-1):
         sample = image[0:480, 320*i:320*i+640]
         samples.append(sample)
 
     roi=[]
-    for i in range(13):
+    for i in range(2*len(image_list)-1):
         image=samples[i]
         boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
