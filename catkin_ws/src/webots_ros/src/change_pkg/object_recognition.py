@@ -83,7 +83,7 @@ def get_rois(image_list):
     weights=BASE_DIR+'/model/yolov3-tiny.weights'
 
     #Minimum confidence for a box to be detected
-    confidence=0.6
+    confidence=0.4
 
     #Threshold for Non-Max Suppression
     threshold=0.3
