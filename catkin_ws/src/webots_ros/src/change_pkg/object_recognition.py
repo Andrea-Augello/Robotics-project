@@ -131,4 +131,4 @@ def get_rois(image_list):
 
 #Command line test
 if __name__ == '__main__':
-   
+   print('Main')
