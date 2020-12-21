@@ -1,6 +1,7 @@
 from std_msgs.msg import *
 from sensor_msgs.msg import *
 import cv2
+import rospy
 import time
 import math
 
@@ -110,7 +111,6 @@ class Movement:
         self.robot.motors.right_wheel.set_position(right_wheel_target)
 
         self.set_linear_velocity(self.linear_velocity)
-
 
         while(abs(right_wheel_target-self.robot.sensors.left_wheel.value)>precision \
                 and abs(left_wheel_target-self.robot.sensors.left_wheel.value)>precision):

@@ -9,7 +9,8 @@ from change_pkg.robot import Change
 
 def testing(robot):
     robot.tablet.display.load_image('warning')
-    #robot.movement.scan()
+    robot.movement.scan()
+    robot.vision.locate_targets()
     rospy.logerr(robot.odometry)
     robot.movement.move_forward(2)
     robot.movement.rotate(180)

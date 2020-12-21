@@ -2,6 +2,7 @@ import rospy
 import cv2
 import math
 import change_pkg.object_recognition as od
+import matplotlib.pyplot as plt
 
 class Vision:
     def __init__(self):
@@ -9,7 +10,7 @@ class Vision:
         self.IMAGE_HEIGHT   = 480
         self.IMAGE_WIDTH    = 640
         self.SENSOR_HEIGHT  = 0.002549874    # Rough guess, to be refined
-        self.SENSOR_HEIGHT  = 0.003399832    # Rough guess, to be refined
+        self.SENSOR_WIDTH   = 0.003399832    # Rough guess, to be refined
         self.VERTICAL_FOV   = 44.56046121921962
         self.HORIZONTAL_FOV = 57.29578
         self.current_frames = []
@@ -19,7 +20,7 @@ class Vision:
 
     def obj_dist_w(self, p1, p2, real_width):
         diff = (p1[0]-p2[0],p1[1]-p2[1])
-        pixel_height = math.sqrt(diff[1]**2 + diff[1]**2)
+        pixel_height = math.sqrt(diff[0]**2 + diff[1]**2)
         return (real_width*self.FOCAL_LENGTH*self.IMAGE_WIDTH)\
                 /(pixel_height*self.SENSOR_WIDTH)
 
@@ -57,8 +58,8 @@ class Vision:
 
     def point_coords(self, p, rho):
         img_center = (self.IMAGE_WIDTH/2,self.IMAGE_HEIGHT/2)
-        x = obj_width( p, img_center,rho)*(-1 if p[0]<img_center[0] else 1)
-        z = obj_height(p, img_center,rho)*(-1 if p[1]>img_center[1] else 1)
+        x = self.obj_width( p, img_center,rho)*(-1 if p[0]<img_center[0] else 1)
+        z = self.obj_height(p, img_center,rho)*(-1 if p[1]>img_center[1] else 1)
         y = math.sqrt((rho**2)-(x**2)-(z**2))
         return (x,y,z)
 
@@ -67,7 +68,8 @@ class Vision:
         # The ISO standard 31-11 recommends (ρ, φ, z), where ρ is the radial
         # coordinate, φ the azimuth, and z the height.
         img_center = (self.IMAGE_WIDTH/2,self.IMAGE_HEIGHT/2)
-        z = obj_height(p,img_center,distance)*(-1 if p[1] > img_center[1] else 1)
+        z = self.obj_height(p,img_center,distance)\
+                *(-1 if p[1] > img_center[1] else 1)
         phi = (p[0]/self.IMAGE_WIDTH-0.5)*self.HORIZONTAL_FOV
         rho = math.sqrt(distance**2-z**2)
         return (rho, phi, z)
@@ -98,5 +100,28 @@ class Vision:
 
     def save_frame(self,frame):
         self.current_frames.append(frame)
+
+    def locate_targets(self):
+        self.current_rois = od.get_rois(self.current_frames)
+        # TODO: Non maxima suppression here
+        coords = []
+        for roi in self.current_rois:
+            p1 = (roi[0], roi[1])
+            p2 = (roi[0] + roi[2], roi[1] + roi[3])
+            polar_coords = self.point_cylindrical_coords(
+                self.roi_center(roi),
+                self.obj_dist_w(p1,p2,0.6))
+            # Drops z coordinate as our robot only has two translational DoF
+            # and polar coordinates suffice
+            coords.append(polar_coords[0:2])
+        x = [0]
+        y = [0]
+        for c in coords:
+            x.append(c[0]*math.cos(c[1]))
+            y.append(c[0]*math.sin(c[1]))
+        plt.plot(x, y, "ro") # lines from 0,0 to the 
+        plt.grid(True)
+        plt.show()    
+        return coords
 
 
