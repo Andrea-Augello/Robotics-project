@@ -53,20 +53,35 @@
 	
 	\section{Tiago Iron} 
 	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm. The model is a modular mobile platform that allows human-robot interaction.
-	In order to achieve our goal, it was deemed necessary to add the following devices in the extension slot:
+	\textbf{We use a IMU with 6 degrees of freedom}.
+	IMU:
 		\begin{enumerate}
-			\item compass;
 			\item gyro;	
 			\item accelerometer;
 		\end{enumerate}
 	
+	We got rid of the compass in the IMU.
+	
 	\section{Movement primitives}
+	\cite{positioning}
+	
+	\section{Positioning}
+	Implementing Positioning Algorithms Using Accelerometers.
+	
+	\section{Projection Matrix}
+	\cite{OpenGL}
+	
+	\section{TIAGo Wheels}
+	We asked the developers: 200mm. We discovered that the webots model is not the same size as the TIAGo datasheet.
 	
 	\section{Clustering}
 	We decided to lower the dimensionality of our data. We used cilindric coordinates and the feature vector is 2 dimensional.
 	We used the Density-Based Scan with a threshold. The entities not belonging to the cluster are discarded.
+	
 	\section{ROS}
 	
+	\section{Bugs found in the Webots ROS Controller}
+	Logical values did not allow callbacks.
 	
 
 	
@@ -93,6 +108,12 @@
 		\bibitem{Tiago IRON datasheet} 
 		\textit{https://pal-robotics.com/wp-content/uploads/2019/07/Datasheet\_TIAGo\_Complete.pdf}. \newline
 		Tiago IRON datasheet.
+		\bibitem{OpenGL} 
+		\textit{https://www.songho.ca/opengl/gl\_projectionmatrix.html}. \newline
+		OpenGL Projection Matrix.
+		\bibitem{positioning} 
+		\textit{https://www.nxp.com/docs/en/application-note/AN3397.pdf}. \newline
+		Implementing Positioning Algorithms Using Accelerometers.
 	\end{thebibliography}
 
 \end{document}
