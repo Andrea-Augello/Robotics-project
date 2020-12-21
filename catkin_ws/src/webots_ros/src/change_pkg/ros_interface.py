@@ -193,7 +193,8 @@ def get_image():
     :returns: the latest acquired image
 
     """
-    return cv_image
+    global cv_image
+    return cv2.cvtColor(cv_image, cv2.COLOR_RGBA2RGB)
 
 def get_left_wheel_position():
     global left_wheel_joint_position
