@@ -7,7 +7,7 @@ class Tablet:
 
 
 class Speaker:
-    def __init__(self,name='speaker',path='../../../../../Media/Audio/'):
+    def __init__(self,robot,name='speaker',path='../../../../../Media/Audio/'):
         self.name=name
         self.path=path
         self.robot=robot
@@ -16,7 +16,7 @@ class Speaker:
         self.robot.call_service(self.name,'play_sound',self.path + sound + '.mp3', 1.0, 1.0, 0.0, False)
 
     def is_speaking(self):
-        response = robot.call_service(self.name,'is_speaking')
+        response = self.robot.call_service(self.name,'is_speaking')
         return response.value
 
     def speak(self,text,volume=1.0):
@@ -31,7 +31,7 @@ class Speaker:
                 self.speak(text)                   
 
 class Display:
-    def __init__(self,name='display',path='../../../../../Media/Image/'):              
+    def __init__(self,robot,name='display',path='../../../../../Media/Image/'):              
         self.name=name
         self.path=path
         self.robot=robot

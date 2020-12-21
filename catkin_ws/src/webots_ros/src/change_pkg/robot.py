@@ -20,7 +20,7 @@ class Change:
         self.motors = motors.Motors(self)
         self.tablet = tablet.Tablet(self)
         self.movement = movement.Movement(self)
-        self.vision = vision.Vision(self)
+        self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
 
     def __str__(self):
@@ -44,7 +44,7 @@ class Change:
     
     def __get_sensor_value(self, topic, device, msg_type):
         try:
-            return rospy.Subscriber(topic, msg_type, eval("sensors.%s_callback"%device))
+            return rospy.Subscriber(topic, msg_type, eval("self.sensors.%s.%s_callback"%(self.sensors.get_device_name(device),device)))
         except NameError as e:
             rospy.logerr(str(e))
         

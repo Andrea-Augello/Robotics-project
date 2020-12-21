@@ -5,7 +5,7 @@ import time
 import math
 
 class Movement:
-    def __init__(self, rboto):
+    def __init__(self, robot):
         self.robot=robot
         self.angular_velocity = 0.02
         self.linear_velocity  = 5.0
@@ -37,7 +37,6 @@ class Movement:
         """
         self.stop()
         curr_angular_velocity = self.angular_velocity
-        framenum=1
         #update_object_roi()
         # adjust for discontinuity at +/-180°
         difference = rotation
@@ -57,7 +56,7 @@ class Movement:
             if(cv2.waitKey(1) == ord(' ')):
                 break
 
-            gyro=robot.sensors.gyro.value
+            gyro=self.robot.sensors.gyro.value
             time = gyro.t
             if prev_time:
                 ang_vel = 180*gyro.z/math.pi
@@ -94,7 +93,7 @@ class Movement:
 
         """
         self.stop()
-        diameter=robot.wheel_diameter
+        diameter=self.robot.wheel_diameter
         distance_traveled=[0,0]
         speed=[0,0]
         prev_speed = [0,0]
@@ -103,8 +102,8 @@ class Movement:
 
         rotations = distance/(math.pi*diameter)
         angle = rotations * 2 * math.pi
-        left_wheel_target = robot.sensors.left_wheel.value + angle
-        right_wheel_target = robot.sensors.right_wheel.value + angle
+        left_wheel_target = self.robot.sensors.left_wheel.value + angle
+        right_wheel_target = self.robot.sensors.right_wheel.value + angle
         precision = precision*2/diameter
 
         self.robot.motors.left_wheel.set_position(left_wheel_target)
@@ -113,9 +112,9 @@ class Movement:
         self.set_linear_velocity(self.linear_velocity)
 
 
-        while(abs(right_wheel_target-robot.sensors.left_wheel.value)>precision \
-                and abs(left_wheel_target-robot.sensors.left_wheel.value)>precision):
-            accel = robot.sensors.accelerometer.value
+        while(abs(right_wheel_target-self.robot.sensors.left_wheel.value)>precision \
+                and abs(left_wheel_target-self.robot.sensors.left_wheel.value)>precision):
+            accel = self.robot.sensors.accelerometer.value
             timestamp = accel.t
             accel = [accel.x if abs(accel.x) > 0.01 else 0,accel.y if abs(accel.y) > 0.01 else 0]
             if(prev_stamp):
@@ -147,7 +146,7 @@ class Movement:
         coeff = 1.1
         while(distance*coeff - distance_traveled > precision):
 
-            accel = robot.sensors.accelerometer.value
+            accel = self.robot.sensors.accelerometer.value
             timestamp = accel.t
             accel = accel.x if abs(accel.x) > 0.01 else 0
             if(prev_stamp):
@@ -165,6 +164,15 @@ class Movement:
         self.robot.odometry.update_position(distance_traveled)
         return distance_traveled
     
+    def scan(self):
+        self.robot.vision.clear_saved_frames()
+        rotation = 0
+        for _ in range(7):
+            rotation = rotation + self.rotate(self.robot.vision.HORIZONTAL_FOV,0.1)
+            self.robot.vision.save_frame(self.robot.vision.update_frame(self.robot.sensors.camera.value))
+        offset = rotation % 360
+        rotation = rotation + self.rotate(-offset,0.1)
+        return rotation  
 
     
 
