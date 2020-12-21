@@ -11,35 +11,25 @@ class Movement:
     def __init__(self, r):
         global robot
         robot=r
-        self.static_angular_velocity = 0.02
-        self.static_linear_velocity  = 5.0
+        self.angular_velocity = 0.02
+        self.linear_velocity  = 5.0
         
 
-    @property
-    def angular_velocity(self):
-        return self.__angular_velocity   
-
-    @angular_velocity.setter
-    def angular_velocity(self,angular_velocity):
+    def set_angular_velocity(self,angular_velocity):
         global robot
-        robot.motors.left_wheel.velocity=-angular_velocity*330/2
-        robot.motors.right_wheel.velocity=angular_velocity*330/2
-        self.__angular_velocity=angular_velocity
+        robot.motors.left_wheel.set_velocity(-angular_velocity*330/2)
+        robot.motors.right_wheel.set_velocity(angular_velocity*330/2)
 
-    @property
-    def linear_velocity(self):
-        return self.__linear_velocity
 
-    @linear_velocity.setter
-    def linear_velocity(self,linear_velocity):
+    def set_linear_velocity(self,linear_velocity):
         global robot
-        robot.motors.left_wheel.velocity=linear_velocity
-        robot.motors.right_wheel.velocity=linear_velocity
-        self.__linear_velocity=linear_velocity
+        robot.motors.left_wheel.set_velocity(linear_velocity)
+        robot.motors.right_wheel.set_velocity(linear_velocity)
+
 
 
     def stop(self):
-        self.linear_velocity=0
+        self.set_linear_velocity(0)
 
 
     def rotate(self,rotation, precision):
@@ -95,7 +85,7 @@ class Movement:
                     direction=-direction
                 
                 # applies rudimentary proportional controller
-                self.angular_velocity(curr_angular_velocity*(-direction)\
+                self.set_angular_velocity(curr_angular_velocity*(-direction)\
                         * (min(1,abs(difference/45))) )
             prev_time = time
             prev_ang_vel = ang_vel
@@ -109,23 +99,23 @@ class Movement:
 
         """
         self.stop()
-
+        diameter=robot.wheel_diameter
         distance_traveled=[0,0]
         speed=[0,0]
         prev_speed = [0,0]
         prev_stamp = 0
         prev_accel = [0,0]
 
-        rotations = distance/(math.pi*0.24)
+        rotations = distance/(math.pi*diameter)
         angle = rotations * 2 * math.pi
         left_wheel_target = robot.sensors.left_wheel.value + angle
         right_wheel_target = robot.sensors.right_wheel.value + angle
-        precision = precision*2/0.24
+        precision = precision*2/diameter
 
-        robot.motors.left_wheel.position=left_wheel_target
-        robot.motors.right_wheel.position=right_wheel_target
+        robot.motors.left_wheel.set_position(left_wheel_target)
+        robot.motors.right_wheel.set_position(right_wheel_target)
 
-        self.linear_velocity=self.static_linear_velocity
+        self.set_linear_velocity(self.linear_velocity)
 
 
         while(abs(right_wheel_target-robot.sensors.left_wheel.value)>precision \
@@ -158,7 +148,8 @@ class Movement:
         prev_speed = 0
         prev_stamp = 0
         prev_accel = 0
-        while(distance - distance_traveled > precision):
+        coeff = 1.1
+        while(distance*coeff - distance_traveled > precision):
 
             accel = robot.sensors.accelerometer.value
             timestamp = accel.t
@@ -170,8 +161,8 @@ class Movement:
                 speed = speed+((accel-prev_accel)/2+prev_accel)*elapsed_time
                 distance_traveled = distance_traveled\
                         + (prev_speed+ (speed-prev_speed)/2 ) *elapsed_time
-                self.linear_velocity=linear_velocity\
-                        *(min(1, (distance*1.1-distance_traveled)/0.2) ) 
+                self.set_linear_velocity(self.linear_velocity\
+                        *(min(1, (distance*coeff-distance_traveled)/0.2) ) )
             prev_stamp = timestamp
             prev_accel = accel
         self.stop()

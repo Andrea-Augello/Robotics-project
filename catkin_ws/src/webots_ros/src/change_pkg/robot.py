@@ -13,6 +13,7 @@ class Change:
     def __init__(self):
         self.name = 'change'
         self.time_step = 32
+        self.wheel_diameter = 0.23
         self.sensors = sensors.Sensors(self)
         self.motors = motors.Motors(self)
         self.tablet = tablet.Tablet(self)
@@ -32,8 +33,8 @@ class Change:
 
     def set_height(self, height):
         if height>=0 and height<=self.motors.torso.max_height:
-            self.motors.torso.position=height
-            self.motors.torso.velocity=self.motors.torso.max_velocity
+            self.motors.torso.set_position(height)
+            self.motors.torso.set_velocity(self.motors.torso.max_velocity)
             while abs(self.sensors.torso.value - height) > 0.002:
                 pass
 
