@@ -104,22 +104,30 @@ def get_rois(image_list):
     layer_names = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
     image = cv2.imread(BASE_DIR + "/test_images/collage.png")
-    boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
-    # Test boxes
-    image = draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels)
-    cv2.imshow('YOLO Object Detection', image)
-    cv2.waitKey(0)
+    samples = []
+    for i in range(13):
+        sample = image[0:480, 320*i:320*i+640]
+        samples.append(sample)
 
-    # The class ID for a person is 0.
-    # If a person is detected returs the corresponding bounding box
     roi=[]
-    counter=0
-    for i in boxes:
-        classID=classIDs[counter]
-        if(classID==0):
-            roi.append(i)
-        counter=counter+1
+    for i in range(13):
+        image=samples[i]
+        boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
+
+        # Test boxes
+        image = draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels)
+        cv2.imshow('YOLO Object Detection', image)
+        cv2.waitKey(0)
+
+        # The class ID for a person is 0.
+        # If a person is detected returs the corresponding bounding box
+        counter=0
+        for i in boxes:
+            classID=classIDs[counter]
+            if(classID==0):
+                roi.append(i)
+            counter=counter+1
     return roi
 
 #Command line test
