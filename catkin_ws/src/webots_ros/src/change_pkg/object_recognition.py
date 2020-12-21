@@ -1,11 +1,9 @@
 import numpy as np
+import rospy
 import argparse
 import cv2
 import os
 import time
-
-# TEST RUN : 
-# python3 object_recognition.py -w model/yolov3.weights -cfg model/yolov3.cfg -l model/coco.names -i test_images/img2.jpeg -s
 
 def extract_boxes_confidences_classids(outputs, confidence, width, height):
     boxes = []
@@ -106,69 +104,12 @@ def get_rois(image_list):
     image = cv2.imread(BASE_DIR + "/test_images/collage.png")
 
     samples = []
-    for i in range(13):
+    for i in range(2*len(image_list)-1):
         sample = image[0:480, 320*i:320*i+640]
         samples.append(sample)
 
     roi=[]
-    for i in range(13):
-        image=samples[i]
-        boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
-
-            # Test boxes
-        image = draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels)
-        #cv2.imshow('YOLO Object Detection', image)
-        #cv2.waitKey(0)
-
-        # The class ID for a person is 0.
-        # If a person is detected returs the corresponding bounding box
-        counter=0
-        for j in boxes:
-            classID=classIDs[counter]
-            if(classID==0):
-                j[0]=j[0]*i+320
-                roi.append(j)
-            counter=counter+1
-    return roi    
-
-def test_method():
-    #Path to label file
-    labels='model/coco.names' 
-
-    #Path to configuration file
-    config='model/yolov3.cfg'
-
-    #Path to model weights
-    weights='model/yolov3.weights'
-
-    #Minimum confidence for a box to be detected
-    confidence=0.6
-
-    #Threshold for Non-Max Suppression
-    threshold=0.3
-
-    # Get the labels
-    labels = open(labels).read().strip().split('\n')
-
-    # Create a list of colors for the labels
-    colors = np.random.randint(0, 255, size=(len(labels), 3), dtype='uint8')
-
-    # Load weights using OpenCV
-    net = cv2.dnn.readNetFromDarknet(config, weights)
-
-    # Get the ouput layer names
-    layer_names = net.getLayerNames()
-    layer_names = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
-
-    image = cv2.imread("test_images/collage.png")
-
-    samples = []
-    for i in range(13):
-        sample = image[0:480, 320*i:320*i+640]
-        samples.append(sample)
-
-    roi=[]
-    for i in range(13):
+    for i in range(2*len(image_list)-1):
         image=samples[i]
         boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
@@ -190,4 +131,4 @@ def test_method():
 
 #Command line test
 if __name__ == '__main__':
-   print(test_method())
+   print('Main')
