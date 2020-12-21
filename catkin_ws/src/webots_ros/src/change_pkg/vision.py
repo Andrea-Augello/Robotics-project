@@ -117,8 +117,8 @@ class Vision:
         x = [0]
         y = [0]
         for c in coords:
-            x.append(c[0]*math.cos(c[1]))
-            y.append(c[0]*math.sin(c[1]))
+            x.append(c[0]*math.cos(math.pi*c[1]/180))
+            y.append(c[0]*math.sin(math.pi*c[1]/180))
         plt.plot(x, y, "ro") # lines from 0,0 to the 
         plt.grid(True)
         plt.show()    
