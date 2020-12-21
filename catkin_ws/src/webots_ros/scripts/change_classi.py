@@ -9,6 +9,7 @@ from change_pkg.robot import Change
 
 def testing(robot):
     robot.tablet.display.load_image('warning')
+    robot.vision.scan()
     robot.movement.move_forward_accel(2,0.01)
     robot.movement.rotate(180,0.01)
     robot.set_height(robot.motors.torso.max_height)
@@ -25,11 +26,14 @@ def testing(robot):
     '''
         
 def main():
-    if not rospy.is_shutdown():
-        robot = Change()
-        robot.init()
-        testing(robot)
-        rospy.spin()
+    try:
+        if not rospy.is_shutdown():
+            robot = Change()
+            robot.init()
+            testing(robot)
+            rospy.spin()
+    except (rospy.ServiceException, rospy.ROSException):
+        pass        
 
                 
 

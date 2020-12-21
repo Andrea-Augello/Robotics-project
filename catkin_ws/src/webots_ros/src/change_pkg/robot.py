@@ -5,6 +5,8 @@ import change_pkg.motors as motors
 import change_pkg.sensors as sensors
 import change_pkg.tablet as tablet
 import change_pkg.movement as movement
+import change_pkg.vision as vision
+import change_pkg.odometry as odometry
 from sensor_msgs.msg import *
 from webots_ros.msg import *
 import rosservice
@@ -18,7 +20,8 @@ class Change:
         self.motors = motors.Motors(self)
         self.tablet = tablet.Tablet(self)
         self.movement = movement.Movement(self)
-        
+        self.vision = vision.Vision(self)
+        self.odometry = odometry.Odometry(self)
 
     def __str__(self):
         return self.name

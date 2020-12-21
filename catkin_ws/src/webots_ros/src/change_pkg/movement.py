@@ -1,4 +1,3 @@
-from change_pkg.vision import *
 from std_msgs.msg import *
 from sensor_msgs.msg import *
 import cv2
@@ -90,6 +89,7 @@ class Movement:
             prev_time = time
             prev_ang_vel = ang_vel
         self.stop()
+        robot.odometry.update_theta(current_angle)
         return current_angle
 
 
@@ -135,6 +135,7 @@ class Movement:
             prev_accel = accel
         robot.motors.left_wheel.init()
         robot.motors.right_wheel.init()
+        robot.odometry.update_position(distance_traveled)
         return distance_traveled
 
         
@@ -169,13 +170,5 @@ class Movement:
         return distance_traveled
     
 
-    def scan():
-        clear_saved_frames()
-        rotation = 0
-        for _ in range(7):
-            rotation = rotation + rotate(57.29578,0.1)
-            save_frame(update_frame())
-        offset = rotation % 360
-        rotation = rotation + rotate(-offset,0.1)
-        return rotation
+    
 
