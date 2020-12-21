@@ -92,17 +92,17 @@ class MovementSensor(Sensor):
         super().__init__(name, active, robot)
         self.value=Vector()
 
-    def movement_sensor_callback(self, values):
+    def accelerometer_callback(self, values):
+        self.value.x=values.linear_acceleration.x
+        self.value.y=values.linear_acceleration.y
+        self.value.z=values.linear_acceleration.z
+        self.value.t=values.header.stamp
+
+    def gyro_callback(self, values):
         self.value.x=values.angular_velocity.x
         self.value.y=values.angular_velocity.y
         self.value.z=values.angular_velocity.z
         self.value.t=values.header.stamp
-
-    def accelerometer_callback(self, values):
-        self.movement_sensor_callback(values)
-
-    def gyro_callback(self, values):
-        self.movement_sensor_callback(values)    
 
 
 class Vector:
