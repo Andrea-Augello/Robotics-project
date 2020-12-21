@@ -1,13 +1,16 @@
 #!/usr/bin/env python
-from robot import robot
+robot = None
 
 class Tablet:
-    def __init__(self):
-        self.display = Dispay()
+    def __init__(self, r):
+        self.display = Display()
         self.speaker = Speaker()
+        global robot
+        robot = r
 
 class Speaker:
     def __init__(self,name='speaker',path='../../../../../Media/Audio/'):
+        self.name=name
         self.path=path
 
     def play_sound(self,sound):
@@ -30,6 +33,7 @@ class Speaker:
 
 class Display:
     def __init__(self,name='display',path='../../../../../Media/Image/'):              
+        self.name=name
         self.path=path
 
     def load_image(self,image):

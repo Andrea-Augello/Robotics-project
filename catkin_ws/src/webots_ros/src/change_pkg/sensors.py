@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-from robot import robot
 import math
 from scipy.spatial.transform import Rotation
 import numpy as np
+import cv2
+
+robot = None
 
 class Sensors:
-    def __init__(self):
+    def __init__(self, r):
         self.lidar =            Sensor("Hokuyo_URG_04LX_UG01",True)
         self.accelerometer =    MovementSensor("accelerometer",True)
         self.base_cover =       Sensor("base_cover_link",False)
@@ -23,6 +25,8 @@ class Sensors:
         self.torso =            Sensor("torso_lift_joint_sensor",True)
         self.left_wheel =       Sensor("wheel_left_joint_sensor",True)
         self.right_wheel =      Sensor("wheel_right_joint_sensor",True)
+        global robot
+        robot=r
 
     def init(self,time_step):
         for key, sensor in vars(self).items():
@@ -61,6 +65,13 @@ def inertial_unit_callback(values):
     rot_euler = rot.as_euler('xyz', degrees=True) 
     robot.sensors.inertial_unit.value = 180*rot_euler[2]/math.pi
 
+def accelerometer_callback(values):
+    global robot
+    robot.sensors.accelerometer.value.x=values.angular_velocity.x
+    robot.sensors.accelerometer.value.y=values.angular_velocity.y
+    robot.sensors.accelerometer.value.z=values.angular_velocity.z
+    robot.sensors.accelerometer.value.t=values.header.stamp 
+
 def gyro_callback(values):
     global robot
     robot.sensors.gyro.value.x=values.angular_velocity.x
@@ -77,19 +88,19 @@ def camera_callback(values):
         robot.sensors.camera.value = image.copy()
     else:
         robot.sensors.camera.value = None
-        #cv2.imshow('frame',get_image())
-        #cv2.waitKey(1)
+    #cv2.imshow('frame',image)
+    #cv2.waitKey(1)
 
 def motor_sensor_callback(values):
     return values.data  
 
 def head_1_joint_sensor_callback(values):
     global robot
-    robot.sensors.head_1_joint.value = motor_sensor_callback(values)
+    robot.sensors.head_horizontal.value = motor_sensor_callback(values)
 
 def head_2_joint_sensor_callback(values):
     global robot
-    robot.sensors.head_2_joint.value = motor_sensor_callback(values)   
+    robot.sensors.head_vertical.value = motor_sensor_callback(values)   
 
 def wheel_left_joint_sensor_callback(values):
     global robot

@@ -4,23 +4,23 @@ import rospy
 import change_pkg.motors as motors
 import change_pkg.sensors as sensors
 import change_pkg.tablet as tablet
+import change_pkg.movement as movement
+from sensor_msgs.msg import *
+from webots_ros.msg import *
 import rosservice
-
-robot = None
 
 class Change:
     def __init__(self):
         self.name = 'change'
         self.time_step = 32
-        self.motors = motors.Motors()
-        self.sensors = sensors.Sensors()
-        self.tablet = tablet.Tablet()
-        global robot
-        robot = self
+        self.sensors = sensors.Sensors(self)
+        self.motors = motors.Motors(self)
+        self.tablet = tablet.Tablet(self)
+        self.movement = movement.Movement(self)
         
 
     def __str__(self):
-        return name
+        return self.name
 
     def init(self):
         rospy.init_node(self.name, anonymous=True)
@@ -32,9 +32,9 @@ class Change:
 
     def set_height(self, height):
         if height>=0 and height<=self.motors.torso.max_height:
-            self.motors.torso.set_position(height)
-            self.motors.torso.set_velocity(self.motors.torso.max_velocity)
-            while abs(self.sensors.torso.position - height) > 0.002:
+            self.motors.torso.position=height
+            self.motors.torso.velocity=self.motors.torso.max_velocity
+            while abs(self.sensors.torso.value - height) > 0.002:
                 pass
 
     

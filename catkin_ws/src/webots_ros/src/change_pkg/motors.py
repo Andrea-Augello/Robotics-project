@@ -1,13 +1,18 @@
 #!/usr/bin/env python
-from robot import robot
+import rospy
+
+robot=None
 
 class Motors:
-    def __init__(self):        
-        self.left_wheel= RotationalMotor("wheel_left_joint")
-        self.right_wheel= RotationalMotor("wheel_right_joint") 
-        self.head_horizontal= RotationalMotor("head_1_joint")
-        self.head_vertical= RotationalMotor("head_2_joint") 
-        self.torso= LinearMotor("torso_lift_joint",0.35,0.07)
+    def __init__(self,r):
+        global robot
+        robot=r        
+        self.left_wheel= RotationalMotor("wheel_left_joint",r.sensors.left_wheel)
+        self.right_wheel= RotationalMotor("wheel_right_joint",r.sensors.right_wheel) 
+        self.head_horizontal= RotationalMotor("head_1_joint",r.sensors.head_horizontal)
+        self.head_vertical= RotationalMotor("head_2_joint",r.sensors.head_vertical) 
+        self.torso= LinearMotor("torso_lift_joint",r.sensors.torso,0.35,0.07)
+        
 
     def init(self):
         for key, motor in vars(self).items():
@@ -15,30 +20,48 @@ class Motors:
             
 
 class Motor:
-    def __init__(self, name):
+    def __init__(self, name, sensor):
         self.name = name
+        self.sensor = sensor
+    
 
-        def set_position(self, position):
-            robot.call_service(self.name,'set_position',position)
+    @property
+    def position(self):
+        return self.__position   
 
-        def set_velocity(self, velocity):
-            robot.call_service(self.name,'set_velocity',velocity)
+    @position.setter
+    def position(self, position):
+        global robot
+        robot.call_service(self.name,'set_position',position)
+        self.__position=position
 
-        def init(self):
-            self.set_position(float('inf'))
-            self.set_velocity(0.0)
+    @property
+    def velocity(self):
+        return self.__velocity    
 
-        def __str__(self):
-            return name
+    @velocity.setter
+    def velocity(self, velocity):
+        global robot
+        robot.call_service(self.name,'set_velocity',velocity)
+        self.__velocity=velocity
+
+    def init(self):
+        self.position=float('inf')
+        #robot.call_service(self.name,'set_position',float('inf'))
+        self.velocity=0.0
+        #robot.call_service(self.name,'set_velocity',0.0)
+
+    def __str__(self):
+        return name
 
 class LinearMotor(Motor):
-    def __init__(self, name, max_height, max_velocity):
-        super().__init__(self, name, max_height)
+    def __init__(self, name, sensor, max_height, max_velocity):
+        super().__init__(name,sensor)
         self.max_height = max_height
         self.max_velocity = max_velocity   
 
 class RotationalMotor(Motor):
-    def __init__(self, name):
-        super().__init__(self, name)                   
+    def __init__(self, name, sensor):
+        super().__init__(name, sensor)                   
 
 
