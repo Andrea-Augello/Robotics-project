@@ -77,10 +77,10 @@ def get_rois(image_list):
     labels=BASE_DIR+'/model/coco.names' 
 
     #Path to configuration file
-    config=BASE_DIR+'/model/yolov3.cfg'
+    config=BASE_DIR+'/model/yolov3-tiny.cfg'
 
     #Path to model weights
-    weights=BASE_DIR+'/model/yolov3.weights'
+    weights=BASE_DIR+'/model/yolov3-tiny.weights'
 
     #Minimum confidence for a box to be detected
     confidence=0.6
@@ -127,6 +127,7 @@ def get_rois(image_list):
                 j[0]=j[0]*i+320
                 roi.append(j)
             counter=counter+1
+    #rospy.logerr(roi)
     return roi    
 
 #Command line test
