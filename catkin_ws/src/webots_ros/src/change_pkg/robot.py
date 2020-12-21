@@ -21,7 +21,7 @@ class Change:
         self.tablet = tablet.Tablet(self)
         self.movement = movement.Movement(self)
         self.vision = vision.Vision(self)
-        self.odometry = odometry.Odometry(self)
+        self.odometry = odometry.Odometry()
 
     def __str__(self):
         return self.name
