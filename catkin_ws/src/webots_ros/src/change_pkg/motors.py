@@ -23,33 +23,20 @@ class Motor:
     def __init__(self, name, sensor):
         self.name = name
         self.sensor = sensor
-    
 
-    @property
-    def position(self):
-        return self.__position   
-
-    @position.setter
-    def position(self, position):
+    def set_position(self, position):
         global robot
         robot.call_service(self.name,'set_position',position)
-        self.__position=position
 
-    @property
-    def velocity(self):
-        return self.__velocity    
 
-    @velocity.setter
-    def velocity(self, velocity):
+    def set_velocity(self, velocity):
         global robot
         robot.call_service(self.name,'set_velocity',velocity)
-        self.__velocity=velocity
 
     def init(self):
-        self.position=float('inf')
-        #robot.call_service(self.name,'set_position',float('inf'))
-        self.velocity=0.0
-        #robot.call_service(self.name,'set_velocity',0.0)
+        self.set_position(float('inf'))
+        self.set_velocity(0.0)
+
 
     def __str__(self):
         return name
