@@ -35,13 +35,14 @@ X = scaler.inverse_transform(scaler.transform(centers))
 # #############################################################################
 def distance(p1,p2):
     angle_diff = abs(p1[1]-p2[1])%360
+    angle_diff = angle_diff if angle_diff < 30 else 999999
     angle_diff = angle_diff if angle_diff > 1 else 0
     lin_diff = math.sqrt(p1[0]**2+p2[0]**2-2*p1[0]*p2[0]*math.cos((p1[1]-p2[1])*math.pi/180))/10
-    #print("angle:  ",angle_diff,"    lin:    ", lin_diff)
+    print(angle_diff*lin_diff)
     return angle_diff*lin_diff #min(angle_diff, lin_diff)
 
 # Compute DBSCAN
-db = DBSCAN(eps=0.01, min_samples=2, metric=distance ).fit(X)
+db = DBSCAN(eps=0.0000001, min_samples=1, metric=distance ).fit(X)
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
 labels = db.labels_
