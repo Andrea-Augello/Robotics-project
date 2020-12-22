@@ -8,6 +8,7 @@ from change_pkg.vision import *
 from change_pkg.robot import Change
 
 def testing(robot):
+<<<<<<< HEAD
     robot.tablet.display.load_image('warning')
     robot.motors.head_vertical.set_position(0)
     robot.motors.head_vertical.set_velocity(0.5)
@@ -18,18 +19,18 @@ def testing(robot):
     robot.movement.rotate(180)
     robot.movement.move_forward(2)
     robot.movement.rotate(-90)
-    rospy.logerr(robot.odometry)
+    robot.tablet.warning()
     robot.movement.scan()
     robot.vision.locate_targets()
-    rospy.logerr(robot.odometry)
     robot.movement.move_forward(2)
     robot.movement.rotate(180)
-    rospy.logerr(robot.odometry)
     robot.movement.move_forward(2)
     robot.movement.rotate(90)
     robot.odometry.movement_history()
     robot.set_height(0)
     robot.tablet.speaker.speak_polyglot(it_IT="Ciao sono ciangà e sugnu troppu fuoitti", en_UK="Hello I'm ciangà and I'm too strong")
+    robot.print_info()
+
   
         
 def main():
