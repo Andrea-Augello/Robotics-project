@@ -8,7 +8,6 @@ from change_pkg.vision import *
 from change_pkg.robot import Change
 
 def testing(robot):
-<<<<<<< HEAD
     robot.tablet.display.load_image('warning')
     robot.motors.head_vertical.set_position(0)
     robot.motors.head_vertical.set_velocity(0.5)
