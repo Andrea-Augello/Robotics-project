@@ -128,8 +128,8 @@ def get_rois(image_list):
                 j[0]=j[0]+i*320
                 roi.append(j)
             counter=counter+1
-    pick = non_max_suppression( np.array([[x, y, x + w, y + h] for (x, y, w, h) in roi]), probs=None, overlapThresh=0.50)
-    return np.array([[x1, y1, x2-x1, y2-y1] for (x1, y1, x2, y2) in pick])
+    # pick = non_max_suppression( np.array([[x, y, x + w, y + h] for (x, y, w, h) in roi]), probs=None, overlapThresh=0.50)
+    return roi # np.array([[x1, y1, x2-x1, y2-y1] for (x1, y1, x2, y2) in pick])
 
 #Command line test
 if __name__ == '__main__':
