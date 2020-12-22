@@ -1,5 +1,4 @@
 import numpy as np
-
 import math
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
@@ -25,56 +24,82 @@ centers = [[1.6326544740621143, 280.2121740625],
 [1.285950569200028, 361.72437357812504],
 [1.399689127232946, 361.76913590625]]
 
-plt.polar([ c[1] for c in centers], [ c[0] for c in centers], 'o')
-scaler = StandardScaler().fit(centers)
-
-X, labels_true = make_blobs(n_samples=len(centers), centers=centers, cluster_std=0.4, random_state=0)
-
-X = scaler.inverse_transform(scaler.transform(centers))
-
 # #############################################################################
 def distance(p1,p2):
     angle_diff = abs(p1[1]-p2[1])%360
     angle_diff = angle_diff if angle_diff < 57 else 999999
     angle_diff = angle_diff if angle_diff > 1 else 0
     lin_diff = math.sqrt(p1[0]**2+p2[0]**2-2*p1[0]*p2[0]*math.cos((p1[1]-p2[1])*math.pi/180))
-    print(angle_diff*lin_diff)
+    #print(angle_diff*lin_diff)
     return angle_diff*lin_diff #min(angle_diff, lin_diff)
 
-# Compute DBSCAN
-db = DBSCAN(eps=0.5, min_samples=1, metric=distance ).fit(X)
-core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
-core_samples_mask[db.core_sample_indices_] = True
-labels = db.labels_
+# Accepts points in polar coordinates and returns the center of the clustered points in polar coordinates
+def clustering(points):
+	plt.polar([ c[1] for c in points], [ c[0] for c in points], 'o')
+	scaler = StandardScaler().fit(points)
 
-# Number of clusters in labels, ignoring noise if present.
-n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-n_noise_ = list(labels).count(-1)
+	X, labels_true = make_blobs(n_samples=len(points), centers=None, cluster_std=0.4, random_state=0)
 
-print('Estimated number of clusters: %d' % n_clusters_)
-print('Estimated number of noise points: %d' % n_noise_)
-print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
-print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
-print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
-print("Adjusted Rand Index: %0.3f"
-      % metrics.adjusted_rand_score(labels_true, labels))
-print("Adjusted Mutual Information: %0.3f"
-      % metrics.adjusted_mutual_info_score(labels_true, labels))
-print("Silhouette Coefficient: %0.3f"
-      % metrics.silhouette_score(X, labels))
+	X = scaler.inverse_transform(scaler.transform(points))
+	# Compute DBSCAN
+	db = DBSCAN(eps=0.5, min_samples=1, metric=distance ).fit(X)
+	core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+	core_samples_mask[db.core_sample_indices_] = True
+	labels = db.labels_
 
-# #############################################################################
-# Plot result
+	# Number of clusters in labels, ignoring noise if present.
+	n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+	n_noise_ = list(labels).count(-1)
 
-plt.figure(1)
-plt.clf()
+	print('Estimated number of clusters: %d' % n_clusters_)
+	print('Estimated number of noise points: %d' % n_noise_)
+	print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
+	print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
+	print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
+	print("Adjusted Rand Index: %0.3f"
+		% metrics.adjusted_rand_score(labels_true, labels))
+	print("Adjusted Mutual Information: %0.3f"
+		% metrics.adjusted_mutual_info_score(labels_true, labels))
+	print("Silhouette Coefficient: %0.3f"
+		% metrics.silhouette_score(X, labels))
 
-#X = scaler.inverse_transform(X)
-colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
-for k, col in zip(range(n_clusters_), colors):
-    my_members = labels == k
-    #cluster_center = cluster_centers[k]
-    plt.plot(X[my_members, 1], X[my_members, 0], col + '.')
-    #plt.polar(cluster_center[1], cluster_center[0], 'o', markerfacecolor=col, markeredgecolor='k', markersize=14)
-plt.title('Estimated number of clusters: %d' % n_clusters_)
-plt.show()
+	# #############################################################################
+	# Plot result
+
+	plt.figure(1)
+	plt.clf()
+
+	#X = scaler.inverse_transform(X)
+	colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
+
+	clustered_centers_angle_average=[]
+	clustered_centers_radius_average=[]
+	for k, col in zip(range(n_clusters_), colors):
+		my_members = labels == k
+		#cluster_center = cluster_centers[k]
+		plt.plot(X[my_members, 1], X[my_members, 0], col + '.')
+		clustered_centers_angle_average.append(np.average(X[my_members,1]))
+		clustered_centers_radius_average.append(np.average(X[my_members,0]))
+		#plt.polar(cluster_center[1], cluster_center[0], 'o', markerfacecolor=col, markeredgecolor='k', markersize=14)
+	plt.title('Estimated number of clusters: %d' % n_clusters_)
+	plt.show()
+
+	output=[]
+	counter=0
+	for point in clustered_centers_radius_average:
+		newpoint=[]
+		newpoint.append(point)
+		newpoint.append(clustered_centers_angle_average[counter])
+		output.append(newpoint)
+		counter=counter+1
+
+	#print(clustered_centers_angle_average)
+	#print(clustered_centers_radius_average)
+	#print(output)
+
+	#Returns a list with the center polar coordinates(radius and angle theta) for each cluster
+	return output
+	
+
+
+#clustering(centers)
