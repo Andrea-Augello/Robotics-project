@@ -5,6 +5,25 @@ class Tablet:
         self.display = Display(robot)
         self.speaker = Speaker(robot)
 
+    def greeting(self):
+        self.display.load_image('greetings')
+        self.speaker.speak_polyglot(it_IT="Ciao", en_US="Hello")
+
+    def help(self):
+        self.display.load_image('help')
+        self.speaker.speak_polyglot(it_IT="Aiuto", en_US="Help me")
+ 
+
+    def make_way(self):
+        self.display.load_image('make_way')
+        self.speaker.speak_polyglot(it_IT="Permesso", en_US="Please make way")
+ 
+
+    def warning(self):
+        self.display.load_image('warning')
+        self.speaker.speak_polyglot(it_IT="Per favore rispettare il distanziamento sociale", en_US="Please respect social distancing")
+               
+
 
 class Speaker:
     def __init__(self,robot,name='speaker',path='../../../../../Media/Audio/'):

@@ -14,14 +14,22 @@ def testing(robot):
     robot.motors.head_horizontal.set_position(0)
     robot.motors.head_horizontal.set_velocity(0.5)
     robot.set_height(robot.motors.torso.max_height/2)
-    robot.movement.scan()
-    robot.vision.locate_targets()
-    rospy.logerr(robot.odometry)
     robot.movement.move_forward(2)
     robot.movement.rotate(180)
-    rospy.logerr(robot.odometry)
+    robot.movement.move_forward(2)
+    robot.movement.rotate(-90)
+    robot.tablet.warning()
+    robot.movement.scan()
+    robot.vision.locate_targets()
+    robot.movement.move_forward(2)
+    robot.movement.rotate(180)
+    robot.movement.move_forward(2)
+    robot.movement.rotate(90)
+    robot.odometry.movement_history()
     robot.set_height(0)
     robot.tablet.speaker.speak_polyglot(it_IT="Ciao sono ciangà e sugnu troppu fuoitti", en_UK="Hello I'm ciangà and I'm too strong")
+    robot.print_info()
+
   
         
 def main():

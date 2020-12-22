@@ -15,7 +15,7 @@ class Change:
     def __init__(self):
         self.name = 'change'
         self.time_step = 32
-        self.wheel_diameter = 0.23
+        self.wheel_diameter = 0.24
         self.sensors = sensors.Sensors(self)
         self.motors = motors.Motors(self)
         self.tablet = tablet.Tablet(self)
@@ -26,6 +26,9 @@ class Change:
     def __str__(self):
         return self.name
 
+    def print_info(self):
+        rospy.logerr("Current position   "+str(self.odometry))
+
     def init(self):
         rospy.init_node(self.name, anonymous=True)
         rospy.loginfo('Initializing ROS: connecting to ' + os.environ['ROS_MASTER_URI'])
@@ -33,6 +36,8 @@ class Change:
         self.motors.init()
         self.sensors.init(self.time_step)
         self.__get_sensors_values()
+        self.set_pose(0,0)
+        self.set_height(self.motors.torso.max_height/2)
 
     def set_height(self, height):
         if height>=0 and height<=self.motors.torso.max_height:
@@ -40,6 +45,20 @@ class Change:
             self.motors.torso.set_velocity(self.motors.torso.max_velocity)
             while abs(self.sensors.torso.value - height) > 0.002:
                 pass
+
+    def set_pose(self,horizontal,vertical):
+        if self.motors.head_horizontal.min_position <= horizontal <= self.motors.head_horizontal.max_position:
+            self.motors.head_horizontal.set_position(horizontal)
+            self.motors.head_horizontal.set_velocity(0.5)
+        else:
+            rospy.logerr("Invalid head horizontal position. It must be {} <= x <= {}. Found {}".format(self.motors.head_horizontal.min_position,self.motors.head_horizontal.max_position, horizontal))    
+        if self.motors.head_vertical.min_position <= vertical <= self.motors.head_vertical.max_position:
+            self.motors.head_vertical.set_position(vertical)
+            self.motors.head_vertical.set_velocity(0.5)
+        else:
+            rospy.logerr("Invalid head vertical position. It must be {} <= x <= {}. Found {}".format(self.motors.head_vertical.min_position,self.motors.head_vertical.max_position, vertical))     
+            
+                
 
     
     def __get_sensor_value(self, topic, device, msg_type):

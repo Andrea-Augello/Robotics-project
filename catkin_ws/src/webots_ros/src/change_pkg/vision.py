@@ -120,7 +120,7 @@ class Vision:
             x.append(c[0]*math.sin(math.pi*c[1]/180))
             y.append(c[0]*math.cos(math.pi*c[1]/180))
             rospy.logerr(c)
-        plt.plot(x, y, "r.") # lines from 0,0 to the 
+        plt.plot(x, y, "r.") 
         plt.grid(True)
         plt.show()    
         return coords

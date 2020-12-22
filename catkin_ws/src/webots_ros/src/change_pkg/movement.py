@@ -112,7 +112,7 @@ class Movement:
 
         self.set_linear_velocity(self.linear_velocity)
 
-        while(abs(right_wheel_target-self.robot.sensors.left_wheel.value)>precision \
+        while(abs(right_wheel_target-self.robot.sensors.right_wheel.value)>precision \
                 and abs(left_wheel_target-self.robot.sensors.left_wheel.value)>precision):
             accel = self.robot.sensors.accelerometer.value
             timestamp = accel.t
