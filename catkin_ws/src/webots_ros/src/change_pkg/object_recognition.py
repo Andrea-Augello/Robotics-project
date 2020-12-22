@@ -66,7 +66,7 @@ def make_prediction(net, layer_names, labels, image, confidence, threshold):
 
     return boxes, confidences, classIDs, idxs
 
-def get_rois(image_list):
+def get_rois(image_list, show_images):
     paths = os.path.split(os.path.realpath(__file__))
     BASE_DIR = paths[0]
     
@@ -115,9 +115,10 @@ def get_rois(image_list):
         boxes, confidences, classIDs, idxs = make_prediction(net, layer_names, labels, image, confidence, threshold)
 
         # Test boxes
-        image2 = draw_bounding_boxes(image.copy(), boxes, confidences, classIDs, idxs, colors,labels)
-        cv2.imshow('YOLO Object Detection', image2)
-        cv2.waitKey(0)
+        if show_images:
+            image2 = draw_bounding_boxes(image.copy(), boxes, confidences, classIDs, idxs, colors,labels)
+            cv2.imshow('YOLO Object Detection', image2)
+            cv2.waitKey(0)
 
         # The class ID for a person is 0.
         # If a person is detected returs the corresponding bounding box

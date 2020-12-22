@@ -103,7 +103,7 @@ class Vision:
         self.current_frames.append(frame)
 
     def locate_targets(self):
-        self.current_rois = od.get_rois(self.current_frames)
+        self.current_rois = od.get_rois(self.current_frames, self.show_image)
         coords = []
         for roi in self.current_rois:
             p1 = (roi[0], roi[1])
@@ -115,15 +115,16 @@ class Vision:
             # and polar coordinates suffice
             coords.append(cylindrical_coords[0:2])
         coords = clst.clustering(coords)
-        x = [0]
-        y = [0]
-        for c in coords:
-            x.append(c[0]*math.sin(math.pi*c[1]/180))
-            y.append(c[0]*math.cos(math.pi*c[1]/180))
-            rospy.logerr(c)
-        plt.plot(x, y, "r.") 
-        plt.grid(True)
-        plt.show()    
+        if self.show_image:
+            x = [0]
+            y = [0]
+            for c in coords:
+                x.append(c[0]*math.sin(math.pi*c[1]/180))
+                y.append(c[0]*math.cos(math.pi*c[1]/180))
+                rospy.logerr(c)
+            plt.plot(x, y, "r.") 
+            plt.grid(True)
+            plt.show()    
         return coords
 
 
