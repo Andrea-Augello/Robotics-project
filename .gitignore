@@ -1,5 +1,7 @@
 # YOLO weights
 *.weights
+# image collages
+*.png
 # Python cache
 *.pyc
 # merged junk, fml
