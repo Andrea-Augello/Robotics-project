@@ -1,35 +1,47 @@
 import numpy as np
 
+import math
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+from itertools import cycle
 
 
 # #############################################################################
 # Generate sample data
-centers = [(1.6326544740621143, 280.2121740625),
-(6.584455987498526, 304.47335590625005),
-(6.929602039689195, 312.39628798437496),
-(6.200314562627878, 304.65240521875),
-(5.804895618419142, 312.4410503125),
-(6.675169273969831, 313.560108515625),
-(6.539154460747976, 304.518118234375),
-(6.658405156507997, 312.4410503125),
-(6.02878028159751, 304.65240521875),
-(5.5969133687342785, 312.4410503125),
-(5.940518754916619, 313.42582153125005),
-(1.285950569200028, 361.72437357812504),
-(1.399689127232946, 361.76913590625)]
+centers = [[1.6326544740621143, 280.2121740625],
+[6.584455987498526, 304.47335590625005],
+[6.929602039689195, 312.39628798437496],
+[6.200314562627878, 304.65240521875],
+[5.804895618419142, 312.4410503125],
+[6.675169273969831, 313.560108515625],
+[6.539154460747976, 304.518118234375],
+[6.658405156507997, 312.4410503125],
+[6.02878028159751, 304.65240521875],
+[5.5969133687342785, 312.4410503125],
+[5.940518754916619, 313.42582153125005],
+[1.285950569200028, 361.72437357812504],
+[1.399689127232946, 361.76913590625]]
 
-X, labels_true = make_blobs(n_samples=750, centers=centers, cluster_std=0.4,
-                            random_state=0)
+plt.polar([ c[1] for c in centers], [ c[0] for c in centers], 'o')
+scaler = StandardScaler().fit(centers)
 
-X = StandardScaler().fit_transform(X)
+X, labels_true = make_blobs(n_samples=len(centers), centers=centers, cluster_std=0.4, random_state=0)
+
+X = scaler.inverse_transform(scaler.transform(centers))
 
 # #############################################################################
+def distance(p1,p2):
+    angle_diff = abs(p1[1]-p2[1])%360
+    angle_diff = angle_diff if angle_diff > 1 else 0
+    lin_diff = math.sqrt(p1[0]**2+p2[0]**2-2*p1[0]*p2[0]*math.cos((p1[1]-p2[1])*math.pi/180))/10
+    #print("angle:  ",angle_diff,"    lin:    ", lin_diff)
+    return angle_diff*lin_diff #min(angle_diff, lin_diff)
+
 # Compute DBSCAN
-db = DBSCAN(eps=0.3, min_samples=10).fit(X)
+db = DBSCAN(eps=0.01, min_samples=2, metric=distance ).fit(X)
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
 labels = db.labels_
@@ -52,27 +64,16 @@ print("Silhouette Coefficient: %0.3f"
 
 # #############################################################################
 # Plot result
-import matplotlib.pyplot as plt
 
-# Black removed and is used for noise instead.
-unique_labels = set(labels)
-colors = [plt.cm.Spectral(each)
-          for each in np.linspace(0, 1, len(unique_labels))]
-for k, col in zip(unique_labels, colors):
-    if k == -1:
-        # Black used for noise.
-        col = [0, 0, 0, 1]
+plt.figure(1)
+plt.clf()
 
-    class_member_mask = (labels == k)
-
-    xy = X[class_member_mask & core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
-             markeredgecolor='k', markersize=14)
-
-    xy = X[class_member_mask & ~core_samples_mask]
-    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
-             markeredgecolor='k', markersize=6)
-
+#X = scaler.inverse_transform(X)
+colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
+for k, col in zip(range(n_clusters_), colors):
+    my_members = labels == k
+    #cluster_center = cluster_centers[k]
+    plt.polar(X[my_members, 1], X[my_members, 0], col + '.')
+    #plt.polar(cluster_center[1], cluster_center[0], 'o', markerfacecolor=col, markeredgecolor='k', markersize=14)
 plt.title('Estimated number of clusters: %d' % n_clusters_)
 plt.show()
-
