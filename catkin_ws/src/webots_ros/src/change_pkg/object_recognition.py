@@ -6,8 +6,6 @@ import cv2
 import os
 import time
 
-    # TODO Test
-    #  assignees: Andrea-Augello, marcolamartina
 def extract_boxes_confidences_classids(outputs, confidence, width, height):
     boxes = []
     confidences = []
