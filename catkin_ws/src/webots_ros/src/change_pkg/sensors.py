@@ -57,7 +57,7 @@ class Sensor:
                 dtype=np.dtype('uint8'), buffer=values.data)
         size = image.shape
         if size[0] > 1 and size[1] > 1:
-            self.value = image.copy()
+            self.value = cv2.cvtColor(image.copy(),cv2.COLOR_RGBA2RGB)
         else:
             self.value = None
         #cv2.imshow('frame',image)

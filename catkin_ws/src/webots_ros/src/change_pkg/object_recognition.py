@@ -72,7 +72,7 @@ def get_rois(image_list):
     
     global collage 
     collage = np.hstack(image_list)
-    cv2.imwrite(BASE_DIR + "/test_images/collage.png", collage)
+    #cv2.imwrite(BASE_DIR + "/test_images/collage.png", collage)
 
     #Path to label file
     labels=BASE_DIR+'/model/coco.names' 
@@ -102,7 +102,7 @@ def get_rois(image_list):
     layer_names = net.getLayerNames()
     layer_names = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
-    image = cv2.imread(BASE_DIR + "/test_images/collage.png")
+    image = collage# cv2.imread(BASE_DIR + "/test_images/collage.png")
 
     samples = []
     for i in range(2*len(image_list)-1):
