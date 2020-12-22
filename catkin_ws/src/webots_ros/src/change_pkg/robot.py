@@ -7,6 +7,7 @@ import change_pkg.tablet as tablet
 import change_pkg.movement as movement
 import change_pkg.vision as vision
 import change_pkg.odometry as odometry
+import change_pkg.slam as slam
 from sensor_msgs.msg import *
 from webots_ros.msg import *
 import rosservice
@@ -22,6 +23,7 @@ class Change:
         self.movement = movement.Movement(self)
         self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
+        self.slam = slam.Slam(self)
 
     def __str__(self):
         return self.name

@@ -4,7 +4,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.9999047672712602 -0.009511507139827024 -0.009999380987634466 4.662293862369329
-  position 0.2937761409706723 13.299482946053029 0.720734344041739
+  position 0.29481005628761636 12.266360495388037 0.7724232169363127
 }
 TexturedBackground {
 }
@@ -134,8 +134,6 @@ TiagoIron {
   controller "ros"
   controllerArgs [
     "--name=change"
-    "--clock"
-    "--use-sim-time"
   ]
   displaySlot [
     Solid {

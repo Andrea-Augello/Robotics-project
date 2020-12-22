@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import math
-from scipy.spatial.transform import Rotation
 import numpy as np
 import cv2
 
@@ -17,7 +16,7 @@ class Sensors:
         self.gyro =             MovementSensor("gyro",True,robot)    
         self.head_horizontal =  Sensor("head_1_joint_sensor",True,robot)
         self.head_vertical =    Sensor("head_2_joint_sensor",True,robot)
-        self.inertial_unit =    Sensor("inertial_unit",False,robot)
+        self.inertial_unit =    Sensor("inertial_unit",True,robot)
         self.joystick =         Sensor("joystick",False,robot)
         self.keyboard =         Sensor("keyboard",False,robot)
         self.torso =            Sensor("torso_lift_joint_sensor",True,robot)
@@ -44,12 +43,10 @@ class Sensor:
     def init(self,time_step):
         self.robot.call_service(self.name,"enable",time_step)
 
-    def inertial_unit_callback(self, values):      
-        q = values.orientation
-        rot = Rotation.from_quat([q.x,q.y,q.z,q.w])
-        rot_euler = rot.as_euler('xyz', degrees=True) 
-        self.value = 180*rot_euler[2]/math.pi
-
+    def inertial_unit_callback(self, values):
+        self.value = values.orientation      
+        self.robot.slam.broadcast_transform()
+        
 
 
     def camera_callback(self, values):
@@ -82,7 +79,8 @@ class Sensor:
         self.value = self.motor_sensor_callback(values) 
 
     def Hokuyo_URG_04LX_UG01_callback(self, values):
-        pass
+        self.value=values.ranges
+
 
 
     
