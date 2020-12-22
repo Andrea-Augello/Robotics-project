@@ -45,7 +45,6 @@ class Sensor:
 
     def inertial_unit_callback(self, values):
         self.value = values.orientation      
-        self.robot.slam.broadcast_transform()
         
 
 

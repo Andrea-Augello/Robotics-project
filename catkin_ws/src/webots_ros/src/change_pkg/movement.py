@@ -42,6 +42,7 @@ class Movement:
         # adjust for discontinuity at +/-180°
         difference = rotation
         current_angle = 0
+        delta = 0
         ang_vel = 0
         prev_ang_vel = 0
         prev_time = 0
@@ -60,6 +61,7 @@ class Movement:
             gyro=self.robot.sensors.gyro.value
             time = gyro.t
             if prev_time:
+                delta = current_angle
                 ang_vel = 180*gyro.z/math.pi
                 elapsed_time = time - prev_time
                 elapsed_time = elapsed_time.to_sec()
@@ -83,8 +85,10 @@ class Movement:
                         * (min(1,abs(difference/45))) )
             prev_time = time
             prev_ang_vel = ang_vel
+            delta=current_angle - delta
+            self.robot.odometry.update_theta(delta)
+            
         self.stop()
-        self.robot.odometry.update_theta(current_angle)
         return current_angle
 
 
@@ -127,6 +131,8 @@ class Movement:
                             + (prev_speed[i]+ (speed[i]-prev_speed[i])/2 ) *elapsed_time
             prev_stamp = timestamp
             prev_accel = accel
+            self.robot.odometry.update_position(distance_traveled)
+            distance_traveled=[0,0]
         self.robot.motors.left_wheel.init()
         self.robot.motors.right_wheel.init()
         self.robot.odometry.update_position(distance_traveled)

@@ -8,14 +8,12 @@ from change_pkg.vision import *
 from change_pkg.robot import Change
 
 def testing(robot):
-
     robot.tablet.warning()
     robot.set_height(robot.motors.torso.max_height/2)
-    for _ in range(40):
-        robot.movement.move_forward(2)
-        robot.movement.rotate(180)
-        robot.movement.move_forward(2)
-        robot.movement.rotate(180)
+    for i in range(40):
+        robot.movement.move_forward(10)
+        robot.movement.rotate(90)
+        #robot.odometry.movement_history()
     #robot.movement.scan()
     #robot.vision.locate_targets()
     robot.movement.move_forward(2)

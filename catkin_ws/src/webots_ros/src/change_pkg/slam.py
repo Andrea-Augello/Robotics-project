@@ -14,5 +14,5 @@ class Slam:
         translation=(od.x,od.y,0)
         iu=self.robot.sensors.inertial_unit.value
         rotation=(iu.x,iu.y,iu.z,iu.w)
-        br.sendTransform(translation,rotation,rospy.Time().now(),"odom", "base_link")
-        br.sendTransform((0,0,0),utils.euler_to_quaternion([1,0,0]),rospy.Time().now(),"base_link", "/"+self.robot.name+"/"+self.robot.sensors.lidar.name) 
+        br.sendTransform(translation,rotation,rospy.Time().now(),"base_link", "odom")
+        br.sendTransform((0,0,0),(0, 0, 0, 1),rospy.Time().now(), "/"+self.robot.name+"/"+self.robot.sensors.lidar.name,"base_link")

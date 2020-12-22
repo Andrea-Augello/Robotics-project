@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.5
+protoFileHash: 0e268bafc668cb004ac2940710427564
+needsRobotAncestor: 1
+baseType: Robot
+slotType: 
+parameters: translation,rotation,name,controller,controllerArgs,customData,supervisor,synchronization,selfCollision,model,bodySlot,lidarSlot
+tags: 
+license:  Apache License 2.0.
+licenseUrl:  http://www.apache.org/licenses/LICENSE-2.0.
+documentationUrl: https://www.cyberbotics.com/doc/guide/tiago-base
+info: This\sis\sa\sPROTO\sfile\sfor\sWebots\sfor\sthe\srobot\sTIAGo\sfrom\sPAL\sRobotics\s(Spain).\nIt\sis\sthe\sTIAGo\sbase\srobot\sthat\scan\sbe\sextended\swith\sdifferent\sfeatures\sto\sfullfil\syour\srequirement.\n

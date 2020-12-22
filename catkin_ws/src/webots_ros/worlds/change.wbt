@@ -3,132 +3,24 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.9999047672712602 -0.009511507139827024 -0.009999380987634466 4.662293862369329
-  position 0.29481005628761636 12.266360495388037 0.7724232169363127
+  orientation 1 0 0 4.71238898038469
+  position 0.30385908308703236 70.72739873855518 0.0001308413046138834
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 10 10
+  floorSize 20 20
   floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
   }
   wallThickness 0.3
-  wallHeight 3
-}
-Pedestrian {
-  translation 3 1.27 2
-  rotation 0 1 0 3.14159
-  enableBoundingObject TRUE
-}
-Pedestrian {
-  translation 2.10675 1.27 -1.68566
-  rotation 0 1 0 -0.5236053071795865
-  name "pedestrian(3)"
-  shirtColor 0.671351 0 0.652461
-  pantsColor 0.130205 0.135622 0.26186
-  shoesColor 1 0.85745 0
-  enableBoundingObject TRUE
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation -2.04 1.27 2.1
-  rotation 0 1 0 -2.8797953071795863
-  name "pedestrian(2)"
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  enableBoundingObject TRUE
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation 2.79664 1.27 0.883207
-  rotation 0 1 0 -5.307179586466759e-06
-  name "pedestrian(1)"
-  shirtColor 0.739193 0 0.0918135
-  shoesColor 1 0.999969 0.999985
-  skinColor 0.389014 0.297383 0.280034
-  enableBoundingObject TRUE
-}
-Sofa {
-  translation -4.44 0 0
-  physics Physics {
-    density 100
-  }
-}
-RoundTable {
-  physics Physics {
-  }
-}
-Solid {
-  translation 0 0.87 0.8
-  children [
-    DEF Sanitizer_shape Shape {
-      appearance DEF Sanitizer_appearance PBRAppearance {
-        metalness 0
-      }
-      geometry Cylinder {
-        height 0.2
-        radius 0.05
-      }
-    }
-    Solid {
-      translation 0 0.1 0
-      children [
-        DEF Ejection_tube_shape Shape {
-          appearance USE Sanitizer_appearance
-          geometry Cylinder {
-            height 0.07
-            radius 0.01
-          }
-        }
-        Solid {
-          translation 0 0.04 0.05
-          rotation 1 0 0 -1.5707953071795862
-          children [
-            DEF Ejection_tube_oriz_shape Shape {
-              appearance USE Sanitizer_appearance
-              geometry Cylinder {
-                height 0.15
-                radius 0.01
-              }
-            }
-          ]
-          boundingObject USE Ejection_tube_oriz_shape
-        }
-      ]
-    }
-  ]
-  boundingObject DEF Sanitizer_shape Shape {
-    appearance DEF Sanitizer_appearance PBRAppearance {
-      metalness 0
-    }
-    geometry Cylinder {
-      height 0.2
-      radius 0.05
-    }
-  }
-  physics Physics {
-  }
-}
-FruitBowl {
-  translation 0 0.759803 0
-}
-Apple {
-  translation 0 0.819508 0
+  wallHeight 8
 }
 TiagoIron {
-  translation -2.55 0.095 -2
+  translation -4.67755 0.096158 -4.48309
   rotation 0.9997397762563311 0.015803042241100698 0.01645125000924864 -1.5711437638017518
   name "change"
   controller "ros"
@@ -218,6 +110,12 @@ TiagoIron {
       }
       recognition Recognition {
       }
+    }
+  ]
+  lidarSlot [
+    SickLms291 {
+      translation 0 1.08 0.01
+      name "Hokuyo URG-04LX-UG01"
     }
   ]
 }

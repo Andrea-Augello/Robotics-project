@@ -22,7 +22,7 @@ class Change:
         self.tablet = tablet.Tablet(self)
         self.movement = movement.Movement(self)
         self.vision = vision.Vision()
-        self.odometry = odometry.Odometry()
+        self.odometry = odometry.Odometry(self)
         self.slam = slam.Slam(self)
 
     def __str__(self):

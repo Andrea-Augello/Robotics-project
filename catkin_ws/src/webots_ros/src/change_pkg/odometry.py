@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 
 class Odometry:
-    def __init__(self):
+    def __init__(self,robot):
+        self.robot=robot
         self.history=[[0,0]]
         self.x=0
         self.y=0
@@ -15,9 +16,11 @@ class Odometry:
         self.x = self.x + distance[1]*math.cos(math.pi*self.theta/180) - distance[0]*math.sin(math.pi*self.theta/180)
         self.y = self.y + distance[1]*math.sin(math.pi*self.theta/180) + distance[0]*math.cos(math.pi*self.theta/180)
         self.history.append([self.x, self.y])
+        self.robot.slam.broadcast_transform()
 
     def update_theta(self, theta):
         self.theta = (self.theta + theta) % 360
+        self.robot.slam.broadcast_transform()
 
     def movement_history(self):
         plt.plot([x for [x,y] in self.history], [y for [x,y] in self.history]) 

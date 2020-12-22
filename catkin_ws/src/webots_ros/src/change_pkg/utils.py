@@ -10,4 +10,3 @@ def quaternion_to_degree(q):
 def euler_to_quaternion(e):
     rot = Rotation.from_euler('xyz', e, degrees=True)
     return rot.as_quat()
-
