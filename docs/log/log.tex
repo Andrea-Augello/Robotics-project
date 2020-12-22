@@ -87,6 +87,13 @@
 	We decided to lower the dimensionality of our data. We used cilindric coordinates and the feature vector is 2 dimensional.
 	We used the Density-Based Scan with a threshold. The entities not belonging to the cluster are discarded.
 	
+	\section{SLAM}
+	We decided to use gMapping, one of the most used SLAM algorithms\cite{gmapping}.
+	\begin{itemize}
+		\item Gaussian (EKF) approximation of odometry model from Probabilistic Robotics
+		\item Discrete time steps (=when updates happen) correspond to whenever the robot has traveled
+	\end{itemize}
+	
 	\section{ROS}
 	
 	\section{Bugs found in the Webots ROS Controller}
@@ -123,6 +130,9 @@
 		\bibitem{positioning} 
 		\textit{https://www.nxp.com/docs/en/application-note/AN3397.pdf}. \newline
 		Implementing Positioning Algorithms Using Accelerometers.
+		\bibitem{gmapping} 
+		\textit{https://people.eecs.berkeley.edu/~pabbeel/cs287-fa11/slides/gmapping.pdf}. \newline
+		Gmapping from UC Berkeley EECS, Pieter Abbeel.
 	\end{thebibliography}
 
 \end{document}
