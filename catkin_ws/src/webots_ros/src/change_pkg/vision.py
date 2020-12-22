@@ -104,7 +104,6 @@ class Vision:
 
     def locate_targets(self):
         self.current_rois = od.get_rois(self.current_frames)
-        # TODO: Non maxima suppression here
         coords = []
         for roi in self.current_rois:
             p1 = (roi[0], roi[1])
