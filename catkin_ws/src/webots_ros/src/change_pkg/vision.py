@@ -2,6 +2,7 @@ import rospy
 import cv2
 import math
 import change_pkg.object_recognition as od
+import change_pkg.clustering as clst
 import matplotlib.pyplot as plt
 
 class Vision:
@@ -16,7 +17,7 @@ class Vision:
         self.current_frames = []
         self.current_rois = []
         self.show_roi = False
-        self.show_image = True
+        self.show_image = False
 
     def obj_dist_w(self, p1, p2, real_width):
         diff = (p1[0]-p2[0],p1[1]-p2[1])
@@ -114,6 +115,7 @@ class Vision:
             # Drops z coordinate as our robot only has two translational DoF
             # and polar coordinates suffice
             coords.append(cylindrical_coords[0:2])
+        coords = clst.clustering(coords)
         x = [0]
         y = [0]
         for c in coords:
