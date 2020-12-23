@@ -64,7 +64,7 @@ class Change:
     def __get_sensor_value(self, topic, device, msg_type):
         try:
             return rospy.Subscriber(topic, msg_type, eval("self.sensors.%s.%s_callback"%(self.sensors.get_device_name(device),device)))
-        except NameError as e:
+        except AttributeError as e:
             rospy.logerr(str(e))
         
 
