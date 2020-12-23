@@ -3,10 +3,11 @@ import math
 from scipy.spatial.transform import Rotation
 import numpy as np
 import cv2
+import rospy
 
 class Sensors:
     def __init__(self, robot):
-        self.lidar =            Sensor("Hokuyo_URG_04LX_UG01",True,robot)
+        self.lidar =            LidarSensor("Hokuyo_URG_04LX_UG01",True,robot,240)
         self.accelerometer =    MovementSensor("accelerometer",True,robot)
         self.base_cover =       Sensor("base_cover_link",True,robot)
         self.sonar_01 =         Sensor("base_sonar_01_link",False,robot)
@@ -82,7 +83,12 @@ class Sensor:
         self.value = self.motor_sensor_callback(values) 
 
     def Hokuyo_URG_04LX_UG01_callback(self, values):
-        pass
+        point_increment = math.floor(len(values.ranges)/6)
+        angle_increment = math.floor(self.fov/6)
+        self.value = [(min(values.ranges[i*point_increment:(i+1)*point_increment]),i*angle_increment+math.floor(angle_increment/2-self.fov/2)) for i in range(6)]
+
+    def base_cover_link_callback(self, values):
+        self.value = values.data    
 
 
     
@@ -103,6 +109,11 @@ class MovementSensor(Sensor):
         self.value.y=values.angular_velocity.y
         self.value.z=values.angular_velocity.z
         self.value.t=values.header.stamp
+
+class LidarSensor(Sensor):
+    def __init__(self, name, active, robot, fov):
+        super().__init__(name, active, robot)
+        self.fov=fov       
 
 
 class Vector:
