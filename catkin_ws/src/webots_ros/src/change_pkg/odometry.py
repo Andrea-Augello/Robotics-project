@@ -26,6 +26,6 @@ class Odometry:
         plt.show()    
 
     def __str__(self):
-        return "x:{} y:{} theta:{}".format(self.x,self.y,self.theta)          
+        return "x:{:.2f} y:{:.2f} theta:{:.2f}".format(self.x,self.y,self.theta)          
 
 

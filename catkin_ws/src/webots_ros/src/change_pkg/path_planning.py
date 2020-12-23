@@ -19,8 +19,8 @@ class Path_planner:
         self.target = [self.__robot.odometry.x,self.__robot.odometry.y]
         self.resolution = resolution
         self.radius=radius
-        self.KP = 5
-        self.ETA = 30
+        self.KP = 15
+        self.ETA = 25
         self.OSCILLATIONS_DETECTION_LENGTH = 3
 
 
@@ -86,12 +86,9 @@ class Path_planner:
 
         :returns: rotation angle
         """
-        self.__robot.print_info()
-        rospy.logerr("Target pos:(%f,%f)\n"%(self.target[0],self.target[1]))
         target_angle = self.__abs_cartesian_to_polar(self.target)[1]       
         direction = target_angle
-        obstacles = [ p for p in self.__robot.sensors.lidar.value[1:5] if p[0] < 1.5 ]
-        rospy.logerr(obstacles)
+        obstacles = [ p for p in self.__robot.sensors.lidar.value[3:9] if p[0] < 2.0 ]
         closest_obstacle = (999,None)
         for o in obstacles:
             if o[0] < closest_obstacle[0]:
@@ -99,10 +96,11 @@ class Path_planner:
         if True and closest_obstacle[1] != None:
             attractive_potential = self.KP * np.hypot(self.__robot.odometry.x \
                     - self.target[0], self.__robot.odometry.y - self.target[1])
-            repulsive_potential = self.ETA * 1/closest_obstacle[0]
+            repulsive_potential = self.ETA * 1/closest_obstacle[0]**2
             direction = 180/math.pi*math.atan2( 
                         attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential*math.sin(closest_obstacle[1]/180*math.pi),
                         attractive_potential*math.cos(target_angle/180*math.pi) - repulsive_potential*math.cos(closest_obstacle[1]/180*math.pi) )
+            direction = max(-45, min(45, direction))
         return direction
 
     def  target_distance(self):

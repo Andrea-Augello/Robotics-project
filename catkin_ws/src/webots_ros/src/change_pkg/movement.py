@@ -23,11 +23,28 @@ class Movement:
 
 
 
-    def stop(self):
+    def stop(self, linear=False, speed=[0,0]):
         self.set_linear_velocity(0)
+        if linear:
+            prev_speed = [0,0]
+            prev_stamp = 0
+            prev_accel = [0,0]
+            accel = self.__robot.sensors.accelerometer.value
+            while( speed[0]>0.1 or speed[1]>0.1):
+                accel = self.__robot.sensors.accelerometer.value
+                timestamp = accel.t
+                accel = [accel.x if abs(accel.x) > 0.01 else 0,accel.y if abs(accel.y) > 0.01 else 0]
+                if(prev_stamp):
+                    elapsed_time = timestamp-prev_stamp
+                    elapsed_time = elapsed_time.to_sec()
+                    prev_speed = speed
+                    for i in range(2):
+                        speed[i] = speed[i]+((accel[i]-prev_accel[i])/2+prev_accel[i])*elapsed_time
+                prev_stamp = timestamp
+                prev_accel = accel
+            
 
-
-    def rotate(self,rotation, precision=0.01):
+    def rotate(self,rotation, precision=1):
         """
         :rotation:  The desired rotation in degrees. Note that a rotation greater
             than 180° in modulo will be substituted with a rotation in the opposite
@@ -37,6 +54,8 @@ class Movement:
             no sense.
         """
         self.stop()
+        if(abs(rotation) <= precision):
+            return 0
         curr_angular_velocity = self.angular_velocity
         #update_object_roi()
         # adjust for discontinuity at +/-180°
@@ -51,8 +70,7 @@ class Movement:
             difference = difference + 360
 
         direction =  1 if difference > 0 else -1
-        while(abs(difference)>precision):
-            # just for funzies
+        while(abs(difference)>precision ):
         # update_frame()
             if(cv2.waitKey(1) == ord(' ')):
                 break
@@ -93,7 +111,7 @@ class Movement:
         :returns: traveled distance as a vector
 
         """
-        self.stop()
+        self.stop(linear=True)
         diameter=self.__robot.wheel_diameter
         distance_traveled=[0,0]
         speed=[0,0]
@@ -112,8 +130,11 @@ class Movement:
 
         self.set_linear_velocity(self.linear_velocity)
 
-        while(abs(right_wheel_target-self.__robot.sensors.right_wheel.value)>precision \
-                and abs(left_wheel_target-self.__robot.sensors.left_wheel.value)>precision):
+        while(abs(right_wheel_target-self.__robot.sensors.right_wheel.value)>precision\
+                and abs(left_wheel_target-self.__robot.sensors.left_wheel.value)>precision\
+                and self.__robot.sensors.lidar.value[5][0]>0.75 \
+                and self.__robot.sensors.lidar.value[6][0]>0.75 \
+                and not self.__robot.sensors.bumper.value):
             accel = self.__robot.sensors.accelerometer.value
             timestamp = accel.t
             accel = [accel.x if abs(accel.x) > 0.01 else 0,accel.y if abs(accel.y) > 0.01 else 0]
@@ -127,6 +148,7 @@ class Movement:
                             + (prev_speed[i]+ (speed[i]-prev_speed[i])/2 ) *elapsed_time
             prev_stamp = timestamp
             prev_accel = accel
+        self.stop(linear=True, speed=speed)
         self.__robot.motors.left_wheel.init()
         self.__robot.motors.right_wheel.init()
         self.__robot.odometry.update_position(distance_traveled)

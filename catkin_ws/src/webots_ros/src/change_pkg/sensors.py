@@ -83,9 +83,10 @@ class Sensor:
         self.value = self.motor_sensor_callback(values) 
 
     def Hokuyo_URG_04LX_UG01_callback(self, values):
-        point_increment = math.floor(len(values.ranges)/6)
-        angle_increment = math.floor(self.fov/6)
-        self.value = [(min(values.ranges[i*point_increment:(i+1)*point_increment]),i*angle_increment+math.floor(angle_increment/2-self.fov/2)) for i in range(6)]
+        section=12
+        point_increment = math.floor(len(values.ranges)/section)
+        angle_increment = math.floor(self.fov/section)
+        self.value = [(min(values.ranges[i*point_increment:(i+1)*point_increment]),i*angle_increment+math.floor(angle_increment/2-self.fov/2)) for i in range(section)]
 
     def base_cover_link_callback(self, values):
         self.value = values.data    

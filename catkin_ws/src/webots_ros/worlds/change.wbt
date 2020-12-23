@@ -3,15 +3,15 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.9999047672712602 -0.009511507139827024 -0.009999380987634466 4.662293862369329
-  position 0.2937761409706723 13.299482946053029 0.720734344041739
+  orientation -1 0 0 1.5707963267948966
+  position 0.031002066463943326 42.05934952782129 0.0010617378008096756
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 10 10
+  floorSize 17 17
   floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
@@ -67,8 +67,6 @@ Sofa {
   }
 }
 RoundTable {
-  physics Physics {
-  }
 }
 Solid {
   translation 0 0.87 0.8
@@ -222,4 +220,20 @@ TiagoIron {
       }
     }
   ]
+}
+Solid {
+  translation 0 0.4 0
+  children [
+    Shape {
+      geometry DEF CYLINDER_SHAPE Cylinder {
+        height 0.7
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject Shape {
+    appearance PBRAppearance {
+    }
+    geometry USE CYLINDER_SHAPE
+  }
 }

@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.5
+protoFileHash: c1b9c92bbcb836f1d98e4333bb2b2c98
+needsRobotAncestor: 1
+baseType: Solid
+slotType: 
+parameters: translation,rotation,name
+tags: 
+license:  Apache License 2.0.
+licenseUrl:  http://www.apache.org/licenses/LICENSE-2.0.
+documentationUrl: 
+info: Left\sversion\sof\sthe\sHey5\shand\send-effector\sfor\sthe\sTIAGo\srobot\sfrom\sPAL\sRobotics.\n
