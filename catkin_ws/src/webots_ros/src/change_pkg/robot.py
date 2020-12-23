@@ -2,6 +2,7 @@
 import os
 import rospy
 import change_pkg.motors as motors
+import change_pkg.path_planning as path_planner
 import change_pkg.sensors as sensors
 import change_pkg.tablet as tablet
 import change_pkg.movement as movement
@@ -22,6 +23,7 @@ class Change:
         self.movement = movement.Movement(self)
         self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
+        self.path_planner = path_planner.Path_planner(self)
 
     def __str__(self):
         return self.name

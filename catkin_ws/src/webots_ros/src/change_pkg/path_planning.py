@@ -9,19 +9,18 @@ class Path_planner:
     """Docstring for Path_planner. """
 
     def __init__(self, robot, resolution=1, radius=5):
-        """Accepts a robot and an odometry object
+        """Accepts a robot and an.__robot.odometry object
 
         :robot: The robot this module belongs to
-        :odometry: The odometry object used to estimate the position
+        .__robot.odometry: The odometry object used to estimate the position
 
         """
         self.__robot = robot
-        self.people_coords=[]
         self.target = [self.__robot.odometry.x,self.__robot.odometry.y]
         self.resolution = resolution
         self.radius=radius
         self.KP = 5
-        self.ETA = 100
+        self.ETA = 30
         self.OSCILLATIONS_DETECTION_LENGTH = 3
 
 
@@ -35,9 +34,9 @@ class Path_planner:
         :returns:  Cartesian coordinates in the (Rho, Theta) format
 
         """
-        x = p[0] - self.odometry.x
-        y = p[1] - self.odometry.y
-        return (np.hypot(x,y), math.atan2(y,x)-self.odometry.theta)
+        x = p[0] - self.__robot.odometry.x
+        y = p[1] - self.__robot.odometry.y
+        return (np.hypot(x,y), -180/math.pi*math.atan2(x,y)-self.__robot.odometry.theta)
 
 
     def __polar_to_abs_cartesian(self, p):
@@ -49,24 +48,11 @@ class Path_planner:
         :returns:       Cartesian coordinates
 
         """
-        theta = self._odometry.theta
-        x = self._odometry.x
-        y = self._odometry.y
+        theta = self.__robot.odometry.theta
+        x = self.__robot.odometry.x
+        y = self.__robot.odometry.y
         angle=p[1]+theta
         return(p[0]*math.sin(math.pi*angle/180),p[0]*math.cos(math.pi*angle/180))
-
-    def update_target_coords(self, new_cords):
-        """
-        :new_cords: The updated coordinates
-        :returns: TODO
-
-        """
-        cartesian_coords = [ __polar_to_abs_cartesian(p) for p in new_cords ]
-        # TODO some more sophisticated analysis here, e.g. iterative closest
-        # point estimate for data points that can be linked with past data,
-        # keeping the old position as best guess for points that have been
-        # lost. Possibly update position estimate with triangulation
-        self.people_coords = cartesain
 
     def find_clusters(self):
         # TODO find a more suitable module for this function
@@ -100,19 +86,25 @@ class Path_planner:
 
         :returns: rotation angle
         """
-        repulsive_potential = 0
-        attractive_potential = self.KP * np.hypot(self.__robot.odometry.x \
-                - self.target[0], self.__robot.odometry.y - self.target[1])
+        self.__robot.print_info()
+        rospy.logerr("Target pos:(%f,%f)\n"%(self.target[0],self.target[1]))
         target_angle = self.__abs_cartesian_to_polar(self.target)[1]       
         direction = target_angle
-        obstacles = [ p in self.__robot.sensors.lidar.value if p[0] < 5.59]
+        obstacles = [ p for p in self.__robot.sensors.lidar.value[1:5] if p[0] < 1.5 ]
+        rospy.logerr(obstacles)
         closest_obstacle = (999,None)
         for o in obstacles:
             if o[0] < closest_obstacle[0]:
                 closest_obstacle = o
-        if closest_obstacle[1] != None:
-            repulsive_potential = ETA * 1/closest_obstacle[0]
-            target_angle = math.atan2( 
-                        attractive_potential*math.cos(target_angle) - repulsive_potential*math.cos(closest_obstacle[1]),
-                        attractive_potential*math.sin(target_angle) - repulsive_potential*math.sin(closest_obstacle[1]) )
-        return target_angle
+        if True and closest_obstacle[1] != None:
+            attractive_potential = self.KP * np.hypot(self.__robot.odometry.x \
+                    - self.target[0], self.__robot.odometry.y - self.target[1])
+            repulsive_potential = self.ETA * 1/closest_obstacle[0]
+            direction = 180/math.pi*math.atan2( 
+                        attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential*math.sin(closest_obstacle[1]/180*math.pi),
+                        attractive_potential*math.cos(target_angle/180*math.pi) - repulsive_potential*math.cos(closest_obstacle[1]/180*math.pi) )
+        return direction
+
+    def  target_distance(self):
+        dist, angle = self.__abs_cartesian_to_polar(self.target)
+        return dist

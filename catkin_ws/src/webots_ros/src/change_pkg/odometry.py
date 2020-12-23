@@ -18,6 +18,7 @@ class Odometry:
 
     def update_theta(self, theta):
         self.theta = (self.theta + theta) % 360
+        self.theta = self.theta if self.theta <= 180 else self.theta -360
 
     def movement_history(self):
         plt.plot([x for [x,y] in self.history], [y for [x,y] in self.history]) 
