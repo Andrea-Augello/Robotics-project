@@ -19,11 +19,13 @@ class Vision:
         self.show_roi = False
         self.show_image = False
 
+
     def obj_dist_w(self, p1, p2, real_width):
         diff = (p1[0]-p2[0],p1[1]-p2[1])
         pixel_height = math.sqrt(diff[0]**2 + diff[1]**2)
         return (real_width*self.FOCAL_LENGTH*self.IMAGE_WIDTH)\
                 /(pixel_height*self.SENSOR_WIDTH)
+
 
     def obj_dist_h(self, p1, p2, real_height):
         diff = (p1[0]-p2[0],p1[1]-p2[1])
