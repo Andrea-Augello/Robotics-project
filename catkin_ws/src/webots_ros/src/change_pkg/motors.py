@@ -20,14 +20,14 @@ class Motor:
     def __init__(self, name, sensor, robot):
         self.name = name
         self.sensor = sensor
-        self.robot = robot
+        self.__robot = robot
 
     def set_position(self, position):
-        self.robot.call_service(self.name,'set_position',position)
+        self.__robot.call_service(self.name,'set_position',position)
 
 
     def set_velocity(self, velocity):
-        self.robot.call_service(self.name,'set_velocity',velocity)
+        self.__robot.call_service(self.name,'set_velocity',velocity)
 
     def init(self):
         self.set_position(float('inf'))

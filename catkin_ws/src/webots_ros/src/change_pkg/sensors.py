@@ -8,7 +8,7 @@ class Sensors:
     def __init__(self, robot):
         self.lidar =            Sensor("Hokuyo_URG_04LX_UG01",True,robot)
         self.accelerometer =    MovementSensor("accelerometer",True,robot)
-        self.base_cover =       Sensor("base_cover_link",False,robot)
+        self.base_cover =       Sensor("base_cover_link",True,robot)
         self.sonar_01 =         Sensor("base_sonar_01_link",False,robot)
         self.sonar_02 =         Sensor("base_sonar_02_link",False,robot)
         self.sonar_03 =         Sensor("base_sonar_03_link",False,robot) 
@@ -39,10 +39,10 @@ class Sensor:
         self.name = name
         self.active = active
         self.value = None
-        self.robot = robot
+        self.__robot = robot
 
     def init(self,time_step):
-        self.robot.call_service(self.name,"enable",time_step)
+        self.__robot.call_service(self.name,"enable",time_step)
 
     def inertial_unit_callback(self, values):      
         q = values.orientation
