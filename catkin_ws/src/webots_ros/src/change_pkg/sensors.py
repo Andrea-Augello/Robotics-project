@@ -9,7 +9,7 @@ class Sensors:
     def __init__(self, robot):
         self.lidar =            LidarSensor("Hokuyo_URG_04LX_UG01",True,robot,240)
         self.accelerometer =    MovementSensor("accelerometer",True,robot)
-        self.base_cover =       Sensor("base_cover_link",True,robot)
+        self.bumper =       Sensor("base_cover_link",True,robot)
         self.sonar_01 =         Sensor("base_sonar_01_link",False,robot)
         self.sonar_02 =         Sensor("base_sonar_02_link",False,robot)
         self.sonar_03 =         Sensor("base_sonar_03_link",False,robot) 
