@@ -59,18 +59,18 @@
 	\end{itemize}
 
 	\section{Task}
-	Our robot will be deployed in a room (such as the one showed in our demo) and its aim is to identify humans and estimate their relative positions. If the distance between said humans is less that a specified value, the robot will go towards them and invite them to respect social distancing (with both visual and audio output).
+	Our robot will be deployed in a room (such as the one showed in our demo) and its aim is to identify humans and avoid gatherings. It must estimate people's relative positions and, if the distance between said humans is less that a specified value, the robot will go towards them and invite them to respect social distancing (with both visual and audio output).
 	
 	\section{Tiago Iron} 
-	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm. The model is a modular mobile platform that allows human-robot interaction.
-	\textbf{We use a IMU with 6 degrees of freedom}.
-	IMU:
+	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm\cite{Tiago IRON datasheet}. The model is a modular mobile platform that allows human-robot interaction.\newline
+	We added a \textbf{speaker} and a \textbf{display} with a corresponding support solid to the base TIAGo model available in Webots.
+	\newline We also decided to modify the IMU in order to best fit our goals and use an IMU with 6 degrees of freedom.
+	The IMU consists of the following components:
 		\begin{enumerate}
 			\item gyro;	
 			\item accelerometer;
 		\end{enumerate}
-	
-	We got rid of the compass in the IMU.
+	We decided to \textbf{not use the compass} because in a real scenario it would have been subject to various degrees of interference (significantly more so than a gyro), especially in an environment with many metal objects.
 	
 	\section{Movement primitives}
 	\cite{positioning}
