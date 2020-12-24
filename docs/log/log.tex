@@ -44,33 +44,33 @@
 	\section{Name}\label{sec:Name}
 	Our team has chosen the name \textbf{Change}, which resembles \textbf{Chang'e 4} \cite{change4}, the spacecraft mission part of the second phase of the Chinese Lunar Exploration Program, which achieved humanity's first soft landing on the far side of the moon.
 
-	\section{Libraries and environment}\label{sec:Libraries}
-	We have used the \textbf{webots\_ros} \cite{webotsRos} package in order to gain deeper understanding of how to interface ROS nodes with the standard ROS controller for Webots. We have also studied the ROS documentation \cite{rosTutorial} in order to install and configure the ROS enviroment and also to understand fundamental ROS concepts related to nodes and topics.
+	\section{Environment}\label{sec:Libraries}
+	We have explored the \textbf{webots\_ros} \cite{webotsRos} package in order to gain deeper understanding of how to interface ROS nodes with the standard ROS controller for Webots. We have also studied the ROS documentation \cite{rosTutorial} in order to install and configure the ROS enviroment and also to understand fundamental ROS concepts related to nodes and topics.
 	Moreover, we set-up the ROS interface in Webots following the cyberbotics documentation \cite{rosTutorial}.
 	
 	\section{Dependencies}
 	This is a list of the libraries used in our project and a brief explanation of their relevance:
 	\begin{itemize}
-		\item opencv 4.x, a library aimed at computer vision;
-		\item imutils, series of convenience functions to make basic image processing functions such as translation, rotation, resizing, skeletonization;
-		\item sklearn, a machine learning library, featuring various classification, regression and clustering algorithms including support vector machines, random forests, gradient boosting, k-means and DBSCAN;
-		\item numpy, a library that adds support for large, multi-dimensional arrays and matrices, along with a large collection of high-level mathematical functions to operate on these arrays;
-		\item matplotlib, a comprehensive library for creating static, animated, and interactive visualizations;
+		\item opencv 4.x, a library aimed at computer vision\cite{opencv};
+		\item imutils, series of convenience functions to make basic image processing functions such as translation, rotation, resizing, skeletonization\cite{imutils};
+		\item sklearn, a machine learning library, featuring various classification, regression and clustering algorithms including support vector machines, random forests, gradient boosting, k-means and DBSCAN\cite{scikit};
+		\item numpy, a library that adds support for large, multi-dimensional arrays and matrices, along with a large collection of high-level mathematical functions to operate on these arrays\cite{numpy};
+		\item matplotlib, a comprehensive library for creating static, animated, and interactive visualizations\cite{matplotlib};
 	\end{itemize}
 
 	\section{Task}
-	Our robot will be deployed in a room (such as the one showed in our demo) and its aim is to identify humans and estimate their relative positions. If the distance between said humans is less that a specified value, the robot will go towards them and invite them to respect social distancing (with both visual and audio output).
+	Our robot will be deployed in a room (such as the one showed in our demo) and its aim is to identify humans and avoid gatherings. It must estimate people's relative positions and, if the distance between said humans is less that a specified value, the robot will go towards them and invite them to respect social distancing (with both visual and audio output).
 	
 	\section{Tiago Iron} 
-	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm. The model is a modular mobile platform that allows human-robot interaction.
-	\textbf{We use a IMU with 6 degrees of freedom}.
-	IMU:
+	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm\cite{Tiago IRON datasheet}. The model is a modular mobile platform that allows human-robot interaction.\newline
+	We added a \textbf{speaker} and a \textbf{display} with a corresponding support solid to the base TIAGo model available in Webots.
+	\newline We also decided to modify the IMU in order to best fit our goals and use an IMU with 6 degrees of freedom.
+	The IMU consists of the following components:
 		\begin{enumerate}
 			\item gyro;	
 			\item accelerometer;
 		\end{enumerate}
-	
-	We got rid of the compass in the IMU.
+	We decided to \textbf{not use the compass} because in a real scenario it would have been subject to various degrees of interference (significantly more so than a gyro), especially in an environment with many metal objects.
 	
 	\section{Movement primitives}
 	\cite{positioning}
@@ -137,6 +137,21 @@
 		\bibitem{gmapping} 
 		\textit{https://people.eecs.berkeley.edu/~pabbeel/cs287-fa11/slides/gmapping.pdf}. \newline
 		Gmapping from UC Berkeley EECS, Pieter Abbeel.
+		\bibitem{opencv} 
+		\textit{https://opencv.org/}. \newline
+		OpenCV Website.
+		\bibitem{imutils} 
+		\textit{https://github.com/jrosebr1/imutils}. \newline
+		Imutils GitHub page.
+		\bibitem{scikit} 
+		\textit{https://scikit-learn.org/stable/}. \newline
+		Scikit-learn website.
+		\bibitem{numpy} 
+		\textit{https://numpy.org/}. \newline
+		Numpy website.
+		\bibitem{matplotlib} 
+		\textit{https://matplotlib.org/}. \newline
+		Matplotlib website.
 	\end{thebibliography}
 
 \end{document}
