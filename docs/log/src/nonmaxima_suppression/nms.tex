@@ -1,0 +1,49 @@
+\documentclass[]{standalone}
+
+\usepackage{graphicx}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{color,soul}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb}
+\usepackage{caption}
+\usepackage{listings}
+
+% figure support
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage[hidelinks]{hyperref}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+
+	\begin{tikzpicture}[>=stealth]
+		\node[] (Robot) at (0,0) {\textbullet};
+		\node[below] (label) at (0,0) {Robot};
+		\node[] (A) at (7,8) {\textbullet};
+		\node[] (B) at (5,4) {\textbullet};
+		\draw[dashed, shorten >=-200] (Robot) -- ($(B)+(0,0)$);
+		\draw[dashed, shorten >=-30] (Robot) -- ($(A)+(0,0)$);
+		\draw[] (A) -- (B) node[left] at ($(A)!0.5!(B)$) {$l$};
+		\draw ($(Robot)+(49:2)$) arc (49:38:2) node[midway] (a) {};
+		\node[] (alpha) at ($(a)+(0.1,0.1)$) {$\alpha $};
+		\draw (A) arc (63:52:4.472136) 
+			node[] (d) {};
+		\node[above] (D) at (d) {$d$};
+		\draw[dotted] (d) arc (52:38:4.472136);
+		
+		
+		
+	\end{tikzpicture}
+
+	% Bibliography
+	\bibliographystyle{unsrt}
+	\bibliography{references.bib}
+\end{document}
