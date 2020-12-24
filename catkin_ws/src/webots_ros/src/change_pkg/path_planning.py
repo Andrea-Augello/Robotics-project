@@ -24,7 +24,9 @@ class Path_planner:
         self.OSCILLATIONS_DETECTION_LENGTH = 3
         self.SECURITY_DISTANCE = 2.0
         self.MAX_DEVIATION = 45
-        self.LIDAR_THRESHOLD = 0.2 # Percentage of lidar sensor values to discard
+        self.LIDAR_THRESHOLD = 0.2 # Percentage of lidar FOV to discard, this
+        # prevents steering to avoid objects that do not represent an obstacle
+        # if the current trajectory is mantained
 
 
 
@@ -84,13 +86,12 @@ class Path_planner:
 
     def movement_distance(self):
         size=len(self.__robot.sensors.lidar.value)
-        sup_limit=math.ceil(size/2)
-        inf_limit=sup_limit-1
-        if self.__robot.sensors.lidar.value[inf_limit][0]>self.__robot.sensors.lidar.value[sup_limit][0]:
-            max_distance=self.__robot.sensors.lidar.value[inf_limit][0]
-        else:
-            max_distance=self.__robot.sensors.lidar.value[sup_limit][0]    
-        # y = 0.48 + (MAX - 0.48)/(1 + (x/30)**1.13)
+        sup_limit=math.ceil(size/2) # Selects the lidar slices corresponding to
+        inf_limit=sup_limit-1       # the 40° fov in fron of the robot
+        max_distance =min(  # Max traveleable distance before obstacle
+                self.__robot.sensors.lidar.value[sup_limit][0],
+                self.__robot.sensors.lidar.value[inf_limit][0])
+        # rho = 0.48 + (MAX - 0.48)/(1 + (theta/30)**1.13)
         max_distance_allowed=0.48 + ( max_distance - 0.48)/(1 + (abs(self.target_angle())/30)**1.13)
         distance = min(max_distance_allowed,self.target_distance())
         rospy.logerr("x: {} y:{} max:{}".format(abs(self.target_angle()),distance,max_distance))
