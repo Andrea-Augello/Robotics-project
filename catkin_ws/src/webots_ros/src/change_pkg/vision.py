@@ -73,7 +73,7 @@ class Vision:
         img_center = (self.IMAGE_WIDTH/2,self.IMAGE_HEIGHT/2)
         z = self.obj_height(p,img_center,distance)\
                 *(-1 if p[1] > img_center[1] else 1)
-        phi = (p[0]/self.IMAGE_WIDTH-0.5)*self.HORIZONTAL_FOV
+        phi = -(p[0]/self.IMAGE_WIDTH-0.5)*self.HORIZONTAL_FOV
         rho = math.sqrt(distance**2-z**2)
         return (rho, phi, z)
 

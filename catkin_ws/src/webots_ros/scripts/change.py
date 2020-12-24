@@ -8,10 +8,12 @@ from change_pkg.vision import *
 from change_pkg.robot import Change
 
 def testing(robot):
+    time.sleep(3)
     robot.tablet.warning()
-    # robot.movement.scan()
-    # robot.vision.locate_targets()
-    robot.path_planner.set_target((-3,7))
+    valid_target = False
+    while not valid_target:
+        robot.movement.scan()
+        valid_target = robot.path_planner.set_target(robot.path_planner.find_clusters(robot.vision.locate_targets()))
     while robot.path_planner.target_distance() > 0.1:
         robot.print_info()
         angle = robot.path_planner.next_step_direction()

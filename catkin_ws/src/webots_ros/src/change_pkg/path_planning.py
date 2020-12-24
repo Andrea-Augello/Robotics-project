@@ -60,7 +60,7 @@ class Path_planner:
         angle=p[1]+theta
         return(p[0]*math.sin(math.pi*angle/180),p[0]*math.cos(math.pi*angle/180))
 
-    def find_clusters(self):
+    def find_clusters(self, polar_coords):
         # TODO find a more suitable module for this function
         """Based on the self.people_coords finds clusters and returns them.
         This may not be the best place for this function, may move to vision
@@ -70,9 +70,14 @@ class Path_planner:
             lists, or a centroid.
 
         """
+        cartesian_coords = [ self.__polar_to_abs_cartesian(p) for p in polar_coords ]
         # TODO find reasonable parameters for the Density Based Scan clustering
         # algorithm
-        pass
+        clusters = clst.clustering(cartesian_coords, 
+                distance_measure=clst.euclid_distance,
+                min_samples=2,
+                eps=2.5)
+        return None if len(clusters) == 0 else clusters[0]
 
 
     def set_target(self, target):
@@ -82,7 +87,11 @@ class Path_planner:
         :returns: None
 
         """
-        self.target = target
+        if target != None:
+            self.target = target
+            return True
+        else:
+            return False
 
     def movement_distance(self):
         size=len(self.__robot.sensors.lidar.value)
@@ -92,7 +101,8 @@ class Path_planner:
                 self.__robot.sensors.lidar.value[sup_limit][0],
                 self.__robot.sensors.lidar.value[inf_limit][0])
         # rho = 0.5 + (MAX - 0.5)/(1 + (theta/30))
-        max_distance_allowed=0.5 + ( max_distance - 0.5)/(1 + (abs(self.target_angle())/30))
+        max_distance_allowed= max_distance if max_distance < 0.5\
+                else 0.5 + ( max_distance - 0.5)/(1 + (abs(self.target_angle())/30))
         distance = min(max_distance_allowed,self.target_distance())
         rospy.logerr("x: {} y:{} max:{}".format(abs(self.target_angle()),distance,max_distance))
         return distance
