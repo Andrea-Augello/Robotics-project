@@ -32,12 +32,12 @@
 		\draw[dashed, shorten >=-200] (Robot) -- ($(B)+(0,0)$);
 		\draw[dashed, shorten >=-30] (Robot) -- ($(A)+(0,0)$);
 		\draw[] (A) -- (B) node[left] at ($(A)!0.5!(B)$) {$l$};
-		\draw ($(Robot)!0.15!(A)$) arc (45:38:2) node[midway] (a) {};
+		\draw ($(Robot)+(49:2)$) arc (49:38:2) node[midway] (a) {};
 		\node[] (alpha) at ($(a)+(0.1,0.1)$) {$\alpha $};
-		\draw (A) arc (45:38:4.472136) 
+		\draw (A) arc (63:52:4.472136) 
 			node[] (d) {};
 		\node[above] (D) at (d) {$d$};
-		\draw[dotted] (d) arc (38:20:4.472136);
+		\draw[dotted] (d) arc (52:38:4.472136);
 		
 		
 		
