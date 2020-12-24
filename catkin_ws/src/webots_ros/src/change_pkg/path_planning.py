@@ -22,6 +22,9 @@ class Path_planner:
         self.KP = 15
         self.ETA = 25
         self.OSCILLATIONS_DETECTION_LENGTH = 3
+        self.SECURITY_DISTANCE = 2.0
+        self.MAX_DEVIATION = 45
+        self.LIDAR_THRESHOLD = 0.2 # Percentage of lidar sensor values to discard
 
 
 
@@ -40,6 +43,7 @@ class Path_planner:
 
 
     def __polar_to_abs_cartesian(self, p):
+        # TODO odometry is not used
         """Accepts a point given in polar coordinates relative to the robot
         frame of reference and converts it to cartesian coordinates in a wolrd
         frame of reference based on the current position estimate
@@ -78,31 +82,55 @@ class Path_planner:
         """
         self.target = target
 
+    def movement_distance(self):
+        size=len(self.__robot.sensors.lidar.value)
+        sup_limit=math.ceil(size/2)
+        inf_limit=sup_limit-1
+        if self.__robot.sensors.lidar.value[inf_limit][0]>self.__robot.sensors.lidar.value[sup_limit][0]:
+            max_distance=self.__robot.sensors.lidar.value[inf_limit][0]
+        else:
+            max_distance=self.__robot.sensors.lidar.value[sup_limit][0]    
+        # y = 0.48 + (MAX - 0.48)/(1 + (x/30)**1.13)
+        max_distance_allowed=0.48 + ( max_distance - 0.48)/(1 + (abs(self.target_angle())/30)**1.13)
+        distance = min(max_distance_allowed,self.target_distance())
+        rospy.logerr("x: {} y:{} max:{}".format(abs(self.target_angle()),distance,max_distance))
+        return distance
+
+    def is_obstacle(self, distance):
+        return distance < self.SECURITY_DISTANCE   
+
 
     def next_step_direction(self):
         """ 
-        Using the potential fields method  computes the movement direction for
+        Using the potential fields method computes the movement direction for
         the next step towards the target 
 
         :returns: rotation angle
         """
         target_angle = self.__abs_cartesian_to_polar(self.target)[1]       
         direction = target_angle
-        obstacles = [ p for p in self.__robot.sensors.lidar.value[3:9] if p[0] < 2.0 ]
+        size=len(self.__robot.sensors.lidar.value)
+        inf_limit=math.ceil(size*self.LIDAR_THRESHOLD)
+        sup_limit=size-inf_limit
+        obstacles = [ p for p in self.__robot.sensors.lidar.value[inf_limit:sup_limit] if self.is_obstacle(p[0]) ]
         closest_obstacle = (999,None)
         for o in obstacles:
             if o[0] < closest_obstacle[0]:
                 closest_obstacle = o
-        if True and closest_obstacle[1] != None:
+        if closest_obstacle[1] != None:
             attractive_potential = self.KP * np.hypot(self.__robot.odometry.x \
                     - self.target[0], self.__robot.odometry.y - self.target[1])
             repulsive_potential = self.ETA * 1/closest_obstacle[0]**2
             direction = 180/math.pi*math.atan2( 
                         attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential*math.sin(closest_obstacle[1]/180*math.pi),
                         attractive_potential*math.cos(target_angle/180*math.pi) - repulsive_potential*math.cos(closest_obstacle[1]/180*math.pi) )
-            direction = max(-45, min(45, direction))
+            direction = max(-self.MAX_DEVIATION, min(self.MAX_DEVIATION, direction))
         return direction
 
-    def  target_distance(self):
+    def target_distance(self):
         dist, angle = self.__abs_cartesian_to_polar(self.target)
         return dist
+
+    def target_angle(self):
+        dist, angle = self.__abs_cartesian_to_polar(self.target)
+        return angle    

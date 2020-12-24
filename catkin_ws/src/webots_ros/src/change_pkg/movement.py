@@ -10,6 +10,7 @@ class Movement:
         self.__robot=robot
         self.angular_velocity = 0.02
         self.linear_velocity  = 5.0
+        self.SECURITY_DISTANCE = 0.75
         
 
     def set_angular_velocity(self,angular_velocity):
@@ -29,7 +30,6 @@ class Movement:
             prev_speed = [0,0]
             prev_stamp = 0
             prev_accel = [0,0]
-            accel = self.__robot.sensors.accelerometer.value
             while( speed[0]>0.1 or speed[1]>0.1):
                 accel = self.__robot.sensors.accelerometer.value
                 timestamp = accel.t
@@ -132,8 +132,8 @@ class Movement:
 
         while(abs(right_wheel_target-self.__robot.sensors.right_wheel.value)>precision\
                 and abs(left_wheel_target-self.__robot.sensors.left_wheel.value)>precision\
-                and self.__robot.sensors.lidar.value[5][0]>0.75 \
-                and self.__robot.sensors.lidar.value[6][0]>0.75 \
+                and self.__robot.sensors.lidar.value[5][0]>self.SECURITY_DISTANCE \
+                and self.__robot.sensors.lidar.value[6][0]>self.SECURITY_DISTANCE \
                 and not self.__robot.sensors.bumper.value):
             accel = self.__robot.sensors.accelerometer.value
             timestamp = accel.t
