@@ -62,8 +62,9 @@
 	Our robot will be deployed in a room (such as the one showed in our demo) and its aim is to identify humans and avoid gatherings. It must estimate people's relative positions and, if the distance between said humans is less that a specified value, the robot will go towards them and invite them to respect social distancing (with both visual and audio output).
 	
 	\section{Tiago Iron} 
-	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm\cite{Tiago IRON datasheet}. The model is a modular mobile platform that allows human-robot interaction.\newline
+	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm. The model is a modular mobile platform that allows human-robot interaction.\newline
 	We added a \textbf{speaker} and a \textbf{display} with a corresponding support solid to the base TIAGo model available in Webots.
+	We also had to ask the Webots developers for the precise size of the \textbf{wheels} since the model does not exactly match the specifications given in the data TIAGo datasheet\cite{Tiago IRON datasheet} and we discovered that they are 200mm.
 	\newline We also decided to modify the IMU in order to best fit our goals and use an IMU with 6 degrees of freedom.
 	The IMU consists of the following components:
 		\begin{enumerate}
@@ -84,32 +85,21 @@
 	\section{Object recognition}
 	We evalued performance between YOLO V3, TinyYOLO, HoG , HoG + SVG  , HoG + SVG + NMS. Yolo wins because it is 443\% more efficient. Width and not height. Yolo yields much more tight bounding boxes. 
 	
-	\section{TIAGo Wheels}
-	We asked the developers: 200mm. We discovered that the webots model is not the same size as the TIAGo datasheet.
-	
 	\section{Clustering}
 	We decided to lower the dimensionality of our data. We used cilindric coordinates and the feature vector is 2 dimensional.
 	We used the Density-Based Scan with a threshold. The entities not belonging to the cluster are discarded.
-	
-	\section{SLAM}
-	We decided to use gMapping, one of the most used SLAM algorithms\cite{gmapping}.
-	\begin{itemize}
-		\item Gaussian (EKF) approximation of odometry model from Probabilistic Robotics
-		\item Discrete time steps (=when updates happen) correspond to whenever the robot has traveled
-	\end{itemize}
 	
 	\section{ROS}
 	
 	\section{Bugs found in the Webots ROS Controller}
 	Logical values did not allow callbacks.
 	
-
 	
 	
 	\newpage
 	% Bibliography
 	\bibliographystyle{unsrt}
-	\begin{thebibliography}{9}
+	\begin{thebibliography}{19}
 		\bibitem{tiagoiron} 
 		\textit{https://cyberbotics.com/doc/guide/tiago-iron}. \newline
 		Webots TIAGo Iron documentation.
