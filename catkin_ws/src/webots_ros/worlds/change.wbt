@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -1 0 0 1.5707963267948966
-  position 0.031002066463943326 42.05934952782129 0.0010617378008096756
+  orientation -0.9999065439353442 0.009322843976840042 0.009999398754882672 1.6408895580374419
+  position 0.6610450607018005 34.55168000909428 -0.8089522763039328
 }
 TexturedBackground {
 }
@@ -222,18 +222,23 @@ TiagoIron {
   ]
 }
 Solid {
-  translation 0 0.4 0
+  translation 0 0.42 0
   children [
     Shape {
-      geometry DEF CYLINDER_SHAPE Cylinder {
+      appearance DEF Cylinder_appearance PBRAppearance {
+        baseColor 0.05 0.38 0.05
+        transparency 0.3
+        metalness 0
+      }
+      geometry DEF Cylinder_shape Cylinder {
         height 0.7
+        radius 1.01
       }
     }
   ]
   name "solid(1)"
   boundingObject Shape {
-    appearance PBRAppearance {
-    }
-    geometry USE CYLINDER_SHAPE
+    appearance USE Cylinder_appearance
+    geometry USE Cylinder_shape
   }
 }
