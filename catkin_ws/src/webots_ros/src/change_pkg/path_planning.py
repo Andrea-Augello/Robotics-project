@@ -91,8 +91,8 @@ class Path_planner:
         max_distance =min(  # Max traveleable distance before obstacle
                 self.__robot.sensors.lidar.value[sup_limit][0],
                 self.__robot.sensors.lidar.value[inf_limit][0])
-        # rho = 0.48 + (MAX - 0.48)/(1 + (theta/30)**1.13)
-        max_distance_allowed=0.48 + ( max_distance - 0.48)/(1 + (abs(self.target_angle())/30)**1.13)
+        # rho = 0.5 + (MAX - 0.5)/(1 + (theta/30))
+        max_distance_allowed=0.5 + ( max_distance - 0.5)/(1 + (abs(self.target_angle())/30))
         distance = min(max_distance_allowed,self.target_distance())
         rospy.logerr("x: {} y:{} max:{}".format(abs(self.target_angle()),distance,max_distance))
         return distance

@@ -9,6 +9,8 @@ from change_pkg.robot import Change
 
 def testing(robot):
     robot.tablet.warning()
+    # robot.movement.scan()
+    # robot.vision.locate_targets()
     robot.path_planner.set_target((-3,7))
     while robot.path_planner.target_distance() > 0.1:
         robot.print_info()
@@ -17,8 +19,6 @@ def testing(robot):
         distance=robot.path_planner.movement_distance()
         robot.movement.move_forward(distance)
     robot.print_info()    
-    #robot.movement.scan()
-    #robot.vision.locate_targets()
     robot.odometry.movement_history()
     robot.tablet.speaker.speak_polyglot(it_IT="Ciao sono ciangà e sugnu troppu fuoitti", en_UK="Hello I'm ciangà and I'm too strong")
 

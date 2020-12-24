@@ -6,7 +6,7 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 
 # #############################################################################
-def distance(p1,p2):
+def arc_distance(p1,p2):
     angle_diff = abs(p1[1]-p2[1])%360
     angle_diff = angle_diff if angle_diff < 57 else 999999
     angle_diff = angle_diff if angle_diff > 1 else 0
@@ -14,11 +14,11 @@ def distance(p1,p2):
     #print(angle_diff*lin_diff)
     return angle_diff*lin_diff #min(angle_diff, lin_diff)
 
-def clustering(points, distance_measure=distance):
+def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
         scaler = StandardScaler().fit(points)
         X = scaler.inverse_transform(scaler.transform(points))
         # Compute DBSCAN
-        db = DBSCAN(eps=0.5, min_samples=1, metric=distance_measure).fit(X)
+        db = DBSCAN(eps=eps, min_samples=min_samples, metric=distance_measure).fit(X)
         core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
         core_samples_mask[db.core_sample_indices_] = True
         labels = db.labels_
