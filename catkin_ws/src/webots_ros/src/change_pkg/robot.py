@@ -17,6 +17,7 @@ class Change:
         self.name = 'change'
         self.time_step = 32
         self.wheel_diameter = 0.24
+        self.footprint = 0.54
         self.sensors = sensors.Sensors(self)
         self.motors = motors.Motors(self)
         self.tablet = tablet.Tablet(self)

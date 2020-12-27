@@ -11,8 +11,11 @@ class Odometry:
         self.x=0
         self.y=0
         self.theta=0
+        self.distance_traveled = 0
 
     def update_position(self, distance):
+        self.distance_traveled = self.distance_traveled \
+                + np.hypot(distance[0], distance[1])
         self.x = self.x + distance[1]*math.cos(math.pi*self.theta/180) - distance[0]*math.sin(math.pi*self.theta/180)
         self.y = self.y + distance[1]*math.sin(math.pi*self.theta/180) + distance[0]*math.cos(math.pi*self.theta/180)
         self.history.append([self.x, self.y])
@@ -37,7 +40,9 @@ class Odometry:
         """
         x = p[0] - self.x
         y = p[1] - self.y
-        return (np.hypot(x,y), -180/math.pi*math.atan2(x,y)-self.theta)
+        angle = -180/math.pi*math.atan2(x,y)-self.theta
+        angle = angle if angle > -180 else angle +360
+        return (np.hypot(x,y), angle)
 
 
     def polar_to_abs_cartesian(self, p):

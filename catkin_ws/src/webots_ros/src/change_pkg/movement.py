@@ -132,8 +132,10 @@ class Movement:
 
         while(abs(right_wheel_target-self.__robot.sensors.right_wheel.value)>precision\
                 and abs(left_wheel_target-self.__robot.sensors.left_wheel.value)>precision\
-                and self.__robot.sensors.lidar.value[5][0]>self.SECURITY_DISTANCE \
-                and self.__robot.sensors.lidar.value[6][0]>self.SECURITY_DISTANCE \
+                and min([self.__robot.sensors.lidar.value[10][0],
+                    self.__robot.sensors.lidar.value[11][0],
+                    self.__robot.sensors.lidar.value[12][0],
+                    self.__robot.sensors.lidar.value[13][0]])>self.SECURITY_DISTANCE \
                 and not self.__robot.sensors.bumper.value):
             accel = self.__robot.sensors.accelerometer.value
             timestamp = accel.t
@@ -197,6 +199,3 @@ class Movement:
         offset = offset if offset < 180 else offset-360
         rotation = rotation + self.rotate(-offset,0.1)
         return rotation  
-
-    
-

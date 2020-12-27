@@ -66,7 +66,7 @@ class Path_planner:
     def movement_distance(self):
         size=len(self.__robot.sensors.lidar.value)
         sup_limit=math.ceil(size/2) # Selects the lidar slices corresponding to
-        inf_limit=sup_limit-1       # the 40° fov in fron of the robot
+        inf_limit=sup_limit-1       # the 20° fov in fron of the robot
         max_distance =min(  # Max traveleable distance before obstacle
                 self.__robot.sensors.lidar.value[sup_limit][0],
                 self.__robot.sensors.lidar.value[inf_limit][0])
@@ -74,11 +74,64 @@ class Path_planner:
         max_distance_allowed= max_distance if max_distance < 0.5\
                 else 0.5 + ( max_distance - 0.5)/(1 + (abs(self.target_angle())/30))
         distance = min(max_distance_allowed,self.target_distance())
-        rospy.logerr("x: {} y:{} max:{}".format(abs(self.target_angle()),distance,max_distance))
         return distance
 
     def is_obstacle(self, distance):
         return distance < self.SECURITY_DISTANCE   
+
+
+    def bug_next_step(self):
+        """ 
+        Using the tangent bug method computes the movement direction for
+        the next step towards the target and the movement distance.
+        Only the tangent following part of the algorithm is implemented.
+
+        :returns: (distance, angle)
+        """
+        target_angle = self.__robot.odometry.abs_cartesian_to_polar(self.target)[1]       
+        direction = target_angle
+        size=len(self.__robot.sensors.lidar.value)
+        # TODO Behaviour scheduling to only use this movement mode when stuck
+
+        inf_limit=2
+        sup_limit=size-inf_limit
+        obstacles = self.__robot.sensors.lidar.value[inf_limit:sup_limit]
+        width = 1.3*self.__robot.footprint 
+
+        tangents=[]
+        corrections=[]
+        for i in range(len(obstacles)-1):
+            delta = obstacles[i][0] - obstacles[i+1][0]
+            if(delta > width\
+                    or ( obstacles[i][0]>=self.__robot.sensors.lidar.range_max \
+                    and obstacles[i+1][0]<self.__robot.sensors.lidar.range_max)):
+               tangents.append((obstacles[i+1][0],obstacles[i][1]))
+               corrections.append(-math.asin(min(1,width/obstacles[i+1][0])))
+            elif ( delta < -width \
+                    or ( obstacles[i][0] <self.__robot.sensors.lidar.range_max \
+                    and obstacles[i+1][0]>=self.__robot.sensors.lidar.range_max)):
+               tangents.append((obstacles[i][0],obstacles[i+1][1]))
+               corrections.append(math.asin(min(1,width/obstacles[i][0])))
+
+        found_tan = None
+        tangent_distance = None
+        for i in range(len(tangents)):
+            new_tangent_distance = (target_angle-tangents[i][1])%360
+            if found_tan == None:
+                found_tan = i
+                tangent_distance = new_tangent_distance
+                rospy.logerr(tangent_distance)
+            else:
+                if (tangent_distance < new_tangent_distance ):
+                    tangent_distance = new_tangent_distance
+                    rospy.logerr(tangent_distance)
+                    found_tan = i
+        if found_tan != None :
+            return (tangents[found_tan][0],
+                    tangents[found_tan][1]+corrections[found_tan]*180/math.pi)
+        else:
+            # Turn back and hope for the best
+            return (0,180)
 
 
     def next_step_direction(self):
@@ -99,8 +152,9 @@ class Path_planner:
             if o[0] < closest_obstacle[0]:
                 closest_obstacle = o
         if closest_obstacle[1] != None:
-            attractive_potential = self.KP * np.hypot(self.__robot.odometry.x \
-                    - self.target[0], self.__robot.odometry.y - self.target[1])
+            attractive_potential = self.KP * np.hypot(
+                    self.__robot.odometry.x - self.target[0],
+                    self.__robot.odometry.y - self.target[1])
             repulsive_potential = self.ETA * 1/closest_obstacle[0]**2
             direction = 180/math.pi*math.atan2( 
                         attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential*math.sin(closest_obstacle[1]/180*math.pi),
