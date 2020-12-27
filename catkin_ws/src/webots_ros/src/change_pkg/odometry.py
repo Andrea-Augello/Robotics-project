@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy
 import math
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -25,7 +26,35 @@ class Odometry:
         plt.grid(True)
         plt.show()    
 
+    def abs_cartesian_to_polar(self, p):
+        """Accepts a point given in cartesian coordinates relative to the world
+        frame of reference and converts it to polar coordinates in the robot
+        frame of reference based on the current position estimate
+
+        :p:   Cartesian coordinates in the (x, y) format
+        :returns:  Cartesian coordinates in the (Rho, Theta) format
+
+        """
+        x = p[0] - self.x
+        y = p[1] - self.y
+        return (np.hypot(x,y), -180/math.pi*math.atan2(x,y)-self.theta)
+
+
+    def polar_to_abs_cartesian(self, p):
+        """Accepts a point given in polar coordinates relative to the robot
+        frame of reference and converts it to cartesian coordinates in a wolrd
+        frame of reference based on the current position estimate
+
+        :p:   Polar coordinates in the (Rho, Theta) format
+        :returns:       Cartesian coordinates
+
+        """
+        angle=p[1]+self.theta
+        return (self.x+p[0]*math.sin(math.pi*angle/180),
+                self.y+p[0]*math.cos(math.pi*angle/180))
+
+
     def __str__(self):
-        return "x:{:.2f} y:{:.2f} theta:{:.2f}".format(self.x,self.y,self.theta)          
+        return "x:{:.2f} y:{:.2f} theta:{:.2f}".format(self.x,self.y,self.theta)  
 
 

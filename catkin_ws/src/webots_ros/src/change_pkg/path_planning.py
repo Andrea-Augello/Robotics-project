@@ -30,36 +30,6 @@ class Path_planner:
 
 
 
-    def __abs_cartesian_to_polar(self, p):
-        """Accepts a point given in cartesian coordinates relative to the world
-        frame of reference and converts it to polar coordinates in the robot
-        frame of reference based on the current position estimate
-
-        :p:   Cartesian coordinates in the (x, y) format
-        :returns:  Cartesian coordinates in the (Rho, Theta) format
-
-        """
-        x = p[0] - self.__robot.odometry.x
-        y = p[1] - self.__robot.odometry.y
-        return (np.hypot(x,y), -180/math.pi*math.atan2(x,y)-self.__robot.odometry.theta)
-
-
-    def __polar_to_abs_cartesian(self, p):
-        # TODO odometry is not used
-        """Accepts a point given in polar coordinates relative to the robot
-        frame of reference and converts it to cartesian coordinates in a wolrd
-        frame of reference based on the current position estimate
-
-        :p:   Polar coordinates in the (Rho, Theta) format
-        :returns:       Cartesian coordinates
-
-        """
-        theta = self.__robot.odometry.theta
-        x = self.__robot.odometry.x
-        y = self.__robot.odometry.y
-        angle=p[1]+theta
-        return(p[0]*math.sin(math.pi*angle/180),p[0]*math.cos(math.pi*angle/180))
-
     def find_clusters(self, polar_coords):
         # TODO find a more suitable module for this function
         """Based on the self.people_coords finds clusters and returns them.
@@ -70,7 +40,7 @@ class Path_planner:
             lists, or a centroid.
 
         """
-        cartesian_coords = [ self.__polar_to_abs_cartesian(p) for p in polar_coords ]
+        cartesian_coords = [ self.__robot.odometry.polar_to_abs_cartesian(p) for p in polar_coords ]
         # TODO find reasonable parameters for the Density Based Scan clustering
         # algorithm
         clusters = clst.clustering(cartesian_coords, 
@@ -118,7 +88,7 @@ class Path_planner:
 
         :returns: rotation angle
         """
-        target_angle = self.__abs_cartesian_to_polar(self.target)[1]       
+        target_angle = self.__robot.odometry.abs_cartesian_to_polar(self.target)[1]       
         direction = target_angle
         size=len(self.__robot.sensors.lidar.value)
         inf_limit=math.ceil(size*self.LIDAR_THRESHOLD)
@@ -139,9 +109,9 @@ class Path_planner:
         return direction
 
     def target_distance(self):
-        dist, angle = self.__abs_cartesian_to_polar(self.target)
+        dist, angle = self.__robot.odometry.abs_cartesian_to_polar(self.target)
         return dist
 
     def target_angle(self):
-        dist, angle = self.__abs_cartesian_to_polar(self.target)
+        dist, angle = self.__robot.odometry.abs_cartesian_to_polar(self.target)
         return angle    
