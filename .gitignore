@@ -1,5 +1,5 @@
 # Ctags tags files
-*/tags
+catkin_ws/src/webots_ros/src/change_pkg/tags
 # YOLO weights
 *.weights
 # image collages
