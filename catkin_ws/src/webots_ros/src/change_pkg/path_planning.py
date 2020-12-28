@@ -1,6 +1,5 @@
 import rospy
 import math
-import random
 from change_pkg.vision import *
 import numpy as np
 import change_pkg.clustering as clst
