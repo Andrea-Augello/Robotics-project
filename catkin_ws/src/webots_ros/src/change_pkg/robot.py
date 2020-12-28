@@ -8,6 +8,7 @@ import change_pkg.tablet as tablet
 import change_pkg.movement as movement
 import change_pkg.vision as vision
 import change_pkg.odometry as odometry
+import change_pkg.controller as controller
 from sensor_msgs.msg import *
 from webots_ros.msg import *
 import rosservice
@@ -25,6 +26,7 @@ class Change:
         self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
         self.path_planner = path_planner.Path_planner(self)
+        self.controller = controller.Controller(self)
 
     def __str__(self):
         return self.name

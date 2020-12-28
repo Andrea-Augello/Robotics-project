@@ -8,7 +8,6 @@ from change_pkg.vision import *
 from change_pkg.robot import Change
 
 def testing(robot):
-    time.sleep(3)
     robot.tablet.warning()
     valid_target = False
     bugmode = 0
