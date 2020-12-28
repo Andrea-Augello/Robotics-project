@@ -1,3 +1,5 @@
+# Ctags tags files
+*/tags
 # YOLO weights
 *.weights
 # image collages
