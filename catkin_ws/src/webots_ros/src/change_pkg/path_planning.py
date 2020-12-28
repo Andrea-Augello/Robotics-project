@@ -1,5 +1,6 @@
 import rospy
 import math
+import random
 from change_pkg.vision import *
 import numpy as np
 import change_pkg.clustering as clst
@@ -24,6 +25,7 @@ class Path_planner:
         self.OSCILLATIONS_DETECTION_LENGTH = 3
         self.SECURITY_DISTANCE = 2.0
         self.MAX_DEVIATION = 45
+        self.MIN_EXPLORATION_STEP = 1
         self.LIDAR_THRESHOLD = 0.2 # Percentage of lidar FOV to discard, this
         # prevents steering to avoid objects that do not represent an obstacle
         # if the current trajectory is mantained
@@ -64,25 +66,35 @@ class Path_planner:
             return False
 
     def movement_distance(self):
-        size=len(self.__robot.sensors.lidar.value)
-        sup_limit=math.ceil(size/2) # Selects the lidar slices corresponding to
-        inf_limit=sup_limit-1       # the 20° fov in fron of the robot
-        max_distance =min(  # Max traveleable distance before obstacle
-                self.__robot.sensors.lidar.value[sup_limit][0],
-                self.__robot.sensors.lidar.value[inf_limit][0])
+        max_distance = self.max_distance()
         # rho = 0.5 + (MAX - 0.5)/(1 + (theta/30))
         max_distance_allowed= max_distance if max_distance < 0.5\
                 else 0.5 + ( max_distance - 0.5)/(1 + (abs(self.target_angle())/30))
         distance = min(max_distance_allowed,self.target_distance())
         return distance
 
+    def max_distance(self):
+        lidar_position=math.floor(len(self.__robot.sensors.lidar.value)/2)
+        # Selects the lidar slices corresponding to
+        # the 40° fov in front of the robot
+        max_distance =min(  # Max traveleable distance before obstacle
+                self.__robot.sensors.lidar.value[lidar_position][0],
+                self.__robot.sensors.lidar.value[lidar_position+1][0],
+                self.__robot.sensors.lidar.value[lidar_position-1][0],
+                self.__robot.sensors.lidar.value[lidar_position-2][0])
+        return max_distance*0.9          
+
     def is_obstacle(self, distance):
         return distance < self.SECURITY_DISTANCE   
 
 
     def exploration_next_step(self):
-        # TODO Exploration mode
-        return (1,0)
+        distance=self.max_distance()
+        if distance > self.MIN_EXPLORATION_STEP:
+            return (distance,0)
+        else:
+            direction = -1 if self.__robot.sensors.lidar.value[0][0] > self.__robot.sensors.lidar.value[-1][0] else 1
+            return (0,direction*90)
 
 
     def bug_next_step(self):

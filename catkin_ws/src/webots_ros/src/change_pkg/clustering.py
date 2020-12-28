@@ -43,6 +43,5 @@ def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
                 newpoint.append(point)
                 newpoint.append(clustered_centers_angle_average[counter])
                 output.append(newpoint)
-                counter=counter+1
-        rospy.logerr(output)         
+                counter+=1      
         return output

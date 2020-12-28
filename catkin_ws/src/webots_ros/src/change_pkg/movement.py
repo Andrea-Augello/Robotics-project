@@ -11,7 +11,8 @@ class Movement:
         self.angular_velocity = 0.02
         self.linear_velocity  = 5.0
         self.SECURITY_DISTANCE = 0.75
-        
+        self.SPEED_THRESHOLD = 0.1
+        self.ACCELERATION_THRESHOLD = 0.01
 
     def set_angular_velocity(self,angular_velocity):
         self.__robot.motors.left_wheel.set_velocity(-angular_velocity*330/2)
@@ -30,10 +31,10 @@ class Movement:
             prev_speed = [0,0]
             prev_stamp = 0
             prev_accel = [0,0]
-            while( speed[0]>0.1 or speed[1]>0.1):
+            while( speed[0]>self.SPEED_THRESHOLD or speed[1]>self.SPEED_THRESHOLD):
                 accel = self.__robot.sensors.accelerometer.value
                 timestamp = accel.t
-                accel = [accel.x if abs(accel.x) > 0.01 else 0,accel.y if abs(accel.y) > 0.01 else 0]
+                accel = [accel.x if abs(accel.x) > self.ACCELERATION_THRESHOLD else 0,accel.y if abs(accel.y) > self.ACCELERATION_THRESHOLD else 0]
                 if(prev_stamp):
                     elapsed_time = timestamp-prev_stamp
                     elapsed_time = elapsed_time.to_sec()
@@ -129,13 +130,13 @@ class Movement:
         self.__robot.motors.right_wheel.set_position(right_wheel_target)
 
         self.set_linear_velocity(self.linear_velocity)
-
+        lidar_position=math.floor(len(self.__robot.sensors.lidar.value)/2)
         while(abs(right_wheel_target-self.__robot.sensors.right_wheel.value)>precision\
                 and abs(left_wheel_target-self.__robot.sensors.left_wheel.value)>precision\
-                and min([self.__robot.sensors.lidar.value[10][0],
-                    self.__robot.sensors.lidar.value[11][0],
-                    self.__robot.sensors.lidar.value[12][0],
-                    self.__robot.sensors.lidar.value[13][0]])>self.SECURITY_DISTANCE \
+                and min([self.__robot.sensors.lidar.value[lidar_position-2][0],
+                    self.__robot.sensors.lidar.value[lidar_position-1][0],
+                    self.__robot.sensors.lidar.value[lidar_position][0],
+                    self.__robot.sensors.lidar.value[lidar_position+1][0]])>self.SECURITY_DISTANCE \
                 and not self.__robot.sensors.bumper.value):
             accel = self.__robot.sensors.accelerometer.value
             timestamp = accel.t

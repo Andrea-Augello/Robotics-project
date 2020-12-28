@@ -25,7 +25,6 @@ class Controller:
             self.__robot.warning()
             self.__robot.odometry.movement_history()
 
-
     def go_to_gathering(self):
         self.scheduler.potential_field_mode()
         while self.path_planner.target_distance() > self.TARGET_DISTANCE:
@@ -76,20 +75,20 @@ class Controller:
                 if utils.distance(point_list[i],point_list[j])<self.MOVEMENT_LOOP_PRECISION:
                     position_loop=True
                     self.loop_point=point_list[i]
-                    rospy.logerr("MOVING LOOP DETECTED")
+                    self.__log_loop("MOVING LOOP DETECTED")
                     break
         """
         for point_couple in itertools.combinations(point_list,2):
             if utils.distance(point_couple[0],point_couple[1])<self.MOVEMENT_LOOP_PRECISION:
                 position_loop=True
                 self.loop_point=point_couple[0]
-                rospy.logerr("MOVING LOOP DETECTED")
+                self.__log_loop("MOVING LOOP DETECTED")
                 break
         """
         rotation_loop = self.__robot.odometry.history[0][1] - self.__robot.odometry.history[lookback_window_size-1][1]  < self.ROTATION_LOOP_PRECISION
         if rotation_loop:
             self.loop_point= self.__robot.odometry.history[0][0]  
-            rospy.logerr("ROTATION LOOP DETECTED")
+            self.__log_loop("ROTATION LOOP DETECTED")
         return rotation_loop or position_loop
 
     def bug_movement(self):
@@ -108,6 +107,10 @@ class Controller:
         distance=self.path_planner.movement_distance()
         self.__robot.movement.move_forward(distance)
 
+    def __log_loop(self, text):
+        #rospy.loginfo(text)
+        rospy.logwarn(text)    
+
 
 class Scheduler:
     def __init__(self):
@@ -116,19 +119,19 @@ class Scheduler:
         self.exploration=True
 
     def bug_mode(self):
-        rospy.logwarn("ENTERING BUG MODE")
+        self.__log_mod("ENTERING BUG MODE")
         self.bug=True
         self.potential_field=False
         self.exploration=False
 
     def potential_field_mode(self):
-        rospy.logwarn("ENTERING POTENTIAL FIELD MODE")
+        self.__log_mod("ENTERING POTENTIAL FIELD MODE")
         self.bug=False
         self.potential_field=True
         self.exploration=False
 
     def exploration_mode(self):
-        rospy.logwarn("ENTERING EXPLORATION MODE")
+        self.__log_mod("ENTERING EXPLORATION MODE")
         self.bug=False
         self.potential_field=False
         self.exploration=True
@@ -136,4 +139,8 @@ class Scheduler:
     def get_mode(self):
         for mode, flag in vars(self).items():
             if flag:
-                return mode                       
+                return mode
+
+    def __log_mod(self, text):
+        #rospy.loginfo(text)
+        rospy.logwarn(text)
