@@ -1,0 +1,134 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Change	../src/change_pkg/robot.py	/^class Change:$/;"	c
+Display	../src/change_pkg/tablet.py	/^class Display:$/;"	c
+Hokuyo_URG_04LX_UG01_callback	../src/change_pkg/sensors.py	/^    def Hokuyo_URG_04LX_UG01_callback(self, values):$/;"	m	class:Sensor
+LidarSensor	../src/change_pkg/sensors.py	/^class LidarSensor(Sensor):$/;"	c
+LinearMotor	../src/change_pkg/motors.py	/^class LinearMotor(Motor):$/;"	c
+Motor	../src/change_pkg/motors.py	/^class Motor:$/;"	c
+Motors	../src/change_pkg/motors.py	/^class Motors:$/;"	c
+Movement	../src/change_pkg/movement.py	/^class Movement:$/;"	c
+MovementSensor	../src/change_pkg/sensors.py	/^class MovementSensor(Sensor):$/;"	c
+Odometry	../src/change_pkg/odometry.py	/^class Odometry:$/;"	c
+Path_planner	../src/change_pkg/path_planning.py	/^class Path_planner:$/;"	c
+RotationalMotor	../src/change_pkg/motors.py	/^class RotationalMotor(Motor):$/;"	c
+Sensor	../src/change_pkg/sensors.py	/^class Sensor:$/;"	c
+Sensors	../src/change_pkg/sensors.py	/^class Sensors:$/;"	c
+Speaker	../src/change_pkg/tablet.py	/^class Speaker:$/;"	c
+Tablet	../src/change_pkg/tablet.py	/^class Tablet:$/;"	c
+Vector	../src/change_pkg/sensors.py	/^class Vector:$/;"	c
+Vision	../src/change_pkg/vision.py	/^class Vision:$/;"	c
+__get_sensor_value	../src/change_pkg/robot.py	/^    def __get_sensor_value(self, topic, device, msg_type):$/;"	m	class:Change	file:
+__get_sensors_values	../src/change_pkg/robot.py	/^    def __get_sensors_values(self):$/;"	m	class:Change	file:
+__init__	../src/change_pkg/motors.py	/^    def __init__(self, name, sensor, robot):$/;"	m	class:Motor
+__init__	../src/change_pkg/motors.py	/^    def __init__(self, name, sensor, robot, max_height, max_velocity):$/;"	m	class:LinearMotor
+__init__	../src/change_pkg/motors.py	/^    def __init__(self, name, sensor, robot, min_position=None, max_position=None):$/;"	m	class:RotationalMotor
+__init__	../src/change_pkg/motors.py	/^    def __init__(self,robot):     $/;"	m	class:Motors
+__init__	../src/change_pkg/movement.py	/^    def __init__(self, robot):$/;"	m	class:Movement
+__init__	../src/change_pkg/odometry.py	/^    def __init__(self):$/;"	m	class:Odometry
+__init__	../src/change_pkg/path_planning.py	/^    def __init__(self, robot, resolution=1, radius=5):$/;"	m	class:Path_planner
+__init__	../src/change_pkg/robot.py	/^    def __init__(self):$/;"	m	class:Change
+__init__	../src/change_pkg/sensors.py	/^    def __init__(self):$/;"	m	class:Vector
+__init__	../src/change_pkg/sensors.py	/^    def __init__(self, name, active, robot):                    $/;"	m	class:Sensor
+__init__	../src/change_pkg/sensors.py	/^    def __init__(self, name, active, robot):$/;"	m	class:MovementSensor
+__init__	../src/change_pkg/sensors.py	/^    def __init__(self, name, active, robot, fov, range_max):$/;"	m	class:LidarSensor
+__init__	../src/change_pkg/sensors.py	/^    def __init__(self, robot):$/;"	m	class:Sensors
+__init__	../src/change_pkg/tablet.py	/^    def __init__(self, robot):$/;"	m	class:Tablet
+__init__	../src/change_pkg/tablet.py	/^    def __init__(self,robot,name='display',path='..\/..\/..\/..\/..\/Media\/Image\/'):              $/;"	m	class:Display
+__init__	../src/change_pkg/tablet.py	/^    def __init__(self,robot,name='speaker',path='..\/..\/..\/..\/..\/Media\/Audio\/'):$/;"	m	class:Speaker
+__init__	../src/change_pkg/vision.py	/^    def __init__(self):$/;"	m	class:Vision
+__str__	../src/change_pkg/motors.py	/^    def __str__(self):$/;"	m	class:Motor	file:
+__str__	../src/change_pkg/odometry.py	/^    def __str__(self):$/;"	m	class:Odometry	file:
+__str__	../src/change_pkg/robot.py	/^    def __str__(self):$/;"	m	class:Change	file:
+__str__	../src/change_pkg/sensors.py	/^    def __str__(self):$/;"	m	class:Vector	file:
+abs_cartesian_to_polar	../src/change_pkg/odometry.py	/^    def abs_cartesian_to_polar(self, p):$/;"	m	class:Odometry
+accelerometer_callback	../src/change_pkg/sensors.py	/^    def accelerometer_callback(self, values):$/;"	m	class:MovementSensor
+ap	../src/change_pkg/pedestrian_detection2.py	/^ap = argparse.ArgumentParser()$/;"	v
+arc_distance	../src/change_pkg/clustering.py	/^def arc_distance(p1,p2):$/;"	f
+args	../src/change_pkg/pedestrian_detection2.py	/^args = vars(ap.parse_args())$/;"	v
+base_cover_link_callback	../src/change_pkg/sensors.py	/^    def base_cover_link_callback(self, values):$/;"	m	class:Sensor
+bug_next_step	../src/change_pkg/path_planning.py	/^    def bug_next_step(self):$/;"	m	class:Path_planner
+call_service	../src/change_pkg/robot.py	/^    def call_service(self,device_name,service_name,*args):$/;"	m	class:Change
+camera_callback	../src/change_pkg/sensors.py	/^    def camera_callback(self, values):$/;"	m	class:Sensor
+clear_saved_frames	../src/change_pkg/vision.py	/^    def clear_saved_frames(self):$/;"	m	class:Vision
+clustering	../src/change_pkg/clustering.py	/^def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):$/;"	f
+draw_bounding_boxes	../src/change_pkg/object_recognition.py	/^def draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels):$/;"	f
+euclid_distance	../src/change_pkg/clustering.py	/^def euclid_distance(p1,p2):$/;"	f
+extract_boxes_confidences_classids	../src/change_pkg/object_recognition.py	/^def extract_boxes_confidences_classids(outputs, confidence, width, height):$/;"	f
+filename	../src/change_pkg/pedestrian_detection2.py	/^	filename = imagePath[imagePath.rfind("\/") + 1:]$/;"	v
+find_clusters	../src/change_pkg/path_planning.py	/^    def find_clusters(self, polar_coords):$/;"	m	class:Path_planner
+get_device_name	../src/change_pkg/sensors.py	/^    def get_device_name(self, device):$/;"	m	class:Sensors
+get_rois	../src/change_pkg/object_recognition.py	/^def get_rois(image_list, show_images):$/;"	f
+greeting	../src/change_pkg/tablet.py	/^    def greeting(self):$/;"	m	class:Tablet
+gyro_callback	../src/change_pkg/sensors.py	/^    def gyro_callback(self, values):$/;"	m	class:MovementSensor
+head_1_joint_sensor_callback	../src/change_pkg/sensors.py	/^    def head_1_joint_sensor_callback(self, values):$/;"	m	class:Sensor
+head_2_joint_sensor_callback	../src/change_pkg/sensors.py	/^    def head_2_joint_sensor_callback(self, values):$/;"	m	class:Sensor
+help	../src/change_pkg/tablet.py	/^    def help(self):$/;"	m	class:Tablet
+hog	../src/change_pkg/pedestrian_detection.py	/^hog = cv2.HOGDescriptor() $/;"	v
+hog	../src/change_pkg/pedestrian_detection2.py	/^hog = cv2.HOGDescriptor()$/;"	v
+image	../src/change_pkg/pedestrian_detection.py	/^image = cv2.imread('test_images\/img2.jpeg') $/;"	v
+image	../src/change_pkg/pedestrian_detection.py	/^image = imutils.resize(image,width=min(400, image.shape[1])) $/;"	v
+image	../src/change_pkg/pedestrian_detection2.py	/^	image = cv2.imread(imagePath)$/;"	v
+image	../src/change_pkg/pedestrian_detection2.py	/^	image = imutils.resize(image, width=min(400, image.shape[1]))$/;"	v
+inertial_unit_callback	../src/change_pkg/sensors.py	/^    def inertial_unit_callback(self, values):      $/;"	m	class:Sensor
+init	../src/change_pkg/motors.py	/^    def init(self):$/;"	m	class:Motor
+init	../src/change_pkg/motors.py	/^    def init(self):$/;"	m	class:Motors
+init	../src/change_pkg/robot.py	/^    def init(self):$/;"	m	class:Change
+init	../src/change_pkg/sensors.py	/^    def init(self,time_step):$/;"	m	class:Sensor
+init	../src/change_pkg/sensors.py	/^    def init(self,time_step):$/;"	m	class:Sensors
+is_obstacle	../src/change_pkg/path_planning.py	/^    def is_obstacle(self, distance):$/;"	m	class:Path_planner
+is_speaking	../src/change_pkg/tablet.py	/^    def is_speaking(self):$/;"	m	class:Speaker
+load_image	../src/change_pkg/tablet.py	/^    def load_image(self,image):$/;"	m	class:Display
+locate_targets	../src/change_pkg/vision.py	/^    def locate_targets(self):$/;"	m	class:Vision
+make_prediction	../src/change_pkg/object_recognition.py	/^def make_prediction(net, layer_names, labels, image, confidence, threshold):$/;"	f
+make_way	../src/change_pkg/tablet.py	/^    def make_way(self):$/;"	m	class:Tablet
+motor_sensor_callback	../src/change_pkg/sensors.py	/^    def motor_sensor_callback(self, values):$/;"	m	class:Sensor
+move_forward	../src/change_pkg/movement.py	/^    def move_forward(self, distance, precision=0.01):$/;"	m	class:Movement
+move_forward_accel	../src/change_pkg/movement.py	/^    def move_forward_accel(self, distance, precision=0.01):$/;"	m	class:Movement
+movement_distance	../src/change_pkg/path_planning.py	/^    def movement_distance(self):$/;"	m	class:Path_planner
+movement_history	../src/change_pkg/odometry.py	/^    def movement_history(self):$/;"	m	class:Odometry
+next_step_direction	../src/change_pkg/path_planning.py	/^    def next_step_direction(self):$/;"	m	class:Path_planner
+obj_dist_h	../src/change_pkg/vision.py	/^    def obj_dist_h(self, p1, p2, real_height):$/;"	m	class:Vision
+obj_dist_w	../src/change_pkg/vision.py	/^    def obj_dist_w(self, p1, p2, real_width):$/;"	m	class:Vision
+obj_height	../src/change_pkg/vision.py	/^    def obj_height(self, p1, p2, real_distance):$/;"	m	class:Vision
+obj_width	../src/change_pkg/vision.py	/^    def obj_width(self, p1, p2, real_distance):$/;"	m	class:Vision
+orig	../src/change_pkg/pedestrian_detection2.py	/^	orig = image.copy()$/;"	v
+padding	../src/change_pkg/pedestrian_detection2.py	/^		padding=(8, 8), scale=1.05)$/;"	v
+pick	../src/change_pkg/pedestrian_detection.py	/^pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)$/;"	v
+pick	../src/change_pkg/pedestrian_detection2.py	/^	pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)$/;"	v
+play_sound	../src/change_pkg/tablet.py	/^    def play_sound(self,sound):$/;"	m	class:Speaker
+point_coords	../src/change_pkg/vision.py	/^    def point_coords(self, p, rho):$/;"	m	class:Vision
+point_cylindrical_coords	../src/change_pkg/vision.py	/^    def point_cylindrical_coords(self, p, distance):$/;"	m	class:Vision
+point_polar_coords	../src/change_pkg/vision.py	/^    def point_polar_coords(self, p, rho):$/;"	m	class:Vision
+polar_to_abs_cartesian	../src/change_pkg/odometry.py	/^    def polar_to_abs_cartesian(self, p):$/;"	m	class:Odometry
+print_info	../src/change_pkg/robot.py	/^    def print_info(self):$/;"	m	class:Change
+rects	../src/change_pkg/pedestrian_detection.py	/^rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])$/;"	v
+rects	../src/change_pkg/pedestrian_detection2.py	/^	rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])$/;"	v
+roi_center	../src/change_pkg/vision.py	/^    def roi_center(self, roi):$/;"	m	class:Vision
+rotate	../src/change_pkg/movement.py	/^    def rotate(self,rotation, precision=1):$/;"	m	class:Movement
+save_frame	../src/change_pkg/vision.py	/^    def save_frame(self,frame):$/;"	m	class:Vision
+scan	../src/change_pkg/movement.py	/^    def scan(self):$/;"	m	class:Movement
+set_angular_velocity	../src/change_pkg/movement.py	/^    def set_angular_velocity(self,angular_velocity):$/;"	m	class:Movement
+set_height	../src/change_pkg/robot.py	/^    def set_height(self, height):$/;"	m	class:Change
+set_linear_velocity	../src/change_pkg/movement.py	/^    def set_linear_velocity(self,linear_velocity):$/;"	m	class:Movement
+set_pose	../src/change_pkg/robot.py	/^    def set_pose(self,horizontal,vertical):$/;"	m	class:Change
+set_position	../src/change_pkg/motors.py	/^    def set_position(self, position):$/;"	m	class:Motor
+set_target	../src/change_pkg/path_planning.py	/^    def set_target(self, target):$/;"	m	class:Path_planner
+set_velocity	../src/change_pkg/motors.py	/^    def set_velocity(self, velocity):$/;"	m	class:Motor
+speak	../src/change_pkg/tablet.py	/^    def speak(self,text,volume=1.0):$/;"	m	class:Speaker
+speak_polyglot	../src/change_pkg/tablet.py	/^    def speak_polyglot(self,it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):$/;"	m	class:Speaker
+stop	../src/change_pkg/movement.py	/^    def stop(self, linear=False, speed=[0,0]):$/;"	m	class:Movement
+target_angle	../src/change_pkg/path_planning.py	/^    def target_angle(self):$/;"	m	class:Path_planner
+target_distance	../src/change_pkg/path_planning.py	/^    def target_distance(self):$/;"	m	class:Path_planner
+toggle_roi	../src/change_pkg/vision.py	/^    def toggle_roi(self):$/;"	m	class:Vision
+torso_lift_joint_sensor_callback	../src/change_pkg/sensors.py	/^    def torso_lift_joint_sensor_callback(self, values):$/;"	m	class:Sensor
+update_frame	../src/change_pkg/vision.py	/^    def update_frame(self, current_frame):$/;"	m	class:Vision
+update_position	../src/change_pkg/odometry.py	/^    def update_position(self, distance):$/;"	m	class:Odometry
+update_theta	../src/change_pkg/odometry.py	/^    def update_theta(self, theta):$/;"	m	class:Odometry
+warning	../src/change_pkg/tablet.py	/^    def warning(self):$/;"	m	class:Tablet
+wheel_left_joint_sensor_callback	../src/change_pkg/sensors.py	/^    def wheel_left_joint_sensor_callback(self, values):$/;"	m	class:Sensor
+wheel_right_joint_sensor_callback	../src/change_pkg/sensors.py	/^    def wheel_right_joint_sensor_callback(self, values):$/;"	m	class:Sensor
