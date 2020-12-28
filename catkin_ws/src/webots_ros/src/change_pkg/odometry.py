@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 
 class Odometry:
     def __init__(self):
-        self.history=[((0,0),0)]
         self.x=0
         self.y=0
+        self.history=[((self.x,self.y),0)]
         self.theta=0
 
     def update_position(self, distance):

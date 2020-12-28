@@ -4,6 +4,7 @@ import change_pkg.path_planning as path_planner
 import change_pkg.utils as utils
 import itertools
 import numpy as np
+import rospy
 
 class Controller:
     def __init__(self, robot):
@@ -12,7 +13,8 @@ class Controller:
         self.path_planner = path_planner.Path_planner(robot)
         self.loop_point= None
         self.LOOKBACK_WINDOW_SIZE = 4
-        self.LOOP_PRECISION = 0.1
+        self.MOVEMENT_LOOP_PRECISION = 0.01
+        self.ROTATION_LOOP_PRECISION = 0.1
         self.ESCAPING_DISTANCE = 2
         self.TARGET_DISTANCE = 0.5
 
@@ -21,7 +23,7 @@ class Controller:
             self.exploration()
             self.go_to_gathering()
             self.__robot.warning()
-            #self.__robot.odometry.movement_history()
+            self.__robot.odometry.movement_history()
 
 
     def go_to_gathering(self):
@@ -69,14 +71,25 @@ class Controller:
         position_loop=False
         lookback_window_size=min(self.LOOKBACK_WINDOW_SIZE,len(self.__robot.odometry.history))
         point_list = [(x,y) for ((x,y),_distance) in self.__robot.odometry.history[0:lookback_window_size]]
+        for i in range(len(point_list)):
+            for j in range(i+2,len(point_list)):
+                if utils.distance(point_list[i],point_list[j])<self.MOVEMENT_LOOP_PRECISION:
+                    position_loop=True
+                    self.loop_point=point_list[i]
+                    rospy.logerr("MOVING LOOP DETECTED")
+                    break
+        """
         for point_couple in itertools.combinations(point_list,2):
-            if utils.distance(point_couple[0],point_couple[1])<self.LOOP_PRECISION:
+            if utils.distance(point_couple[0],point_couple[1])<self.MOVEMENT_LOOP_PRECISION:
                 position_loop=True
                 self.loop_point=point_couple[0]
+                rospy.logerr("MOVING LOOP DETECTED")
                 break
-        rotation_loop = self.__robot.odometry.history[0][1] - self.__robot.odometry.history[lookback_window_size-1][1]  < 0.1
+        """
+        rotation_loop = self.__robot.odometry.history[0][1] - self.__robot.odometry.history[lookback_window_size-1][1]  < self.ROTATION_LOOP_PRECISION
         if rotation_loop:
             self.loop_point= self.__robot.odometry.history[0][0]  
+            rospy.logerr("ROTATION LOOP DETECTED")
         return rotation_loop or position_loop
 
     def bug_movement(self):
@@ -103,16 +116,19 @@ class Scheduler:
         self.exploration=True
 
     def bug_mode(self):
+        rospy.logwarn("ENTERING BUG MODE")
         self.bug=True
         self.potential_field=False
         self.exploration=False
 
     def potential_field_mode(self):
+        rospy.logwarn("ENTERING POTENTIAL FIELD MODE")
         self.bug=False
         self.potential_field=True
-        self.exploration=False 
+        self.exploration=False
 
     def exploration_mode(self):
+        rospy.logwarn("ENTERING EXPLORATION MODE")
         self.bug=False
         self.potential_field=False
         self.exploration=True

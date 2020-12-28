@@ -16,7 +16,7 @@ class Path_planner:
 
         """
         self.__robot = robot
-        self.target = [self.__robot.odometry.x,self.__robot.odometry.y]
+        self.target = (self.__robot.odometry.x,self.__robot.odometry.y)
         self.resolution = resolution
         self.radius=radius
         self.KP = 15
