@@ -2,12 +2,12 @@
 import os
 import rospy
 import change_pkg.motors as motors
-import change_pkg.path_planning as path_planner
 import change_pkg.sensors as sensors
 import change_pkg.tablet as tablet
 import change_pkg.movement as movement
 import change_pkg.vision as vision
 import change_pkg.odometry as odometry
+import change_pkg.controller as controller
 from sensor_msgs.msg import *
 from webots_ros.msg import *
 import rosservice
@@ -24,13 +24,13 @@ class Change:
         self.movement = movement.Movement(self)
         self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
-        self.path_planner = path_planner.Path_planner(self)
+        self.controller = controller.Controller(self)
 
     def __str__(self):
         return self.name
 
     def print_info(self):
-        rospy.logerr("Current position   "+str(self.odometry))
+        rospy.logwarn("Current position   "+str(self.odometry))
 
     def init(self):
         rospy.init_node(self.name, anonymous=True)
@@ -41,6 +41,7 @@ class Change:
         self.__get_sensors_values()
         self.set_pose(0,0)
         self.set_height(self.motors.torso.max_height/2)
+        self.tablet.greetings()
 
     def set_height(self, height):
         if height>=0 and height<=self.motors.torso.max_height:
