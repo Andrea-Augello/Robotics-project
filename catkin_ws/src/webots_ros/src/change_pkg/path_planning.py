@@ -120,11 +120,9 @@ class Path_planner:
             if found_tan == None:
                 found_tan = i
                 tangent_distance = new_tangent_distance
-                rospy.logerr(tangent_distance)
             else:
                 if (tangent_distance < new_tangent_distance ):
                     tangent_distance = new_tangent_distance
-                    rospy.logerr(tangent_distance)
                     found_tan = i
         if found_tan != None :
             return (tangents[found_tan][0],

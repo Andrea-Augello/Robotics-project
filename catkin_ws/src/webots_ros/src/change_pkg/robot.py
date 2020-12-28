@@ -2,7 +2,6 @@
 import os
 import rospy
 import change_pkg.motors as motors
-import change_pkg.path_planning as path_planner
 import change_pkg.sensors as sensors
 import change_pkg.tablet as tablet
 import change_pkg.movement as movement
@@ -42,6 +41,7 @@ class Change:
         self.__get_sensors_values()
         self.set_pose(0,0)
         self.set_height(self.motors.torso.max_height/2)
+        self.tablet.greetings()
 
     def set_height(self, height):
         if height>=0 and height<=self.motors.torso.max_height:

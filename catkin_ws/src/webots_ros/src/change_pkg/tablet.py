@@ -5,7 +5,7 @@ class Tablet:
         self.display = Display(robot)
         self.speaker = Speaker(robot)
 
-    def greeting(self):
+    def greetings(self):
         self.display.load_image('greetings')
         self.speaker.speak_polyglot(it_IT="Ciao", en_US="Hello")
 
