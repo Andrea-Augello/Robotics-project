@@ -30,7 +30,7 @@ class Change:
         return self.name
 
     def print_info(self):
-        rospy.logerr("Current position   "+str(self.odometry))
+        rospy.logwarn("Current position   "+str(self.odometry))
 
     def init(self):
         rospy.init_node(self.name, anonymous=True)
