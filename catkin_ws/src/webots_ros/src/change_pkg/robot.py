@@ -25,7 +25,6 @@ class Change:
         self.movement = movement.Movement(self)
         self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
-        self.path_planner = path_planner.Path_planner(self)
         self.controller = controller.Controller(self)
 
     def __str__(self):
