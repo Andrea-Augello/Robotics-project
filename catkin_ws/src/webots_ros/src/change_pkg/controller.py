@@ -67,13 +67,14 @@ class Controller:
 
         """
         position_loop=False
-        point_list= [(x,y) for ((x,y),_distance) in self.__robot.odometry.history[0:self.LOOKBACK_WINDOW_SIZE]]
+        lookback_window_size=min(self.LOOKBACK_WINDOW_SIZE,len(self.__robot.odometry.history))
+        point_list = [(x,y) for ((x,y),_distance) in self.__robot.odometry.history[0:lookback_window_size]]
         for point_couple in itertools.combinations(point_list,2):
             if utils.distance(point_couple[0],point_couple[1])<self.LOOP_PRECISION:
                 position_loop=True
                 self.loop_point=point_couple[0]
                 break
-        rotation_loop = self.__robot.odometry.history[0][1] - self.__robot.odometry.history[self.LOOKBACK_WINDOW_SIZE-1][1]  < 0.1
+        rotation_loop = self.__robot.odometry.history[0][1] - self.__robot.odometry.history[lookback_window_size-1][1]  < 0.1
         if rotation_loop:
             self.loop_point= self.__robot.odometry.history[0][0]  
         return rotation_loop or position_loop
