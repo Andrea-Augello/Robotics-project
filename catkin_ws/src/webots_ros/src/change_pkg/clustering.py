@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import rospy
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
 from sklearn.datasets import make_blobs
@@ -43,4 +44,5 @@ def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
                 newpoint.append(clustered_centers_angle_average[counter])
                 output.append(newpoint)
                 counter=counter+1
+        rospy.logerr(output)         
         return output
