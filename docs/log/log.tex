@@ -1,5 +1,6 @@
 \documentclass[a4paper]{article}
 
+\usepackage[a4paper, margin=0.5in]{geometry}
 \usepackage{graphicx}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage{color,soul}
@@ -9,6 +10,7 @@
 \usepackage{amsmath, amssymb}
 \usepackage{caption}
 \usepackage{listings}
+\usepackage[italian]{babel}
 
 % figure support
 \usepackage{tikz}
@@ -83,7 +85,7 @@
 	We evalued performance between YOLO V3, TinyYOLO, HoG , HoG + SVG  , HoG + SVG + NMS. Yolo wins because it is 443\% more efficient. Width and not height. Yolo yields much tighter bounding boxes. 
 	
 	\section{Clustering}
-	We decided to lower the dimensionality of our data. We used cilindric coordinates and the feature vector is 2 dimensional.
+	We decided to lower the dimensionality of our data. We used cylindrical coordinates and the feature vector is 2 dimensional.
 	We used the Density-Based Scan with a threshold. The entities not belonging to the cluster are discarded.
 	
 	\section{ROS}
@@ -91,6 +93,70 @@
 	\section{Bugs found in the Webots ROS Controller}
 	Logical values did not allow callbacks.
 	
+
+	\section{Distance calculation}\label{sec:Distance-calculation}
+	The perceived object height is not a reliable indicator of its distance
+	since part of the object may be occluded or not present in the frame.
+	Moreover, some classifiers like the HoG based ones tend to produce ROIs
+	significantly taller than the object.
+	
+	The torso width, on the other hand, is less susceptible to these issues,
+	and does not depend on the pose (e.g. sitting vs standing). We however need
+	to assume a cylindrical torso, introducing some error if the target is not
+	facing the camera.
+
+	The horizontal position of the object relative to the camera can influence
+	its perceived width, shrinking it the further it is from the center of the
+	image.  Assuming that a camera has a FOV of $2\alpha$ and has a distance
+	$d$ from the object, the maximum horizontal distance a point in the image
+	can have from the center of the image plane is $a = d \tan alpha$
+	(Fig.~\ref{fig:error}).
+
+	\begin{figure}[htpb]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./img/linearization_error.pdf}
+		\caption{Error in distance estimate with piecewise circle linearization}
+		\label{fig:error}
+	\end{figure}
+
+	Ignoring the perspective means performing a first order linear
+	approximation and treating the point as if it lies in a circumference
+	centered on the camera with $d$ as its radius. Hence, we consider the point
+	being closer, committing the error shown in Eq.~\ref{eq:max_err}. With a
+	camera FOV of 1 radiant as with the TIAGo this means that the maximum error
+	due to the linearization amounts to a 13.9\% underestimate.
+
+	\begin{equation}
+		\epsilon = 
+		\sqrt{a^2+d^2} - d =
+		\sqrt{(d\tan \theta )^2+d^2}-d =
+		d\left( \sqrt{\frac{1}{\cos ^2 \alpha}}-1 \right) =
+		d \left( \sec \alpha -1 \right) 
+		\label{eq:max_err}
+	\end{equation}
+
+
+	Under these assumptions we can compute the distance of an object as shown in
+	Eq.~\ref{eq:obj_dist}
+
+	\begin{equation}\label{eq:obj_dist}
+		object~distance(m) = 
+		\frac{f(m) \times real~width(m) \times image~width(pixels)}
+			{object~width(pixels) \times sensor~width(m)}
+	\end{equation}
+
+	Since we are using a simulator, there is no camera sensor with a width to
+	plug inside eq.~\ref{eq:obj_dist}. By placing both the robot and an object
+	with known size in known positions and using this data together with pixel
+	measurements in eq.~\ref{sensor_size}, we estimated the virtual sensor size
+	to be used in all following computations.
+
+	\begin{equation}\label{sensor_size}
+		sensor~width(m) = 
+		\frac{f(m) \times real~width(m) \times image~width(pixels)}
+			{object~width(pixels) \times object~distance(m)}
+	\end{equation}
+
 	\newpage
 	% Bibliography
 	\bibliographystyle{unsrt}

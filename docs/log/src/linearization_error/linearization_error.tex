@@ -1,0 +1,43 @@
+\documentclass[]{standalone}
+
+\usepackage{graphicx}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{color,soul}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb}
+\usepackage{caption}
+\usepackage{listings}
+
+% figure support
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage[hidelinks]{hyperref}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+
+		
+		\begin{tikzpicture}
+			\draw (0,0) -- (0,5);
+			\draw (-3.5,5) -- (3,5);
+			\draw (0,0) -- ++ (120:6);
+			\draw (0,0) -- ++ (60:5) arc (60:120:5);
+			\draw[dashed] (0,0) circle[radius=5];
+			\draw (0,0) -- ++ (90:1) arc (90:120:1);
+			\draw (0,0) ++ (60:5) -- ++ (-5,0);
+			\node[anchor=east] (alpha) at(-0.15,1.25) {$\alpha$};
+			\node[anchor=east] (epsilon) at(-2.75,4.6) {$\epsilon$};
+			\node[anchor=east] (d) at (-0.15, 2.5) {$d$};
+			\node[anchor=east] (a) at (-1.25, 5.25) {$a$};
+		\end{tikzpicture}
+		
+		
+\end{document}
