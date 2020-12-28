@@ -7,25 +7,23 @@ import matplotlib.pyplot as plt
 
 class Odometry:
     def __init__(self):
-        self.history=[[0,0]]
+        self.history=[((0,0),0)]
         self.x=0
         self.y=0
         self.theta=0
-        self.distance_traveled = 0
 
     def update_position(self, distance):
-        self.distance_traveled = self.distance_traveled \
-                + np.hypot(distance[0], distance[1])
+        distance_traveled = self.history[0][1] + np.hypot(distance[0], distance[1])
         self.x = self.x + distance[1]*math.cos(math.pi*self.theta/180) - distance[0]*math.sin(math.pi*self.theta/180)
         self.y = self.y + distance[1]*math.sin(math.pi*self.theta/180) + distance[0]*math.cos(math.pi*self.theta/180)
-        self.history.append([self.x, self.y])
+        self.history.insert(0,((self.x, self.y),distance_traveled))
 
     def update_theta(self, theta):
         self.theta = (self.theta + theta) % 360
         self.theta = self.theta if self.theta <= 180 else self.theta -360
 
     def movement_history(self):
-        plt.plot([x for [x,y] in self.history], [y for [x,y] in self.history]) 
+        plt.plot([x for ((x,y),_distance) in self.history], [y for ((x,y),_distance) in self.history]) 
         plt.grid(True)
         plt.show()    
 

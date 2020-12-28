@@ -62,7 +62,12 @@ class Change:
         else:
             rospy.logerr("Invalid head vertical position. It must be {} <= x <= {}. Found {}".format(self.motors.head_vertical.min_position,self.motors.head_vertical.max_position, vertical))     
             
-                
+    def warning(self):
+        self.set_height(self.motors.torso.max_height)
+        for _ in range(3):
+            self.tablet.warning()
+        self.set_height(self.motors.torso.max_height/2)
+
 
     
     def __get_sensor_value(self, topic, device, msg_type):

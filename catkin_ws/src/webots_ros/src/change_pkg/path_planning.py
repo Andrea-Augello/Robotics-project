@@ -80,6 +80,11 @@ class Path_planner:
         return distance < self.SECURITY_DISTANCE   
 
 
+    def exploration_next_step(self):
+        # TODO Exploration mode
+        return (1,0)
+
+
     def bug_next_step(self):
         """ 
         Using the tangent bug method computes the movement direction for
@@ -91,7 +96,6 @@ class Path_planner:
         target_angle = self.__robot.odometry.abs_cartesian_to_polar(self.target)[1]       
         direction = target_angle
         size=len(self.__robot.sensors.lidar.value)
-        # TODO Behaviour scheduling to only use this movement mode when stuck
 
         inf_limit=2
         sup_limit=size-inf_limit
