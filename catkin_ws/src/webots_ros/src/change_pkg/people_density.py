@@ -56,6 +56,13 @@ class GridMap:
         plt.axis("equal")
         plt.show()
 
+    def draw_cluster_map(self,data):
+        mx, my = self.calc_grid_index()
+        max_value = max([max(i_data) for i_data in self.data])
+        plt.pcolor(mx, my, data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
+        plt.axis("equal")
+        plt.show()
+
     def calc_grid_index(self):
         mx, my = np.mgrid[slice(self.min_x - self.xy_resolution / 2.0,
                                 self.max_x + self.xy_resolution / 2.0,
@@ -92,12 +99,33 @@ class GridMap:
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
         return 0.01 + 1/(1+math.hypot((abs(o_distance-p_distance)/2),(angle_diff)/3))
 
+    def find_clusters_2(self):
+        # TODO find a more suitable module for this function
+        """Based on the self.people_coords finds clusters and returns them.
+
+        :returns: Clusters, either as the points in each cluster as a list of
+            lists, or a centroid.
+
+        """
+        threshold = max([max(i_data) for i_data in self.data])
+        threshold *= 0.8
+        cluster_list=[]
+        for i,row in enumerate(self.data):
+            for j,col in enumerate(row):
+                if self.data[i][j]>threshold:
+                    cluster_list.append((i,j))
+        # TODO find reasonable parameters for the Density Based Scan clustering
+        # algorithm
+        self.draw_cluster_map(cluster_list)
+        clusters = clst.clustering(cluster_list, 
+                distance_measure=utils.math_distance,
+                min_samples=2,
+                eps=2.5)
+        return None if len(clusters) == 0 else clusters
 
     def find_clusters(self, polar_coords):
         # TODO find a more suitable module for this function
         """Based on the self.people_coords finds clusters and returns them.
-        This may not be the best place for this function, may move to vision
-        module or a specific "reasoning" object.
 
         :returns: Clusters, either as the points in each cluster as a list of
             lists, or a centroid.

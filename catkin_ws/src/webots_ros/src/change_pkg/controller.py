@@ -5,6 +5,7 @@ import change_pkg.utils as utils
 import itertools
 import numpy as np
 import change_pkg.people_density as people_density
+import matplotlib.pyplot as plt
 
 class Controller:
     def __init__(self, robot):
@@ -39,6 +40,13 @@ class Controller:
         while True or not valid_target:
             if self.exploration_movement():
                 valid_target = self.scan()
+    
+    def print_cluster_centroid(self):
+        cluster_list=self.people_density.find_clusters_2()
+        x=[e[0] for e in cluster_list]
+        y=[e[1] for e in cluster_list]
+        plt.scatter(x,y)
+        plt.show()
 
     def scan(self):
         self.__robot.movement.scan()
@@ -46,7 +54,7 @@ class Controller:
         clusters_target=self.people_density.find_clusters(targets) 
         valid_target = self.path_planner.set_target(clusters_target)
         self.people_density.observation_update(targets)
-        utils.debug(clusters_target)
+        #self.print_cluster_centroid()
         return valid_target
 
     def schedule_movement(self):
