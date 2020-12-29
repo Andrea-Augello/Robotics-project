@@ -33,22 +33,21 @@ class Controller:
             self.set_mode()
         self.__robot.movement.rotate(-self.path_planner.target_angle())  
 
-
     def exploration(self):
         self.scheduler.exploration_mode()
         valid_target = self.scan()
-        while not valid_target:
-            self.exploration_movement()
-            valid_target = self.scan()
-            
+        while True or not valid_target:
+            if self.exploration_movement():
+                valid_target = self.scan()
 
     def scan(self):
         self.__robot.movement.scan()
         targets = self.__robot.vision.locate_targets()
-        valid_target = self.path_planner.set_target(self.people_density.find_clusters(targets))
+        clusters_target=self.people_density.find_clusters(targets) 
+        valid_target = self.path_planner.set_target(clusters_target)
         self.people_density.observation_update(targets)
+        utils.debug(clusters_target)
         return valid_target
-        
 
     def schedule_movement(self):
         mode=self.scheduler.get_mode()
@@ -56,8 +55,6 @@ class Controller:
             self.bug_movement()
         elif mode == 'potential_field':
             self.potential_field_movement()
-
-
 
     def set_mode(self):
         mode=self.scheduler.get_mode()
@@ -107,6 +104,7 @@ class Controller:
         distance,angle = self.path_planner.exploration_next_step()
         self.__robot.movement.rotate(angle)
         self.__robot.movement.move_forward(distance)    
+        return distance > 0 
 
     def potential_field_movement(self):
         angle = self.path_planner.next_step_direction()

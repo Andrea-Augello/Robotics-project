@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.9999065439353442 0.009322843976840042 0.009999398754882672 1.6408895580374419
-  position 0.6610450607018005 34.55168000909428 -0.8089522763039328
+  orientation 0.5776567755050865 0.5771969549958943 0.5771969549958953 4.189249903239788
+  position 0.031002066464054893 35.47116100561525 0.0010617378008106301
 }
 TexturedBackground {
 }
@@ -32,7 +32,7 @@ Pedestrian {
   enableBoundingObject TRUE
 }
 Pedestrian {
-  translation 2.10675 1.27 -1.68566
+  translation 4.63961 1.27 -3.6527
   rotation 0 1 0 -0.5236053071795865
   name "pedestrian(3)"
   shirtColor 0.671351 0 0.652461
@@ -46,8 +46,8 @@ Pedestrian {
   ]
 }
 Pedestrian {
-  translation -2.04 1.27 2.1
-  rotation 0 1 0 -2.8797953071795863
+  translation -4.66027 1.27 7.05799
+  rotation 0 1 0 3.14159
   name "pedestrian(2)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
