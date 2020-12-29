@@ -42,7 +42,6 @@ class GridMap:
         self.normalize_probability()
 
     def normalize_probability(self):
-        utils.loginfo("NORMALIZING PROBABILITIES")
         sump = sum([sum(i_data) for i_data in self.data])
 
         for ix in range(self.x_w):
@@ -50,7 +49,6 @@ class GridMap:
                 self.data[ix][iy] /= sump
 
     def draw_heat_map(self):
-        utils.loginfo("DRAWING HEAT MAP")
         mx, my = self.calc_grid_index()
         max_value = max([max(i_data) for i_data in self.data])
         plt.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
