@@ -29,7 +29,7 @@ def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
 
         # Number of clusters in labels, ignoring noise if present.
         n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-        # 
+         
         clustered_centers_angle_average=[]
         clustered_centers_radius_average=[]
         for k in range(n_clusters_):
