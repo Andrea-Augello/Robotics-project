@@ -123,13 +123,13 @@ class Scheduler:
         self.exploration=True
 
     def bug_mode(self):
-        utils.loginfo("ENTERING BUG MODE")
+        utils.loginfo("BUG MODE")
         self.bug=True
         self.potential_field=False
         self.exploration=False
 
     def potential_field_mode(self):
-        utils.loginfo("ENTERING POTENTIAL FIELD MODE")
+        utils.loginfo("POTENTIAL FIELD MODE")
         self.bug=False
         self.potential_field=True
         self.exploration=False
