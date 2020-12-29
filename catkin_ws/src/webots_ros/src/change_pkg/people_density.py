@@ -56,12 +56,6 @@ class GridMap:
         plt.axis("equal")
         plt.show()
 
-    def draw_cluster_map(self,data):
-        mx, my = self.calc_grid_index()
-        max_value = max([max(i_data) for i_data in self.data])
-        plt.pcolor(mx, my, data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
-        plt.axis("equal")
-        plt.show()
 
     def calc_grid_index(self):
         mx, my = np.mgrid[slice(self.min_x - self.xy_resolution / 2.0,
@@ -113,15 +107,20 @@ class GridMap:
         for i,row in enumerate(self.data):
             for j,col in enumerate(row):
                 if self.data[i][j]>threshold:
-                    cluster_list.append((i,j))
+                    cluster_list.append((self.absolute_x(i),self.absolute_y(j)))
         # TODO find reasonable parameters for the Density Based Scan clustering
         # algorithm
-        self.draw_cluster_map(cluster_list)
         clusters = clst.clustering(cluster_list, 
                 distance_measure=utils.math_distance,
                 min_samples=2,
                 eps=2.5)
         return None if len(clusters) == 0 else clusters
+
+    def absolute_x(self,i):
+        return i-(self.max_x-self.min_x)/2*self.xy_resolution
+
+    def absolute_y(self,i):
+        return i-(self.max_y-self.min_y)/2*self.xy_resolution
 
     def find_clusters(self, polar_coords):
         # TODO find a more suitable module for this function

@@ -54,7 +54,7 @@ class Controller:
         clusters_target=self.people_density.find_clusters(targets) 
         valid_target = self.path_planner.set_target(clusters_target)
         self.people_density.observation_update(targets)
-        #self.print_cluster_centroid()
+        self.print_cluster_centroid()
         return valid_target
 
     def schedule_movement(self):
