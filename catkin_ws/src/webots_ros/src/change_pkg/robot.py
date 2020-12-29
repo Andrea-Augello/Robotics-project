@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import rospy
+import change_pkg.utils as utils
 import change_pkg.motors as motors
 import change_pkg.sensors as sensors
 import change_pkg.tablet as tablet
@@ -30,7 +31,7 @@ class Change:
         return self.name
 
     def print_info(self):
-        rospy.logwarn("Current position   "+str(self.odometry))
+        utils.loginfo("Current position   "+str(self.odometry))
 
     def init(self):
         rospy.init_node(self.name, anonymous=True)
@@ -55,12 +56,12 @@ class Change:
             self.motors.head_horizontal.set_position(horizontal)
             self.motors.head_horizontal.set_velocity(0.5)
         else:
-            rospy.logerr("Invalid head horizontal position. It must be {} <= x <= {}. Found {}".format(self.motors.head_horizontal.min_position,self.motors.head_horizontal.max_position, horizontal))    
+            utils.logerr("Invalid head horizontal position. It must be {} <= x <= {}. Found {}".format(self.motors.head_horizontal.min_position,self.motors.head_horizontal.max_position, horizontal))    
         if self.motors.head_vertical.min_position <= vertical <= self.motors.head_vertical.max_position:
             self.motors.head_vertical.set_position(vertical)
             self.motors.head_vertical.set_velocity(0.5)
         else:
-            rospy.logerr("Invalid head vertical position. It must be {} <= x <= {}. Found {}".format(self.motors.head_vertical.min_position,self.motors.head_vertical.max_position, vertical))     
+            utils.logerr("Invalid head vertical position. It must be {} <= x <= {}. Found {}".format(self.motors.head_vertical.min_position,self.motors.head_vertical.max_position, vertical))     
             
     def warning(self):
         self.set_height(self.motors.torso.max_height)
@@ -74,7 +75,7 @@ class Change:
         try:
             return rospy.Subscriber(topic, msg_type, eval("self.sensors.%s.%s_callback"%(self.sensors.get_device_name(device),device)))
         except AttributeError as e:
-            rospy.logerr(str(e))
+            utils.logerr(str(e))
         
 
     def __get_sensors_values(self):
@@ -95,7 +96,7 @@ class Change:
             rospy.loginfo("Service %s called" % service_string)
             return response
         except rospy.ServiceException as e:
-            rospy.logerr("Service call failed: %s" % e)                           
+            utils.logerr("Service call failed: %s" % e)                           
 
 
 

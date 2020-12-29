@@ -4,7 +4,6 @@ import change_pkg.path_planning as path_planner
 import change_pkg.utils as utils
 import itertools
 import numpy as np
-import rospy
 import change_pkg.people_density as pd
 
 class Controller:
@@ -38,15 +37,11 @@ class Controller:
     def exploration(self):
         self.scheduler.exploration_mode()
         valid_target = False
-        #while not valid_target:
-        for i in range(2):
-            if i:
-                self.exploration_movement()
+        while not valid_target:
+            self.exploration_movement()
             self.__robot.movement.scan()
             targets = self.__robot.vision.locate_targets()
-            self.__log_loop("Looking for valid target")
             valid_target = self.path_planner.set_target(self.path_planner.find_clusters(targets))
-            self.__log_loop("Updating observation")
             self.pd.observation_update(targets)
 
         
@@ -83,20 +78,20 @@ class Controller:
                 if utils.distance(point_list[i],point_list[j])<self.MOVEMENT_LOOP_PRECISION:
                     position_loop=True
                     self.loop_point=point_list[i]
-                    self.__log_loop("MOVING LOOP DETECTED")
+                    utils.loginfo("MOVING LOOP DETECTED")
                     break
         """
         for point_couple in itertools.combinations(point_list,2):
             if utils.distance(point_couple[0],point_couple[1])<self.MOVEMENT_LOOP_PRECISION:
                 position_loop=True
                 self.loop_point=point_couple[0]
-                self.__log_loop("MOVING LOOP DETECTED")
+                utils.loginfo("MOVING LOOP DETECTED")
                 break
         """
         rotation_loop = self.__robot.odometry.history[0][1] - self.__robot.odometry.history[lookback_window_size-1][1]  < self.ROTATION_LOOP_PRECISION
         if rotation_loop:
             self.loop_point= self.__robot.odometry.history[0][0]  
-            self.__log_loop("ROTATION LOOP DETECTED")
+            utils.loginfo("ROTATION LOOP DETECTED")
         return rotation_loop or position_loop
 
     def bug_movement(self):
@@ -114,10 +109,7 @@ class Controller:
         self.__robot.movement.rotate(angle)
         distance=self.path_planner.movement_distance()
         self.__robot.movement.move_forward(distance)
-
-    def __log_loop(self, text):
-        #rospy.loginfo(text)
-        rospy.logwarn(text)    
+  
 
 
 class Scheduler:
@@ -127,19 +119,19 @@ class Scheduler:
         self.exploration=True
 
     def bug_mode(self):
-        self.__log_mod("ENTERING BUG MODE")
+        utils.loginfo("ENTERING BUG MODE")
         self.bug=True
         self.potential_field=False
         self.exploration=False
 
     def potential_field_mode(self):
-        self.__log_mod("ENTERING POTENTIAL FIELD MODE")
+        utils.loginfo("ENTERING POTENTIAL FIELD MODE")
         self.bug=False
         self.potential_field=True
         self.exploration=False
 
     def exploration_mode(self):
-        self.__log_mod("ENTERING EXPLORATION MODE")
+        utils.loginfo("ENTERING EXPLORATION MODE")
         self.bug=False
         self.potential_field=False
         self.exploration=True
@@ -148,7 +140,3 @@ class Scheduler:
         for mode, flag in vars(self).items():
             if flag:
                 return mode
-
-    def __log_mod(self, text):
-        #rospy.loginfo(text)
-        rospy.logwarn(text)

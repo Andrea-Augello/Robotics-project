@@ -1,4 +1,3 @@
-import rospy
 import cv2
 import math
 import change_pkg.object_recognition as od
@@ -123,7 +122,6 @@ class Vision:
             for c in coords:
                 x.append(c[0]*math.sin(math.pi*c[1]/180))
                 y.append(c[0]*math.cos(math.pi*c[1]/180))
-                rospy.logerr(c)
             plt.plot(x, y, "r.") 
             plt.grid(True)
             plt.show()    

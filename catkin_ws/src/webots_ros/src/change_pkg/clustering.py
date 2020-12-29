@@ -1,6 +1,5 @@
 import numpy as np
 import math
-import rospy
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
 from sklearn.datasets import make_blobs

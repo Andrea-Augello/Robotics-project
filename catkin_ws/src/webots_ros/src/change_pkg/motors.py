@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import rospy
-
 
 class Motors:
     def __init__(self,robot):     

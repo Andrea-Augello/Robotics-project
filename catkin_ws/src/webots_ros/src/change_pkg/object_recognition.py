@@ -1,7 +1,5 @@
 import numpy as np
 from imutils.object_detection import non_max_suppression
-import rospy
-import argparse
 import cv2
 import os
 import time

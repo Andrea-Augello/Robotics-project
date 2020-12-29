@@ -1,6 +1,6 @@
 import copy
 import math
-import rospy
+import change_pkg.utils as utils
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -42,7 +42,7 @@ class GridMap:
         self.normalize_probability()
 
     def normalize_probability(self):
-        rospy.logerr("NORMALIZING PROBABILITIES")
+        utils.loginfo("NORMALIZING PROBABILITIES")
         sump = sum([sum(i_data) for i_data in self.data])
 
         for ix in range(self.x_w):
@@ -50,7 +50,7 @@ class GridMap:
                 self.data[ix][iy] /= sump
 
     def draw_heat_map(self):
-        rospy.logerr("DRAWING HEAT MAP")
+        utils.loginfo("DRAWING HEAT MAP")
         mx, my = self.calc_grid_index()
         max_value = max([max(i_data) for i_data in self.data])
         plt.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
@@ -68,7 +68,7 @@ class GridMap:
         return mx, my
 
     def observation_update(self, z, std=1):
-        rospy.logerr("UPDATING MAP")
+        utils.loginfo("UPDATING MAP")
         for ix in range(self.x_w):
             for iy in range(self.y_w):
                 prob = 0

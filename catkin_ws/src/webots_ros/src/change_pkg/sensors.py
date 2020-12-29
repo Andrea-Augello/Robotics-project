@@ -3,7 +3,6 @@ import math
 from scipy.spatial.transform import Rotation
 import numpy as np
 import cv2
-import rospy
 
 class Sensors:
     def __init__(self, robot):
