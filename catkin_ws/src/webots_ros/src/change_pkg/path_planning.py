@@ -1,7 +1,6 @@
 import math
 from change_pkg.vision import *
 import numpy as np
-import change_pkg.clustering as clst
 
 class Path_planner:
 
@@ -27,27 +26,6 @@ class Path_planner:
         self.LIDAR_THRESHOLD = 0.15 # Percentage of lidar FOV to discard, this
         # prevents steering to avoid objects that do not represent an obstacle
         # if the current trajectory is mantained
-
-
-
-    def find_clusters(self, polar_coords):
-        # TODO find a more suitable module for this function
-        """Based on the self.people_coords finds clusters and returns them.
-        This may not be the best place for this function, may move to vision
-        module or a specific "reasoning" object.
-
-        :returns: Clusters, either as the points in each cluster as a list of
-            lists, or a centroid.
-
-        """
-        cartesian_coords = [ self.__robot.odometry.polar_to_abs_cartesian(p) for p in polar_coords ]
-        # TODO find reasonable parameters for the Density Based Scan clustering
-        # algorithm
-        clusters = clst.clustering(cartesian_coords, 
-                distance_measure=clst.euclid_distance,
-                min_samples=2,
-                eps=2.5)
-        return None if len(clusters) == 0 else clusters[0]
 
 
     def set_target(self, target):

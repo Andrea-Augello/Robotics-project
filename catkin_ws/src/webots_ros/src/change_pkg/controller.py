@@ -4,11 +4,11 @@ import change_pkg.path_planning as path_planner
 import change_pkg.utils as utils
 import itertools
 import numpy as np
-import change_pkg.people_density as pd
+import change_pkg.people_density as people_density
 
 class Controller:
     def __init__(self, robot):
-        self.pd = pd.GridMap(robot)
+        self.people_density = people_density.GridMap(robot)
         self.__robot=robot
         self.scheduler=Scheduler()
         self.path_planner = path_planner.Path_planner(robot)
@@ -45,8 +45,8 @@ class Controller:
     def scan(self):
         self.__robot.movement.scan()
         targets = self.__robot.vision.locate_targets()
-        valid_target = self.path_planner.set_target(self.path_planner.find_clusters(targets))
-        self.pd.observation_update(targets)
+        valid_target = self.path_planner.set_target(self.people_density.find_clusters(targets))
+        self.people_density.observation_update(targets)
         return valid_target
         
 

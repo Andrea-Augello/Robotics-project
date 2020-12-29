@@ -26,18 +26,18 @@ def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
         # Number of clusters in labels, ignoring noise if present.
         n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
          
-        clustered_centers_angle_average=[]
-        clustered_centers_radius_average=[]
+        clustered_centers_angle_median=[]
+        clustered_centers_radius_median=[]
         for k in range(n_clusters_):
                 my_members = labels == k
-                clustered_centers_angle_average.append(np.median(X[my_members,1]))
-                clustered_centers_radius_average.append(np.median(X[my_members,0]))
+                clustered_centers_angle_median.append(np.median(X[my_members,1]))
+                clustered_centers_radius_median.append(np.median(X[my_members,0]))
         output=[]
         counter=0
-        for point in clustered_centers_radius_average:
+        for point in clustered_centers_radius_median:
                 newpoint=[]
                 newpoint.append(point)
-                newpoint.append(clustered_centers_angle_average[counter])
+                newpoint.append(clustered_centers_angle_median[counter])
                 output.append(newpoint)
                 counter+=1      
         return output

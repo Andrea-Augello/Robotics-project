@@ -1,6 +1,7 @@
 import copy
 import math
 import change_pkg.utils as utils
+import change_pkg.clustering as clst
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -90,3 +91,23 @@ class GridMap:
         # var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
         return 0.01 + 1/(1+math.hypot((abs(o_distance-p_distance)/2),(angle_diff)/3))
+
+
+    def find_clusters(self, polar_coords):
+        # TODO find a more suitable module for this function
+        """Based on the self.people_coords finds clusters and returns them.
+        This may not be the best place for this function, may move to vision
+        module or a specific "reasoning" object.
+
+        :returns: Clusters, either as the points in each cluster as a list of
+            lists, or a centroid.
+
+        """
+        cartesian_coords = [ self.__robot.odometry.polar_to_abs_cartesian(p) for p in polar_coords ]
+        # TODO find reasonable parameters for the Density Based Scan clustering
+        # algorithm
+        clusters = clst.clustering(cartesian_coords, 
+                distance_measure=clst.euclid_distance,
+                min_samples=2,
+                eps=2.5)
+        return None if len(clusters) == 0 else clusters[0]
