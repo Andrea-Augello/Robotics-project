@@ -41,20 +41,12 @@ class Controller:
             if self.exploration_movement():
                 valid_target = self.scan()
     
-    def print_cluster_centroid(self):
-        cluster_list=self.people_density.find_clusters_2()
-        x=[e[0] for e in cluster_list]
-        y=[e[1] for e in cluster_list]
-        plt.scatter(x,y)
-        plt.show()
-
     def scan(self):
         self.__robot.movement.scan()
         targets = self.__robot.vision.locate_targets()
         clusters_target=self.people_density.find_clusters(targets) 
         valid_target = self.path_planner.set_target(clusters_target)
         self.people_density.observation_update(targets)
-        self.print_cluster_centroid()
         return valid_target
 
     def schedule_movement(self):

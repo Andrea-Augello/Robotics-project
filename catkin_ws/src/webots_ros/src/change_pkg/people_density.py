@@ -56,6 +56,15 @@ class GridMap:
         plt.axis("equal")
         plt.show()
 
+    def print_cluster_centroid(self,cluster_list,clusters):
+        x_1=[e[0] for e in cluster_list]
+        y_1=[e[1] for e in cluster_list]
+        x_2=[e[0] for e in clusters]
+        y_2=[e[1] for e in clusters]
+        plt.subplot(1,2,'ro')
+        plt.xlim([self.min_x, self.max_x])
+        plt.ylim([self.min_y, self.min_y])
+        plt.show()
 
     def calc_grid_index(self):
         mx, my = np.mgrid[slice(self.min_x - self.xy_resolution / 2.0,
@@ -107,20 +116,21 @@ class GridMap:
         for i,row in enumerate(self.data):
             for j,col in enumerate(row):
                 if self.data[i][j]>threshold:
-                    cluster_list.append((self.absolute_x(i),self.absolute_y(j)))
+                    cluster_list.append((self.resize_x(i),self.resize_y(j)))
         # TODO find reasonable parameters for the Density Based Scan clustering
         # algorithm
         clusters = clst.clustering(cluster_list, 
                 distance_measure=utils.math_distance,
                 min_samples=2,
                 eps=2.5)
+        self.print_cluster_centroid(cluster_list, clusters)
         return None if len(clusters) == 0 else clusters
 
-    def absolute_x(self,i):
-        return i-(self.max_x-self.min_x)/2*self.xy_resolution
+    def resize_x(self,i):
+        return (i*self.xy_resolution)+self.min_x
 
-    def absolute_y(self,i):
-        return i-(self.max_y-self.min_y)/2*self.xy_resolution
+    def resize_y(self,i):
+        return (i*self.xy_resolution)-self.min_y
 
     def find_clusters(self, polar_coords):
         # TODO find a more suitable module for this function
