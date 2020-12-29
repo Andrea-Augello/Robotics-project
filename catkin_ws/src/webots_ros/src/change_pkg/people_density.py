@@ -61,7 +61,18 @@ class GridMap:
         y_1=[e[1] for e in cluster_list]
         x_2=[e[0] for e in clusters]
         y_2=[e[1] for e in clusters]
-        plt.subplot(1,2,'ro')
+
+        fig, (ax1, ax2) = plt.subplots(2, 1)
+        fig.suptitle('People recognition')
+
+        ax1.plot(x_1, y_1, 'ro')
+        ax1.set_ylabel('Position')
+
+        ax2.plot(x_2, y_2, 'ro')
+        ax2.set_xlabel('Position')
+        ax2.set_ylabel('Position')
+
+
         plt.xlim([self.min_x, self.max_x])
         plt.ylim([self.min_y, self.min_y])
         plt.show()
