@@ -88,7 +88,7 @@ class GridMap:
         angle_diff = (o_angle-p_angle)%360
         angle_diff = angle_diff if angle_diff < 180 else 360-angle_diff
         # likelihood
-        # var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
+        #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
         return 0.01 + 1/(1+math.hypot((abs(o_distance-p_distance)/2),(angle_diff)/3))
 
@@ -107,7 +107,7 @@ class GridMap:
         # TODO find reasonable parameters for the Density Based Scan clustering
         # algorithm
         clusters = clst.clustering(cartesian_coords, 
-                distance_measure=utils.distance,
+                distance_measure=utils.math_distance,
                 min_samples=2,
                 eps=2.5)
         return None if len(clusters) == 0 else clusters[0]
