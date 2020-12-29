@@ -107,7 +107,7 @@ class GridMap:
         # TODO find reasonable parameters for the Density Based Scan clustering
         # algorithm
         clusters = clst.clustering(cartesian_coords, 
-                distance_measure=clst.euclid_distance,
+                distance_measure=utils.distance,
                 min_samples=2,
                 eps=2.5)
         return None if len(clusters) == 0 else clusters[0]
