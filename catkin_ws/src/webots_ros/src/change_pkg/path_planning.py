@@ -25,7 +25,7 @@ class Path_planner:
         self.SECURITY_DISTANCE = 2.0
         self.MAX_DEVIATION = 45
         self.MIN_EXPLORATION_STEP = 1
-        self.LIDAR_THRESHOLD = 0.2 # Percentage of lidar FOV to discard, this
+        self.LIDAR_THRESHOLD = 0.15 # Percentage of lidar FOV to discard, this
         # prevents steering to avoid objects that do not represent an obstacle
         # if the current trajectory is mantained
 

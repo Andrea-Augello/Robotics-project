@@ -5,9 +5,11 @@ import change_pkg.utils as utils
 import itertools
 import numpy as np
 import rospy
+import change_pkg.people_density as pd
 
 class Controller:
     def __init__(self, robot):
+        self.pd = pd.GridMap(robot)
         self.__robot=robot
         self.scheduler=Scheduler()
         self.path_planner = path_planner.Path_planner(robot)
@@ -36,10 +38,16 @@ class Controller:
     def exploration(self):
         self.scheduler.exploration_mode()
         valid_target = False
-        while not valid_target:
-            self.exploration_movement()
+        #while not valid_target:
+        for i in range(2):
+            if i:
+                self.exploration_movement()
             self.__robot.movement.scan()
-            valid_target = self.path_planner.set_target(self.path_planner.find_clusters(self.__robot.vision.locate_targets()))
+            targets = self.__robot.vision.locate_targets()
+            self.__log_loop("Looking for valid target")
+            valid_target = self.path_planner.set_target(self.path_planner.find_clusters(targets))
+            self.__log_loop("Updating observation")
+            self.pd.observation_update(targets)
 
         
 
