@@ -1,11 +1,10 @@
-import pfilter
+import pfilter 
+from pfilter import ParticleFilter, gaussian_noise, squared_error, independent_sample
 import numpy as np
 from scipy.stats import norm, gamma, uniform 
 # testing only
 import skimage.draw
 import cv2
-from scipy.stats import norm, gamma, uniform 
-from pfilter import ParticleFilter, gaussian_noise, squared_error, independent_sample
 
 
 def blob(x):
