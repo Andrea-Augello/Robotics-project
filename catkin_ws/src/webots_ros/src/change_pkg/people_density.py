@@ -141,7 +141,6 @@ class GridMap:
         return (i*self.xy_resolution)-self.min_y
 
     def find_clusters(self, polar_coords):
-        # TODO find a more suitable module for this function
         """Based on the self.people_coords finds clusters and returns them.
 
         :returns: Clusters, either as the points in each cluster as a list of
@@ -149,8 +148,6 @@ class GridMap:
 
         """
         cartesian_coords = [ self.__robot.odometry.polar_to_abs_cartesian(p) for p in polar_coords ]
-        # TODO find reasonable parameters for the Density Based Scan clustering
-        # algorithm
         clusters = clst.clustering(cartesian_coords, 
                 distance_measure=utils.math_distance,
                 min_samples=2,
