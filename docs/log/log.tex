@@ -68,16 +68,19 @@
 	\section{TIAGo Iron} 
 	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron} \cite{tiagoiron} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
 	Abbiamo ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello base del \textbf{TIAGo} disponibile in Webots.
-	Inolte è stato necessario contattare gli sviluppatori di Webots per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto il modello Webots non corrisponde perfettamente alle specifiche indicate nel datasheet \cite{Tiago IRON datasheet}. Le ruote del modello hanno raggio di 200mm. \newline
-	\newline Abbiamo inoltre ritenuto opportuno modificare l'IMU(inertial measurement unit) per raggiungere l'obbiettivo proposto. L'IMU utilizzata ha 6 gradi di libertà e consiste delle seguenti componenti:
+	Inolte è stato necessario contattare gli sviluppatori di Webots per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto il modello Webots non corrisponde perfettamente alle specifiche indicate nel datasheet \cite{Tiago IRON datasheet}. Le ruote del modello hanno raggio di 200mm. 
+	
+    L'IMU utilizzata ha 6 gradi di libertà ed è composta delle seguenti componenti:
 	\begin{enumerate}
 		\item giroscopio;	
 		\item accelerometro;
 	\end{enumerate}
-	Abbiamo ritenuto non necessario usare il \textbf{magnetometro} in quanto in uno scenario reale sarebbe stato soggetto ad interferenze (significativamente più di un giroscopio), specialmente in un ambiente con molti oggetti metallici (quale potenzialmente lo scenario di utilizzo del nostro robot).
+	Abbiamo ritenuto non necessario aggiungere il \textbf{magnetometro} in quanto in uno scenario reale sarebbe stato soggetto ad interferenze (significativamente più di un giroscopio), specialmente in un ambiente con molti oggetti metallici (quale potenzialmente lo scenario di utilizzo del nostro robot).
 
-	\section{Posizionamento}
-	Per ottenere l'angolo di rotazione ci basiamo sui dati ottenuti dal giroscopio, il quale misura il moto rotazionale fornendo una velocità angolare. Per ottenere l'angolo di rotazione effettuiamo quindi un'integrazione discreta. Per quanto riguarda lo spostamento lineare utilizziamo l'accelerometro. Al segnale dell'accelerometro viene applicato un integrale doppio.
+	\section{Modello del moto e posizionamento}
+	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per ottenere l'angolo di rotazione ci basiamo sui dati ottenuti dal giroscopio, il quale misura il moto rotazionale fornendo una velocità angolare. Per ottenere l'angolo di rotazione effettuiamo quindi un'integrazione discreta dei campioni con interpolazione lineare del primo ordine.
+	Per effettuare lo spostamento lineare utilizziamo il controllore PID delle ruote fornito da Webots, che richiede l'angolo di rotazione desiderato.
+	A causa di possibili imprecisioni calcoliamo la stima dello spostamento lineare utilizzando l'accelerometro. Al segnale dell'accelerometro viene applicato un integrale doppio per ottenere lo spostamento lineare.
 	
 	\section{Projection Matrix}
 	\cite{OpenGL}
