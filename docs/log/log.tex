@@ -54,7 +54,7 @@
 	
 	\begin{itemize}
 		\item opencv 4.x, una libreria per la computer vision, usata per operazioni di segmentazione \cite{opencv};
-		\item imutils, che include funzioni per semplici operazioni di image processing quali traslazioni, rotazioni, ridimensionamento \cite{imutils};
+		\item imutils, che include funzioni per semplici operazioni di image processing quali traslazioni, rotazioni, ridimensionamento. Utilizzato inoltre per effettuare Non Maxima Suppression(NMS) \cite{imutils};
 		\item sklearn, una libreria per il machine learning comprendente algoritmi di clustering quali DBSCAN \cite{scikit};
 		\item numpy, una libreria che fornisce supporto per array multidimensionali, matrici ed operazioni matematiche per lavorare su detti array \cite{numpy};
 		\item matplotlib, una libreria per creare visualizzazioni di dati (statiche, dinamiche, interattive) \cite{matplotlib};
@@ -65,21 +65,17 @@
 	L'obbiettivo del robot è di \textbf{evitare assembramenti in ambienti indoor}. \newline
 	Nella dimostrazione presentata il nostro robot rileva le persone nella stanza e individua i possibili assembramenti. In seguito alla fase di rilevazione si sposterà verso l'assembramento evitando gli ostacoli e, arrivato, esorterà le persone al rispetto del distanziamento sociale.
 	
-	\section{Tiago Iron} 
-	Il
-	
-	
-	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm. The model is a modular mobile platform that allows human-robot interaction.\newline
-	We added a \textbf{speaker} and a \textbf{display} with a corresponding support solid to the base TIAGo model available in Webots.
-	We also had to ask the Webots developers for the precise size of the \textbf{wheels} since the model does not exactly match the specifications given in the data TIAGo datasheet\cite{Tiago IRON datasheet} and we discovered that they are 200mm.
-	\newline We also decided to modify the IMU in order to best fit our goals and use an IMU with 6 degrees of freedom.
-	The IMU consists of the following components:
-		\begin{enumerate}
-			\item gyro;	
-			\item accelerometer;
-		\end{enumerate}
-	We decided to \textbf{not use the compass} because in a real scenario it would have been subject to various degrees of interference (significantly more so than a gyro), especially in an environment with many metal objects.
-	
+	\section{TIAGo Iron} 
+	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
+	Abbiamo ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello base del \textbf{TIAGo} disponibile in Webots.
+	Inolte è stato necessario contattare gli sviluppatori di Webots per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto il modello Webots non corrisponde perfettamente alle specifiche indicate nel datasheet \cite{Tiago IRON datasheet}. Le ruote del modello hanno raggio di 200mm. \newline
+	\newline Abbiamo inoltre ritenuto opportuno modificare l'IMU(inertial measurement unit) per raggiungere l'obbiettivo proposto. L'IMU utilizzata ha 6 gradi di libertà e consiste delle seguenti componenti:
+	\begin{enumerate}
+		\item giroscopio;	
+		\item accelerometro;
+	\end{enumerate}
+	Abbiamo ritenuto non necessario usare il \textbf{magnetometro} in quanto in uno scenario reale sarebbe stato soggetto ad interferenze (significativamente più di un giroscopio), specialmente in un ambiente con molti oggetti metallici (quale potenzialmente lo scenario di utilizzo del nostro robot).
+
 	\section{Positioning}
 	In order to obtain the linear motion from the IMU a double integral is applied to the signal. The mathematical reasoning behind such approach is to remember that acceleration is the rate of change of the velocity of an object. At the same time, the velocity is the rate of change of the position of that same object. Since integration is the opposite of the derivative, if we know the object's acceleration we can get the position through double integration.
 	
