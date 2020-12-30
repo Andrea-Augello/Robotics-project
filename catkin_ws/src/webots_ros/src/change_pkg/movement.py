@@ -132,6 +132,10 @@ class Movement:
         lidar_position=math.floor(len(self.__robot.sensors.lidar.value)/2)
         while(abs(right_wheel_target-self.__robot.sensors.right_wheel.value)>precision\
                 and abs(left_wheel_target-self.__robot.sensors.left_wheel.value)>precision\
+                and min([self.__robot.sensors.lidar.value[lidar_position-4][0],
+                    self.__robot.sensors.lidar.value[lidar_position-3][0],
+                    self.__robot.sensors.lidar.value[lidar_position+2][0],
+                    self.__robot.sensors.lidar.value[lidar_position+3][0]])>self.SECURITY_DISTANCE*0.66 \
                 and min([self.__robot.sensors.lidar.value[lidar_position-2][0],
                     self.__robot.sensors.lidar.value[lidar_position-1][0],
                     self.__robot.sensors.lidar.value[lidar_position][0],
