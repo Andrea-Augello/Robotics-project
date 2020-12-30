@@ -18,7 +18,7 @@ class Controller:
         self.MOVEMENT_LOOP_PRECISION = 0.01
         self.ROTATION_LOOP_PRECISION = 0.1
         self.ESCAPING_DISTANCE = 2
-        self.TARGET_DISTANCE = 0.5
+        self.TARGET_DISTANCE = 1
 
     def start(self):
         while(True):
@@ -29,11 +29,19 @@ class Controller:
 
     def go_to_gathering(self):
         self.scheduler.potential_field_mode()
-        while self.path_planner.target_distance() > self.TARGET_DISTANCE:
+        while not self.is_arrived():
             #self.people_density.reset()
             self.schedule_movement()
             self.set_mode()
         # self.__robot.movement.rotate(-self.path_planner.target_angle())  
+
+
+    def is_arrived(self):
+        """
+        :returns: True if the robot is near the cluster, False otherwise
+
+        """
+        return self.path_planner.target_distance() < max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)
 
     def exploration(self):
         self.scheduler.exploration_mode()
@@ -41,6 +49,7 @@ class Controller:
         while not valid_target:
             if self.exploration_movement():
                 valid_target = self.scan()
+        utils.loginfo("Target: {} - Distance allowed: {}".format(self.path_planner.target, max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)))        
     
     def scan(self):
         self.__robot.movement.scan()

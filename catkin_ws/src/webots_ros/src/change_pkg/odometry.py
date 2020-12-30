@@ -11,6 +11,9 @@ class Odometry:
         self.history=[((self.x,self.y),0)]
         self.theta=0
 
+    def get_position(self):
+        return (self.x,self.y)    
+
     def update_position(self, distance):
         distance_traveled = self.history[0][1] + np.hypot(distance[0], distance[1])
         self.x = self.x + distance[1]*math.cos(math.pi*self.theta/180) - distance[0]*math.sin(math.pi*self.theta/180)
