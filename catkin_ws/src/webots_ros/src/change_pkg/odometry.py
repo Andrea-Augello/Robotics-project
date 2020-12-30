@@ -22,7 +22,8 @@ class Odometry:
         self.theta = self.theta if self.theta <= 180 else self.theta -360
 
     def movement_history(self):
-        plt.plot([x for ((x,y),_distance) in self.history], [y for ((x,y),_distance) in self.history]) 
+        plt.plot([x for ((x,y),_distance) in self.history], [y for ((x,y),_distance) in self.history])
+        plt.axis("equal") 
         plt.grid(True)
         plt.show()    
 
