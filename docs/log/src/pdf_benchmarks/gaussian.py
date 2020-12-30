@@ -9,5 +9,5 @@ for _ in range(int(sys.argv[2])):
         var = multivariate_normal(mean=[0,0], cov=[[2,0],[0,10]])
         a=(var.pdf([5,(0-3)%360]))
     else:
-        a=0.01 + 1/(1+math.hypot((abs(0-5)/2),(3)/3))
+        a=0.01 + 1/(1+math.hypot((abs(0-5)/2),(3)/3)**2)
     

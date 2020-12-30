@@ -24,7 +24,7 @@ class Controller:
         while(True):
             self.exploration()
             self.go_to_gathering()
-            # self.__robot.warning()
+            self.__robot.warning()
             self.__robot.odometry.movement_history()
 
     def go_to_gathering(self):

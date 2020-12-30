@@ -123,7 +123,7 @@ class GridMap:
         # likelihood
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
-        return 0.01 + 1/(1+math.hypot((abs(o_distance-p_distance)/2),(angle_diff)/3))
+        return 0.01 + 1/(1+math.hypot((abs(o_distance-p_distance)/2),(angle_diff)/3)**2)
 
 
 
