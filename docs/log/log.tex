@@ -44,19 +44,21 @@
 	\end{tabular}
 
 	\section{Nome}\label{sec:Name}
-	Il team ha scelto il nome \textbf{Change} in onore di \textbf{Chang'e 4} \cite{change4}, la missione parte della seconda fase del programma cinese di esplorazione lunare, durante il quale si è raggiunto il primo atterraggio morbido sulla faccia nascosta della luna. 
+	Il team ha scelto il nome \textbf{Change} in onore di \textbf{Chang'e 4} \cite{change4}, la missione parte della seconda fase del programma cinese di esplorazione lunare, durante il quale è andato a buon fine il primo atterraggio morbido sulla faccia nascosta della luna. 
 
 	\section{Ambiente}\label{sec:Libraries}
-	Abbiamo considerato opportuno approfondire il package \textbf{webots\_ros} \cite{webotsRos} al fine di raggiungere una comprensione più profonda sulle metodologie per interfacciare i nodi ROS con il controller ROS standard per Webots. Inoltre è risultato necessario approfondire la documentazione ROS \cite{rosTutorial} al fine di installare e configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali relativi ai nodi e topics ROS. Infone abbiamo impostato l'interfaccia ROS su Webots seguendo la documentazione cyberbotics rilevante \cite{rosTutorial}.
+	Abbiamo considerato opportuno analizzare e studiare il package \textbf{webots\_ros} \cite{webotsRos} al fine di raggiungere una comprensione più profonda sulle metodologie per interfacciare i nodi ROS con il controller ROS standard per Webots. Inoltre è risultato necessario approfondire la documentazione ROS \cite{rosTutorial} al fine di installare e configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali relativi ai nodi e topics. Infine abbiamo impostato l'interfaccia ROS su Webots seguendo la documentazione cyberbotics rilevante \cite{rosTutorial}.
 	
-	\section{Dependencies}
-	This is a list of the libraries used in our project and a brief explanation of their relevance:
+	\section{Dipendenze}
+	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
+	
 	\begin{itemize}
-		\item opencv 4.x, a library aimed at computer vision\cite{opencv};
-		\item imutils, series of convenience functions to make basic image processing functions such as translation, rotation, resizing, skeletonization\cite{imutils};
-		\item sklearn, a machine learning library, featuring various classification, regression and clustering algorithms including support vector machines, random forests, gradient boosting, k-means and DBSCAN\cite{scikit};
-		\item numpy, a library that adds support for large, multi-dimensional arrays and matrices, along with a large collection of high-level mathematical functions to operate on these arrays\cite{numpy};
-		\item matplotlib, a comprehensive library for creating static, animated, and interactive visualizations\cite{matplotlib};
+		\item opencv 4.x, una libreria per la computer vision, usata per operazioni di segmentazione \cite{opencv};
+		\item imutils, che include funzioni per semplici operazioni di image processing quali traslazioni, rotazioni, ridimensionamento \cite{imutils};
+		\item sklearn, una libreria per il machine learning comprendente algoritmi di clustering quali DBSCAN \cite{scikit};
+		\item numpy, una libreria che fornisce supporto per array multidimensionali, matrici ed operazioni matematiche per lavorare su detti array \cite{numpy};
+		\item matplotlib, una libreria per creare visualizzazioni di dati (statiche, dinamiche, interattive) \cite{matplotlib};
+		\item math, una libreria che fornisce funzioni matematiche definite dallo standard C \cite{math}.
 	\end{itemize}
 
 	\section{Task}
@@ -202,6 +204,9 @@
 		\bibitem{matplotlib} 
 		\textit{https://matplotlib.org/}. \newline
 		Matplotlib website.
+		\bibitem{math} 
+		\textit{https://docs.python.org/3/library/math.html}. \newline
+		Python documentation.
 	\end{thebibliography}
 
 \end{document}
