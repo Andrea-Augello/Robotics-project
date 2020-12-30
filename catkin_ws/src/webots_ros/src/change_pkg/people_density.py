@@ -42,6 +42,10 @@ class GridMap:
         self.normalize_probability()
         self.show_map=show_map
 
+    def reset(self):
+        self.data =  [[1.0 for _ in range(self.y_w)]
+                     for _ in range(self.x_w)]
+
     def normalize_probability(self):
         sump = sum([sum(i_data) for i_data in self.data])
 
@@ -114,7 +118,7 @@ class GridMap:
 
         o_distance, o_angle = z[iz]
         p_distance, p_angle = self.__robot.odometry.abs_cartesian_to_polar((x,y))
-        angle_diff = (o_angle-p_angle)%360
+        angle_diff = (-o_angle-p_angle)%360
         angle_diff = angle_diff if angle_diff < 180 else 360-angle_diff
         # likelihood
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
@@ -144,6 +148,8 @@ class GridMap:
         clusters=[]
         for c in contours:
             M = cv2.moments(c)
+            if M['m00'] == 0:
+                continue
             cx = self.resize_x(int(M['m10']/M['m00']))
             cy = self.resize_y(int(M['m01']/M['m00']))
             contour_point=[(self.resize_x(x),self.resize_y(y)) for [[x,y]] in c]
