@@ -4,7 +4,6 @@ import change_pkg.utils as utils
 import change_pkg.clustering as clst
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.ndimage import gaussian_filter
 from scipy.stats import multivariate_normal
 
 
