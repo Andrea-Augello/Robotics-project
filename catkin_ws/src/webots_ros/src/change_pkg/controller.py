@@ -30,9 +30,10 @@ class Controller:
     def go_to_gathering(self):
         self.scheduler.potential_field_mode()
         while self.path_planner.target_distance() > self.TARGET_DISTANCE:
+            #self.people_density.reset()
             self.schedule_movement()
             self.set_mode()
-        self.__robot.movement.rotate(-self.path_planner.target_angle())  
+        # self.__robot.movement.rotate(-self.path_planner.target_angle())  
 
     def exploration(self):
         self.scheduler.exploration_mode()

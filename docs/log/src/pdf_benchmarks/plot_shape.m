@@ -17,5 +17,5 @@ exportgraphics(f, "pdf_shape.pdf", 'BackgroundColor', 'none', 'ContentType', 've
 
 function y = custom(x)
     len = length(x);
-    y   = ones(len)'./(x+1)'*0.8;
+    y   = ones(len)'./(x.^2+1)'*0.8;
 end

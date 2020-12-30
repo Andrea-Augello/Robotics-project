@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 class Odometry:
     def __init__(self):
-        self.x=-2
+        self.x=2
         self.y=-2.55
         self.history=[((self.x,self.y),0)]
         self.theta=0
@@ -39,7 +39,7 @@ class Odometry:
         x = p[0] - self.x
         y = p[1] - self.y
         angle = -180/math.pi*math.atan2(x,y)-self.theta
-        angle = angle if angle > -180 else angle +360
+        angle = angle if angle < 180 else angle -360
         return (np.hypot(x,y), angle)
 
 
