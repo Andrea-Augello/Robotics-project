@@ -84,7 +84,7 @@ class GridMap:
         ax2.scatter(x, y, s=20)
         ax2.scatter(x_contour, y_contour, s=10)
         ax2.set_xlabel('Position (m)')
-        plt.xlim([self.min_x, self.max_x])
+        plt.xlim([ self.max_x,self.min_x])
         plt.ylim([self.min_y, self.max_y])
         plt.show()
 

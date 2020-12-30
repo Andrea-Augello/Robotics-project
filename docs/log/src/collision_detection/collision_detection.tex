@@ -1,0 +1,37 @@
+\documentclass[]{standalone}
+
+\usepackage{graphicx}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{color,soul}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb}
+\usepackage{caption}
+\usepackage{listings}
+
+% figure support
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage[hidelinks]{hyperref}
+
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+	\begin{tikzpicture}[>=stealth]
+		\filldraw[] (0,0) circle[radius=0.27];
+		\draw 
+			($(0,0)+(30:0.2475)$)--($(0,0)+(30:0.5175)$) 
+			arc (30:50:0.5175) -- ($(0,0)+(50:0.765)$)
+			arc (50:70:0.765) -- ($(0,0)+(70:1.02)$)
+			arc (70:110:1.02) -- ($(0,0)+(110:0.765)$)
+			arc (110:130:0.765) -- ($(0,0)+(130:0.5175)$)
+			arc (130:150:0.5175) -- ($(0,0)+(150:0.27)$);
+		\draw[dotted] (0,-0.27) -- (0,1.1);
+	\end{tikzpicture}
+\end{document}

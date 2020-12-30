@@ -113,11 +113,14 @@ class Path_planner:
         tangent_distance = None
         for i in range(len(tangents)):
             new_tangent_distance = (target_angle-tangents[i][1])%360
+            new_tangent_distance =\
+                    new_tangent_distance if new_tangent_distance < 180 \
+                    else abs(new_tangent_distance -360)
             if found_tan == None:
                 found_tan = i
                 tangent_distance = new_tangent_distance
             else:
-                if (tangent_distance < new_tangent_distance ):
+                if (tangent_distance > new_tangent_distance ):
                     tangent_distance = new_tangent_distance
                     found_tan = i
         if found_tan != None :
