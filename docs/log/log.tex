@@ -23,6 +23,9 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{multirow}
 
+% provides the H option
+\usepackage{float}
+
 \pdfsuppresswarningpagegroup=1
 
 \begin{document}
@@ -88,11 +91,27 @@
 	
 	A causa di possibili imprecisioni calcoliamo la stima dello spostamento lineare utilizzando l'accelerometro. Al segnale dell'accelerometro viene applicato un integrale doppio per ottenere lo spostamento lineare.
 	
+	\section{Object recognition}
+	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di \textbf{object recognition}. A tal fine abbiamo valutato le performance di YOLOv3 (You only look once), YOLOv3-tiny, Hog (Histogram of gradients), Hog + SVG (Support Vector Machines) + NMS (Non Maxima suppression).
+	In seguito a vari test su Hog abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicile alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparaemtri parametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3, il quale risulta essere significativamente più efficiente, sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. Ecco un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella seguente, i cui dati provengono dal sito di YOLO \cite{yolo}:
+	
+	\begin{center}
+		\begin{tabular}{ |c|c|c|c| } 
+			\hline
+			Model & mAP & FLOPS & FPS \\
+			\hline
+			\multirow{5}{4em} 							\\
+			 YOLOv3-320    & 51.5  &  38.97  Bn  &  45  \\ 
+			 YOLOv3-416    & 55.3  &  65.86  Bn  &  35  \\ 
+			 YOLOv3-608    & 57.9  &  140.69 Bn  &  20  \\ 
+			 YOLOv3-tiny   & 33.1  &  5.56   Bn  &  220 \\
+			 YOLOv3-spp    & 60.6  &  141.45 Bn  &  20  \\
+			\hline
+		\end{tabular}
+	\end{center}
+
 	\section{Projection Matrix}
 	\cite{OpenGL}
-	
-	\section{Object recognition}
-	We evalued performance between YOLO V3, TinyYOLO, HoG , HoG + SVG  , HoG + SVG + NMS. Yolo wins because it is 443\% more efficient. Width and not height. Yolo yields much tighter bounding boxes. 
 	
 	\section{Clustering}
 	We decided to lower the dimensionality of our data. We used cylindrical coordinates and the feature vector is 2 dimensional.
@@ -216,6 +235,9 @@
 		\bibitem{math} 
 		\textit{https://docs.python.org/3/library/math.html}. \newline
 		Python documentation.
+		\bibitem{yolo} 
+		\textit{https://pjreddie.com/darknet/yolo/}. \newline
+		Yolo website.
 	\end{thebibliography}
 
 \end{document}
