@@ -1,5 +1,6 @@
 import copy
 import math
+import cv2
 import change_pkg.utils as utils
 import change_pkg.clustering as clst
 import matplotlib.pyplot as plt
@@ -59,7 +60,6 @@ class GridMap:
         y=[e[1] for e in clusters]
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
         fig.suptitle('People recognition')
-
         mx, my = self.calc_grid_index()
         max_value = max([max(i_data) for i_data in self.data])
         ax1.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
@@ -92,8 +92,8 @@ class GridMap:
                         z, iz, ix, iy, std)
                 self.data[ix][iy] *= prob
         self.normalize_probability()
-        #self.draw_heat_map()
-        return self.find_clusters_2()
+        #return self.find_clusters_2()
+        return self.find_centroid()
 
     def calc_gaussian_observation_pdf(self, z, iz, ix, iy, std=1):
         # predicted range
@@ -108,6 +108,36 @@ class GridMap:
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
         return 0.01 + 1/(1+math.hypot((abs(o_distance-p_distance)/2),(angle_diff)/3))
+
+
+
+    def find_centroid(self):
+        im = np.array(self.data)
+        im=im[:,:,None]
+
+        # Calculate centroids
+
+        otsu_threshold, thresh = cv2.threshold( im, 0, 1, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_TC89_L1)
+        cv2.drawContours(im, contours, -1, (0,1,0), 3)
+        clusters=[]
+        for c in contours:
+            M = cv2.moments(c)
+            cx = int(M['m10']/M['m00'])
+            cy = int(M['m01']/M['m00'])
+            clusters.append(
+                    {'center':(cx,cy),
+                        'area':M['m00'],
+                        'contour':c})
+            cv2.circle(im, (cx,cy), 2, (0,1,0), 1)
+
+        cv2.imshow('f',im)
+        cv2.waitKey(0)
+
+
+        self.draw_clusters(clusters)
+        return clusters    
+
 
     def find_clusters_2(self):
         # TODO find a more suitable module for this function
