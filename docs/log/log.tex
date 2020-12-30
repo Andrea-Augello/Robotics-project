@@ -79,7 +79,13 @@
 
 	\section{Modello del moto e posizionamento}
 	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per ottenere l'angolo di rotazione ci basiamo sui dati ottenuti dal giroscopio, il quale misura il moto rotazionale fornendo una velocità angolare. Per ottenere l'angolo di rotazione effettuiamo quindi un'integrazione discreta dei campioni con interpolazione lineare del primo ordine.
-	Per effettuare lo spostamento lineare utilizziamo il controllore PID delle ruote fornito da Webots, che richiede l'angolo di rotazione desiderato.
+	Per effettuare lo spostamento lineare utilizziamo il controllore PID (Proporzionale-Integrale-Derivativo) delle ruote fornito da Webots, che richiede l'angolo di rotazione corrente, il diametro delle ruote e fornisce l'angolo di rotazione necessario al fine di ottenere lo spostamento desiderato.
+	\begin{equation}\label{eq:odometry}
+	targetAngle =
+	currentAngle+2\pi\frac    {distance}
+	{2\pi \cdot diameter}
+	\end{equation}
+	
 	A causa di possibili imprecisioni calcoliamo la stima dello spostamento lineare utilizzando l'accelerometro. Al segnale dell'accelerometro viene applicato un integrale doppio per ottenere lo spostamento lineare.
 	
 	\section{Projection Matrix}
