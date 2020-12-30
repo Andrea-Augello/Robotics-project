@@ -1,0 +1,15 @@
+digraph G {
+    start [shape=Mdiamond, width=1];
+    b [label="Tangent\n Bug", shape=circle, width=1];
+    e [label="Explore", shape=circle, width=1];
+    p [label="Potential\n field", shape=circle, width=1];
+    s [label="Scan", shape=circle, width=1];
+
+    start -> s;
+    s->e [label="No target\nfound"];
+    e->s;
+    s->p [label="Valid target\nfound"];
+    p->s [label="Target\n reached"];
+    p->b [label="Stuck in\na loop"];
+    b->p;
+}
