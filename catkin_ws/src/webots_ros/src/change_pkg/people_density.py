@@ -55,22 +55,20 @@ class GridMap:
         plt.axis("equal")
         plt.show()
 
-    def print_cluster_centroid(self,cluster_list,clusters):
-        x_1=[e[0] for e in cluster_list]
-        y_1=[e[1] for e in cluster_list]
-        x_2=[e[0] for e in clusters]
-        y_2=[e[1] for e in clusters]
-        fig, (ax1, ax2) = plt.subplots(2, 1)
+    def draw_clusters(self,clusters):
+        x=[e[0] for e in clusters]
+        y=[e[1] for e in clusters]
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
         fig.suptitle('People recognition')
 
-        ax1.scatter(x_1, y_1)
-        ax1.set_ylabel('Position')
-
-        ax2.scatter(x_2, y_2)
-        ax2.set_xlabel('Position')
-        ax2.set_ylabel('Position')
-
-
+        mx, my = self.calc_grid_index()
+        max_value = max([max(i_data) for i_data in self.data])
+        ax1.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
+        ax1.axis("equal")
+        ax1.set_xlabel('Position (m)')
+        ax1.set_ylabel('Position (m)')
+        ax2.scatter(x, y, s=20)
+        ax2.set_xlabel('Position (m)')
         plt.xlim([self.min_x, self.max_x])
         plt.ylim([self.min_y, self.max_y])
         plt.show()
@@ -95,7 +93,8 @@ class GridMap:
                         z, iz, ix, iy, std)
                 self.data[ix][iy] *= prob
         self.normalize_probability()
-        self.draw_heat_map()
+        #self.draw_heat_map()
+        return self.find_clusters_2()
 
     def calc_gaussian_observation_pdf(self, z, iz, ix, iy, std=1):
         # predicted range
@@ -120,19 +119,19 @@ class GridMap:
 
         """
         threshold = max([max(i_data) for i_data in self.data])
-        threshold *= 0.8
-        cluster_list=[]
+        threshold *= 0.9
+        point_list=[]
         for i,row in enumerate(self.data):
             for j,col in enumerate(row):
                 if self.data[i][j]>threshold:
-                    cluster_list.append((self.resize_x(i),self.resize_y(j)))
+                    point_list.append((self.resize_x(i),self.resize_y(j)))
         # TODO find reasonable parameters for the Density Based Scan clustering
         # algorithm
-        clusters = clst.clustering(cluster_list, 
+        clusters = clst.clustering(point_list, 
                 distance_measure=utils.math_distance,
-                min_samples=2,
-                eps=2.5)
-        self.print_cluster_centroid(cluster_list, clusters)
+                min_samples=1,
+                eps=0.5)
+        self.draw_clusters(clusters)
         return None if len(clusters) == 0 else clusters
 
     def resize_x(self,i):

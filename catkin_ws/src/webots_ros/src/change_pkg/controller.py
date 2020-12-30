@@ -45,9 +45,8 @@ class Controller:
         self.__robot.movement.scan()
         targets = self.__robot.vision.locate_targets()
         clusters_target=self.people_density.find_clusters(targets) 
-        clusters=self.people_density.find_clusters_2()
         valid_target = self.path_planner.set_target(clusters_target)
-        self.people_density.observation_update(targets)
+        clusters=self.people_density.observation_update(targets)
         return valid_target
 
     def schedule_movement(self):
