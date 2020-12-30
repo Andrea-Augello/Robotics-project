@@ -19,6 +19,7 @@ class Controller:
         self.ROTATION_LOOP_PRECISION = 0.1
         self.ESCAPING_DISTANCE = 2
         self.TARGET_DISTANCE = 1
+        self.SCAN_RATE = 3
 
     def start(self):
         while(True):
@@ -29,8 +30,12 @@ class Controller:
 
     def go_to_gathering(self):
         self.scheduler.potential_field_mode()
+        odometer = self.get_odometer()
         while not self.is_arrived():
             #self.people_density.reset()
+            if self.get_odometer()-odometer > self.SCAN_RATE:
+                odometer = self.get_odometer()
+                self.scan()
             self.schedule_movement()
             self.set_mode()
         # self.__robot.movement.rotate(-self.path_planner.target_angle())  
@@ -51,6 +56,9 @@ class Controller:
                 valid_target = self.scan()
         utils.loginfo("Target: {} - Distance allowed: {}".format(self.path_planner.target, max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)))        
     
+    def get_odometer(self):
+        return self.__robot.odometry.history[0][1]
+
     def scan(self):
         self.__robot.movement.scan()
         targets = self.__robot.vision.locate_targets()
