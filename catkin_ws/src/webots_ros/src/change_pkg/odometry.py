@@ -27,7 +27,8 @@ class Odometry:
 
     def movement_history(self):
         plt.plot([x for ((x,y),_distance) in self.history], [y for ((x,y),_distance) in self.history])
-        plt.axis("equal") 
+        plt.axis("equal")
+        plt.invert_xaxis() 
         plt.grid(True)
         plt.show()    
 

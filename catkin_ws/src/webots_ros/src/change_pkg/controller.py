@@ -19,7 +19,7 @@ class Controller:
         self.ROTATION_LOOP_PRECISION = 0.1
         self.ESCAPING_DISTANCE = 2
         self.TARGET_DISTANCE = 1
-        self.SCAN_RATE = 3
+        self.SCAN_RATE = 8
 
     def start(self):
         while(True):
@@ -50,9 +50,12 @@ class Controller:
 
     def exploration(self):
         self.scheduler.exploration_mode()
+        odometer = self.get_odometer()
         valid_target = self.scan()
         while not valid_target:
-            if self.exploration_movement():
+            self.exploration_movement()
+            if self.get_odometer()-odometer > self.SCAN_RATE/2:
+                odometer = self.get_odometer()
                 valid_target = self.scan()
         utils.loginfo("Target: {} - Distance allowed: {}".format(self.path_planner.target, max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)))        
     
@@ -122,7 +125,6 @@ class Controller:
         distance,angle = self.path_planner.exploration_next_step()
         self.__robot.movement.rotate(angle)
         self.__robot.movement.move_forward(distance)    
-        return distance > 0 
 
     def potential_field_movement(self):
         angle = self.path_planner.next_step_direction()
