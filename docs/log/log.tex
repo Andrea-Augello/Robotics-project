@@ -61,10 +61,14 @@
 		\item math, una libreria che fornisce funzioni matematiche definite dallo standard C \cite{math}.
 	\end{itemize}
 
-	\section{Task}
-	Our robot will be deployed in a room (such as the one showed in our demo) and its aim is to identify humans and avoid gatherings. It must estimate people's relative positions and, if the distance between said humans is less that a specified value, the robot will go towards them and invite them to respect social distancing (with both visual and audio output).
+	\section{Obbiettivo}
+	L'obbiettivo del robot è di \textbf{evitare assembramenti in ambienti indoor}. \newline
+	Nella dimostrazione presentata il nostro robot rileva le persone nella stanza e individua i possibili assembramenti. In seguito alla fase di rilevazione si sposterà verso l'assembramento evitando gli ostacoli e, arrivato, esorterà le persone al rispetto del distanziamento sociale.
 	
 	\section{Tiago Iron} 
+	Il
+	
+	
 	The robot selected for the given task is the \textbf{TIAGo Iron}. \newline\textbf{PAL Robotics TIAGo Iron}\cite{tiagoiron} is a two-wheeled human-like robot with a torso and a head but no articulated arm. The model is a modular mobile platform that allows human-robot interaction.\newline
 	We added a \textbf{speaker} and a \textbf{display} with a corresponding support solid to the base TIAGo model available in Webots.
 	We also had to ask the Webots developers for the precise size of the \textbf{wheels} since the model does not exactly match the specifications given in the data TIAGo datasheet\cite{Tiago IRON datasheet} and we discovered that they are 200mm.
