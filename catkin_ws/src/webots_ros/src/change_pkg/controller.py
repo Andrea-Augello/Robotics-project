@@ -37,16 +37,16 @@ class Controller:
     def exploration(self):
         self.scheduler.exploration_mode()
         valid_target = self.scan()
-        while True or not valid_target:
+        while not valid_target:
             if self.exploration_movement():
                 valid_target = self.scan()
     
     def scan(self):
         self.__robot.movement.scan()
         targets = self.__robot.vision.locate_targets()
-        clusters_target=self.people_density.find_clusters(targets) 
-        valid_target = self.path_planner.set_target(clusters_target)
-        self.people_density.observation_update(targets)
+        #people_target=self.people_density.find_clusters(targets)
+        clusters_targets=self.people_density.observation_update(targets) 
+        valid_target = self.path_planner.set_target(clusters_targets)
         return valid_target
 
     def schedule_movement(self):
