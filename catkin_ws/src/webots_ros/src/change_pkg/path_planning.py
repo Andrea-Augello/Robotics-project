@@ -28,15 +28,19 @@ class Path_planner:
         # if the current trajectory is mantained
 
 
-    def set_target(self, target):
+    def set_target(self, targets):
         """Sets the target point for the movement algorithm
 
-        :target: Target coordinate
+        :targets: Dict of targets' coordinate
         :returns: None
 
         """
-        if target != None:
-            self.target = target
+        if len(targets) > 0:
+            target=targets[0]
+            for t in targets:
+                if t['area']>target['area']:
+                    target=t
+            self.target = target['center']
             return True
         else:
             return False

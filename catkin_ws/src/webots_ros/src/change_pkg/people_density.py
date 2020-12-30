@@ -26,7 +26,7 @@ show_animation = True
 
 class GridMap:
 
-    def __init__(self, robot, xy_resolution = 0.25, min_x =-10, min_y = -10, max_x=10, max_y=10):
+    def __init__(self, robot, xy_resolution = 0.25, min_x =-10, min_y = -10, max_x=10, max_y=10, show_map=True):
         self.__robot = robot
         self.xy_resolution = xy_resolution
         self.min_x = min_x
@@ -40,6 +40,7 @@ class GridMap:
         self.data =  [[1.0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]
         self.normalize_probability()
+        self.show_map=show_map
 
     def normalize_probability(self):
         sump = sum([sum(i_data) for i_data in self.data])
@@ -56,8 +57,18 @@ class GridMap:
         plt.show()
 
     def draw_clusters(self,clusters):
-        x=[e[0] for e in clusters]
-        y=[e[1] for e in clusters]
+        x=[]
+        y=[]
+        x_contour=[]
+        y_contour=[]
+
+        for cluster in clusters:
+            x.append(cluster['center'][0])
+            y.append(cluster['center'][1])
+            for contour in cluster['contour']:
+                x_contour.append(contour[0])
+                y_contour.append(contour[1])
+
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
         fig.suptitle('People recognition')
         mx, my = self.calc_grid_index()
@@ -67,6 +78,7 @@ class GridMap:
         ax1.set_xlabel('Position (m)')
         ax1.set_ylabel('Position (m)')
         ax2.scatter(x, y, s=20)
+        ax2.scatter(x_contour, y_contour, s=10)
         ax2.set_xlabel('Position (m)')
         plt.xlim([self.min_x, self.max_x])
         plt.ylim([self.min_y, self.max_y])
@@ -119,11 +131,10 @@ class GridMap:
         im = im /(max_value-min_value)
         im = 255 * im
         im = im.astype(np.uint8)
-        im = np.swapaxes(im,0,1)
-        im = np.flip(im,0)
+        im = im.T
+        #im = np.flip(im,0)
         im=im[:,:,None]
         
-
 
         # Calculate centroids
 
@@ -133,14 +144,16 @@ class GridMap:
         clusters=[]
         for c in contours:
             M = cv2.moments(c)
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
+            cx = self.resize_x(int(M['m10']/M['m00']))
+            cy = self.resize_y(int(M['m01']/M['m00']))
+            contour_point=[(self.resize_x(x),self.resize_y(y)) for [[x,y]] in c]
             clusters.append(
                     {'center':(cx,cy),
                         'area':M['m00'],
-                        'contour':c})
+                        'contour':contour_point})
             #cv2.circle(im, (cx,cy), 2, (0,255,0), 1)
-        self.draw_clusters(clusters)
+        if self.show_map:
+            self.draw_clusters(clusters)
         return clusters    
 
 
@@ -172,7 +185,7 @@ class GridMap:
         return (i*self.xy_resolution)+self.min_x
 
     def resize_y(self,i):
-        return (i*self.xy_resolution)-self.min_y
+        return (i*self.xy_resolution)+self.min_y
 
     def find_clusters(self, polar_coords):
         """Based on the self.people_coords finds clusters and returns them.
