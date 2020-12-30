@@ -114,7 +114,9 @@ class GridMap:
     def find_centroid(self):
         im = np.array(self.data)
         max_value = max([max(i_data) for i_data in self.data])
-        im = im/max_value
+        min_value = min([min(i_data) for i_data in self.data])
+        im = im-min_value
+        im = im /(max_value-min_value)
         im = 255 * im
         im = im.astype(np.uint8)
         im=im[:,:,None]
@@ -137,7 +139,7 @@ class GridMap:
                         'contour':c})
             cv2.circle(im, (cx,cy), 2, (0,255,0), 1)
 
-        cv2.imshow('f',im)
+        cv2.imshow('Clusters',im)
         cv2.waitKey(0)
 
 
