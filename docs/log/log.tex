@@ -201,7 +201,16 @@
 	\end{equation}
 	
 	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
-	Al fine di trasformare le osservazioni ottenute in una probabilità che le persone si trovino effettivamente nella posizione indicata è stato necessario definire una funzione densità di probabilità. La distribuzione normale, sebbene relativamente appropriata nel nostro scenario, è computazionalmente onerosa, come si evince dalla fig. \ref{fig:pdf_benchmark}.
+		
+	Al fine di trasformare le osservazioni ottenute in una probabilità che le
+	persone si trovino effettivamente nella posizione indicata è stato
+	necessario definire una funzione densità di probabilità. La distribuzione
+	normale, sebbene relativamente appropriata nel nostro scenario, è
+	computazionalmente onerosa. La griglia di occupazione ha diverse migliaia
+	di celle per cui va calcolata una pdf per ogni osservazione. Come si evince
+	dalla fig.~\ref{fig:pdf_benchmark} con un numero così elevato di iterazioni
+	i tempi di esecuzione non sarebbero accettabili, è stato quindi necessario
+	ricorrere ad una approssimazione.
 	
 	\begin{figure}[H]
 		\centering
@@ -210,7 +219,46 @@
 		\label{fig:pdf_benchmark}
 	\end{figure}
 
-	Al fine di ottene un'approssimazione di una gaussiana applicabile nel nostro scenario, è stato utilizzato un funzionale ispirato al filtro di Butterworth. Un'approssimazione di largo uso è la distrubizione triangolare. Quest'ultima, tuttavia, presenta delle caratteristiche non ottimali per il nostro caso d'uso. Una proprietà desiderabile della nostra funzione, difatti, sono le "fat tails", ovvero le code della distribuzione devono essere spesse e la distribuzione non deve tagliare nettamente. Quando, in seguito ad un'osservazione, non abbiamo alcuna osservazione di conferma nello scan successivo, non vogliamo infatti che la probabilità di trovare una persona in quel punto scenda e rimanga a zero.
+	Un'approssimazione di largo uso è la distribuzione triangolare.
+	Quest'ultima, tuttavia, presenta delle caratteristiche non desiderabili per
+	il nostro caso d'uso. Una proprietà desiderabile della nostra funzione,
+	difatti, sono le "fat tails", ovvero le code della distribuzione devono
+	essere spesse e la distribuzione non deve tagliare nettamente. Quando, in
+	seguito ad un'osservazione, non abbiamo alcuna osservazione di conferma
+	nello scan successivo, non è infatti desiderabile che la probabilità di
+	trovare una persona in quel punto scenda a zero. Inoltre, in una prima
+	osservazione, un oggetto potrebbe essere occluso ed essere rilevato solo
+	successivamente, quindi se in quella zona la probabilità di rilevare un
+	target scendesse a zero non sarebbe possibile integrare correttamente
+	questa nuova informazione. Ulteriori complicazioni sorgerebbero in caso di
+	target in movimento.
+	
+	Essendo la scansione una operazione estremamente costosa non è nemmeno
+	possibile affidarsi esclusivamente all'aggiunta di rumore alla griglia di
+	occupazione confidando in una eventuale convergenza.
+
+	Al fine di ottene un'approssimazione di una gaussiana adatta al
+	nostro scenario, è stato utilizzato un funzionale ispirato al guadagno del
+	filtro di Butterworth.
+	\begin{equation}\label{eq:pdf}
+		p({\bf x}|{\bf z}) = \frac	{K}
+		{1 + d({\bf x},{\bf z})^4 } 
+	\end{equation}
+	Nell'equazione~\ref{eq:pdf} è mostrato il funzionale utilizzato. In
+	figura~\ref{fig:pdf_shape} si mostra un confronto della forma di questa
+	funzione rispetto ad una gaussiana con media nulla e deviazione standard
+	unitaria nel caso monodimensionale.
+	
+	Nell'equazione~\ref{eq:pdf} $K$ indica un parametro di scala per ottenere
+	CDF unitaria. $d$ è una funzione per il calcolo della distanza della cella
+	$ {\bf x} $ dalla stima di posizione $ {\bf z} $.
+
+	La distanza euclidea porterebbe a formare aree ad alta probabilità di forma
+	circolare. Questo però non si adatta bene al nostro modello di errore del
+	sensore: l'angolo dell'oggetto rispetto al robot è noto con una precisione
+	molto elevata, mentre la maggior parte dell'incertezza si concentra nella
+	distanza. Utilizziamo quindi la distanza di Mahalanobis per tenere conto
+	del nostro modello.
 
 	\begin{figure}[H]
 		\centering
