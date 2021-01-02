@@ -77,7 +77,7 @@
 	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron} \cite{tiagoiron} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
 	Il datasheet del \textbf{TIAGo} indica la presenza di speaker e display, tuttavia questi non sono presenti nel modello Webots. Abbiamo dunque ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello.
 	La camera del \textbf{TIAGo}, come indicato dal datasheet, è RGB-D. Il modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una camera monoscopica RGB.
-	Inoltre è stato necessario contattare gli sviluppatori del \textbf{TIAGo} per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto tale informazione è omessa dal datasheet. Ci è stato comunicato che le ruote del \textbf{TIAGo} hanno raggio di 200 mm. Utilizzando tale valore nei calcoli odometrici, abbiamo ottenuto valori largamente differenti dalle misurazioni. Abbiamo quindi dedotto sperimentalmente che il raggio del modello Webots è di 3 cm più lungo. 
+	Inoltre è stato necessario contattare gli sviluppatori del \textbf{TIAGo} per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto tale informazione è omessa dal datasheet. Ci è stato comunicato che le ruote del \textbf{TIAGo} hanno raggio di $200\,mm$. Utilizzando tale valore nei calcoli odometrici, abbiamo ottenuto valori largamente differenti dalle misurazioni. Abbiamo quindi dedotto sperimentalmente che il raggio del modello Webots è di $3\,cm$ più lungo. 
 	
     L'IMU utilizzata ha 6 gradi di libertà ed è composta delle seguenti componenti:
 	\begin{enumerate}
@@ -85,6 +85,8 @@
 		\item accelerometro;
 	\end{enumerate}
 	Abbiamo ritenuto non necessario aggiungere il \textbf{magnetometro} in quanto in uno scenario reale sarebbe stato soggetto ad interferenze (significativamente più di un giroscopio), specialmente in un ambiente con molti oggetti metallici (quale potenzialmente lo scenario di utilizzo del nostro robot).
+	
+	Il \textbf{lidar} del \textbf{TIAGo}, come indicato nel datasheet \cite{tiago_datasheet}, ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (ricordiamo che agli estremi è parzialmente occluso).
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento}
 	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per ottenere l'angolo di rotazione ci basiamo sui dati ottenuti dal giroscopio, il quale misura il moto rotazionale fornendo una velocità angolare. Per ottenere l'angolo di rotazione effettuiamo quindi un'integrazione discreta dei campioni con interpolazione lineare del primo ordine.
