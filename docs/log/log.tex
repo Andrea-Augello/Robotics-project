@@ -172,7 +172,13 @@
 		\label{fig:error}
 	\end{figure}
 
-	Ignorare la prospettiva significa effettuare un'approssimazione lineare del primo ordine e trattare il punto come se si trovasse su una circonferenza di raggio $d$ centrata sulla camera. Di conseguenza consideriamo il punto come se fosse più vicino di quanto non sia realmente, commettendo l'errore mostrato nell' Eq.~\ref{eq:max_err}. Con una camera con FOV di 1 radiante quale quella del TIAGo il massimo errore causato dalla linearizzazione è quindi una sottostima del 13.9\%.
+	Ignorare la prospettiva significa effettuare un'approssimazione lineare del
+	primo ordine e trattare il punto come se si trovasse su una circonferenza
+	di raggio $d$ centrata sulla camera. Di conseguenza consideriamo il punto
+	come se fosse più vicino di quanto non sia realmente, commettendo l'errore
+	mostrato nell' Eq.~\ref{eq:max_err}. Con una camera con FOV di 1 radiante
+	quale quella del TIAGo il massimo errore causato dalla linearizzazione è
+	quindi una sottostima del 13.9\%.
 	
 	\begin{equation}
 	\epsilon = 
@@ -183,8 +189,8 @@
 	\label{eq:max_err}
 	\end{equation}
 	
-	Sotto tali ipotesi possiamo quindi calcolare la distanza di un oggetto come mostrato in
-	Eq.~\ref{eq:obj_dist}
+	Sotto tali ipotesi possiamo quindi calcolare la distanza di un oggetto come
+	mostrato in Eq.~\ref{eq:obj_dist}
 	
 	\begin{equation}\label{eq:obj_dist}
 	object~distance(m) = 
@@ -192,7 +198,12 @@
 	{object~width(pixels) \times sensor~width(m)}
 	\end{equation}
 	
-	Poiché stiamo utilizzando un simulatore non è nota la larghezza del sensore da utilizzare per l'eq.~\ref{eq:obj_dist}. Abbiamo ovviato a tale problema posizionando il robot ed un oggetto dalle dimensioni note in posizioni note e abbiamo utilizzato questi dati insieme a delle misure in pixel nell' eq.~\ref{sensor_size}. Abbiamo così stimato le dimensioni del sensore virtuale da utilizzare nei calcoli successivi.
+	Poiché stiamo utilizzando un simulatore non è nota la larghezza del sensore
+	da utilizzare per l'eq.~\ref{eq:obj_dist}. Abbiamo ovviato a tale problema
+	posizionando il robot ed un oggetto dalle dimensioni note in posizioni note
+	e abbiamo utilizzato questi dati insieme a delle misure in pixel nell'
+	eq.~\ref{sensor_size}. Abbiamo così stimato le dimensioni del sensore
+	virtuale da utilizzare nei calcoli successivi.
 
 	\begin{equation}\label{sensor_size}
 	sensor~width(m) = 
@@ -201,7 +212,19 @@
 	\end{equation}
 	
 	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
+
+	Le relazioni geometriche sulla distanza degli oggetti esposte nella
+	sezione~\ref{subsec:Calcolo-della-distanza} assumono che il target abbia la
+	stessa larghezza in ogni posa e che sia possibile ottenere dal
+	classificatore delle bounding box estremamente aderenti all'oggetto. Queste
+	assunzioni nella nostra applicazione non sono rispettate, la distanza
+	dell'oggetto sarà quindi soggetta ad errore non trascurabile. Per questa
+	ragione e per i problemi legati alla triangolazione abbiamo abbandonato la
+	rappresentazione basata su oggetti e siamo ricorsi ad un filtro di
+	occupazione bayesiano (BOF)~\cite{tay2008bayesian}.
 		
+	\hl{TODO: Inserire un paragrafo di collegamento tra BOF e dettagli implementativi}
+
 	Al fine di trasformare le osservazioni ottenute in una probabilità che le
 	persone si trovino effettivamente nella posizione indicata è stato
 	necessario definire una funzione densità di probabilità. La distribuzione
@@ -267,14 +290,35 @@
 		\label{fig:pdf_shape}
 	\end{figure}
 
-	Al fine di individuare gli eventuali cluster abbiamo utilizzato un approccio derivante dall'elaborazione delle immagini.
-	In primo luogo abbiamo utilizzato \cite{otsu}, il quale applica un thresholding automatico calcolato minimizzando la varianza dei valori di intensità all'interno delle classi e massimizzandola fra classi differenti all'immagine in input.
-	Dall'immagine binaria restituita in output da otsu estraiamo i contorni con un metodo fornito da OpenCV per utilizzare l'algoritmo in \cite{contours}.
+	Dato un insieme di osservazioni ottenute da una scansione $ Z_i $ aggiorniamo il belief precedente rispetto ad ogni cella della griglia di occupazione come mostrato nell'equazione~\ref{eq:belief-update}.
+
+	\hl{TODO: check math to match slides}
+
+	\begin{equation}\label{eq:belief-update}
+		p({\bf x} | Z_i) = p({\bf x} | Z_{i-1}) \cdot 
+		\sum_{{\bf z} \in Z_i} p({\bf x} | {\bf z})
+	\end{equation}
+
+
+	Al fine di individuare le zone con alta probabilità di contenere persone
+	abbiamo utilizzato un approccio derivante dall'elaborazione delle immagini.
+	In primo luogo separiamo i punti nella mappa in punti ad alta probabilità
+	di essere occupati da persone e punti con bassa probabilità. Per effettuare
+	questa sogliatura abbiamo utilizzato il metodo Otsu~\cite{otsu}, il quale
+	applica un thresholding automatico calcolato minimizzando la varianza dei
+	valori di intensità all'interno delle classi e massimizzandola fra classi
+	differenti all'immagine in input.  
+	
+	Da questa sogliatura otteniamo una mappa binaria in cui sono evidenziate le
+	celle ad alta probabilità. Applicando l'algoritmo in~\cite{contours},
+	implementato in OpenCV, estraiamo le regioni ad alta probabilità contigue
+	ed i loro contorni. Per ogni regione verrà selezionato come centro il punto
+	con maggiore probabilità (Fig.~\ref{fig:image_segmentation}).
 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1\textwidth]{./img/image_segmentation.pdf}
-		\caption{Segmentazione immagine}
+		\caption{Segmentazione immagine: a sinistra i valori grezzi del BOF, a destra i contorni delle regioni (giallo) e i centri (blu) }
 		\label{fig:image_segmentation}
 	\end{figure}
 		
