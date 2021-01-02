@@ -75,9 +75,9 @@
 	
 	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
 	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron} \cite{tiagoiron} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
-	Abbiamo ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello base del \textbf{TIAGo} disponibile in Webots.
+	Il datasheet del \textbf{TIAGo} indica la presenza di speaker e display, tuttavia questi non sono presenti nel modello Webots. Abbiamo dunque ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello.
 	La camera del \textbf{TIAGo}, come indicato dal datasheet, è RGB-D. Il modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una camera monoscopica RGB.
-	Inoltre è stato necessario contattare gli sviluppatori del \textbf{TIAGo} per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto tale informazione è omessa dal datasheet. Ci è stato comunicato che le ruote del \textbf{TIAGo} hanno raggio di 200mm. Utilizzando tale valore nei calcoli odometrici, abbiamo ottenuto valori largamente differenti dalle misurazioni. Abbiamo quindi dedotto sperimentalmente che il raggio del modello Webots è di 3cm più lungo. 
+	Inoltre è stato necessario contattare gli sviluppatori del \textbf{TIAGo} per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto tale informazione è omessa dal datasheet. Ci è stato comunicato che le ruote del \textbf{TIAGo} hanno raggio di $200\,mm$. Utilizzando tale valore nei calcoli odometrici, abbiamo ottenuto valori largamente differenti dalle misurazioni. Abbiamo quindi dedotto sperimentalmente che il raggio del modello Webots è di $3\,cm$ più lungo. 
 	
     L'IMU utilizzata ha 6 gradi di libertà ed è composta delle seguenti componenti:
 	\begin{enumerate}
@@ -85,6 +85,8 @@
 		\item accelerometro;
 	\end{enumerate}
 	Abbiamo ritenuto non necessario aggiungere il \textbf{magnetometro} in quanto in uno scenario reale sarebbe stato soggetto ad interferenze (significativamente più di un giroscopio), specialmente in un ambiente con molti oggetti metallici (quale potenzialmente lo scenario di utilizzo del nostro robot).
+	
+	Il \textbf{lidar} del \textbf{TIAGo}, come indicato nel datasheet \cite{tiago_datasheet}, ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (ricordiamo che agli estremi è parzialmente occluso).
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento}
 	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per ottenere l'angolo di rotazione ci basiamo sui dati ottenuti dal giroscopio, il quale misura il moto rotazionale fornendo una velocità angolare. Per ottenere l'angolo di rotazione effettuiamo quindi un'integrazione discreta dei campioni con interpolazione lineare del primo ordine.
@@ -108,7 +110,7 @@
 	\section{Object recognition}\label{sec:Object-recognition}
 	
 	\subsection{Campionamento delle immagini}\label{subsec:Campionamento-delle-immagini}
-	Il FOV della camera è di 57°, di conseguenza per ricoprire 360° è stato necessario effettuare 7 campionamenti. Il settimo campionamento, come si evince dalla figura seguente, è sovrapposto al primo per una porzione di scena pari a 39° coincidente col primo campionamento.
+	Il FOV della camera è di 57°, di conseguenza per ricoprire 360° è stato necessario effettuare 7 campionamenti. Il settimo campionamento, come si evince dalla figura \ref{fig:campionamento_immagini}, è sovrapposto al primo per una porzione di scena pari a 39° coincidente col primo campionamento.
 	
 	\begin{figure}[H]
 		\centering
@@ -119,7 +121,7 @@
 	
 	\subsection{Yolo}\label{subsec:Yolo}
 	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di \textbf{object recognition}. A tal fine abbiamo valutato le performance di YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented gradients), HoG + SVG (support vector machines) + NMS (non maxima suppression).
-	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicile alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparaemtri parametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente, sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. Ecco un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella seguente, i cui dati provengono dal sito di YOLO \cite{yolo}:
+	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicine alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparaemtri parametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente, sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. Ecco un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella seguente, i cui dati provengono dal sito di YOLO \cite{yolo}:
 	
 	\begin{center}
 		\begin{tabular}{ |c|c|c|c| } 
@@ -136,7 +138,10 @@
 	\end{center}
 
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
+	Durante la fase di individuazione delle persone vengono individuate varie bounding box corrispondenti al medesimo individuo. Di conseguenza è stato necessario effettuare una fase di clustering al fine di scartare le bounding box duplicate. L'algoritmo di clustering utilizzato è DBSCAN (Density based scan) \cite{DBSCAN}, i cui parametri principali sono \textbf{eps}, ovvero la massima distanza fra due punti affinché vengano considerati appartenenti a un cluster (da non confondere con la massima distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il numero minimo di punti affinchè un cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di distanza. 
+	Come di evince dalla figura \ref{fig:nms}, la metrica utilizzata considera la lunghezza di un arco di circonferenza con raggio corrispondente alla distanza fra i due punti ed angolo $\alpha$ corrispondente  all'angolo fra i due punti rispetto alla posizione del robot.
 	
+	Abbiamo ritenuto opportuno utilizzare l'implementazione dell'algoritmo fornita da \textbf{sklearn} \cite{scikit}.
 	
 	\begin{figure}[H]
 		\centering
@@ -147,6 +152,7 @@
 	\section{Posizione dei target}\label{sec:Posizione-dei-target}
 	
 	\subsection{Triangolazione}\label{subsec:Triangolazione}
+	La triangolazione come metodo di individuazione delle persone, sebbene teoricamente possibile, presenta dei problemi nel nostro scenario. In primo luogo prendiamo in esame l'occlusione delle persone. Ad esempio, se due persone (5 e 2) sono una dietro l'altra lungo una retta immaginaria che le congiunge al robot (B), quest'ultimo non sarà in grado di individuare la persona 5. Inoltre, quando il robot effettua scan successivi, non sarebbe in grado di dedurre quali osservazioni derivano dalla stessa persona. Infatti, poiché nel nostro scenario abbiamo più persone in una stanza, non è possibile dedurre quali intersezioni delle rette corrispondono ad osservazioni reali o se si tratta di intersezioni spurie. 
 	
 	\begin{figure}[H]
 		\centering
@@ -159,7 +165,7 @@
 	
 	L'altezza percepita dell'oggetto non è un indicatore affidabile della sua distanza dal robot in quanto parte dell'oggetto potrebbe essere occlusa o non presente nel frame. Inoltre classificatori quali HoG tendono a produrre ROI significativamente più alte dell'oggetto. La larghezza del torso, invece, è meno suscettibile a tali problemi, e non dipende dalla posizione (ad esempio seduto o alzato). Dobbiamo tuttavia ipotizzare che il torso abbia forma cilindrica introducendo quindi degli errori se l'obbiettivo non sta guardando la camera.	La posizione orizzontale dell'oggetto relativa alla camera può influenzare la larghezza percepita diminuendola quando aumenta la distanza dal centro dell'immagine. Ipotizzando che la camera abbia un FOV (field of view) di $2\alpha$ e sia distante $d$ dall'oggetto, la massima distanza orizzontale che un punto dell'immagine potrebbe avere dal centro del piano dell'immagine sarebbe $a = d \tan alpha$ (Fig.~\ref{fig:error}).
 	
-	\begin{figure}[htpb]
+	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.8\textwidth]{./img/linearization_error.pdf}
 		\caption{Errore nella stima della distanza con una linearizzazione a tratti della circonferenza}
@@ -195,6 +201,8 @@
 	\end{equation}
 	
 	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
+	Al fine di trasformare le osservazioni ottenute in una probabilità che le persone si trovino effettivamente nella posizione indicata è stato necessario definire una funzione densità di probabilità. La distribuzione normale, sebbene relativamente appropriata nel nostro scenario, è computazionalmente onerosa, come si evince dalla fig. \ref{fig:pdf_benchmark}.
+	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.6\textwidth]{./img/pdf_benchmark.pdf}
@@ -202,12 +210,18 @@
 		\label{fig:pdf_benchmark}
 	\end{figure}
 
+	Al fine di ottene un'approssimazione di una gaussiana applicabile nel nostro scenario, è stato utilizzato un funzionale ispirato al filtro di Butterworth \cite{bibid}. Un'approssimazione di largo uso è la distrubizione triangolare. Quest'ultima, tuttavia, presenta delle caratteristiche non ottimali per il nostro caso d'uso. Una proprietà desiderabile della nostra funzione, difatti, sono le "fat tails", ovvero le code della distribuzione devono essere spesse e la distribuzione non deve tagliare nettamente. Quando, in seguito ad un'osservazione, non abbiamo alcuna osservazione di conferma nello scan successivo, non vogliamo infatti che la probabilità di trovare una persona in quel punto scenda e rimanga a zero.
+
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.6\textwidth]{./img/pdf_shape.pdf}
 		\caption{Forma pdf}
 		\label{fig:pdf_shape}
 	\end{figure}
+
+	Al fine di individuare gli eventuali cluster abbiamo utilizzato un approccio derivante dall'elaborazione delle immagini.
+	In primo luogo abbiamo utilizzato \cite{otsu}, il quale applica un thresholding automatico calcolato minimizzando la varianza dei valori di intensità all'interno delle classi e massimizzandola fra classi differenti all'immagine in input.
+	Dall'immagine binaria restituita in output da otsu estraiamo i contorni con un metodo fornito da OpenCV per utilizzare l'algoritmo in \ref{countours}.
 
 	\begin{figure}[H]
 		\centering
@@ -280,6 +294,9 @@
 		\bibitem{yolo} 
 		\textit{https://pjreddie.com/darknet/yolo/}. \newline
 		Yolo website.
+		\bibitem{DBSCAN} 
+		\textit{https://dl.acm.org/doi/abs/10.1145/3068335}. \newline
+		DBSCAN Revisited.
 	\end{thebibliography}
 
 \end{document}
