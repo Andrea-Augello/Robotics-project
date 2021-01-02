@@ -2,19 +2,20 @@ import math
 from change_pkg.vision import *
 import change_pkg.utils as utils
 import numpy as np
+import matplotlib.path as mpltPath
 
 class Path_planner:
 
     """Docstring for Path_planner. """
 
     def __init__(self, robot, resolution=1, radius=5):
-        """Accepts a robot and an.__robot.odometry object
+        """Accepts a robot object
 
         :robot: The robot this module belongs to
-        .__robot.odometry: The odometry object used to estimate the position
 
         """
         self.__robot = robot
+        self.valid_target = True
         self.target = (self.__robot.odometry.x,self.__robot.odometry.y)
         self.distance_allowed = 0
         self.perimeter_target = []
@@ -39,26 +40,33 @@ class Path_planner:
         :returns: None
 
         """
-        if len(targets) > 0:
-            target=targets[0]
-            for t in targets:
-                if t['area']>target['area']:
+        target= None # targets[0]
+        for t in targets:
+            if not self.valid_target and (
+                    mpltPath.Path(self.perimeter_target).contains_points([t['center']])\
+                            or mpltPath.Path(t['contour']).contains_points([self.target])):
+                continue
+            else:
+                if target == None or t['area']>max(1.1304,target['area']):
                     target=t
-            self.target = target['center']
-            self.area_target = target['area']
-            self.perimeter_target = target['contour']
-
-            min_point = self.perimeter_target[0]
-            min_distance = utils.math_distance(min_point,self.target)
-            for perimeter_point in self.perimeter_target:
-                perimeter_point_distance=utils.math_distance(perimeter_point,self.target)
-                if  perimeter_point_distance < min_distance:
-                    #min_point = perimeter_point
-                    min_distance = perimeter_point_distance
-            self.distance_allowed = min_distance
-            return True
-        else:
+        if target == None:
             return False
+
+        self.target = target['center']
+        self.area_target = target['area']
+        self.perimeter_target = target['contour']
+
+        min_point = self.perimeter_target[0]
+        min_distance = utils.math_distance(min_point,self.target)
+        for perimeter_point in self.perimeter_target:
+            perimeter_point_distance=utils.math_distance(perimeter_point,self.target)
+            if  perimeter_point_distance < min_distance:
+                #min_point = perimeter_point
+                min_distance = perimeter_point_distance
+        self.distance_allowed = min_distance
+        self.valid_target=True
+        return True
+
 
     def movement_distance(self):
         max_distance = self.max_distance()

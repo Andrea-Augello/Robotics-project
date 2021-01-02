@@ -5,6 +5,7 @@ import change_pkg.utils as utils
 import change_pkg.clustering as clst
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.ndimage.filters import gaussian_filter
 from scipy.stats import multivariate_normal
 
 class GridMap:
@@ -83,20 +84,26 @@ class GridMap:
 
         return mx, my
 
-    def observation_update(self, z, std=1):
+    def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
+        self.data = gaussian_filter(self.data, sigma=3)
         for ix in range(self.x_w):
             for iy in range(self.y_w):
                 prob = 0
                 for iz in range(len(z)):
                     prob += self.calc_gaussian_observation_pdf(
-                        z, iz, ix, iy, std)
+                        z, iz, ix, iy)
                 self.data[ix][iy] *= prob
+        # adds noise
+        min_val = np.min(self.data)
+        for ix in range(self.x_w):
+            for iy in range(self.y_w):
+                self.data[ix][iy] += np.random.rand()*min_val/2
         self.normalize_probability()
         #return self.find_clusters_2()
         return self.find_centroid()
 
-    def calc_gaussian_observation_pdf(self, z, iz, ix, iy, std=1):
+    def calc_gaussian_observation_pdf(self, z, iz, ix, iy):
         # predicted range
         x = ix * self.xy_resolution + self.min_x
         y = iy * self.xy_resolution + self.min_y
@@ -108,8 +115,9 @@ class GridMap:
         # likelihood
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
-        return 0.05 \
-                + 1/(1+math.hypot((o_distance-p_distance)/1.5,(angle_diff)/5)**2)
+        return ( 0 if p_distance < 0.5 or abs(angle_diff-180)<45 \
+                else 1/(1+math.hypot( (o_distance-p_distance)/1.5, (angle_diff)/5)**4)) \
+                + 0.05 
 
 
 
@@ -136,12 +144,15 @@ class GridMap:
             M = cv2.moments(c)
             if M['m00'] == 0:
                 continue
-            cx = self.resize_x(int(M['m10']/M['m00']))
-            cy = self.resize_y(int(M['m01']/M['m00']))
+            mask = np.zeros(im.shape, np.uint8)
+            cv2.drawContours(mask, [c],0,255,-1)
+            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(im,mask=mask)
+            cx = self.resize_x(max_loc[0])#int(M['m10']/M['m00']))
+            cy = self.resize_y(max_loc[1])#int(M['m01']/M['m00']))
             contour_point=[(self.resize_x(x),self.resize_y(y)) for [[x,y]] in c]
             clusters.append(
                     {'center':(cx,cy),
-                        'area':M['m00'],
+                        'area':M['m00']*self.xy_resolution**2,
                         'contour':contour_point})
             #cv2.circle(im, (cx,cy), 2, (0,255,0), 1)
         if self.show_map:

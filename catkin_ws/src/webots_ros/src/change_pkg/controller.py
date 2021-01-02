@@ -6,6 +6,7 @@ import itertools
 import numpy as np
 import change_pkg.people_density as people_density
 import matplotlib.pyplot as plt
+import matplotlib.path as mpltPath
 
 class Controller:
     def __init__(self, robot):
@@ -38,6 +39,7 @@ class Controller:
                 self.scan()
             self.schedule_movement()
             self.set_mode()
+        self.path_planner.valid_target = False
         # self.__robot.movement.rotate(-self.path_planner.target_angle())  
 
 
@@ -46,7 +48,9 @@ class Controller:
         :returns: True if the robot is near the cluster, False otherwise
 
         """
-        return self.path_planner.target_distance() < max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)
+        return self.path_planner.target_distance() < max(self.path_planner.distance_allowed,self.TARGET_DISTANCE) \
+                or mpltPath.Path(self.path_planner.perimeter_target).contains_points([self.__robot.odometry.history[0][0]])
+                
 
     def exploration(self):
         self.scheduler.exploration_mode()
@@ -80,6 +84,8 @@ class Controller:
     def set_mode(self):
         mode=self.scheduler.get_mode()
         if mode == 'bug':
+            if self.check_loop():
+                self.__robot.movement.rotate(90)
             distance = utils.distance((self.__robot.odometry.x,self.__robot.odometry.y),self.loop_point)
             if distance > self.ESCAPING_DISTANCE:
                 self.scheduler.potential_field_mode() 
