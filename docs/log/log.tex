@@ -52,6 +52,11 @@
 	\section{Ambiente}\label{sec:Ambiente}
 	Abbiamo considerato opportuno analizzare e studiare il package \textbf{webots\_ros} \cite{webotsRos} al fine di raggiungere una comprensione più profonda sulle metodologie per interfacciare i nodi ROS con il controller ROS standard per Webots. Inoltre è risultato necessario approfondire la documentazione ROS \cite{rosTutorial} al fine di installare e configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali relativi ai nodi e topics. Infine abbiamo impostato l'interfaccia ROS su Webots seguendo la documentazione cyberbotics rilevante \cite{rosTutorial}.
 	
+	\section{ROS}\label{sec:Ros}
+	
+	\subsection{Bug}\label{sec:Bug}
+	Logical values did not allow callbacks.
+	
 	\section{Dipendenze}\label{sec:Dipendenze} 
 	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
 	
@@ -91,9 +96,29 @@
 	
 	A causa di possibili imprecisioni calcoliamo la stima dello spostamento lineare utilizzando l'accelerometro. Al segnale dell'accelerometro viene applicato un integrale doppio per ottenere lo spostamento lineare.
 	
+	Nell'immagine seguente viene mostrata la zona nella quale, se viene indicata dal \textbf{lidar} la presenza di un ostacolo, il \textbf{TIAGo} si ferma per ragioni di sicurezza al fine di evitare danni a persone e/o oggetti.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.2\textwidth]{./img/collision_detection.pdf}
+		\caption{Collision detection}
+		\label{fig:collision_detection}
+	\end{figure}
+	
 	\section{Object recognition}\label{sec:Object-recognition}
+	
+	\subsection{Campionamento delle immagini}\label{subsec:Campionamento-delle-immagini}
+	Il FOV della camera 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.4\textwidth]{./img/pictures_sampling.pdf}
+		\caption{Campionamento delle immagini}
+		\label{fig:campionamento_immagini}
+	\end{figure}
+	
+	\subsection{Yolo}\label{subsec:Yolo}
 	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di \textbf{object recognition}. A tal fine abbiamo valutato le performance di YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented gradients), HoG + SVG (support vector machines) + NMS (non maxima suppression).
-	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicile alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparaemtri parametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3, il quale risulta essere significativamente più efficiente, sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. Ecco un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella seguente, i cui dati provengono dal sito di YOLO \cite{yolo}:
+	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicile alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparaemtri parametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente, sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. Ecco un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella seguente, i cui dati provengono dal sito di YOLO \cite{yolo}:
 	
 	\begin{center}
 		\begin{tabular}{ |c|c|c|c| } 
@@ -109,7 +134,26 @@
 		\end{tabular}
 	\end{center}
 
-	\section{Calcolo della distanza}\label{sec:Calcolo-della-distanza}
+	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\textwidth]{./img/nms.pdf}
+		\caption{Non maxima suppression}
+		\label{fig:nms}
+	\end{figure}
+	\section{Posizione dei target}\label{sec:Posizione-dei-target}
+	
+	\subsection{Triangolazione}\label{subsec:Triangolazione}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.5\textwidth]{./img/ideal_object_triangulation.pdf}
+		\caption{Triangolazione}
+		\label{fig:triangulation}
+	\end{figure}
+	
+	\subsection{Calcolo della distanza}\label{subsec:Calcolo-della-distanza}
 	
 	L'altezza percepita dell'oggetto non è un indicatore affidabile della sua distanza dal robot in quanto parte dell'oggetto potrebbe essere occlusa o non presente nel frame. Inoltre classificatori quali HoG tendono a produrre ROI significativamente più alte dell'oggetto. La larghezza del torso, invece, è meno suscettibile a tali problemi, e non dipende dalla posizione (ad esempio seduto o alzato). Dobbiamo tuttavia ipotizzare che il torso abbia forma cilindrica introducendo quindi degli errori se l'obbiettivo non sta guardando la camera.	La posizione orizzontale dell'oggetto relativa alla camera può influenzare la larghezza percepita diminuendola quando aumenta la distanza dal centro dell'immagine. Ipotizzando che la camera abbia un FOV (field of view) di $2\alpha$ e sia distante $d$ dall'oggetto, la massima distanza orizzontale che un punto dell'immagine potrebbe avere dal centro del piano dell'immagine sarebbe $a = d \tan alpha$ (Fig.~\ref{fig:error}).
 	
@@ -147,18 +191,40 @@
 	\frac{f(m) \times real~width(m) \times image~width(pixels)}
 	{object~width(pixels) \times object~distance(m)}
 	\end{equation}
+	
+	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\textwidth]{./img/pdf_benchmark.pdf}
+		\caption{Benchmark funzione densità di probabilità (probability density function, funzione )}
+		\label{fig:pdf_benchmark}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\textwidth]{./img/pdf_shape.pdf}
+		\caption{Forma pdf}
+		\label{fig:pdf_shape}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\textwidth]{./img/image_segmentation.pdf}
+		\caption{Segmentazione immagine}
+		\label{fig:image_segmentation}
+	\end{figure}
 		
-	\section{Clustering}
-	We decided to lower the dimensionality of our data. We used cylindrical coordinates and the feature vector is 2 dimensional.
-	We used the Density-Based Scan with a threshold. The entities not belonging to the cluster are discarded.
+	\section{Pianificazione del moto}\label{sec:Pianificazione-del-moto}
 	
-	\section{Projection Matrix}
-	\cite{OpenGL}
+	\subsection{Modalità di movimento}\label{subsec:Modalità-di-movimento}
 	
-	\section{ROS}
-	
-	\section{Bugs found in the Webots ROS Controller}
-	Logical values did not allow callbacks.
+	\subsection{Pianificazione}\label{subsec:Pianificazione}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\textwidth]{./img/fsa.pdf}
+		\caption{Automa a stati finito (Finite state automata)}
+		\label{fig:fsa}
+	\end{figure}
 	
 	\newpage
 	% Bibliography
