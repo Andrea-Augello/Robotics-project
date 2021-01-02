@@ -76,7 +76,8 @@
 	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
 	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron} \cite{tiagoiron} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
 	Abbiamo ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello base del \textbf{TIAGo} disponibile in Webots.
-	Inolte è stato necessario contattare gli sviluppatori di Webots per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto il modello Webots non corrisponde perfettamente alle specifiche indicate nel datasheet \cite{Tiago IRON datasheet}. Le ruote del modello hanno raggio di 200mm. 
+	La camera del \textbf{TIAGo}, come indicato dal datasheet, è RGB-D. Il modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una camera monoscopica RGB.
+	Inoltre è stato necessario contattare gli sviluppatori del \textbf{TIAGo} per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto tale informazione è omessa dal datasheet. Ci è stato comunicato che le ruote del \textbf{TIAGo} hanno raggio di 200mm. Utilizzando tale valore nei calcoli odometrici, abbiamo ottenuto valori largamente differenti dalle misurazioni. Abbiamo quindi dedotto sperimentalmente che il raggio del modello Webots è di 3cm più lungo. 
 	
     L'IMU utilizzata ha 6 gradi di libertà ed è composta delle seguenti componenti:
 	\begin{enumerate}
@@ -107,7 +108,7 @@
 	\section{Object recognition}\label{sec:Object-recognition}
 	
 	\subsection{Campionamento delle immagini}\label{subsec:Campionamento-delle-immagini}
-	Il FOV della camera 
+	Il FOV della camera è di 57°, di conseguenza per ricoprire 360° è stato necessario effettuare 7 campionamenti. Il settimo campionamento, come si evince dalla figura seguente, è sovrapposto al primo per una porzione di scena pari a 39° coincidente col primo campionamento.
 	
 	\begin{figure}[H]
 		\centering
@@ -135,6 +136,7 @@
 	\end{center}
 
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
+	
 	
 	\begin{figure}[H]
 		\centering
