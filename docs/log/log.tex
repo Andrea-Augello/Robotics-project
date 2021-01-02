@@ -234,10 +234,19 @@
 	
 	\subsection{Modalità di movimento}\label{subsec:Modalità-di-movimento}
 	
-	\subsubsection{Exploration mode}
+	\subsubsection{Modalità esplorazione}
+	Quando il robot entra in modalità esplorazione il suo comportamento è di esplorazione casuale della mappa. Il robot continua ad esplorare ed effettuare scan periodici fino a quando non viene rilevato un obbiettivo. In tal caso il robot entra in modalità campi di potenziale. Se il robot incontra un ostacolo nel suo cammino ruota di $90^{\circ}$ nella direzione opposta a quest'ultimo e continua l'esplorazione casuale.
 	
 	\subsubsection{Bug mode}
+	Quando il robot entra in modalità bug effettuiamo uno scan lidar. Poiché lavoriamo con valori discreti, confrontiamo i valori ottenuti con una soglia al fine di individuare le discontinuità nel profilo degli oggetti nel range. Analizziamo successivamente le discontinuità del segnale, corrispondenti ai bordi degli ostacoli, come si evince dalla fig. \ref{fig:bug}. Da tali punti viene calcolato l'angolo fra la retta che li congiunge con l'obbiettivo. Il robot si muove infine verso il punto al quale corrisponde l'angolo minore, che ci farà allontanare meno dall'obbiettivo. Se il profilo dell'ostacolo è una circonferenza, la retta fra il punto con angolo minimo e l'obbiettivo è tangente all'ostacolo, da cui il nome dell'algoritmo Tangent Bug \cite{503814}.
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.4\textwidth]{./img/bug.pdf}
+		\caption{Profilo dell'ostacolo}
+		\label{fig:bug}
+	\end{figure}
+
 	\subsubsection{Campi di potenziale}
 	
 	
