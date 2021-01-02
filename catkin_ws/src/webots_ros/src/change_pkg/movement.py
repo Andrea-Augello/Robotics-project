@@ -200,7 +200,7 @@ class Movement:
         self.__robot.vision.clear_saved_frames()
         rotation = 0
         self.__robot.vision.save_frame(self.__robot.vision.update_frame(self.__robot.sensors.camera.value))
-        for _ in range(6):
+        for _ in range(math.ceil(360/self.__robot.vision.HORIZONTAL_FOV)-1):
             rotation = rotation + self.rotate(self.__robot.vision.HORIZONTAL_FOV-2,0.1)
             self.__robot.vision.save_frame(self.__robot.vision.update_frame(self.__robot.sensors.camera.value))
         offset = rotation % 360
