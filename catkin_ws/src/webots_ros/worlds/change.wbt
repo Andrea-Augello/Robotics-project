@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5776567755050865 0.5771969549958943 0.5771969549958953 4.189249903239788
-  position 0.031002066464054893 35.47116100561525 0.0010617378008106301
+  orientation 0.5813536833567812 -0.5637170567401557 -0.5867290471654866 4.160364099346999
+  position 1.5173988769713471 31.58096707699731 -3.138082558090137
 }
 TexturedBackground {
 }
@@ -33,23 +33,25 @@ Pedestrian {
 }
 Pedestrian {
   translation -0.306239 1.27 -7.4404
-  rotation 0 1 0 3.14159
+  rotation 0 1 0 -5.307179586466759e-06
   name "pedestrian(4)"
+  shirtColor 0 0.448768 0
   enableBoundingObject TRUE
 }
 Pedestrian {
   translation -5.56128 1.27 -0.337293
-  rotation 0 1 0 -2.3561953071795863
+  rotation 0 -1 0 0.2618
   name "pedestrian(5)"
+  shirtColor 0 0.850233 0.855879
   enableBoundingObject TRUE
 }
 Pedestrian {
   translation 4.63961 1.27 -3.6527
   rotation 0 1 0 -0.5236053071795865
   name "pedestrian(3)"
-  shirtColor 0.671351 0 0.652461
-  pantsColor 0.130205 0.135622 0.26186
-  shoesColor 1 0.85745 0
+  shirtColor 1 1 1
+  pantsColor 0.2 0.2 0.2
+  shoesColor 0 0 0
   enableBoundingObject TRUE
   rightHandSlot [
     Can {
@@ -59,7 +61,7 @@ Pedestrian {
 }
 Pedestrian {
   translation -5.56887 1.27 0.535229
-  rotation 0 1 0 -0.5236053071795865
+  rotation 0 1 0 2.87979
   name "pedestrian(6)"
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
@@ -86,9 +88,9 @@ Pedestrian {
 }
 Pedestrian {
   translation 7.10683 1.27 7.91489
-  rotation 0 1 0 0.261794
+  rotation 0 1 0 -2.3561953071795863
   name "pedestrian(1)"
-  shirtColor 0.739193 0 0.0918135
+  shirtColor 0.972793 0.592737 0
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
   enableBoundingObject TRUE
@@ -103,7 +105,7 @@ Pedestrian {
   enableBoundingObject TRUE
 }
 Sofa {
-  translation -4.44 0 0
+  translation -7.88569 0 0.128936
   physics Physics {
     density 100
   }
