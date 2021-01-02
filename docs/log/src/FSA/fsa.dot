@@ -6,10 +6,12 @@ digraph G {
     s [label="Scan", shape=circle, width=1];
 
     start -> s;
-    s->e [label="No target\nfound"];
+    s->e [label="No target\nfound   "];
     e->s;
-    s->p [label="Valid target\nfound"];
-    p->s [label="Target\n reached"];
-    p->b [label="Stuck in\na loop"];
-    b->p;
+    s->p [label="Valid target   \nfound"];
+    p->s [label="Target reached\n\\\nDistance walked"];
+    p->b [label="Stuck in    \na loop"];
+    b->p [label="   Moved away\nfrom loop"];
+
+
 }
