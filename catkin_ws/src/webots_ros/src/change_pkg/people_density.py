@@ -7,26 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import multivariate_normal
 
-
-# Parameters
-EXTEND_AREA = 100.0  # [m] grid map extended length
-SIM_TIME = 50.0  # simulation time [s]
-DT = 0.1  # time tick [s]
-MAX_RANGE = 5.59  # maximum observation range
-RANGE_STD = 1.0  # standard deviation for observation gaussian distribution
-
-# grid map param
-XY_RESOLUTION = 0.25  # xy grid resolution
-MIN_X = -50.0
-MIN_Y = -50.0
-MAX_X = 50.0
-MAX_Y = 50.0
-
-show_animation = True
-
 class GridMap:
 
-    def __init__(self, robot, xy_resolution = 0.25, min_x =-10, min_y = -10, max_x=10, max_y=10, show_map=True):
+    def __init__(self, robot, xy_resolution = 0.25, min_x =-20, min_y = -20, max_x=20, max_y=20, show_map=True):
         self.__robot = robot
         self.xy_resolution = xy_resolution
         self.min_x = min_x
@@ -84,8 +67,10 @@ class GridMap:
         ax2.scatter(x, y, s=20)
         ax2.scatter(x_contour, y_contour, s=10)
         ax2.set_xlabel('Position (m)')
-        plt.xlim([ self.max_x,self.min_x])
+        plt.xlim([self.min_x, self.max_x])
         plt.ylim([self.min_y, self.max_y])
+        ax1.invert_xaxis()
+        ax2.invert_xaxis()
         plt.show()
 
     def calc_grid_index(self):
@@ -123,7 +108,8 @@ class GridMap:
         # likelihood
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
-        return 0.01 + 1/(1+math.hypot((abs(o_distance-p_distance)/2),(angle_diff)/3)**2)
+        return 0.05 \
+                + 1/(1+math.hypot((o_distance-p_distance)/1.5,(angle_diff)/5)**2)
 
 
 

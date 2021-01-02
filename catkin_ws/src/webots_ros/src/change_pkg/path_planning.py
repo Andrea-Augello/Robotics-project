@@ -1,5 +1,6 @@
 import math
 from change_pkg.vision import *
+import change_pkg.utils as utils
 import numpy as np
 
 class Path_planner:
@@ -15,6 +16,9 @@ class Path_planner:
         """
         self.__robot = robot
         self.target = (self.__robot.odometry.x,self.__robot.odometry.y)
+        self.distance_allowed = 0
+        self.perimeter_target = []
+        self.area_target = 0
         self.resolution = resolution
         self.radius=radius
         self.KP = 15
@@ -41,6 +45,17 @@ class Path_planner:
                 if t['area']>target['area']:
                     target=t
             self.target = target['center']
+            self.area_target = target['area']
+            self.perimeter_target = target['contour']
+
+            min_point = self.perimeter_target[0]
+            min_distance = utils.math_distance(min_point,self.target)
+            for perimeter_point in self.perimeter_target:
+                perimeter_point_distance=utils.math_distance(perimeter_point,self.target)
+                if  perimeter_point_distance < min_distance:
+                    #min_point = perimeter_point
+                    min_distance = perimeter_point_distance
+            self.distance_allowed = min_distance
             return True
         else:
             return False

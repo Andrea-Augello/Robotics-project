@@ -7,7 +7,8 @@ from sklearn.preprocessing import StandardScaler
 
 
 def arc_distance(p1,p2):
-    angle_diff = abs(p1[1]-p2[1])%360
+    angle_diff = (p1[1]-p2[1])%360
+    angle_diff = angle_diff if angle_diff < 180 else abs(angle_diff-360)
     angle_diff = angle_diff if angle_diff < 57 else 999999
     angle_diff = angle_diff if angle_diff > 1 else 0
     lin_diff = math.sqrt(p1[0]**2+p2[0]**2-2*p1[0]*p2[0]*math.cos((p1[1]-p2[1])*math.pi/180))

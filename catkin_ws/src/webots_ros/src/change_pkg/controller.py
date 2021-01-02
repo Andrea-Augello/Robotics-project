@@ -18,7 +18,8 @@ class Controller:
         self.MOVEMENT_LOOP_PRECISION = 0.01
         self.ROTATION_LOOP_PRECISION = 0.1
         self.ESCAPING_DISTANCE = 2
-        self.TARGET_DISTANCE = 0.5
+        self.TARGET_DISTANCE = 1
+        self.SCAN_RATE = 8
 
     def start(self):
         while(True):
@@ -29,19 +30,38 @@ class Controller:
 
     def go_to_gathering(self):
         self.scheduler.potential_field_mode()
-        while self.path_planner.target_distance() > self.TARGET_DISTANCE:
+        odometer = self.get_odometer()
+        while not self.is_arrived():
             #self.people_density.reset()
+            if self.get_odometer()-odometer > self.SCAN_RATE:
+                odometer = self.get_odometer()
+                self.scan()
             self.schedule_movement()
             self.set_mode()
         # self.__robot.movement.rotate(-self.path_planner.target_angle())  
 
+
+    def is_arrived(self):
+        """
+        :returns: True if the robot is near the cluster, False otherwise
+
+        """
+        return self.path_planner.target_distance() < max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)
+
     def exploration(self):
         self.scheduler.exploration_mode()
+        odometer = self.get_odometer()
         valid_target = self.scan()
         while not valid_target:
-            if self.exploration_movement():
+            self.exploration_movement()
+            if self.get_odometer()-odometer > self.SCAN_RATE/2:
+                odometer = self.get_odometer()
                 valid_target = self.scan()
+        utils.loginfo("Target: {} - Distance allowed: {}".format(self.path_planner.target, max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)))        
     
+    def get_odometer(self):
+        return self.__robot.odometry.history[0][1]
+
     def scan(self):
         self.__robot.movement.scan()
         targets = self.__robot.vision.locate_targets()
@@ -105,7 +125,6 @@ class Controller:
         distance,angle = self.path_planner.exploration_next_step()
         self.__robot.movement.rotate(angle)
         self.__robot.movement.move_forward(distance)    
-        return distance > 0 
 
     def potential_field_movement(self):
         angle = self.path_planner.next_step_direction()
