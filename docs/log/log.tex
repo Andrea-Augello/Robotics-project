@@ -108,7 +108,7 @@
 	\section{Object recognition}\label{sec:Object-recognition}
 	
 	\subsection{Campionamento delle immagini}\label{subsec:Campionamento-delle-immagini}
-	Il FOV della camera è di 57°, di conseguenza per ricoprire 360° è stato necessario effettuare 7 campionamenti. Il settimo campionamento, come si evince dalla figura seguente, è sovrapposto al primo per una porzione di scena pari a 39° coincidente col primo campionamento.
+	Il FOV della camera è di 57°, di conseguenza per ricoprire 360° è stato necessario effettuare 7 campionamenti. Il settimo campionamento, come si evince dalla figura \ref{fig:campionamento_immagini}, è sovrapposto al primo per una porzione di scena pari a 39° coincidente col primo campionamento.
 	
 	\begin{figure}[H]
 		\centering
@@ -119,7 +119,7 @@
 	
 	\subsection{Yolo}\label{subsec:Yolo}
 	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di \textbf{object recognition}. A tal fine abbiamo valutato le performance di YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented gradients), HoG + SVG (support vector machines) + NMS (non maxima suppression).
-	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicile alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparaemtri parametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente, sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. Ecco un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella seguente, i cui dati provengono dal sito di YOLO \cite{yolo}:
+	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicine alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparaemtri parametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente, sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. Ecco un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella seguente, i cui dati provengono dal sito di YOLO \cite{yolo}:
 	
 	\begin{center}
 		\begin{tabular}{ |c|c|c|c| } 
@@ -136,7 +136,10 @@
 	\end{center}
 
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
+	Durante la fase di individuazione delle persone vengono individuate varie bounding box corrispondenti al medesimo individuo. Di conseguenza è stato necessario effettuare una fase di clustering al fine di scartare le bounding box duplicate. L'algoritmo di clustering utilizzato è DBSCAN (Density based scan) \cite{DBSCAN}, i cui parametri principali sono \textbf{eps}, ovvero la massima distanza fra due punti affinché vengano considerati appartenenti a un cluster (da non confondere con la massima distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il numero minimo di punti affinchè un cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di distanza. 
+	Come di evince dalla figura \ref{fig:nms}, la metrica utilizzata considera la lunghezza di un arco di circonferenza con raggio corrispondente alla distanza fra i due punti ed angolo $\alpha$ corrispondente  all'angolo fra i due punti rispetto alla posizione del robot.
 	
+	Abbiamo ritenuto opportuno utilizzare l'implementazione dell'algoritmo fornita da \textbf{sklearn} \cite{scikit}.
 	
 	\begin{figure}[H]
 		\centering
@@ -280,6 +283,9 @@
 		\bibitem{yolo} 
 		\textit{https://pjreddie.com/darknet/yolo/}. \newline
 		Yolo website.
+		\bibitem{DBSCAN} 
+		\textit{https://dl.acm.org/doi/abs/10.1145/3068335}. \newline
+		DBSCAN Revisited.
 	\end{thebibliography}
 
 \end{document}
