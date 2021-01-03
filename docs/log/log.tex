@@ -261,10 +261,12 @@
 	occupazione confidando in una eventuale convergenza.
 
 	Al fine di ottene un'approssimazione di una gaussiana adatta al
-	nostro scenario, è stato utilizzato un funzionale ispirato al guadagno del
-	filtro di Butterworth.
+	nostro scenario, per modellare la probabilità che data l'occupazione della
+	cella in posizione $ {\bf x} $ si ottenga l'osservazione $ {\bf z} $ è
+	stato utilizzato un funzionale ispirato al guadagno del filtro di
+	Butterworth.
 	\begin{equation}\label{eq:pdf}
-		p({\bf x}|{\bf z}) = \frac	{K}
+		p({\bf z}|{\bf x}) = \frac	{K}
 		{1 + d({\bf x},{\bf z})^4 } 
 	\end{equation}
 	Nell'equazione~\ref{eq:pdf} è mostrato il funzionale utilizzato. In
@@ -295,10 +297,58 @@
 	\hl{TODO: check math to match slides}
 
 	\begin{equation}\label{eq:belief-update}
-		p({\bf x} | Z_i) = p({\bf x} | Z_{i-1}) \cdot 
-		\sum_{{\bf z} \in Z_i} p({\bf x} | {\bf z})
+		p({\bf x}_i | Z_i) = p({\bf x}_{i-1}) \cdot 
+		\sum_{{\bf z} \in Z_i} p({\bf z} | {\bf x})
 	\end{equation}
+	Al termine di ogni aggiornamento della mappa l'intera griglia viene inoltre
+	normalizzata per avere somma unitaria.  
+	Questa formula è valida sotto le seguenti assunzioni:
+	\begin{itemize}
+		\item In uno stesso scan osservazioni separate si riferiscono ad
+			oggetti distinti. In altre parole date due osservazioni $z_1$ e
+			$z_2$ queste non hanno intersezione, quindi $ p(z_1 \cup pz_2) =
+			p(z_1)+p(z_2)-p( z_1 \cap z_2) = p(z_1)+p(z_2) $ 
 
+			Questa assunzione è ragionevole ricordando che lo scan avviene
+			ruotando intorno al centro del robot e che viene effettuato uno
+			scarto dei duplicati tenendo conto dell'angolo, quindi non possono
+			esserci due osservazioni distinte derivanti dall'occupazione della
+			stessa posizione nella mappa.
+
+		\item In assenza di nuove osservazioni la stima dello stato del sistema
+			rimane invariata: $ \overline{bel}(x_i) = bel(x_{i-1}) $ 
+
+			Il robot non si muove abbastanza velocemente da poter inseguire e
+			raggiungere assembramenti di breve durata, ha senso quindi
+			limitarsi a considerare situazioni prevalentemente stazionarie e
+			assumere consistenza dell'ambiente tra uno scan e l'altro. Inoltre
+			gli scan sarebbero comunque troppo infrequenti per ottenere stime
+			significative sul movimento degli oggetti.
+
+	\end{itemize}
+
+	In pratica applicando direttamente queste formule si introdurrebbe un
+	errore nell'interpretazione delle informazioni: se per qualche ragione in
+	uno scan non venisse rilevato nessun oggetto, $ Z_i $ sarebbe l'insieme
+	vuoto. In mancanza di nuovi dati si potrebbero tentare due approcci:
+	resettare le stime o lasciarle del tutto invariate. Nessuno di questi
+	approcci si dimostra soddisfacente:
+	\begin{itemize} 
+		\item Lasciare invariato il belief a seguito di multiple scansioni
+			senza successo porterebbe a non notare che tutte le persone
+			nell'ambiente in cui ci si trova sono andate via, continuando a
+			considerare valide tutte le posizioni precedenti.
+		\item Dall'altro lato, un approccio troppo drastico quale
+			immediatamente scartare tutte le precedenti stime porterebbe a
+			perdere informazioni utili a causa di occlusioni temporanee (e.g.
+			il robot entra in una stanza vuota).
+	\end{itemize}
+
+	Per gestire questa situazione effettuiamo uno smoothing degli istogrammi
+	prima di ogni update essendoci una diminuzione della certezza delle misure.
+	Aggiungiamo inoltre del rumore. In questo modo in assenza di osservazioni
+	ci sarà una tendenza al ritorno ad uno stato iniziale, ma sarà graduale in
+	modo da evitare di scartare troppo rapidamente le informazioni pregresse.
 
 	Al fine di individuare le zone con alta probabilità di contenere persone
 	abbiamo utilizzato un approccio derivante dall'elaborazione delle immagini.
