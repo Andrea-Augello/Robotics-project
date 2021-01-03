@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5813536833567812 -0.5637170567401557 -0.5867290471654866 4.160364099346999
-  position 1.5173988769713471 31.58096707699731 -3.138082558090137
+  orientation 0.000534241725607563 -0.7415635855200496 -0.6708823765880474 3.1427737076085873
+  position -3.151202209182188 41.84788665929711 -4.564497441502758
 }
 TexturedBackground {
 }
@@ -19,13 +19,6 @@ RectangleArena {
   wallThickness 0.3
   wallHeight 3
 }
-PlasticCrate {
-  translation 0.58 0 -1.39
-}
-PlasticCrate {
-  translation 0.13 0 -2.12
-  name "plastic crate(1)"
-}
 Pedestrian {
   translation 3 1.27 2
   rotation 0 1 0 3.14159
@@ -39,16 +32,20 @@ Pedestrian {
   enableBoundingObject TRUE
 }
 Pedestrian {
-  translation -5.56128 1.27 -0.337293
-  rotation 0 -1 0 0.2618
+  translation -5.3 1.27 -4.70729
+  rotation 0 -1 0 6.13667e-07
   name "pedestrian(5)"
   shirtColor 0 0.850233 0.855879
   enableBoundingObject TRUE
 }
 Pedestrian {
-  translation 4.63961 1.27 -3.6527
-  rotation 0 1 0 -0.5236053071795865
+  translation 5 1.27 -6
+  rotation 0 -1 0 6.53317e-06
   name "pedestrian(3)"
+  controllerArgs [
+    "--speed=0.4"
+    "--trajectory=5 -6,  5 5, -4 5,  -4 -6"
+  ]
   shirtColor 1 1 1
   pantsColor 0.2 0.2 0.2
   shoesColor 0 0 0
@@ -60,8 +57,8 @@ Pedestrian {
   ]
 }
 Pedestrian {
-  translation -5.56887 1.27 0.535229
-  rotation 0 1 0 2.87979
+  translation -5.3 1.27 -3.56477
+  rotation 0 1 0 3.14159
   name "pedestrian(6)"
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
@@ -106,9 +103,49 @@ Pedestrian {
 }
 Sofa {
   translation -7.88569 0 0.128936
+  color 0.3 0.04 0.0005
   physics Physics {
     density 100
   }
+}
+Armchair {
+  translation -6.58 0 -2.04
+  rotation 0 1 0 -1.5707953071795862
+  color 0.3 0.04 0.0005
+}
+Armchair {
+  translation -6.58 0 2.15
+  rotation 0 1 0 1.5708
+  name "armchair(1)"
+  color 0.3 0.04 0.0005
+}
+PottedTree {
+  translation -7.69 0 -7.94
+}
+PottedTree {
+  translation -7.69 0 7.98
+  name "potted tree(1)"
+}
+Carpet {
+  translation -6.41 0 0.120006
+  rotation 0 1 0 -1.5707953071795862
+  color 0.6 0.4 0.2
+}
+Table {
+  translation -5.18 -0.3 1.17246e-06
+  rotation 0 1 0 -1.5707953071795862
+}
+LandscapePainting {
+  translation -1.12243e-05 1.61 8.5
+  rotation 0 1 0 3.14159
+}
+Clock {
+  translation -8.47 2.03 1.81093e-05
+  rotation 0 1 0 1.5708
+}
+Television {
+  translation -4.87 0.76 1.27474e-06
+  rotation 0 1 0 -1.5707953071795862
 }
 RoundTable {
 }
