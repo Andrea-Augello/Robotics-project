@@ -86,19 +86,20 @@ class GridMap:
 
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
+        noise = 0.2/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
         self.data = gaussian_filter(self.data, sigma=3)
-        for ix in range(self.x_w):
-            for iy in range(self.y_w):
-                prob = 0
-                for iz in range(len(z)):
-                    prob += self.calc_gaussian_observation_pdf(
-                        z, iz, ix, iy)
-                self.data[ix][iy] *= prob
+        if len(z):
+            for ix in range(self.x_w):
+                for iy in range(self.y_w):
+                    prob = 0
+                    for iz in range(len(z)):
+                        prob += self.calc_gaussian_observation_pdf(
+                            z, iz, ix, iy)
+                    self.data[ix][iy] *= prob
         # adds noise
-        min_val = np.min(self.data)
         for ix in range(self.x_w):
             for iy in range(self.y_w):
-                self.data[ix][iy] += np.random.rand()*min_val/2
+                self.data[ix][iy] += np.random.rand()*noise
         self.normalize_probability()
         #return self.find_clusters_2()
         return self.find_centroid()
