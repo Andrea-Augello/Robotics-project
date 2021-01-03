@@ -216,14 +216,14 @@
 	Le relazioni geometriche sulla distanza degli oggetti esposte nella
 	sezione~\ref{subsec:Calcolo-della-distanza} assumono che il target abbia la
 	stessa larghezza in ogni posa e che sia possibile ottenere dal
-	classificatore delle bounding box estremamente aderenti all'oggetto. Queste
-	assunzioni nella nostra applicazione non sono rispettate, la distanza
-	dell'oggetto sarà quindi soggetta ad errore non trascurabile. Per questa
+	classificatore delle bounding box estremamente aderenti all'oggetto. Dato che queste
+	assunzioni non sono rispettate nella nostra applicazione la distanza
+	dell'oggetto sarà soggetta ad errore non trascurabile. Per questa
 	ragione e per i problemi legati alla triangolazione abbiamo abbandonato la
-	rappresentazione basata su oggetti e siamo ricorsi ad un filtro di
+	rappresentazione basata su oggetti e abbiamo fatto ricorso ad un filtro di
 	occupazione bayesiano (BOF)~\cite{tay2008bayesian}.
-		
-	\hl{TODO: Inserire un paragrafo di collegamento tra BOF e dettagli implementativi}
+
+	Nelle classiche metodologie di tracciamento, il problema dell'associazione dei dati (data association), ovvero di associare un oggetto $o_t$ al tempo $t$ con un oggetto $o_t+1$ al tempo $t+1$, e della stima dello stato si configurano come classici problemi da risolvere. Nel filtro di occupazione bayesiano, il problema dell'associazione dei dati viene superato in quanto viene gestito da un livello di astrazione superiore. Il concetto di oggetto viene difatti riformulato da proprietà più utili quali occupazione o rischio, che vengono stimate direttamente per ogni cella utilizzando sia osservazioni dai sensori che conoscenze pregresse. Le caratteristiche di incertezza legate ai sensori vengono descritte, in questo modello, attraverso le probabilità di occupazione.
 
 	Al fine di trasformare le osservazioni ottenute in una probabilità che le
 	persone si trovino effettivamente nella posizione indicata è stato
