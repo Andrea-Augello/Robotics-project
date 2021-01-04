@@ -103,6 +103,13 @@ class Vision:
     def save_frame(self,frame):
         self.current_frames.append(frame)
 
+    def correction(self, x):
+        if x < 1 or x > 10:
+            return x
+        else:
+            return 0.003116*x**5 - 0.09722*x**4 + 1.124*x**3 -5.908*x**2 + 14.5*x-7.367
+
+
     def locate_targets(self):
         self.current_rois = od.get_rois(self.current_frames, self.show_roi)
         coords = []
@@ -111,7 +118,7 @@ class Vision:
             p2 = (roi[0] + roi[2], roi[1] + roi[3])
             cylindrical_coords = self.point_cylindrical_coords(
                 self.roi_center(roi),
-                self.obj_dist_w(p1,p2,0.8))
+                self.correction(self.obj_dist_w(p1,p2,0.6)))
             # Drops z coordinate as our robot only has two translational DoF
             # and polar coordinates suffice
             coords.append(cylindrical_coords[0:2])

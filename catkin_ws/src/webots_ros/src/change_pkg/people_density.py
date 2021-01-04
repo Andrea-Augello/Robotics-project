@@ -10,7 +10,7 @@ from scipy.stats import multivariate_normal
 
 class GridMap:
 
-    def __init__(self, robot, xy_resolution = 0.25, min_x =-20, min_y = -20, max_x=20, max_y=20, show_map=True):
+    def __init__(self, robot, xy_resolution = 0.20, min_x =-10, min_y = -10, max_x=10, max_y=10, show_map=True):
         self.__robot = robot
         self.xy_resolution = xy_resolution
         self.min_x = min_x
@@ -87,7 +87,7 @@ class GridMap:
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
         noise = 0.2/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
-        self.data = gaussian_filter(self.data, sigma=3)
+        self.data = gaussian_filter(self.data, sigma=2)
         if len(z):
             for ix in range(self.x_w):
                 for iy in range(self.y_w):
