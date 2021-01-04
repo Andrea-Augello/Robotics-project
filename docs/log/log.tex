@@ -56,6 +56,7 @@
 	
 	\subsection{Descrizione}\label{sec:Descrizione}
 	ROS \cite{ros.org} è un meta sistema operativo open-source. Fornisce tutti i servizi che caratterizzano un sistema operativo quali l'astrazione hardware, il controllo di dei dispositivi a basso livello, l'implementazione delle funzionalità più usate, lo scambio di messaggi fra processi e la gestione dei pacchetti. Fornisce inoltre librerie e strumenti per scrivere, ottenere e eseguire codice su più computer. Il "grafo" runtime è una rete peer-to-peer di processi (potenzialmente distribuiti su più macchine) collegati attraverso l'infrastruttura ROS. ROS implementa vari stili di comunicazione, fra i quali streaming di dati asincrodo attraversi i \textbf{topics} e comunicazione sincrona attraverso i \textbf{servizi}. 
+	I topics sono bus con identificativi attraverso i quali i nodi scambiano messaggi. I topics hanno una semantica di publish/subscribe anonima, che separa la produzione di informazioni dal suo consumo 
 	
 	\subsection{Bug}\label{sec:Bug}
 	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots \cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare che si sta riproducendo un suono da file audio ed il metodo per verificare che il robot sta parlando presentavano difatti le funzioni callback invertite. In seguito al nostro avviso via email il bug è stato risolto nel successivo aggiornamento, come si evince dal commit github rilevante \cite{rosbug}, riga 32-34.
@@ -89,7 +90,7 @@
 	\end{enumerate}
 	Abbiamo ritenuto non necessario aggiungere il \textbf{magnetometro} in quanto in uno scenario reale sarebbe stato soggetto ad interferenze (significativamente più di un giroscopio), specialmente in un ambiente con molti oggetti metallici (quale potenzialmente lo scenario di utilizzo del nostro robot).
 	
-	Il modello Webots del \textbf{TIAGo} presenta uno slot libero per il lidar. Abbiamo scelto il modello Hokuyo URG-04LX-UG01 \cite{lidarspecs} che, come specificato dalla documentazione del modello Webots,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (ricordiamo che agli estremi è parzialmente occluso).
+	Il modello Webots del \textbf{TIAGo} presenta un lidar, ovvero il modello Hokuyo URG-04LX-UG01 \cite{lidarspecs} che, come specificato dalla documentazione del modello Webots,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (ricordiamo che agli estremi è parzialmente occluso). In seguito ad analisi sperimentale abbiamo dedotto che l'occlusione del lidar causa malfunzionamenti del package GMapping \cite{grisettiyz2005improving}, utilizzato per implementare le funzionalità di SLAM.
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento}
 	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per ottenere l'angolo di rotazione ci basiamo sui dati ottenuti dal giroscopio, il quale misura il moto rotazionale fornendo una velocità angolare. Per ottenere l'angolo di rotazione effettuiamo quindi un'integrazione discreta dei campioni con interpolazione lineare del primo ordine.
