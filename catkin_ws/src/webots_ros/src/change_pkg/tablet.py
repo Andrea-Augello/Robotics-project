@@ -4,7 +4,7 @@ import change_pkg.utils as utils
 class Tablet:
     def __init__(self, robot):
         self.display = Display()
-        self.speaker = Speaker(robot)
+        self.speaker = Speaker()
 
     def greetings(self):
         self.display.load_image('greetings')
@@ -29,7 +29,6 @@ class Tablet:
 class Speaker:
     def __init__(self,name='speaker'):
         self.name=name
-        self.path=path
 
     
     def speak_polyglot(self,it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):
@@ -45,7 +44,6 @@ class Speaker:
 class Display:
     def __init__(self,name='display'):              
         self.name=name
-        self.path=path
 
     def load_image(self,image):
         utils.publish(self.name, image)
