@@ -26,10 +26,14 @@ class Odometry:
         self.theta = self.theta if self.theta <= 180 else self.theta -360
 
     def movement_history(self):
-        plt.plot([x for ((x,y),_distance) in self.history], [y for ((x,y),_distance) in self.history])
-        plt.axis("equal")
-        #plt.invert_xaxis() 
-        plt.grid(True)
+        fig, ax = plt.subplots()
+        fig.suptitle('Movement history') 
+        ax.plot([x for ((x,y),_distance) in self.history], [y for ((x,y),_distance) in self.history])
+        ax.axis("equal")
+        ax.set_xlabel('Position (m)')
+        ax.set_ylabel('Position (m)')
+        ax.invert_xaxis() 
+        ax.grid(True)
         plt.show()    
 
     def abs_cartesian_to_polar(self, p):
