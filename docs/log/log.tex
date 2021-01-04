@@ -132,7 +132,25 @@
 	
 	\subsection{Yolo}\label{subsec:Yolo}
 	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di \textbf{object recognition}. A tal fine abbiamo valutato le performance di YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented gradients), HoG + SVG (support vector machines) + NMS (non maxima suppression).
-	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicine alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente (approssimativamente del 442\%), sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. La tabella \ref{tab:yolotiny} mostra l'architettura di YOLOv3-tiny. Ecco un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella \ref{tab:comparison}, i cui dati provengono dal sito di YOLO \cite{yolo}:
+	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicine alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente (approssimativamente del 442\% \cite{9074315}), sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. La tabella \ref{tab:yolotiny} \cite{He2019TFYOLOAI}, mostra l'architettura di YOLOv3-tiny. La tabella \ref{tab:comparisonversions} mostra un paragone fra le versioni di YOLO e le rispettive versioni tiny \cite{9074315}. Inoltre è rilevante in tal senso un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella \ref{tab:comparison}, i cui dati provengono dal sito di YOLO \cite{yolo}:
+	
+	\begin{table}[htpb]
+		\centering
+		\begin{tabular}{ |c|c|c|c|c|c| } 
+			\hline
+			Model & Number of n-layers & FLOPS & FPS & map value & Dataset \\
+			\hline	
+			YOLOv1    		& 26.00   &  Not given  &  45.00   & 63.50 & VOC-data  \\ 
+			YOLOv1-tiny     & 9.00    &  Not given  &  155.00  & 52.80 & VOC-data  \\ 
+			YOLOv2    		& 32.00   &  62.95      &  40.00   & 48.20 & COCO-data \\ 
+			YOLOv2-tiny   	& 16.00   &  05.42	    &  244.00  & 23.60 & COCO-data \\
+			YOLOv3    		& 106.00  &  140.70	    &  20.00   & 57.80 & COCO-data \\
+			YOLOv3-tiny    	& 24.00   &  05.57	    &  220.00  & 33-20 & COCO-data \\
+			\hline
+		\end{tabular}
+		\caption{Paragone fra le versioni di YOLO con rispettive versioni tiny}
+		\label{tab:comparisonversions}
+	\end{table}
 	
 	\begin{table}[htpb]
 		\centering
