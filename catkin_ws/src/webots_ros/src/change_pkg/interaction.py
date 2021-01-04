@@ -14,6 +14,7 @@ class Interaction:
         self.path='../../../../../Media/'
         self.is_speaking_flag=False
         self.time_step = 32
+        self.slideshow_image_number=3
 
     def init(self):
         rospy.init_node(self.name, anonymous=True)
@@ -30,11 +31,13 @@ class Interaction:
                 [language, text] = message.split('@')
                 self.call_robot_service(self.speaker_name, 'set_language', language)
                 self.speak(text)
+            while(self.is_speaking()):
+                pass    
             self.is_speaking_flag=False    
 
     def slideshow(self):
         counter=0
-        images=['social_distancing_'+str(i) for i in range(1,4)]
+        images=['social_distancing_'+str(i) for i in range(1,self.slideshow_image_number+1)]
         while True:
             if not self.is_speaking_flag:
                 self.load_image(images[counter])
@@ -58,8 +61,6 @@ class Interaction:
         while(self.is_speaking()):
             pass
         self.call_robot_service(self.speaker_name,'speak', text, volume)
-        while(self.is_speaking()):
-            pass
 
 
     def call_robot_service(self,device_name,service_name,*args):
