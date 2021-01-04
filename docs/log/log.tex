@@ -416,6 +416,26 @@
 		\right|  } 
 	\end{equation}
 	
+	\begin{equation}\label{eq:repulsive-force}
+		F_{rep}(obstacleDistance) = \begin{cases}
+			k_r \cdot \left(
+				\frac{1}{obstacleDistance^2}-
+				\frac{1}{d_t^2}
+			\right)  & obstacleDistance \leq d_{t} \\
+			0 & d > d_{thresh}
+		\end{cases}
+	\end{equation}
+	\begin{equation}\label{eq:attractive-force}
+		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
+	\end{equation}
+	\begin{equation}\label{eq:angle}
+		\omega = \begin{cases}
+			\omega^*=\theta - \angle\left( \textbf{F}_{att} - \textbf{F}_{rep} \right)  & -\Omega \le \omega^* \le \Omega \\
+			-\Omega & \omega^* < -\Omega \\
+			\Omega & \omega^* < \Omega
+
+		\end{cases}	\end{equation}
+	
 	\subsection{Pianificazione}\label{subsec:Pianificazione}
 	
 	Nella figura \ref{fig:fsa} viene riportato l'automa a stati finiti che descrive i comportamenti del robot. In seguito all'avvio, \textbf{Change} effettua uno scan dell'ambiente. Nel caso in cui non vengano rilevati obbiettivi entra in modalità esplorazione, avviando l'esplorazione casuale e, dopo aver percorso una determinata distanza, effettua nuovamente uno scan dell'ambiente. Nel caso in cui venga rilevato un obbiettivo il robot entra in modalità campi di potenziale e si ferma nel caso in cui abbia raggiunto l'obbiettivo o percorso una determinata distanza. Se, in modalità campi di potenziale, il \textbf{TIAGo} rimane bloccato in un loop, entra in modalità Tangent Bug, fin quando non esce dal loop, e ritorna nella modalità campi di potenziale.
