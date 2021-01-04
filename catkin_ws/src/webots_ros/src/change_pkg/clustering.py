@@ -16,6 +16,8 @@ def arc_distance(p1,p2):
     return angle_diff*lin_diff #min(angle_diff, lin_diff)
 
 def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
+        if not len(points):
+            return []
         scaler = StandardScaler().fit(points)
         X = scaler.inverse_transform(scaler.transform(points))
         # Compute DBSCAN
