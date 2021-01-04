@@ -430,6 +430,47 @@
 
 	\subsubsection{Campi di potenziale}
 	
+	I campi di potenziale \ldots~\cite{grisettiyz2005improving}
+
+	Il potenziale attrattivo è centrato sul target, ed è modellato come un
+	potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
+	distanza (Eq.~\ref{eq:attractive-force}).
+
+	Gli ostacoli generano invece un potenziale repulsivo. Questo ha un raggio
+	d'azione limitato, la forza repulsiva è massima per un ostacolo a distanza
+	nulla, e decrese in modo monotono fino ad annullarsi se la distanza
+	dell'ostacolo supera una soglia $d_t$ con la legge descritta
+	nell'equazione~\ref{eq:repulsive-force}.
+
+	La maggior parte dei potenziali repulsivi descritti in letteratura
+	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
+	moto anche se questo avviene parallelamente all'osctacolo. Per ovviare a
+	questo problema prendiamo in considerazione solo gli ostacoli situati in un
+	FOV frontale al robot con ampiezza calcolata per permettere di muoversi
+	parallelamente ad una superficie mantenendo una distanza di sicurezza
+	(Fig.~\ref{fig:obstacle_fov}.
+
+	\begin{figure}[htpb]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./img/obstacle_fov}
+		\caption{\ldots}
+		\label{fig:obstacle_fov}
+	\end{figure}
+
+	\begin{equation}\label{eq:attractive-force}
+		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
+	\end{equation}
+
+	\begin{equation}\label{eq:repulsive-force}
+		F_{rep}(obstacleDistance) = \begin{cases}
+			k_r \cdot \left(
+				\frac{1}{obstacleDistance^2}-
+				\frac{1}{d_t^2}
+			\right)  & obstacleDistance \leq d_{t} \\
+			0 & d > d_{thresh}
+		\end{cases}
+	\end{equation}
+
 	L'approccio seguito consiste in due comportamenti calcolati
 	indipendentemente: il comportamento traslatorio e il comportamento
 	rotazionale.
@@ -446,18 +487,6 @@
 		\right|  } 
 	\end{equation}
 	
-	\begin{equation}\label{eq:repulsive-force}
-		F_{rep}(obstacleDistance) = \begin{cases}
-			k_r \cdot \left(
-				\frac{1}{obstacleDistance^2}-
-				\frac{1}{d_t^2}
-			\right)  & obstacleDistance \leq d_{t} \\
-			0 & d > d_{thresh}
-		\end{cases}
-	\end{equation}
-	\begin{equation}\label{eq:attractive-force}
-		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
-	\end{equation}
 	\begin{equation}\label{eq:angle}
 		\omega = \begin{cases}
 			\omega^*=\theta - \angle\left( \textbf{F}_{att} - \textbf{F}_{rep} \right)  & -\Omega \le \omega^* \le \Omega \\
