@@ -61,7 +61,7 @@ class Controller:
             if self.get_odometer()-odometer > self.SCAN_RATE/2:
                 odometer = self.get_odometer()
                 valid_target = self.scan()
-        utils.loginfo("Target: {} - Distance allowed: {}".format(self.path_planner.target, max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)))        
+        utils.loginfo("Target: {} - Distance allowed: {:.2f}".format(self.path_planner.target, max(self.path_planner.distance_allowed,self.TARGET_DISTANCE)))        
     
     def get_odometer(self):
         return self.__robot.odometry.history[0][1]
