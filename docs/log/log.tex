@@ -50,9 +50,12 @@
 	Il team ha scelto il nome \textbf{Change} in onore di \textbf{Chang'e 4} \cite{change4}, la missione parte della seconda fase del programma cinese di esplorazione lunare, durante il quale è andato a buon fine il primo atterraggio morbido sulla faccia nascosta della luna. 
 
 	\section{Ambiente}\label{sec:Ambiente}
-	Abbiamo considerato opportuno analizzare e studiare il package \textbf{webots\_ros} \cite{webotsRosSetup} al fine di raggiungere una comprensione più profonda sulle metodologie per interfacciare i nodi ROS con il controller ROS standard per Webots. Inoltre è risultato necessario approfondire la documentazione ROS \cite{ros.org} al fine di installare e configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali relativi ai nodi e topics. Infine abbiamo impostato l'interfaccia ROS su Webots seguendo la documentazione cyberbotics rilevante \cite{ros.org}.
+	Abbiamo considerato opportuno analizzare e studiare il package \textbf{webots\_ros} \cite{cyberbotics} al fine di raggiungere una comprensione più profonda sulle metodologie per interfacciare i nodi ROS con il controller ROS standard per Webots. Inoltre è risultato necessario approfondire la documentazione ROS \cite{ros.org} al fine di installare e configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali relativi ai nodi e topics. Infine abbiamo impostato l'interfaccia ROS su Webots seguendo la documentazione cyberbotics rilevante \cite{webotsRosSetup}.
 	
 	\section{ROS}\label{sec:Ros}
+	
+	\subsection{Descrizione}\label{sec:Descrizione}
+	ROS \cite{ros.org} è un meta sistema operativo open-source. Fornisce tutti i servizi che caratterizzano un sistema operativo quali l'astrazione hardware, il controllo di dei dispositivi a basso livello, l'implementazione delle funzionalità più usate, lo scambio di messaggi fra processi e la gestione dei pacchetti. Fornisce inoltre librerie e strumenti per scrivere, ottenere e eseguire codice su più computer. Il "grafo" runtime è una rete peer-to-peer di processi (potenzialmente distribuiti su più macchine) collegati attraverso l'infrastruttura ROS. ROS implementa vari stili di comunicazione, fra i quali streaming di dati asincrodo attraversi i \textbf{topics} e comunicazione sincrona attraverso i \textbf{servizi}. 
 	
 	\subsection{Bug}\label{sec:Bug}
 	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots \cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare che si sta riproducendo un suono da file audio ed il metodo per verificare che il robot sta parlando presentavano difatti le funzioni callback invertite. In seguito al nostro avviso via email il bug è stato risolto nel successivo aggiornamento, come si evince dal commit github rilevante \cite{rosbug}, riga 32-34.
