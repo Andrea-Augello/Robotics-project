@@ -40,6 +40,7 @@ class Change:
         self.motors.init()
         self.sensors.init(self.time_step)
         self.__get_sensors_values()
+        utils.publish('speaker', 'enable')
         self.set_pose(0,0)
         self.set_height(self.motors.torso.max_height/2)
         self.tablet.greetings()
