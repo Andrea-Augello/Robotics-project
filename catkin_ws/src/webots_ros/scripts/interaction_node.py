@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import rospy
-from change_pkg.robot import Change
+from change_pkg.interaction import Interaction
 
+        
 def main():
     try:
         if not rospy.is_shutdown():
-            robot = Change()
-            robot.init()
-            robot.controller.start()
+            interaction = Interaction()
+            interaction.init()
             rospy.spin()
     except (rospy.ServiceException, rospy.ROSException):
         pass        

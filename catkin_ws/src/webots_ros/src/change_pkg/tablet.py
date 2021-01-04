@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import change_pkg.utils as utils
 
 class Tablet:
     def __init__(self, robot):
@@ -43,11 +44,24 @@ class Speaker:
             pass
         self.__robot.call_service(self.name,'speak', text, volume)
 
-    def speak_polyglot(self,it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):
+    def speak_polyglot_old(self,it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):
         for language, text in locals().items():
             if text is not None and language != 'self':
                 self.__robot.call_service(self.name, 'set_language', language.replace("_","-"))
-                self.speak(text)                   
+                self.speak(text)
+                
+
+    def speak_polyglot(self,it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):
+        message=''
+        for language, text in locals().items():
+            if text is not None and language != 'self' and language != 'message':
+                message+=language.replace("_","-")+"@"+text+"|"
+        message=message[:-1]
+        utils.publish(self.name, message)
+        
+
+
+
 
 class Display:
     def __init__(self,robot,name='display',path='../../../../../Media/Image/'):              
