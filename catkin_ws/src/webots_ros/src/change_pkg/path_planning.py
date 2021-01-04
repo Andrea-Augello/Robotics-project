@@ -22,7 +22,7 @@ class Path_planner:
         self.area_target = 0
         self.resolution = resolution
         self.radius=radius
-        self.KP = 15
+        self.KP = 5
         self.ETA = 25
         self.OSCILLATIONS_DETECTION_LENGTH = 3
         self.SECURITY_DISTANCE = 2.0
@@ -175,7 +175,8 @@ class Path_planner:
             attractive_potential = self.KP * np.hypot(
                     self.__robot.odometry.x - self.target[0],
                     self.__robot.odometry.y - self.target[1])
-            repulsive_potential = self.ETA * 1/closest_obstacle[0]**2
+            repulsive_potential = self.ETA \
+                    * (1/closest_obstacle[0]**2-1/self.SECURITY_DISTANCE**2 )
             direction = 180/math.pi*math.atan2( 
                         attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential*math.sin(closest_obstacle[1]/180*math.pi),
                         attractive_potential*math.cos(target_angle/180*math.pi) - repulsive_potential*math.cos(closest_obstacle[1]/180*math.pi) )
