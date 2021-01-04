@@ -472,16 +472,10 @@
 	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
 	moto anche se questo avviene parallelamente all'osctacolo. Per ovviare a
 	questo problema prendiamo in considerazione solo gli ostacoli situati in un
-	FOV frontale al robot con ampiezza calcolata per permettere di muoversi
-	parallelamente ad una superficie mantenendo una distanza di sicurezza
-	(Fig.~\ref{fig:obstacle_fov}.
+	FOV frontale al robot con ampiezza $ \alpha  $ calcolata per permettere di
+	muoversi parallelamente ad una superficie mantenendo una distanza di
+	sicurezza $ h $ (Eq.~\ref{eq:obstacle_fov}, Fig.~\ref{fig:obstacle_fov}): 
 
-	\begin{figure}[htpb]
-		\centering
-		\includegraphics[width=0.8\textwidth]{./img/obstacle_fov}
-		\caption{\ldots}
-		\label{fig:obstacle_fov}
-	\end{figure}
 
 	\begin{equation}\label{eq:attractive-force}
 		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
@@ -496,6 +490,17 @@
 			0 & d > d_{thresh}
 		\end{cases}
 	\end{equation}
+
+	\begin{equation}\label{eq:obstacle_fov}
+		\alpha = \frac{1}{2}\sin^{-1}{\frac{h}{d_t}}
+	\end{equation}
+
+	\begin{figure}[htpb]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./img/obstacle_fov.pdf}
+		\caption{\ldots}
+		\label{fig:obstacle_fov}
+	\end{figure}
 
 	L'approccio seguito consiste in due comportamenti calcolati
 	indipendentemente: il comportamento traslatorio e il comportamento
