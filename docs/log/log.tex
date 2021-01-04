@@ -148,6 +148,36 @@
 		\end{tabular}
 	\end{center}
 
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		Layer & Type & Filters & Size/Stride & Input & Output \\ \hline
+		0 & Convolutional & 16 & 3×3/1 & 416×416×3 & 416×416×16 \\
+		1 & Maxpool && 2×2/2 & 416×416×16 & 208×208×16\\
+		2 & Convolutional & 32 & 3×3/1 & 208×208×16&208×208×32\\
+		3 & Maxpool & & 2×2/2 & 28×208×32 & 104×104×32 \\
+		4 & Convolutional & 64 & 3×3/1 & 104×104×32 & 104×104×64\\
+		5 & Maxpool & & 2×2/2 & 104×104×64 & 52×52×64\\
+		6 & Convolutional & 128 & 3×3/1 & 52×52×64 & 52×52×128\\
+		7 & Maxpool & & 2×2/2 & 52×52×128 & 26×26×128\\
+		8 & Convolutional & 256 & 3×3/1 & 26×26×128 & 26×26×256\\
+		9 & Maxpool & & 2×2/2 & 26×26×256 & 13×13×256\\
+		10 & Convolutional & 512 & 3×3/1 & 13×13×256 & 13×13×512\\
+		11 & Maxpool & & 2×2/1 & 13×13×512 & 13×13×512\\
+		12 & Convolutional & 1024 & 3×3/1 & 13×13×512 & 13×13×1024\\
+		13 & Convolutional & 256 & 1×1/1 & 13×13×1024 & 13×13×256\\
+		14 & Convolutional & 512 & 3×3/1 & 13×13×256 & 13×13×512\\
+		15 & Convolutional & 255 & 1×1/1 & 13×13×512 & 13×13×255\\
+		16 & YOLO&&&&\\
+		17 & Route 13&&&&\\
+		18 & Convolutional & 128 & 1×1/1 & 13×13×256 & 13×13×128\\
+		19 & Up‐sampling && 2×2/1 & 13×13×128 & 26×26×128\\
+		20 & Route 19 8&&&&\\
+		21 & Convolutional & 256 & 3×3/1 & 13×13×384 & 13×13×256\\
+		22 & Convolutional & 255 & 1×1/1 & 13×13×256 & 13×13×256\\
+		23 & YOLO &&&&\\\hline
+	\end{tabular}
+
+
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
 	Durante la fase di individuazione delle persone vengono individuate varie bounding box corrispondenti al medesimo individuo. Di conseguenza è stato necessario effettuare una fase di clustering al fine di scartare le bounding box duplicate. L'algoritmo di clustering utilizzato è DBSCAN (Density based scan) \cite{DBSCAN}, i cui parametri principali sono \textbf{eps}, ovvero la massima distanza fra due punti affinché vengano considerati appartenenti a un cluster (da non confondere con la massima distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il numero minimo di punti affinchè un cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di distanza. 
 	Come di evince dalla figura \ref{fig:nms}, la metrica utilizzata considera la lunghezza di un arco di circonferenza con raggio corrispondente alla distanza fra i due punti ed angolo $\alpha$ corrispondente  all'angolo fra i due punti rispetto alla posizione del robot.
