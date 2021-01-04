@@ -19,6 +19,7 @@ class Change:
         self.time_step = 32
         self.wheel_diameter = 0.24
         self.footprint = 0.54
+        self.servers = ['speaker', 'display']
         self.sensors = sensors.Sensors(self)
         self.motors = motors.Motors(self)
         self.tablet = tablet.Tablet(self)
@@ -40,7 +41,8 @@ class Change:
         self.motors.init()
         self.sensors.init(self.time_step)
         self.__get_sensors_values()
-        utils.publish('speaker', 'enable')
+        for server in self.servers:
+            utils.publish(server, 'enable')
         self.set_pose(0,0)
         self.set_height(self.motors.torso.max_height/2)
         self.tablet.greetings()

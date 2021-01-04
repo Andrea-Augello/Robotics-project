@@ -69,6 +69,9 @@ class Display:
         self.path=path
         self.__robot=robot
 
-    def load_image(self,image):
+    def load_image_old(self,image):
         image_loaded = self.__robot.call_service(self.name,'image_load',self.path+image+'.jpg')
-        self.__robot.call_service(self.name,'image_paste',image_loaded.ir,0,0,False)      
+        self.__robot.call_service(self.name,'image_paste',image_loaded.ir,0,0,False)
+
+    def load_image(self,image):
+        utils.publish(self.name, image)        
