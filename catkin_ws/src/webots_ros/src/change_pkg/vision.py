@@ -104,14 +104,14 @@ class Vision:
         self.current_frames.append(frame)
 
     def locate_targets(self):
-        self.current_rois = od.get_rois(self.current_frames, self.show_image)
+        self.current_rois = od.get_rois(self.current_frames, self.show_roi)
         coords = []
         for roi in self.current_rois:
             p1 = (roi[0], roi[1])
             p2 = (roi[0] + roi[2], roi[1] + roi[3])
             cylindrical_coords = self.point_cylindrical_coords(
                 self.roi_center(roi),
-                self.obj_dist_w(p1,p2,0.6))
+                self.obj_dist_w(p1,p2,0.8))
             # Drops z coordinate as our robot only has two translational DoF
             # and polar coordinates suffice
             coords.append(cylindrical_coords[0:2])
