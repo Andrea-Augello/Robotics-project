@@ -309,7 +309,7 @@
 	\begin{itemize}
 		\item In uno stesso scan osservazioni separate si riferiscono ad
 			oggetti distinti. In altre parole date due osservazioni $z_1$ e
-			$z_2$ queste non hanno intersezione, quindi $ p(z_1 \cup pz_2) =
+			$z_2$ queste non hanno intersezione, quindi $ p(z_1 \cup z_2) =
 			p(z_1)+p(z_2)-p( z_1 \cap z_2) = p(z_1)+p(z_2) $ 
 
 			Questa assunzione è ragionevole ricordando che lo scan avviene
@@ -393,13 +393,30 @@
 	\end{figure}
 
 	\subsubsection{Campi di potenziale}
+
+	L'approccio seguito consiste in due comportamenti calcolati
+	indipendentemente: il comportamento traslatorio e il comportamento
+	rotazionale.
+
+	La traslazione viene calcolata in funzione dello spazio di movimento a
+	disposizione e dall'angolo rispetto al target secondo
+	l'equazione~\ref{eq:translation}, ottenuta per interpolazione del profilo
+	desiderato.
+
+	\begin{equation}\label{eq:translation}
+		d = 0.5 + \frac	{0.9\cdot obstacleDistance - 0.5}
+		{1 + \left|
+				\frac{6\omega}{\pi}
+		\right|  } 
+	\end{equation}
+
 	
 	
 	\subsection{Pianificazione}\label{subsec:Pianificazione}
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.6\textwidth]{./img/fsa.pdf}
-		\caption{Automa a stati finito (Finite state automata)}
+		\caption{Automa a stati finiti }
 		\label{fig:fsa}
 	\end{figure}
 	
