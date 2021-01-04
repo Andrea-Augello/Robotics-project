@@ -85,8 +85,8 @@
 	Nella dimostrazione presentata il nostro robot rileva le persone nella stanza e individua i possibili assembramenti. In seguito alla fase di rilevazione si sposterà verso l'assembramento evitando gli ostacoli e, arrivato, esorterà le persone al rispetto del distanziamento sociale.
 	
 	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
-	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron} \cite{tiagoiron} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
-	Il datasheet del \textbf{TIAGo} indica la presenza di speaker e display, tuttavia questi non sono presenti nel modello Webots. Abbiamo dunque ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello.
+	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron} \cite{pages2016tiago} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
+	Il datasheet del \textbf{TIAGo} \cite{tiago_datasheet} indica la presenza di speaker e display, tuttavia questi non sono presenti nel modello Webots \cite{tiagoiron}. Abbiamo dunque ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello.
 	La camera del \textbf{TIAGo}, come indicato dal datasheet, è RGB-D. Il modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una camera monoscopica RGB.
 	Inoltre è stato necessario contattare gli sviluppatori del \textbf{TIAGo} per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto tale informazione è omessa dal datasheet. Ci è stato comunicato che le ruote del \textbf{TIAGo} hanno raggio di $200\,mm$. Utilizzando tale valore nei calcoli odometrici, abbiamo ottenuto valori largamente differenti dalle misurazioni. Abbiamo quindi dedotto sperimentalmente che il raggio del modello Webots è di $3\,cm$ più lungo. 
 	
@@ -108,7 +108,7 @@
 	{2\pi \cdot diameter}
 	\end{equation}
 	
-	A causa di possibili imprecisioni calcoliamo la stima dello spostamento lineare utilizzando l'accelerometro. Al segnale dell'accelerometro viene applicato un integrale doppio per ottenere lo spostamento lineare.
+	A causa di possibili imprecisioni calcoliamo la stima dello spostamento lineare utilizzando l'accelerometro \cite{positioning}. Al segnale dell'accelerometro viene applicato un integrale doppio per ottenere lo spostamento lineare.
 	
 	Nell'immagine seguente viene mostrata la zona nella quale, se viene indicata dal \textbf{lidar} la presenza di un ostacolo, il \textbf{TIAGo} si ferma per ragioni di sicurezza al fine di evitare danni a persone e/o oggetti.
 	\begin{figure}[H]
@@ -132,7 +132,7 @@
 	
 	\subsection{Yolo}\label{subsec:Yolo}
 	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di \textbf{object recognition}. A tal fine abbiamo valutato le performance di YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented gradients), HoG + SVG (support vector machines) + NMS (non maxima suppression).
-	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicine alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente (approssimativamente del 442\% \cite{9074315}), sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. La tabella \ref{tab:yolotiny} \cite{He2019TFYOLOAI}, mostra l'architettura di YOLOv3-tiny. La tabella \ref{tab:comparisonversions} mostra un paragone fra le versioni di YOLO e le rispettive versioni tiny \cite{9074315}. Inoltre è rilevante in tal senso un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella \ref{tab:comparison}, i cui dati provengono dal sito di YOLO \cite{yolo}:
+	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicine alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente (approssimativamente del 442\% \cite{tiny_yolo}), sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. La tabella \ref{tab:yolotiny} \cite{He2019TFYOLOAI}, mostra l'architettura di YOLOv3-tiny. La tabella \ref{tab:comparisonversions} mostra un paragone fra le versioni di YOLO e le rispettive versioni tiny \cite{tiny_yolo}. Inoltre è rilevante in tal senso un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second), come illustrato dalla tabella \ref{tab:comparison}, i cui dati provengono dal sito di YOLO \cite{yolo}:
 	
 	\begin{table}[htpb]
 		\centering
@@ -205,7 +205,7 @@
 
 
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
-	Durante la fase di individuazione delle persone vengono individuate varie bounding box corrispondenti al medesimo individuo. Di conseguenza è stato necessario effettuare una fase di clustering al fine di scartare le bounding box duplicate. L'algoritmo di clustering utilizzato è DBSCAN (Density based scan) \cite{DBSCAN}, i cui parametri principali sono \textbf{eps}, ovvero la massima distanza fra due punti affinché vengano considerati appartenenti a un cluster (da non confondere con la massima distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il numero minimo di punti affinchè un cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di distanza. 
+	Durante la fase di individuazione delle persone vengono individuate varie bounding box corrispondenti al medesimo individuo. Di conseguenza è stato necessario effettuare una fase di clustering al fine di scartare le bounding box duplicate. L'algoritmo di clustering utilizzato è DBSCAN (Density based scan) \cite{dbscan}, i cui parametri principali sono \textbf{eps}, ovvero la massima distanza fra due punti affinché vengano considerati appartenenti a un cluster (da non confondere con la massima distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il numero minimo di punti affinchè un cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di distanza. 
 	Come di evince dalla figura \ref{fig:nms}, la metrica utilizzata considera la lunghezza di un arco di circonferenza con raggio corrispondente alla distanza fra i due punti ed angolo $\alpha$ corrispondente  all'angolo fra i due punti rispetto alla posizione del robot.
 	
 	Abbiamo ritenuto opportuno utilizzare l'implementazione dell'algoritmo fornita da \textbf{sklearn} \cite{scikit}.
@@ -456,7 +456,7 @@
 
 	\subsubsection{Campi di potenziale}
 	
-	I campi di potenziale \ldots~\cite{grisettiyz2005improving}
+	Una soluzione al classico problema di muoversi in uno spazio evitando le collisioni è l'uso di un modello basato sui campi di potenziale. Questi schemi richiedono la definizione di potenziali attrattivi e repulsivi. Purtuttavia, questi metodi presentano una problematica significativa: la presenza di un minimo locale causerà una forza totale sul punto nulla, e di conseguenza il robot si fermerà in una posizione non ideale. In \cite{volpe1990manipulator} viene proposto un modello di potenziale basato sulla  \ldots 
 
 	Il potenziale attrattivo è centrato sul target, ed è modellato come un
 	potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
