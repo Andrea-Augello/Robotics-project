@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import rospy
-import time
 from std_msgs.msg import String
 import change_pkg.utils as utils
 import os
@@ -41,7 +40,7 @@ class Interaction:
         while True:
             if not self.is_speaking_flag:
                 self.load_image(images[counter])
-                time.sleep(5)
+                rospy.sleep(5)
                 counter=(counter+1)%len(images)                    
 
     def display_callback(self, values):
