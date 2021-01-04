@@ -104,7 +104,7 @@ class Vision:
         self.current_frames.append(frame)
 
     def correction(self, x):
-        if x < 1 or r > 10:
+        if x < 1 or x > 10:
             return x
         else:
             return 0.003116*x**5 - 0.09722*x**4 + 1.124*x**3 -5.908*x**2 + 14.5*x-7.367
