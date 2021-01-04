@@ -20,7 +20,7 @@ class Controller:
         self.ROTATION_LOOP_PRECISION = 0.1
         self.ESCAPING_DISTANCE = 2
         self.TARGET_DISTANCE = 1
-        self.SCAN_RATE = 8
+        self.SCAN_RATE = 10
 
     def start(self):
         while(True):
