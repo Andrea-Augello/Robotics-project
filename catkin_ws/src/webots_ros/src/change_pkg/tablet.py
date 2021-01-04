@@ -3,7 +3,7 @@ import change_pkg.utils as utils
 
 class Tablet:
     def __init__(self, robot):
-        self.display = Display(robot)
+        self.display = Display()
         self.speaker = Speaker(robot)
 
     def greetings(self):
@@ -27,30 +27,11 @@ class Tablet:
 
 
 class Speaker:
-    def __init__(self,robot,name='speaker',path='../../../../../Media/Audio/'):
+    def __init__(self,name='speaker'):
         self.name=name
         self.path=path
-        self.__robot=robot
 
-    def play_sound(self,sound):
-        self.__robot.call_service(self.name,'play_sound',self.path + sound + '.mp3', 1.0, 1.0, 0.0, False)
-
-    def is_speaking(self):
-        response = self.__robot.call_service(self.name,'is_speaking')
-        return response.value
-
-    def speak(self,text,volume=1.0):
-        while(self.is_speaking()):
-            pass
-        self.__robot.call_service(self.name,'speak', text, volume)
-
-    def speak_polyglot_old(self,it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):
-        for language, text in locals().items():
-            if text is not None and language != 'self':
-                self.__robot.call_service(self.name, 'set_language', language.replace("_","-"))
-                self.speak(text)
-                
-
+    
     def speak_polyglot(self,it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):
         message=''
         for language, text in locals().items():
@@ -61,17 +42,10 @@ class Speaker:
         
 
 
-
-
 class Display:
-    def __init__(self,robot,name='display',path='../../../../../Media/Image/'):              
+    def __init__(self,name='display'):              
         self.name=name
         self.path=path
-        self.__robot=robot
-
-    def load_image_old(self,image):
-        image_loaded = self.__robot.call_service(self.name,'image_load',self.path+image+'.jpg')
-        self.__robot.call_service(self.name,'image_paste',image_loaded.ir,0,0,False)
 
     def load_image(self,image):
-        utils.publish(self.name, image)        
+        utils.publish(self.name, image)
