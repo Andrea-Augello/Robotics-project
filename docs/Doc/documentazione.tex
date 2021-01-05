@@ -29,7 +29,7 @@
 \pdfsuppresswarningpagegroup=1
 
 \begin{document}
-	\title{Project log - Robotica}
+	\title{Documentazione - Progetto di Robotica}
 	\author{Augello Andrea \and Castiglione Francesco Paolo \and La Martina Marco}
 	\maketitle
 	\tableofcontents
@@ -67,6 +67,9 @@
 	
 	\subsection{Bug}\label{sec:Bug}
 	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots \cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare che si sta riproducendo un suono da file audio ed il metodo per verificare che il robot sta parlando presentavano difatti le funzioni callback invertite. In seguito al nostro avviso via email il bug è stato risolto nel successivo aggiornamento, come si evince dal commit github rilevante \cite{rosbug}, riga 32-34.
+	
+	\subsection{Gestione dei nodi}\label{sec:Gestione-dei-nodi}
+	Webots, controller, interazioni di input output audio video.
 	
 	\section{Dipendenze}\label{sec:Dipendenze} 
 	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
