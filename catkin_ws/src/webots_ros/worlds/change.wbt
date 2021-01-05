@@ -3,8 +3,10 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5776567755050867 0.5771969549958951 0.5771969549958942 4.189249903239787
-  position -9.129084869097478e-16 29.867114440220536 -5.614574914881028e-15
+  orientation -0.041540233811131415 0.9983266334313223 0.0402286211123194 1.5468520589538246
+  position -0.40683151403102463 1.1318974038590717 -1.9236953964018626
+  follow "change"
+  followType "Mounted Shot"
 }
 TexturedBackground {
 }
@@ -20,8 +22,8 @@ RectangleArena {
   wallHeight 3
 }
 Pedestrian {
-  translation 3 1.27 2
-  rotation 0 1 0 3.14159
+  translation 0.016765 1.29 3.86683
+  rotation 0 -1 0 -1.5707953071795862
 }
 Pedestrian {
   translation -0.306239 1.27 -7.4404
@@ -30,14 +32,14 @@ Pedestrian {
   shirtColor 0 0.448768 0
 }
 Pedestrian {
-  translation -5.3 1.27 -4.70729
+  translation -4.58 1.27 -4.60729
   rotation 0 -1 0 6.13667e-07
   name "pedestrian(5)"
   shirtColor 0 0.850233 0.855879
 }
 Pedestrian {
   translation 5 1.27 -6
-  rotation 0 -1 0 6.53317e-06
+  rotation 0 -1 0 6.53316937918704e-06
   name "pedestrian(3)"
   controllerArgs [
     "--speed=0.4"
@@ -53,7 +55,7 @@ Pedestrian {
   ]
 }
 Pedestrian {
-  translation -5.3 1.27 -3.56477
+  translation -4.63 1.27 -3.56477
   rotation 0 1 0 3.14159
   name "pedestrian(6)"
   shirtColor 0.671351 0 0.652461
@@ -86,8 +88,8 @@ Pedestrian {
   skinColor 0.389014 0.297383 0.280034
 }
 Pedestrian {
-  translation 2.89664 1.27 0.9832069999999999
-  rotation 0 1 0 -5.307179586466759e-06
+  translation 1.0118 1.27 3.85621
+  rotation 0 1 0 -1.5708053071795867
   name "pedestrian(7)"
   shirtColor 0.739193 0 0.0918135
   shoesColor 1 0.999969 0.999985
@@ -305,7 +307,7 @@ Solid {
         metalness 0
       }
       geometry Box {
-        size 1.8 0.5 1
+        size 1.83 0.5 1.03
       }
     }
   ]

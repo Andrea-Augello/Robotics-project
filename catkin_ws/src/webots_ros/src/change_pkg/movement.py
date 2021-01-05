@@ -121,7 +121,7 @@ class Movement:
         prev_speed = [0,0]
         prev_stamp = 0
         prev_accel = [0,0]
-
+        timestamp=0
         rotations = distance/(math.pi*diameter)
         angle = rotations * 2 * math.pi
         left_wheel_target = self.__robot.sensors.left_wheel.value + angle
