@@ -20,7 +20,7 @@ opts.ExtraColumnsRule = "ignore";
 opts.EmptyLineRule = "read";
 
 % Import the data
-data = readtable("./data.csv", opts);
+data = readtable("./before_interpolation.csv", opts);
 
 
 %% Clear temporary variables
