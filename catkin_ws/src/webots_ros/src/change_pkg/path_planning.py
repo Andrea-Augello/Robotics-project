@@ -47,7 +47,11 @@ class Path_planner:
                             or mpltPath.Path(t['contour']).contains_points([self.target])):
                 continue
             else:
-                if target == None or t['area']>max(1.1304,target['area']):
+                if target == None or (t['area']>max(1.1304,target['area']) \
+                    and ((mpltPath.Path(self.perimeter_target).contains_points([t['center']])\
+                            or mpltPath.Path(t['contour']).contains_points([self.target]))\
+                            or not mpltPath.Path(self.perimeter_target).contains_points([target['center']])\
+                            or not mpltPath.Path(target['contour']).contains_points([self.target]))):
                     target=t
         if target == None:
             return False
