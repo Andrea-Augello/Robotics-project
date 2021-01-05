@@ -40,7 +40,8 @@ class Controller:
             self.exploration()
             self.go_to_gathering()
             self.__robot.warning()
-            self.__robot.odometry.movement_history()
+            if self.__robot.debug_mode:
+                self.__robot.odometry.movement_history()
 
     def go_to_gathering(self):
         self.scheduler.potential_field_mode()
@@ -122,14 +123,6 @@ class Controller:
                     self.loop_point=point_list[i]
                     utils.loginfo("MOVING LOOP DETECTED")
                     break
-        """
-        for point_couple in itertools.combinations(point_list,2):
-            if utils.distance(point_couple[0],point_couple[1])<self.MOVEMENT_LOOP_PRECISION:
-                position_loop=True
-                self.loop_point=point_couple[0]
-                utils.loginfo("MOVING LOOP DETECTED")
-                break
-        """
         rotation_loop = self.__robot.odometry.history[0][1] - self.__robot.odometry.history[lookback_window_size-1][1]  < self.ROTATION_LOOP_PRECISION
         if rotation_loop:
             self.loop_point= self.__robot.odometry.history[0][0]  
