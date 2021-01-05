@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 class Odometry:
     def __init__(self):
-        self.x=0
-        self.y=0
+        self.x=2 
+        self.y=-2.55
         self.history=[((self.x,self.y),0)]
         self.theta=0
 
