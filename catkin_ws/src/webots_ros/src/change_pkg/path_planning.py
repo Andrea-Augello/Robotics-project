@@ -123,7 +123,7 @@ class Path_planner:
             angle_distance = (target_angle-obstacles[i][1])%360
             angle_distance =\
                     angle_distance if angle_distance < 180 \
-                    else abs(new_tangent_distance -360)
+                    else abs(angle_distance -360)
 
             if(angle_distance < 5 and obstacles[i][0] > 2.5):
                 return (obstacles[i][0]-0.5, obstacles[i][1])
