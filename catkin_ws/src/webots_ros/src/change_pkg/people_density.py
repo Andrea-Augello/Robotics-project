@@ -123,7 +123,7 @@ class GridMap:
                 # else 1/(1+distance.mahalanobis( 
                     # [(o_distance-p_distance),(angle_diff)],
                     # [0,0], IV)**4)) +0.05
-                else 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff)/5)**4)) \
+                else 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/32)**4)) \
                 + 0.05 
 
 

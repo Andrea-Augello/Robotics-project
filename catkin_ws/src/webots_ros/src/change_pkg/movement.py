@@ -117,6 +117,7 @@ class Movement:
         diameter=self.__robot.wheel_diameter
         distance_traveled=[0,0]
         speed=[0,0]
+        timestamp=0
         prev_speed = [0,0]
         prev_stamp = 0
         prev_accel = [0,0]
