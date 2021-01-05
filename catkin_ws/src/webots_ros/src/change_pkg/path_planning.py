@@ -147,7 +147,7 @@ class Path_planner:
                     tangent_distance = new_tangent_distance
                     found_tan = i
         if found_tan != None :
-            return (tangents[found_tan][0],
+            return (max(2,tangents[found_tan][0]),
                     tangents[found_tan][1]+corrections[found_tan]*180/math.pi)
         else:
             # Turn back and hope for the best
