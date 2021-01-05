@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 class Odometry:
     def __init__(self):
-        self.x=2
-        self.y=-2.55
+        self.x=0
+        self.y=0
         self.history=[((self.x,self.y),0)]
         self.theta=0
 
@@ -15,7 +15,10 @@ class Odometry:
         return (self.x,self.y)    
 
     def update_position(self, distance):
-        # TODO check if utils.math_distance is better then np.hypot
+        if distance[0] > 0.5:
+            # corrects systematic drifting
+            distance[0] *= 0.8329
+            #distance[0] -=0.2697
         distance_traveled = self.history[0][1] + math.hypot(distance[0], distance[1])
         self.x = self.x + distance[1]*math.cos(math.pi*self.theta/180) - distance[0]*math.sin(math.pi*self.theta/180)
         self.y = self.y + distance[1]*math.sin(math.pi*self.theta/180) + distance[0]*math.cos(math.pi*self.theta/180)

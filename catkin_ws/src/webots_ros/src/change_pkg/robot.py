@@ -17,7 +17,7 @@ class Change:
     def __init__(self):
         self.name = 'change'
         self.time_step = 32
-        self.wheel_diameter = 0.24
+        self.wheel_diameter = 0.20
         self.footprint = 0.54
         self.servers = ['speaker', 'display']
         self.sensors = sensors.Sensors(self)

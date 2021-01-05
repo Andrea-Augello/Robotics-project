@@ -19,17 +19,16 @@ class Movement:
 
 
     def set_linear_velocity(self,linear_velocity):
-        self.__robot.motors.left_wheel.set_velocity(linear_velocity)
         self.__robot.motors.right_wheel.set_velocity(linear_velocity)
+        self.__robot.motors.left_wheel.set_velocity(linear_velocity)
 
 
 
-    def stop(self, linear=False, speed=[0,0]):
+    def stop(self, linear=False, speed=[0,0], prev_accel=[0,0], prev_stamp=0):
         self.set_linear_velocity(0)
         if linear:
-            prev_speed = [0,0]
-            prev_stamp = 0
-            prev_accel = [0,0]
+            prev_speed = speed
+            distance_traveled = [0,0]
             while( speed[0]>self.SPEED_THRESHOLD or speed[1]>self.SPEED_THRESHOLD):
                 accel = self.__robot.sensors.accelerometer.value
                 timestamp = accel.t
@@ -39,9 +38,11 @@ class Movement:
                     elapsed_time = elapsed_time.to_sec()
                     prev_speed = speed
                     for i in range(2):
-                        speed[i] = speed[i]+((accel[i]-prev_accel[i])/2+prev_accel[i])*elapsed_time
+                        speed[i] += ((accel[i]+prev_accel[i])/2)*elapsed_time
+                        distance_traveled[i] += ((speed[i]+prev_speed[i])/2 ) *elapsed_time
                 prev_stamp = timestamp
                 prev_accel = accel
+            return distance_traveled
             
 
     def rotate(self,rotation, precision=1):
@@ -56,6 +57,7 @@ class Movement:
         self.stop()
         if(abs(rotation) <= precision):
             return 0
+        rotation+=precision
         curr_angular_velocity = self.angular_velocity
         #update_object_roi()
         # adjust for discontinuity at +/-180°
@@ -101,7 +103,7 @@ class Movement:
                         * (min(1,abs(difference/45))) )
             prev_time = time
             prev_ang_vel = ang_vel
-        self.stop()
+        self.stop(linear=False)
         self.__robot.odometry.update_theta(current_angle)
         return current_angle
 
@@ -147,21 +149,25 @@ class Movement:
                 and not self.__robot.sensors.bumper.value):
             accel = self.__robot.sensors.accelerometer.value
             timestamp = accel.t
-            accel = [accel.x if abs(accel.x) > 0.01 else 0,accel.y if abs(accel.y) > 0.01 else 0]
+            accel = [accel.x, accel.y]# [accel.x if abs(accel.x) > 0.01 else 0,accel.y if abs(accel.y) > 0.01 else 0]
             if(prev_stamp):
                 elapsed_time = timestamp-prev_stamp
                 elapsed_time = elapsed_time.to_sec()
                 prev_speed = speed
                 for i in range(2):
-                    speed[i] = speed[i]+((accel[i]-prev_accel[i])/2+prev_accel[i])*elapsed_time
-                    distance_traveled[i] = distance_traveled[i]\
-                            + (prev_speed[i]+ (speed[i]-prev_speed[i])/2 ) *elapsed_time
+                    speed[i] +=((accel[i]+prev_accel[i])/2)*elapsed_time
+                    distance_traveled[i] += ((speed[i]+prev_speed[i])/2 ) *elapsed_time
             prev_stamp = timestamp
             prev_accel = accel
-        self.stop(linear=True, speed=speed)
+        breaking_space = self.stop(linear=True, speed=speed, prev_stamp=timestamp, prev_accel=prev_accel)
+        for i in range(2):
+            distance_traveled[i]=distance_traveled[i]+breaking_space[i]
         self.__robot.motors.left_wheel.init()
         self.__robot.motors.right_wheel.init()
         self.__robot.odometry.update_position(distance_traveled)
+        f = open("/home/andrea/Documents/Magistrale_LM-32_Cod2035/Anno_2/Robotica/Robotics-project/docs/log/src/odometry/log.csv", "a")
+        f.write("{}, {}, {}".format(distance, distance_traveled[0],distance_traveled[1]))
+        f.close()
         return distance_traveled
 
         
