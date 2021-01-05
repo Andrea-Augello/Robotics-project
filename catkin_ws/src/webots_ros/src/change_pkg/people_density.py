@@ -11,7 +11,7 @@ from scipy.spatial import distance
 
 class GridMap:
 
-    def __init__(self, robot, xy_resolution = 0.20, min_x =-10, min_y = -10, max_x=10, max_y=10, show_map=True):
+    def __init__(self, robot, xy_resolution = 0.20, min_x =-10, min_y = -10, max_x=10, max_y=10):
         self.__robot = robot
         self.xy_resolution = xy_resolution
         self.min_x = min_x
@@ -25,7 +25,7 @@ class GridMap:
         self.data =  [[1.0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]
         self.normalize_probability()
-        self.show_map=show_map
+        self.show_map=robot.debug_mode
 
     def reset(self):
         self.data =  [[1.0 for _ in range(self.y_w)]
@@ -168,7 +168,6 @@ class GridMap:
 
 
     def find_clusters_2(self):
-        # TODO find a more suitable module for this function
         """Based on the self.people_coords finds clusters and returns them.
 
         :returns: Clusters, either as the points in each cluster as a list of
@@ -188,7 +187,8 @@ class GridMap:
                 distance_measure=utils.math_distance,
                 min_samples=1,
                 eps=0.5)
-        self.draw_clusters(clusters)
+        if self.show_map:
+            self.draw_clusters(clusters)
         return None if len(clusters) == 0 else clusters
 
     def resize_x(self,i):

@@ -27,6 +27,7 @@ class Change:
         self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
         self.controller = controller.Controller(self)
+        self.debug_mode = False
 
     def __str__(self):
         return self.name
