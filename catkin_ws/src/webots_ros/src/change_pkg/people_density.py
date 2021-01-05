@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 from scipy.stats import multivariate_normal
+from scipy.spatial import distance
 
 class GridMap:
 
@@ -87,7 +88,7 @@ class GridMap:
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
         noise = 0.2/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
-        self.data = gaussian_filter(self.data, sigma=2)
+        self.data = gaussian_filter(self.data, sigma=3)
         if len(z):
             for ix in range(self.x_w):
                 for iy in range(self.y_w):
@@ -106,6 +107,8 @@ class GridMap:
 
     def calc_gaussian_observation_pdf(self, z, iz, ix, iy):
         # predicted range
+        # V=[ 0.1627,   -0.0397, -0.0397,    0.0752]
+        # IV = [[7.0551039267470060371, 3.7245694932427678148], [3.7245694932427678148, 15.264167671299705881]]
         x = ix * self.xy_resolution + self.min_x
         y = iy * self.xy_resolution + self.min_y
 
@@ -117,7 +120,10 @@ class GridMap:
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
         return ( 0 if p_distance < 0.5 or abs(angle_diff-180)<45 \
-                else 1/(1+math.hypot( (o_distance-p_distance)/1.5, (angle_diff)/5)**4)) \
+                # else 1/(1+distance.mahalanobis( 
+                    # [(o_distance-p_distance),(angle_diff)],
+                    # [0,0], IV)**4)) +0.05
+                else 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff)/5)**4)) \
                 + 0.05 
 
 

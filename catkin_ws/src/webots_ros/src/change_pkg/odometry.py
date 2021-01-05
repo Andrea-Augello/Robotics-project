@@ -16,7 +16,7 @@ class Odometry:
 
     def update_position(self, distance):
         # TODO check if utils.math_distance is better then np.hypot
-        distance_traveled = self.history[0][1] + np.hypot(distance[0], distance[1])
+        distance_traveled = self.history[0][1] + math.hypot(distance[0], distance[1])
         self.x = self.x + distance[1]*math.cos(math.pi*self.theta/180) - distance[0]*math.sin(math.pi*self.theta/180)
         self.y = self.y + distance[1]*math.sin(math.pi*self.theta/180) + distance[0]*math.cos(math.pi*self.theta/180)
         self.history.insert(0,((self.x, self.y),distance_traveled))

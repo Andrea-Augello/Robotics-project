@@ -7,6 +7,7 @@ import numpy as np
 import change_pkg.people_density as people_density
 import matplotlib.pyplot as plt
 import matplotlib.path as mpltPath
+import time
 
 class Controller:
     def __init__(self, robot):
@@ -23,6 +24,12 @@ class Controller:
         self.SCAN_RATE = 10
 
     def start(self):
+        while False:
+            # Sensor characterization
+            self.__robot.vision.clear_saved_frames()
+            self.__robot.vision.save_frame(self.__robot.sensors.camera.value)
+            utils.loginfo(self.__robot.vision.locate_targets())
+            time.sleep(3)
         while(True):
             self.exploration()
             self.go_to_gathering()
