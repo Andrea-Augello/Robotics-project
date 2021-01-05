@@ -165,9 +165,6 @@ class Movement:
         self.__robot.motors.left_wheel.init()
         self.__robot.motors.right_wheel.init()
         self.__robot.odometry.update_position(distance_traveled)
-        f = open("/home/andrea/Documents/Magistrale_LM-32_Cod2035/Anno_2/Robotica/Robotics-project/docs/log/src/odometry/log.csv", "a")
-        f.write("{}, {}, {}".format(distance, distance_traveled[0],distance_traveled[1]))
-        f.close()
         return distance_traveled
 
         
