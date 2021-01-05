@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.041540233811131415 0.9983266334313223 0.0402286211123194 1.5468520589538246
-  position -0.40683151403102463 1.1318974038590717 -1.9236953964018626
+  orientation -0.5702338390252337 -0.5930073687410201 -0.5684853819135508 2.0679133749366225
+  position -1.3730623565952595 43.36910682160706 0.1352934574678688
   follow "change"
   followType "Mounted Shot"
 }
@@ -20,6 +20,30 @@ RectangleArena {
   }
   wallThickness 0.3
   wallHeight 3
+}
+CardboardBox {
+  translation -3.41 0.3 1.18
+  name "cardboard box(6)"
+}
+CardboardBox {
+  translation -2.79 0.3 1.18
+  name "cardboard box(5)"
+}
+CardboardBox {
+  translation -2.17 0.3 1.18
+  name "cardboard box(4)"
+}
+CardboardBox {
+  translation -4.64 0.3 1.16
+  name "cardboard box(3)"
+}
+CardboardBox {
+  translation -4.02 0.3 1.18
+  name "cardboard box(2)"
+}
+CardboardBox {
+  translation -1.56 0.3 1.18
+  name "cardboard box(1)"
 }
 Pedestrian {
   translation 0.016765 1.29 3.86683
@@ -327,4 +351,14 @@ Solid {
   ]
   name "solid(1)"
   boundingObject USE Cylinder_shape
+}
+Radiator {
+  translation -4.1 0.61 -8.37
+  rotation 0 1 0 -1.5707953071795862
+}
+Door {
+  translation 2.36 0 -8.69
+}
+CardboardBox {
+  translation -0.93 0.3 1.18
 }
