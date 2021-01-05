@@ -126,8 +126,8 @@ class Path_planner:
                     else abs(new_tangent_distance -360)
 
             if(angle_distance < 5 and obstacles[i][0] > 2.5):
-                return (obstacles[i][0]-0.5, obstacles[i][1]
-            
+                return (obstacles[i][0]-0.5, obstacles[i][1])
+
             delta = obstacles[i][0] - obstacles[i+1][0]
             if(delta > width\
                     or ( obstacles[i][0]>=self.__robot.sensors.lidar.range_max \
