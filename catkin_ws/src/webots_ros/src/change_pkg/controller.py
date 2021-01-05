@@ -19,7 +19,7 @@ class Controller:
         self.LOOKBACK_WINDOW_SIZE = 4
         self.MOVEMENT_LOOP_PRECISION = 0.01
         self.ROTATION_LOOP_PRECISION = 0.1
-        self.ESCAPING_DISTANCE = 2
+        self.ESCAPING_DISTANCE = 3
         self.TARGET_DISTANCE = 1
         self.SCAN_RATE = 10
 
@@ -99,8 +99,6 @@ class Controller:
     def set_mode(self):
         mode=self.scheduler.get_mode()
         if mode == 'bug':
-            if self.check_loop():
-                self.__robot.movement.rotate(90)
             distance = utils.distance((self.__robot.odometry.x,self.__robot.odometry.y),self.loop_point)
             if distance > self.ESCAPING_DISTANCE:
                 self.scheduler.potential_field_mode() 

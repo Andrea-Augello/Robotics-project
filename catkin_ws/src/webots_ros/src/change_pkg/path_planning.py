@@ -167,19 +167,19 @@ class Path_planner:
         inf_limit=math.ceil(size*self.LIDAR_THRESHOLD)
         sup_limit=size-inf_limit
         obstacles = [ p for p in self.__robot.sensors.lidar.value[inf_limit:sup_limit] if self.is_obstacle(p[0]) ]
-        closest_obstacle = (999,None)
-        for o in obstacles:
-            if o[0] < closest_obstacle[0]:
-                closest_obstacle = o
-        if closest_obstacle[1] != None:
+        if len(obstacles):
             attractive_potential = self.KP * np.hypot(
                     self.__robot.odometry.x - self.target[0],
                     self.__robot.odometry.y - self.target[1])
-            repulsive_potential = self.ETA \
-                    * (1/closest_obstacle[0]**2-1/self.SECURITY_DISTANCE**2 )
+            repulsive_potential = [0,0]
+            for obstacle in obstacles:
+                repulsive_potential_module = self.ETA \
+                        * (1/obstacle[0]**2-1/self.SECURITY_DISTANCE**2 )
+                repulsive_potential[0] = repulsive_potential_module * math.sin(obstacle[1]/180*math.pi)
+                repulsive_potential[1] = repulsive_potential_module * math.cos(obstacle[1]/180*math.pi)
             direction = 180/math.pi*math.atan2( 
-                        attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential*math.sin(closest_obstacle[1]/180*math.pi),
-                        attractive_potential*math.cos(target_angle/180*math.pi) - repulsive_potential*math.cos(closest_obstacle[1]/180*math.pi) )
+                    attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential[0],
+                    attractive_potential*math.cos(target_angle/180*math.pi) - repulsive_potential[1] )
             direction = max(-self.MAX_DEVIATION, min(self.MAX_DEVIATION, direction))
         return direction
 
