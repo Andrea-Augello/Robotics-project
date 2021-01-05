@@ -15,7 +15,7 @@ class Path_planner:
 
         """
         self.__robot = robot
-        self.valid_target = True
+        self.valid_target = False
         self.target = (self.__robot.odometry.x,self.__robot.odometry.y)
         self.distance_allowed = 0
         self.perimeter_target = []
