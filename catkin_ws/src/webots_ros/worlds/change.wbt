@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.5583166017369425 -0.6124313885059754 -0.5596520049080103 2.044699276585535
-  position -4.029172075246047 44.103509063463264 2.9684198611146964
+  orientation -0.5685777000198178 -0.5932035726624215 -0.5699376460813174 2.0728737222084916
+  position -2.626107865273673 46.681875083406595 1.4173538352816042
 }
 TexturedBackground {
 }
@@ -102,19 +102,19 @@ Pedestrian {
   enableBoundingObject TRUE
 }
 Sofa {
-  translation -7.88569 0 0.128936
+  translation -7.88569 0 -0.061064
   color 0.3 0.04 0.0005
   physics Physics {
     density 100
   }
 }
 Armchair {
-  translation -6.58 0 -2.04
+  translation -6.58 0 -2.1
   rotation 0 1 0 -1.5707953071795862
   color 0.3 0.04 0.0005
 }
 Armchair {
-  translation -6.58 0 2.15
+  translation -6.58 0 2.05
   rotation 0 1 0 1.5708
   name "armchair(1)"
   color 0.3 0.04 0.0005
@@ -127,12 +127,12 @@ PottedTree {
   name "potted tree(1)"
 }
 Carpet {
-  translation -6.41 0 0.120006
+  translation -6.41 0 -0.069994
   rotation 0 1 0 -1.5707953071795862
   color 0.6 0.4 0.2
 }
 Table {
-  translation -5.18 -0.3 1.17246e-06
+  translation -5.2 -0.3 0
   rotation 0 1 0 -1.5707953071795862
 }
 LandscapePainting {
@@ -303,23 +303,34 @@ TiagoIron {
   ]
 }
 Solid {
-  translation 0 0.42 0
+  translation -5.2 0.2 0
+  rotation 0 1 0 1.5707996938995747
   children [
-    Shape {
-      appearance DEF Cylinder_appearance PBRAppearance {
+    DEF Tablecloth_shape Shape {
+      appearance DEF Tablecloth_appearance PBRAppearance {
         baseColor 0.05 0.38 0.05
         transparency 0.3
         metalness 0
       }
-      geometry DEF Cylinder_shape Cylinder {
+      geometry Box {
+        size 1.8 0.5 1
+      }
+    }
+  ]
+  name "solid(2)"
+  boundingObject USE Tablecloth_shape
+}
+Solid {
+  translation 0 0.42 0
+  children [
+    DEF Cylinder_shape Shape {
+      appearance USE Tablecloth_appearance
+      geometry Cylinder {
         height 0.7
         radius 1.01
       }
     }
   ]
   name "solid(1)"
-  boundingObject Shape {
-    appearance USE Cylinder_appearance
-    geometry USE Cylinder_shape
-  }
+  boundingObject USE Cylinder_shape
 }
