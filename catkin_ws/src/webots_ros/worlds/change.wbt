@@ -22,21 +22,18 @@ RectangleArena {
 Pedestrian {
   translation 3 1.27 2
   rotation 0 1 0 3.14159
-  enableBoundingObject TRUE
 }
 Pedestrian {
   translation -0.306239 1.27 -7.4404
   rotation 0 1 0 -5.307179586466759e-06
   name "pedestrian(4)"
   shirtColor 0 0.448768 0
-  enableBoundingObject TRUE
 }
 Pedestrian {
   translation -5.3 1.27 -4.70729
   rotation 0 -1 0 6.13667e-07
   name "pedestrian(5)"
   shirtColor 0 0.850233 0.855879
-  enableBoundingObject TRUE
 }
 Pedestrian {
   translation 5 1.27 -6
@@ -49,7 +46,6 @@ Pedestrian {
   shirtColor 1 1 1
   pantsColor 0.2 0.2 0.2
   shoesColor 0 0 0
-  enableBoundingObject TRUE
   rightHandSlot [
     Can {
       rotation 1 0 0 1.5708
@@ -63,7 +59,6 @@ Pedestrian {
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
-  enableBoundingObject TRUE
   rightHandSlot [
     Can {
       rotation 1 0 0 1.5708
@@ -76,7 +71,6 @@ Pedestrian {
   name "pedestrian(2)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
-  enableBoundingObject TRUE
   leftHandSlot [
     BeerBottle {
       rotation 1 0 0 1.5708
@@ -90,7 +84,6 @@ Pedestrian {
   shirtColor 0.972793 0.592737 0
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
-  enableBoundingObject TRUE
 }
 Pedestrian {
   translation 2.89664 1.27 0.9832069999999999
@@ -99,7 +92,6 @@ Pedestrian {
   shirtColor 0.739193 0 0.0918135
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
-  enableBoundingObject TRUE
 }
 Sofa {
   translation -7.88569 0 -0.061064
