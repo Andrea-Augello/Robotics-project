@@ -15,8 +15,7 @@ class Path_planner:
 
         """
         self.__robot = robot
-        self.valid_target = False
-        self.first_scan = True
+        self.valid_target = True
         self.target = (self.__robot.odometry.x,self.__robot.odometry.y)
         self.distance_allowed = 0
         self.perimeter_target = []
@@ -48,16 +47,10 @@ class Path_planner:
                             or mpltPath.Path(t['contour']).contains_points([self.target])):
                 continue
             else:
-                if target == None or not self.first_scan and (t['area']>max(1.1304,target['area']) \
-                    and ((mpltPath.Path(self.perimeter_target).contains_points([t['center']])\
-                            or mpltPath.Path(t['contour']).contains_points([self.target]))\
-                            or not mpltPath.Path(self.perimeter_target).contains_points([target['center']])\
-                            or not mpltPath.Path(target['contour']).contains_points([self.target]))):
+                if target == None or t['area']>max(1.1304,target['area']):
                     target=t
         if target == None:
             return False
-        else:
-            self.first_scan = False
 
         self.target = target['center']
         self.area_target = target['area']
