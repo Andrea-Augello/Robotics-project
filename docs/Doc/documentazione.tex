@@ -73,14 +73,24 @@
 	
 	\section{Dipendenze}\label{sec:Dipendenze} 
 	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
-	
+
 	\begin{itemize}
-		\item opencv 4.x, una libreria per la computer vision, usata per operazioni di segmentazione \cite{opencv};
-		\item imutils, che include funzioni per semplici operazioni di image processing quali traslazioni, rotazioni, ridimensionamento. Utilizzato inoltre per effettuare Non Maxima Suppression(NMS) \cite{imutils};
-		\item sklearn, una libreria per il machine learning comprendente algoritmi di clustering quali DBSCAN \cite{scikit};
-		\item numpy, una libreria che fornisce supporto per array multidimensionali, matrici ed operazioni matematiche per lavorare su detti array \cite{numpy};
-		\item matplotlib, una libreria per creare visualizzazioni di dati (statiche, dinamiche, interattive) \cite{matplotlib};
-		\item math, una libreria che fornisce funzioni matematiche definite dallo standard C \cite{math}.
+		\item opencv 4.x, una libreria per la computer vision, usata per
+			operazioni di segmentazione \cite{opencv};
+		\item imutils, che include funzioni per semplici operazioni di image
+			processing quali traslazioni, rotazioni, ridimensionamento.
+			Utilizzato inoltre per effettuare Non Maxima Suppression(NMS)
+			\cite{imutils};
+		\item sklearn, una libreria per il machine learning comprendente
+			algoritmi di clustering quali DBSCAN \cite{scikit};
+		\item numpy, una libreria che fornisce supporto per array
+			multidimensionali, matrici ed operazioni matematiche per lavorare
+			su detti array \cite{numpy};
+		\item matplotlib, una libreria per creare visualizzazioni di dati
+			(statiche, dinamiche, interattive). Usata anche per calcolare la
+			posizione di punti rispetto a poligoni.\cite{matplotlib}; 
+		\item math, una libreria che fornisce funzioni matematiche definite dallo
+			standard C \cite{math}.
 	\end{itemize}
 
 	\section{Obbiettivo}\label{sec:Obbiettivo} 
@@ -347,6 +357,13 @@
 	funzione rispetto ad una gaussiana con media nulla e deviazione standard
 	unitaria nel caso monodimensionale.
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\textwidth]{./img/pdf_shape.pdf}
+		\caption{Forma pdf}
+		\label{fig:pdf_shape}
+	\end{figure}
+
 	Nell'equazione~\ref{eq:pdf} $K$ indica un parametro di scala per ottenere
 	CDF unitaria. $d$ è una funzione per il calcolo della distanza della cella
 	$ {\bf x} $ dalla stima di posizione $ {\bf z} $.
@@ -355,16 +372,51 @@
 	circolare. Questo però non si adatta bene al nostro modello di errore del
 	sensore: l'angolo dell'oggetto rispetto al robot è noto con una precisione
 	molto elevata, mentre la maggior parte dell'incertezza si concentra nella
-	distanza. Utilizziamo quindi la distanza di Mahalanobis per tenere conto
-	del nostro modello.
+	distanza. Calcoliamo quindi la distanza non come distanza euclidea tra le
+	coordinate cartesiane della cella e dell'osservazione, ma come norma $ L^2
+	$ delle coordinate polari, opportunamente normalizzate per tenere conto
+	della diversa incertezza sulla misura di angolo e distanza.
 
-	\begin{figure}[H]
+	L'incertezza sulla distanza è ricavata dalle misure di calibrazione
+	effettuate. Per l'angolo è stato seguito un approccio differente:
+	utilizzare una varianza calcolata a partire da una serie di osservazioni
+	potrerebbe ad assegnare maggiore probabilità ad oggetti lontani.  In un
+	setup come quello in figura~\ref{fig:circular_sector}, con due target
+	rilevati, rispettivamente a distanza $d_1$ e $d_2$, le aree ad alta
+	probabilità relative ad entrambi i punti avranno lunghezza $l$ e ampiezze $
+	\alpha_1 \text{ e } \alpha_2  $. 
+
+	Come mostrato nell'equazione~\ref{eq:circular_sector}, con queste
+	condizioni la dimensione dell'area ad alta probabilità è direttamente
+	proporzionale alla distanza e all'ampliezza dell'angolo. Se quindi $
+	\alpha_1 $ coindicesse con $ \alpha _2 $ ad oggetti distanti verrebbero
+	associate aree molto più grandi. Per evitare questo problema, dopo avere
+	individuato un valore $ \alpha ^* $ appropriato questo viene scalato per un
+	coefficiente inversamente proporzionale alla distanza della cella, quindi $
+	\alpha _1 = \alpha ^*/d_1 $ e $ \alpha _2=\alpha ^*/d_2 $, da cui $A_1=A_2$ 
+
+	\begin{subequations}\label{eq:circular_sector}
+	\begin{align*} 
+		A_1  = & \pi((d_1+l/2)^2-(d_1-l/2)^2)\frac{\alpha_1}{2\pi}  =  \alpha_1 d_1l\\
+		A_2  = & \pi((d_2+l/2)^2-(d_2-l/2)^2)\frac{\alpha_2}{2\pi}  =  \alpha_2 d_2l\\
+\tag{\ref{eq:circular_sector}}
+		\frac{A_1}{A_2} = & \frac	{\alpha_1 d_1} {\alpha_2 d_2} 
+	\end{align*}
+	\end{subequations}
+
+	Questa misura di distanza è in accordo con l'intuizione derivata dal fatto
+	che un oggeto più lontano occuperà una porzione più piccola dell'immagine,
+	di conseguenza ci sono meno posizioni valide che la ROI associata
+	all'oggetto può assumere, e quindi l'intervallo di valori che può assumere
+	l'angolo è ridotto.
+
+	\begin{figure}[htpb]
 		\centering
-		\includegraphics[width=0.6\textwidth]{./img/pdf_shape.pdf}
-		\caption{Forma pdf}
-		\label{fig:pdf_shape}
+		\includegraphics[width=0.5\textwidth]{img/circular_sector.pdf}
+		\caption{Area della regione probabile a seconda della distanza.}
+		\label{fig:circular_sector}
 	\end{figure}
-
+		
 	Dato un insieme di osservazioni ottenute da una scansione $ Z_i $ aggiorniamo il belief precedente rispetto ad ogni cella della griglia di occupazione come mostrato nell'equazione~\ref{eq:belief-update}.
 
 	\begin{equation}\label{eq:belief-update}
@@ -442,7 +494,7 @@
 		\caption{Segmentazione immagine: a sinistra i valori grezzi del BOF, a destra i contorni delle regioni (giallo) e i centri (blu) }
 		\label{fig:image_segmentation}
 	\end{figure}
-		
+
 	\section{Pianificazione del moto}\label{sec:Pianificazione-del-moto}
 	
 	\subsection{Modalità di movimento}\label{subsec:Modalità-di-movimento}
