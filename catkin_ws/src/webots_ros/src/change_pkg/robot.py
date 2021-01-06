@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import rospy
+from nav_msgs.msg import Odometry as Odometry_msg
 import change_pkg.utils as utils
 import change_pkg.motors as motors
 import change_pkg.sensors as sensors
@@ -23,7 +24,7 @@ class Change:
         self.servers = ['speaker', 'display']
         self.sensors = sensors.Sensors(self)
         self.motors = motors.Motors(self)
-        self.tablet = tablet.Tablet(self)
+        self.tablet = tablet.Tablet()
         self.movement = movement.Movement(self)
         self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
@@ -42,6 +43,7 @@ class Change:
         self.motors.init()
         self.sensors.init(self.time_step)
         self.__get_sensors_values()
+        #self.__get_odometry_values()
         for server in self.servers:
             utils.publish(server, 'enable')
         self.set_pose(0,0)
@@ -73,7 +75,12 @@ class Change:
             self.tablet.warning()
         self.set_height(self.motors.torso.max_height/2)
 
-
+    def __get_odometry_value(self):
+        try:
+            return rospy.Subscriber("/"+self.odometry.node_name+"/"+self.odometry.topic_name, Odometry_msg, self.odometry.odometry_callback)
+        except AttributeError as e:
+            utils.logerr(str(e))
+   
     
     def __get_sensor_value(self, topic, device, msg_type):
         try:
@@ -84,7 +91,7 @@ class Change:
 
     def __get_sensors_values(self):
         for sensor in rospy.get_published_topics(namespace='/%s'%self.name):
-            if 'range_image' not in sensor[0]: 
+            if 'range_image' not in sensor[0] or 'odometry_node' not in sensor[0]: 
                 msg_type=globals()[sensor[1].split("/")[1]]
                 topic=sensor[0]
                 device=sensor[0].split("/")[2]

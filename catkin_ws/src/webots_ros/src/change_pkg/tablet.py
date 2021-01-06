@@ -2,7 +2,7 @@
 import change_pkg.utils as utils
 
 class Tablet:
-    def __init__(self, robot):
+    def __init__(self):
         self.display = Display()
         self.speaker = Speaker()
 
@@ -37,7 +37,7 @@ class Speaker:
             if text is not None and language != 'self' and language != 'message':
                 message+=language.replace("_","-")+"@"+text+"|"
         message=message[:-1]
-        utils.publish(self.name, message)
+        utils.publish_interaction(self.name, message)
         
 
 
@@ -46,4 +46,4 @@ class Display:
         self.name=name
 
     def load_image(self,image):
-        utils.publish(self.name, image)
+        utils.publish_interaction(self.name, image)
