@@ -4,8 +4,7 @@ import rospy
 import math
 import os
 from change_pkg.sensors import Vector
-from sensor_msgs.msg import *
-from webots_ros.msg import *
+from sensor_msgs.msg import Imu
 
 
 class Odometry:
@@ -71,23 +70,14 @@ class Odometry:
             self.theta = (self.theta) % 360
             self.theta = self.theta if self.theta <= 180 else self.theta -360
 
-    def __get_sensor_value(self, topic, device, msg_type):
-        try:
-            return rospy.Subscriber(topic, msg_type, eval("self.%s_callback"%(device)))
-        except AttributeError as e:
-            utils.logerr(str(e))
         
 
     def __get_sensors_values(self):
-        sensor_values_count=2
-        while sensor_values_count:
-            for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
-                if 'gyro' in sensor[0] or 'accelerometer' in sensor[0]:
-                    msg_type=globals()[sensor[1].split("/")[1]]
-                    topic=sensor[0]
-                    device=sensor[0].split("/")[2]
-                    self.__get_sensor_value(topic, device, msg_type)
-                    sensor_values_count-=1
+        try:
+            rospy.Subscriber("/"+self.robot_name+"/gyro", Imu, self.gyro_callback)
+            rospy.Subscriber("/"+self.robot_name+"/accelerometer", Imu, self.accelerometer_callback)
+        except AttributeError as e:
+            utils.logerr(str(e))
 
     def start(self):
         rate = rospy.Rate(10) # 10hz
