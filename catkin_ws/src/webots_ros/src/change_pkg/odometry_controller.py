@@ -9,6 +9,7 @@ class Odometry:
     def __init__(self):
         self.node_name = 'odometry_node'
         self.node_name = 'odom'
+        self.time_step = 32
         self.x=2 
         self.y=-2.55
         self.history=[((self.x,self.y),0)]
