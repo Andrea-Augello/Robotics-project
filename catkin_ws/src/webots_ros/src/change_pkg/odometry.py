@@ -17,12 +17,14 @@ class Odometry:
         self.x=values.pose.pose.position.x
         self.y=values.pose.pose.position.y
         self.theta=values.pose.pose.position.z      
+        self.history.append(((self.x,self.y),0))
         
 
     def get_position(self):
         return (self.x,self.y)    
 
     def update_position(self, distance):
+        return
         if distance[0] > 0.5:
             # corrects systematic drifting
             distance[0] *= 0.8329
@@ -33,6 +35,7 @@ class Odometry:
         self.history.insert(0,((self.x, self.y),distance_traveled))
 
     def update_theta(self, theta):
+        return
         self.theta = (self.theta + theta) % 360
         self.theta = self.theta if self.theta <= 180 else self.theta -360
 
