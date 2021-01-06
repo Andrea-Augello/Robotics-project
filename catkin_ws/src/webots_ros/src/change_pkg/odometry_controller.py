@@ -30,7 +30,6 @@ class Odometry:
         self.start()
 
     def accelerometer_callback(self, values):
-        utils.debug("pluto")
         self.accelerometer_values_old = self.accelerometer_values
         ax =  values.linear_acceleration.y*math.cos(math.pi*self.theta/180) \
                 - values.linear_acceleration.x*math.sin(math.pi*self.theta/180)
@@ -54,7 +53,6 @@ class Odometry:
 
 
     def gyro_callback(self, values):
-        utils.debug("pippo")
         self.gyro_values_old = self.gyro_values
         self.gyro_values.x=values.angular_velocity.x
         self.gyro_values.y=values.angular_velocity.y
