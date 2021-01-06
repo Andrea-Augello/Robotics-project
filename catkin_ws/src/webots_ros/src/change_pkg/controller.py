@@ -24,9 +24,10 @@ class Controller:
         self.SCAN_RATE = 10
 
     def start(self):
-        while False:
+        while True:
             for i in range(1,20):
                 for _ in range(4):
+                    utils.debug(str(self.__robot.odometry))
                     self.__robot.movement.move_forward(6-i*0.5)
                     self.__robot.movement.rotate(-90)
                     self.__robot.odometry.movement_history()
@@ -36,7 +37,7 @@ class Controller:
             self.__robot.vision.save_frame(self.__robot.sensors.camera.value)
             utils.loginfo(self.__robot.vision.locate_targets())
             time.sleep(3)
-        while(True):
+        while False:
             self.exploration()
             self.go_to_gathering()
             self.__robot.warning()
