@@ -57,7 +57,7 @@ class Movement:
         self.stop()
         if(abs(rotation) <= precision):
             return 0
-        rotation+=precision
+        rotation+=math.copysign(precision,rotation)
         curr_angular_velocity = self.angular_velocity
         #update_object_roi()
         # adjust for discontinuity at +/-180°
