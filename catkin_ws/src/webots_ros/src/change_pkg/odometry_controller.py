@@ -77,7 +77,7 @@ class Odometry:
     def __get_sensors_values(self):
         gyro=False
         accelerometer=False
-        while not gyro and not accelerometer:
+        while not gyro or not accelerometer:
             for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
                 if 'gyro' in sensor[0] and not gyro:
                     msg_type=globals()[sensor[1].split("/")[1]]
