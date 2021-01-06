@@ -50,7 +50,7 @@ class Movement:
         :rotation:  The desired rotation in degrees. Note that a rotation greater
             than 180° in modulo will be substituted with a rotation in the opposite
             direction.
-        :precision: The     maximum difference from the required rotation and the
+        :precision: The maximum difference from the required rotation and the
             actual rotation. If this value is smaller than the sensor noise it makes
             no sense.
         """

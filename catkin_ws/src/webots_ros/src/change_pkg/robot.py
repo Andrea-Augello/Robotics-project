@@ -43,10 +43,11 @@ class Change:
         self.motors.init()
         self.sensors.init(self.time_step)
         self.__get_sensors_values()
-        #self.__get_odometry_values()
+        self.__get_odometry_values()
         for server in self.servers:
             utils.publish_interaction(server, 'enable')
         self.set_pose(0,0)
+        rospy.sleep(1)
         self.set_height(self.motors.torso.max_height/2)
         self.tablet.greetings()
 
@@ -77,7 +78,7 @@ class Change:
 
     def __get_odometry_values(self):
         try:
-            return rospy.Subscriber("/"+self.odometry.node_name+"/"+self.odometry.topic_name, Odometry_msg, self.odometry.odometry_callback)
+            return rospy.Subscriber("/odometry_node/odom", Odometry_msg, self.odometry.odometry_callback)
         except AttributeError as e:
             utils.logerr(str(e))
    

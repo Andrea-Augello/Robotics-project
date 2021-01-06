@@ -31,11 +31,11 @@ def publish_interaction(topic, message):
 
 def publish_odometry(topic, x, y, theta): 
     rate = rospy.Rate(10) # 10hz
-    pub = rospy.Publisher('/odometry_node/'+topic, String, queue_size=10)
+    pub = rospy.Publisher('/odometry_node/'+topic, Odometry_msg, queue_size=10)
     msg = Odometry_msg()
-    msg.pose.position.x=x
-    msg.pose.position.y=y
-    msg.pose.position.z=theta 
+    msg.pose.pose.position.x=x
+    msg.pose.pose.position.y=y
+    msg.pose.pose.position.z=theta 
     pub.publish(msg)
     rate.sleep()
 
