@@ -70,8 +70,16 @@ class Odometry:
 
     def __get_sensors_values(self):
         try:
-            rospy.Subscriber("/"+self.robot_name+"/gyro", Imu, self.gyro_callback)
-            rospy.Subscriber("/"+self.robot_name+"/accelerometer", Imu, self.accelerometer_callback)
+            gyro=False
+            accelerometer=False
+            while not gyro and not accelerometer:
+                for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
+                    if 'gyro' in sensor[0]:
+                        rospy.Subscriber("/"+self.robot_name+"/gyro", Imu, self.gyro_callback)
+                        gyro=True
+                    if 'accelerometer' in sensor[0]:
+                        rospy.Subscriber("/"+self.robot_name+"/accelerometer", Imu, self.accelerometer_callback)
+                        accelerometer=True    
         except AttributeError as e:
             utils.logerr(str(e))
 
