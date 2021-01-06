@@ -112,16 +112,43 @@
 	
 	Il modello Webots del \textbf{TIAGo} presenta un lidar, ovvero il modello Hokuyo URG-04LX-UG01 \cite{lidarspecs} che, come specificato dalla documentazione del modello Webots,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (ricordiamo che agli estremi è parzialmente occluso). In seguito ad analisi sperimentale abbiamo dedotto che l'occlusione del lidar causa malfunzionamenti del package GMapping \cite{grisettiyz2005improving}, utilizzato per implementare le funzionalità di SLAM.
 
-	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento}
-	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per ottenere l'angolo di rotazione ci basiamo sui dati ottenuti dal giroscopio, il quale misura il moto rotazionale fornendo una velocità angolare. Per ottenere l'angolo di rotazione effettuiamo quindi un'integrazione discreta dei campioni con interpolazione lineare del primo ordine.
-	Per effettuare lo spostamento lineare utilizziamo il controllore PID (Proporzionale-Integrale-Derivativo) delle ruote fornito da Webots, che richiede l'angolo di rotazione corrente, il diametro delle ruote e fornisce l'angolo di rotazione necessario al fine di ottenere lo spostamento desiderato.
+	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento} 
+	
+	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per le
+	rotazioni ci basiamo sui dati forniti dal giroscopio, il quale fornisce una
+	velocità angolare. Calcoliamo quindi l'angolo di rotazione effettuando
+	un'integrazione discreta dei campioni con interpolazione lineare del primo
+	ordine (Eq.~\ref{eq:gyro-integration}).  
+	\begin{equation}\label{eq:gyro-integration}
+		\theta_i = \sum_{j=1}^i \frac{\omega _{j-1}+\omega _j}{2} \left( t_j-t_{j-1} \right) 
+	\end{equation}
+	Noto l'angolo corrente e l'angolo target utilizziamo un controllore
+	proporzionale per raggiungere l'angolo desiderato.
+	
+	Per effettuare lo spostamento lineare utilizziamo il controllore PID
+	(Proporzionale-Integrale-Derivativo) delle ruote fornito da Webots, che
+	richiede un angolo di rotazione target per ogni ruota. Utilizziamo quindi
+	l'angolo di rotazione corrente, e il diametro delle ruote per calcolare la
+	posizione delle ruote necessaria al fine di ottenere lo spostamento
+	desiderato (Eq.~\ref{eq:odometry}).
 	\begin{equation}\label{eq:odometry}
 	targetAngle =
 	currentAngle+2\pi\frac    {distance}
-	{2\pi \cdot diameter}
+					{2\pi \cdot diameter}
 	\end{equation}
 	
-	A causa di possibili imprecisioni calcoliamo la stima dello spostamento lineare utilizzando l'accelerometro \cite{positioning}. Al segnale dell'accelerometro viene applicato un integrale doppio per ottenere lo spostamento lineare.
+	Per stimare lo spostamento, però, utilizziamo l'accelerometro
+	\cite{positioning}, in quanto le ruote possono essere soggette a
+	slittamento fornendo una misura imprecisa. Al segnale dell'accelerometro
+	viene applicato un integrale doppio per ottenere lo spostamento
+	lineare(Eq.~\ref{eq:accel-integration}).
+
+	\begin{equation}\label{eq:accel-integration}
+		\begin{cases}
+			\textbf{v}_i & = \sum_{j=1}^{i} \frac{\textbf{a} _{j-1}+\textbf{a} _j}{2} \left( t_j-t_{j-1} \right) \\
+			\textbf{s}_i & = \sum_{j=1}^{i} \frac{\textbf{v} _{j-1}+\textbf{v} _j}{2} \left( t_j-t_{j-1} \right) 
+		\end{cases}
+	\end{equation}
 	
 	Nell'immagine seguente viene mostrata la zona nella quale, se viene indicata dal \textbf{lidar} la presenza di un ostacolo, il \textbf{TIAGo} si ferma per ragioni di sicurezza al fine di evitare danni a persone e/o oggetti.
 	\begin{figure}[H]
