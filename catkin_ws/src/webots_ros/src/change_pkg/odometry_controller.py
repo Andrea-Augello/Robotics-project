@@ -4,7 +4,7 @@ import rospy
 import math
 import os
 from change_pkg.sensors import Vector
-from sensor_msgs.msg import Imu
+from sensor_msgs.msg import *
 
 
 class Odometry:
@@ -69,7 +69,7 @@ class Odometry:
 
     def __get_sensor_value(self, topic, device, msg_type):
         try:
-            return rospy.Subscriber(topic, msg_type, eval("self.%s_callback"%(device)))
+            rospy.Subscriber(topic, msg_type, eval("self.%s_callback"%(device)))
         except AttributeError as e:
             utils.logerr(str(e))
         
@@ -83,12 +83,14 @@ class Odometry:
                     msg_type=globals()[sensor[1].split("/")[1]]
                     topic=sensor[0]
                     device=sensor[0].split("/")[2]
+                    utils.debug("{}  {}  {}".format(topic, device, msg_type))
                     self.__get_sensor_value(topic, device, msg_type)
                     gyro=True
                 elif 'accelerometer' in sensor[0] and not accelerometer:
                     msg_type=globals()[sensor[1].split("/")[1]]
                     topic=sensor[0]
                     device=sensor[0].split("/")[2]
+                    utils.debug("{}  {}  {}".format(topic, device, msg_type))
                     self.__get_sensor_value(topic, device, msg_type)
                     accelerometer=True    
 
