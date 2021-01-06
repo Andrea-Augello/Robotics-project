@@ -29,7 +29,9 @@ class Controller:
                 for _ in range(4):
                     utils.debug(str(self.__robot.odometry))
                     self.__robot.movement.move_forward(6-i*0.5)
+                    utils.debug(str(self.__robot.odometry))
                     self.__robot.movement.rotate(-90)
+                    utils.debug(str(self.__robot.odometry))
                     self.__robot.odometry.movement_history()
         while False:
             # Sensor characterization
