@@ -74,11 +74,11 @@ class Odometry:
             accelerometer=False
             while not gyro and not accelerometer:
                 for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
-                    if 'gyro' in sensor[0]:
+                    if 'gyro' in sensor[0] and not gyro:
                         rospy.Subscriber("/"+self.robot_name+"/gyro", Imu, self.gyro_callback)
                         utils.debug("gyro subscribing")
                         gyro=True
-                    if 'accelerometer' in sensor[0]:
+                    if 'accelerometer' in sensor[0] and not accelerometer:
                         rospy.Subscriber("/"+self.robot_name+"/accelerometer", Imu, self.accelerometer_callback)
                         utils.debug("accelerometer subscribing")
                         accelerometer=True    
