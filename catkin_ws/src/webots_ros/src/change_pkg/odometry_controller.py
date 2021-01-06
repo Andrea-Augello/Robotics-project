@@ -50,9 +50,6 @@ class Odometry:
                 self.speed[i] +=((accel[i]+prev_accel[i])/2)*elapsed_time
                 self.pos[i] += ((self.speed[i]+self.speed_old[i])/2 ) *elapsed_time
             self.speed_old = self.speed
-        prev_stamp = timestamp
-        prev_accel = accel
-            
 
 
     def gyro_callback(self, values):
@@ -70,26 +67,13 @@ class Odometry:
             self.theta = (self.theta) % 360
             self.theta = self.theta if self.theta <= 180 else self.theta -360
 
-        
 
     def __get_sensors_values(self):
-<<<<<<< Updated upstream
         try:
             rospy.Subscriber("/"+self.robot_name+"/gyro", Imu, self.gyro_callback)
             rospy.Subscriber("/"+self.robot_name+"/accelerometer", Imu, self.accelerometer_callback)
         except AttributeError as e:
             utils.logerr(str(e))
-=======
-        sensor_values_count=4
-        while sensor_values_count:
-            for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
-                if 'gyro' in sensor[0] or 'accelerometer' in sensor[0]:
-                    msg_type=globals()[sensor[1].split("/")[1]]
-                    topic=sensor[0]
-                    device=sensor[0].split("/")[2]
-                    self.__get_sensor_value(topic, device, msg_type)
-                    sensor_values_count-=1
->>>>>>> Stashed changes
 
     def start(self):
         rate = rospy.Rate(10) # 10hz
