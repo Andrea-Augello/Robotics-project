@@ -75,7 +75,7 @@ class Change:
             self.tablet.warning()
         self.set_height(self.motors.torso.max_height/2)
 
-    def __get_odometry_value(self):
+    def __get_odometry_values(self):
         try:
             return rospy.Subscriber("/"+self.odometry.node_name+"/"+self.odometry.topic_name, Odometry_msg, self.odometry.odometry_callback)
         except AttributeError as e:
