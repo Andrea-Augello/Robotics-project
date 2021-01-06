@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-from change_pkg.odometry_ros import Odometry
+from change_pkg.odometry_controller import Odometry
 
         
 def main():
