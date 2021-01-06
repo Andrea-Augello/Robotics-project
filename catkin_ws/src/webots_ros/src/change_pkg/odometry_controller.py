@@ -67,23 +67,31 @@ class Odometry:
             self.theta = (self.theta) % 360
             self.theta = self.theta if self.theta <= 180 else self.theta -360
 
-
-    def __get_sensors_values(self):
+    def __get_sensor_value(self, topic, device, msg_type):
         try:
-            gyro=False
-            accelerometer=False
-            while not gyro and not accelerometer:
-                for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
-                    if 'gyro' in sensor[0] and not gyro:
-                        rospy.Subscriber("/"+self.robot_name+"/gyro", Imu, self.gyro_callback)
-                        utils.debug("gyro subscribing")
-                        gyro=True
-                    if 'accelerometer' in sensor[0] and not accelerometer:
-                        rospy.Subscriber("/"+self.robot_name+"/accelerometer", Imu, self.accelerometer_callback)
-                        utils.debug("accelerometer subscribing")
-                        accelerometer=True    
+            return rospy.Subscriber(topic, msg_type, eval("self.%s_callback"%(device)))
         except AttributeError as e:
             utils.logerr(str(e))
+        
+
+    def __get_sensors_values(self):
+        gyro=False
+        accelerometer=False
+        while not gyro and not accelerometer:
+            for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
+                if 'gyro' in sensor[0] and not gyro:
+                    msg_type=globals()[sensor[1].split("/")[1]]
+                    topic=sensor[0]
+                    device=sensor[0].split("/")[2]
+                    self.__get_sensor_value(topic, device, msg_type)
+                    gyro=True
+                elif 'accelerometer' in sensor[0] and not accelerometer:
+                    msg_type=globals()[sensor[1].split("/")[1]]
+                    topic=sensor[0]
+                    device=sensor[0].split("/")[2]
+                    self.__get_sensor_value(topic, device, msg_type)
+                    accelerometer=True    
+
 
     def start(self):
         rate = rospy.Rate(10) # 10hz
