@@ -91,7 +91,7 @@ class Change:
 
     def __get_sensors_values(self):
         for sensor in rospy.get_published_topics(namespace='/%s'%self.name):
-            if 'range_image' not in sensor[0] or 'odometry_node' not in sensor[0]: 
+            if 'range_image' not in sensor[0] and 'odometry_node' not in sensor[0]: 
                 msg_type=globals()[sensor[1].split("/")[1]]
                 topic=sensor[0]
                 device=sensor[0].split("/")[2]
