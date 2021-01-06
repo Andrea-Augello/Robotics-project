@@ -45,7 +45,7 @@ class Change:
         self.__get_sensors_values()
         #self.__get_odometry_values()
         for server in self.servers:
-            utils.publish(server, 'enable')
+            utils.publish_interaction(server, 'enable')
         self.set_pose(0,0)
         self.set_height(self.motors.torso.max_height/2)
         self.tablet.greetings()
