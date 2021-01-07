@@ -39,10 +39,8 @@ class Movement:
                     prev_speed = speed
                     for i in range(2):
                         speed[i] += ((accel[i]+prev_accel[i])/2)*elapsed_time
-                        distance_traveled[i] += ((speed[i]+prev_speed[i])/2 ) *elapsed_time
                 prev_stamp = timestamp
                 prev_accel = accel
-            return distance_traveled
             
 
     def rotate(self,rotation, precision=1):
@@ -50,22 +48,20 @@ class Movement:
         :rotation:  The desired rotation in degrees. Note that a rotation greater
             than 180° in modulo will be substituted with a rotation in the opposite
             direction.
-        :precision: The     maximum difference from the required rotation and the
+        :precision: The maximum difference from the required rotation and the
             actual rotation. If this value is smaller than the sensor noise it makes
             no sense.
         """
         self.stop()
         if(abs(rotation) <= precision):
             return 0
-        rotation+=math.copysign(precision,rotation)
+        current_angle = self.__robot.odometry.theta
+        target_angle=rotation+current_angle
+
         curr_angular_velocity = self.angular_velocity
-        #update_object_roi()
         # adjust for discontinuity at +/-180°
         difference = rotation
         current_angle = 0
-        ang_vel = 0
-        prev_ang_vel = 0
-        prev_time = 0
         if(difference > 180):
             difference = difference - 360
         elif (difference < -180):
@@ -74,37 +70,24 @@ class Movement:
         direction =  1 if difference > 0 else -1
         while(abs(difference)>precision ):
         # update_frame()
-            if(cv2.waitKey(1) == ord(' ')):
-                break
-
-            gyro=self.__robot.sensors.gyro.value
-            time = gyro.t
-            if prev_time:
-                ang_vel = 180*gyro.z/math.pi
-                elapsed_time = time - prev_time
-                elapsed_time = elapsed_time.to_sec()
-                current_angle = current_angle \
-                        - (prev_ang_vel + (ang_vel-prev_ang_vel)/2 ) *elapsed_time
-                difference = rotation-current_angle
-                if(difference > 180):
-                    difference = difference - 360
-                elif (difference < -180):
-                    difference = difference + 360
-                
-                if(direction*difference < 0):
-                # if we went over the specified angle, reverses the direction and
-                # decreases the angular speed to have a better chance of sampling
-                # at the right moment.
-                    curr_angular_velocity*=0.8
-                    direction=-direction
-                
-                # applies rudimentary proportional controller
-                self.set_angular_velocity(curr_angular_velocity*(-direction)\
-                        * (min(1,abs(difference/45))) )
-            prev_time = time
-            prev_ang_vel = ang_vel
+            current_angle = self.__robot.odometry.theta
+            difference = target_angle-current_angle
+            if(difference > 180):
+                difference = difference - 360
+            elif (difference < -180):
+                difference = difference + 360
+            
+            if(direction*difference < 0):
+            # if we went over the specified angle, reverses the direction and
+            # decreases the angular speed to have a better chance of sampling
+            # at the right moment.
+                curr_angular_velocity*=0.8
+                direction=-direction
+            
+            # applies rudimentary proportional controller
+            self.set_angular_velocity(curr_angular_velocity*(-direction)\
+                    * (min(1,abs(difference/45))) )
         self.stop(linear=False)
-        self.__robot.odometry.update_theta(current_angle)
         return current_angle
 
 
@@ -157,16 +140,12 @@ class Movement:
                 prev_speed = speed
                 for i in range(2):
                     speed[i] +=((accel[i]+prev_accel[i])/2)*elapsed_time
-                    distance_traveled[i] += ((speed[i]+prev_speed[i])/2 ) *elapsed_time
             prev_stamp = timestamp
             prev_accel = accel
-        breaking_space = self.stop(linear=True, speed=speed, prev_stamp=timestamp, prev_accel=prev_accel)
-        for i in range(2):
-            distance_traveled[i]=distance_traveled[i]+breaking_space[i]
+        self.stop(linear=True, speed=speed, prev_stamp=timestamp, prev_accel=prev_accel)
         self.__robot.motors.left_wheel.init()
         self.__robot.motors.right_wheel.init()
-        self.__robot.odometry.update_position(distance_traveled)
-        return distance_traveled
+        self.__robot.odometry.update_position()
 
         
 

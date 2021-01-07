@@ -118,12 +118,15 @@ class LidarSensor(Sensor):
 
 
 class Vector:
-    def __init__(self):
-        self.x=0
-        self.y=0
-        self.z=0
-        self.t=0
+    def __init__(self,x=0,y=0,z=0,t=0):
+        self.x=x
+        self.y=y
+        self.z=z
+        self.t=t
 
     def __str__(self):
-        return "x:{} y:{} z:{} t:{}".format(self.x,self.y,self.z,self.t)                
+        return "x:{} y:{} z:{} t:{}".format(self.x,self.y,self.z,self.t)
+
+    def copy(self):
+        return Vector(self.x,self.y,self.z,self.t)
 

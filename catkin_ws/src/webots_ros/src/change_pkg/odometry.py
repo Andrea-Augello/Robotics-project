@@ -2,6 +2,8 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import change_pkg.utils as utils
+
 
 
 class Odometry:
@@ -11,22 +13,20 @@ class Odometry:
         self.history=[((self.x,self.y),0)]
         self.theta=0
 
+
+    def odometry_callback(self,values):
+        self.x=values.pose.pose.position.x
+        self.y=values.pose.pose.position.y
+        self.theta=values.pose.pose.position.z      
+        
+
     def get_position(self):
         return (self.x,self.y)    
 
-    def update_position(self, distance):
-        if distance[0] > 0.5:
-            # corrects systematic drifting
-            distance[0] *= 0.8329
-            #distance[0] -=0.2697
-        distance_traveled = self.history[0][1] + math.hypot(distance[0], distance[1])
-        self.x = self.x + distance[1]*math.cos(math.pi*self.theta/180) - distance[0]*math.sin(math.pi*self.theta/180)
-        self.y = self.y + distance[1]*math.sin(math.pi*self.theta/180) + distance[0]*math.cos(math.pi*self.theta/180)
+    def update_position(self):
+        coords, dist = self.history[0]
+        distance_traveled = math.hypot(self.x-coords[0], self.y-coords[1])
         self.history.insert(0,((self.x, self.y),distance_traveled))
-
-    def update_theta(self, theta):
-        self.theta = (self.theta + theta) % 360
-        self.theta = self.theta if self.theta <= 180 else self.theta -360
 
     def movement_history(self):
         fig, ax = plt.subplots()
