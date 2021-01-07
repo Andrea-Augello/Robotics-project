@@ -23,8 +23,8 @@ class Odometry:
         self.theta=0
         self.motors=Motors_Info()
         self.motors_old=Motors_Info()
-        self.WHEEL_RADIUS=0.985
-        self.WHEEL_DISTANCE=0.5
+        self.WHEEL_RADIUS=0.0985
+        self.WHEEL_DISTANCE=0.547
         
 
     def init(self):
@@ -35,7 +35,8 @@ class Odometry:
         self.start()
 
     def accelerometer_callback(self, values):
-        return self.update_position()
+        return 0
+        #return self.update_position()
         self.accelerometer_values_old = self.accelerometer_values.copy()
         
         ax =  values.linear_acceleration.y*math.cos(math.pi*self.theta/180) \
@@ -66,6 +67,7 @@ class Odometry:
         self.gyro_values.y=values.angular_velocity.y
         self.gyro_values.z=values.angular_velocity.z
         self.gyro_values.t=values.header.stamp    
+        return self.update_position()
         if self.gyro_values_old.t != 0:
             prev_ang_vel = 180*self.gyro_values_old.z/math.pi
             ang_vel = 180*self.gyro_values.z/math.pi
@@ -74,24 +76,25 @@ class Odometry:
             self.theta -= ((ang_vel+prev_ang_vel)/2 ) *elapsed_time
             self.theta = (self.theta) % 360
             self.theta = self.theta if self.theta <= 180 else self.theta -360
-            #self.update_position()
-        utils.debug("x: {:.2f} y: {:.2f} theta: {:.2f}".format(self.position[0], self.position[1], self.theta))        
+            self.update_position()
+        #utils.debug("x: {:.2f} y: {:.2f} theta: {:.2f}".format(self.position[0], self.position[1], self.theta))        
     
     def update_position(self):
         self.motors_old=self.motors.copy()
-        self.motors.right.velocity=utils.call_service(self.robot_name,"wheel_right_joint","get_velocity").value*self.WHEEL_RADIUS #linear velocity
-        self.motors.left.velocity=utils.call_service(self.robot_name,"wheel_left_joint","get_velocity").value*self.WHEEL_RADIUS
+        self.motors.right.velocity = utils.call_service(self.robot_name,"wheel_right_joint","get_velocity").value*self.WHEEL_RADIUS #linear velocity
+        self.motors.left.velocity  = utils.call_service(self.robot_name,"wheel_left_joint","get_velocity").value*self.WHEEL_RADIUS
         self.motors.time=rospy.Time.now()
         if self.motors_old.time != 0:
             elapsed_time = self.motors.time - self.motors_old.time
             elapsed_time = elapsed_time.to_sec()
             linear_velocity = (self.motors.right.velocity + self.motors.left.velocity) / 2
-            #angular_velocity= (self.motors.right.velocity - self.motors.left.velocity) / self.WHEEL_DISTANCE 
-            self.position[0] += elapsed_time * (linear_velocity * math.cos(self.theta))
-            self.position[1] += elapsed_time * (linear_velocity * math.sin(self.theta))
-            #self.theta += elapsed_time * angular_velocity
-            #self.theta = (self.theta) % 360
-            #self.theta = self.theta if self.theta <= 180 else self.theta -360
+            angular_velocity= (self.motors.right.velocity - self.motors.left.velocity) / self.WHEEL_DISTANCE 
+            # if self.motors.right.velocity * self.motors.left.velocity > 0:
+            self.position[0] -= elapsed_time * (linear_velocity * math.sin(self.theta))
+            self.position[1] += elapsed_time * (linear_velocity * math.cos(self.theta))
+            self.theta -= elapsed_time * angular_velocity
+            self.theta = (self.theta) % 360
+            self.theta = self.theta if self.theta <= 180 else self.theta -360
 
 
     def __get_sensor_value(self, topic, device, msg_type):

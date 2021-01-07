@@ -18,7 +18,7 @@ class Change:
     def __init__(self):
         self.name = 'change'
         self.debug_mode = False
-        self.time_step = 32
+        self.time_step = 16
         self.wheel_diameter = 0.20
         self.footprint = 0.54
         self.servers = ['speaker', 'display']
