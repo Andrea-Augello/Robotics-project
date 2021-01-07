@@ -123,22 +123,24 @@ class Path_planner:
             angle_distance = (target_angle-obstacles[i][1])%360
             angle_distance =\
                     angle_distance if angle_distance < 180 \
-                    else abs(new_tangent_distance -360)
+                    else abs(angle_distance -360)
 
             if(angle_distance < 5 and obstacles[i][0] > 2.5):
                 return (obstacles[i][0]-0.5, obstacles[i][1])
-            
+
             delta = obstacles[i][0] - obstacles[i+1][0]
             if(delta > width\
                     or ( obstacles[i][0]>=self.__robot.sensors.lidar.range_max \
                     and obstacles[i+1][0]<self.__robot.sensors.lidar.range_max)):
-               tangents.append((obstacles[i+1][0],obstacles[i][1]))
-               corrections.append(-math.asin(min(1,width/obstacles[i+1][0])))
+               if obstacles[i+1][0] > 1:
+                   tangents.append((obstacles[i+1][0],obstacles[i][1]))
+                   corrections.append(-math.asin(min(1,width/obstacles[i+1][0])))
             elif ( delta < -width \
                     or ( obstacles[i][0] <self.__robot.sensors.lidar.range_max \
                     and obstacles[i+1][0]>=self.__robot.sensors.lidar.range_max)):
-               tangents.append((obstacles[i][0],obstacles[i+1][1]))
-               corrections.append(math.asin(min(1,width/obstacles[i][0])))
+               if obstacles[i][0] > 1:
+                    tangents.append((obstacles[i][0],obstacles[i+1][1]))
+                    corrections.append(math.asin(min(1,width/obstacles[i][0])))
 
         found_tan = None
         tangent_distance = None
@@ -155,11 +157,11 @@ class Path_planner:
                     tangent_distance = new_tangent_distance
                     found_tan = i
         if found_tan != None :
-            return (max(2,tangents[found_tan][0]),
+            return (min(2,tangents[found_tan][0]),
                     tangents[found_tan][1]+corrections[found_tan]*180/math.pi)
         else:
             # Turn back and hope for the best
-            return (0,180)
+            return (0,-90)
 
 
     def next_step_direction(self):
@@ -189,6 +191,8 @@ class Path_planner:
                     attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential[0],
                     attractive_potential*math.cos(target_angle/180*math.pi) - repulsive_potential[1] )
             direction = max(-self.MAX_DEVIATION, min(self.MAX_DEVIATION, direction))
+            if abs(direction) < 3:
+                direction = 20 if int(10*direction)%2 else -20
         return direction
 
     def target_distance(self):

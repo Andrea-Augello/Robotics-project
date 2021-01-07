@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.5702338390252344 -0.5930073687410209 -0.5684853819135495 2.067913374936622
-  position -1.6763770244082767 40.112045298695826 1.8505436388295504
+  orientation -0.5800290515852587 -0.5737608075374767 -0.5782428858628942 2.096671980313923
+  position 0.27943793486174123 40.51466154123977 0.3019641193511356
   follow "change"
   followType "None"
 }
@@ -22,31 +22,23 @@ RectangleArena {
   wallHeight 3
 }
 CardboardBox {
-  translation -3.41 0.3 1.18
+  translation -3.41 0.3 0.09
   name "cardboard box(6)"
 }
 CardboardBox {
-  translation -2.79 0.3 1.18
+  translation -2.79 0.3 0.07
   name "cardboard box(5)"
 }
 CardboardBox {
-  translation -2.17 0.3 1.18
+  translation -2.15 0.3 0.05
   name "cardboard box(4)"
 }
 CardboardBox {
-  translation -4.64 0.3 1.16
-  name "cardboard box(3)"
-}
-CardboardBox {
-  translation -4.02 0.3 1.18
+  translation -4.24 0.3 0.01
   name "cardboard box(2)"
 }
-CardboardBox {
-  translation -1.56 0.3 1.18
-  name "cardboard box(1)"
-}
 Pedestrian {
-  translation 0.016765 1.29 3.86683
+  translation 1.92676 1.29 3.86683
   rotation 0 -1 0 -1.5707953071795862
 }
 Pedestrian {
@@ -67,7 +59,7 @@ Pedestrian {
   name "pedestrian(3)"
   controllerArgs [
     "--speed=0.4"
-    "--trajectory=5 -6,  5 5, -4 5,  -4 -6"
+    "--trajectory=5 -6,  5 5"
   ]
   shirtColor 1 1 1
   pantsColor 0.2 0.2 0.2
@@ -112,7 +104,7 @@ Pedestrian {
   skinColor 0.389014 0.297383 0.280034
 }
 Pedestrian {
-  translation 1.0118 1.27 3.85621
+  translation 2.9718 1.27 3.85621
   rotation 0 1 0 -1.5708053071795867
   name "pedestrian(7)"
   shirtColor 0.739193 0 0.0918135
@@ -132,7 +124,7 @@ Armchair {
   color 0.3 0.04 0.0005
 }
 Armchair {
-  translation -6.58 0 2.05
+  translation -6.58 0 2
   rotation 0 1 0 1.5708
   name "armchair(1)"
   color 0.3 0.04 0.0005
@@ -360,5 +352,5 @@ Door {
   translation 2.36 0 -8.69
 }
 CardboardBox {
-  translation -0.93 0.3 1.18
+  translation -1.46 0.3 0.01
 }

@@ -57,6 +57,7 @@ class Movement:
             return 0
         current_angle = self.__robot.odometry.theta
         target_angle=rotation+current_angle
+
         curr_angular_velocity = self.angular_velocity
         # adjust for discontinuity at +/-180°
         difference = rotation
