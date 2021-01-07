@@ -24,7 +24,7 @@ class Controller:
         self.SCAN_RATE = 10
 
     def start(self):
-        while True:
+        while False:
             for i in range(10):
                 self.__robot.movement.move_forward(10-0.5*i)
                 self.__robot.movement.rotate(-90)

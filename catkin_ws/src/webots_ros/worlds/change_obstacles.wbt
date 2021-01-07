@@ -21,6 +21,22 @@ RectangleArena {
   wallThickness 0.3
   wallHeight 3
 }
+CardboardBox {
+  translation -2.36 0.3 -0.87
+  name "cardboard box(6)"
+}
+CardboardBox {
+  translation -1.73 0.3 -0.87
+  name "cardboard box(5)"
+}
+CardboardBox {
+  translation -1.7 0.3 -1.53
+  name "cardboard box(4)"
+}
+CardboardBox {
+  translation -3.01 0.3 -0.84
+  name "cardboard box(2)"
+}
 Pedestrian {
   translation 1.92676 1.29 3.86683
   rotation 0 -1 0 -1.5707953071795862
@@ -329,4 +345,7 @@ Radiator {
 }
 Door {
   translation 2.36 0 -8.69
+}
+CardboardBox {
+  translation -1.69 0.3 -2.16
 }
