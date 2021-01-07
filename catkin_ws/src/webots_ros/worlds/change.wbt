@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.5800290515852587 -0.5737608075374767 -0.5782428858628942 2.096671980313923
-  position 0.27943793486174123 40.51466154123977 0.3019641193511356
+  orientation 0.5776567755050862 0.5771969549958951 0.5771969549958951 4.189249903239789
+  position 3.0591730397383713e-15 47.38081344516367 -8.260133111985155e-15
   follow "change"
   followType "None"
 }
@@ -22,19 +22,19 @@ RectangleArena {
   wallHeight 3
 }
 CardboardBox {
-  translation -3.41 0.3 0.09
+  translation -2.36 0.3 -0.87
   name "cardboard box(6)"
 }
 CardboardBox {
-  translation -2.79 0.3 0.07
+  translation -1.73 0.3 -0.87
   name "cardboard box(5)"
 }
 CardboardBox {
-  translation -2.15 0.3 0.05
+  translation -1.7 0.3 -1.53
   name "cardboard box(4)"
 }
 CardboardBox {
-  translation -4.24 0.3 0.01
+  translation -3.01 0.3 -0.84
   name "cardboard box(2)"
 }
 Pedestrian {
@@ -135,11 +135,6 @@ PottedTree {
 PottedTree {
   translation -7.69 0 7.98
   name "potted tree(1)"
-}
-Carpet {
-  translation -6.41 0 0.020006
-  rotation 0 1 0 -1.5707953071795862
-  color 0.6 0.4 0.2
 }
 Table {
   translation -5.2 -0.3 0
@@ -352,5 +347,5 @@ Door {
   translation 2.36 0 -8.69
 }
 CardboardBox {
-  translation -1.46 0.3 0.01
+  translation -1.69 0.3 -2.16
 }

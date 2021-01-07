@@ -129,7 +129,7 @@ class Movement:
                 and min([self.__robot.sensors.lidar.value[lidar_position-2][0],
                     self.__robot.sensors.lidar.value[lidar_position-1][0],
                     self.__robot.sensors.lidar.value[lidar_position][0],
-                    self.__robot.sensors.lidar.value[lidar_position+1][0]])>self.SECURITY_DISTANCE*0.66 \
+                    self.__robot.sensors.lidar.value[lidar_position+1][0]])>self.SECURITY_DISTANCE \
                 and not self.__robot.sensors.bumper.value):
             accel = self.__robot.sensors.accelerometer.value
             timestamp = accel.t
@@ -180,6 +180,8 @@ class Movement:
         return distance_traveled
     
     def scan(self):
+        for _ in range(2):
+            self.__robot.tablet.warning()
         self.__robot.vision.clear_saved_frames()
         rotation = 0
         self.__robot.vision.save_frame(self.__robot.vision.update_frame(self.__robot.sensors.camera.value))

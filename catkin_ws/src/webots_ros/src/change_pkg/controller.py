@@ -47,7 +47,7 @@ class Controller:
         odometer = self.get_odometer()
         while not self.is_arrived():
             #self.people_density.reset()
-            if self.get_odometer()-odometer > self.SCAN_RATE:
+            if self.get_odometer()-odometer > self.SCAN_RATE and not self.is_arrived(precision=1.5):
                 odometer = self.get_odometer()
                 self.scan()
             self.schedule_movement()
@@ -56,12 +56,12 @@ class Controller:
         # self.__robot.movement.rotate(-self.path_planner.target_angle())  
 
 
-    def is_arrived(self):
+    def is_arrived(self, precision=1):
         """
         :returns: True if the robot is near the cluster, False otherwise
 
         """
-        return self.path_planner.target_distance() < max(self.path_planner.distance_allowed,self.TARGET_DISTANCE) \
+        return self.path_planner.target_distance() < max(self.path_planner.distance_allowed,self.TARGET_DISTANCE*precision) \
                 or mpltPath.Path(self.path_planner.perimeter_target).contains_points([self.__robot.odometry.history[0][0]])
                 
 
