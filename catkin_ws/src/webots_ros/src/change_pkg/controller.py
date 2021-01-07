@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import change_pkg.path_planning as path_planner
 import change_pkg.utils as utils

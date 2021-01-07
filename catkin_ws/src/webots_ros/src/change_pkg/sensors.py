@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import math
 from scipy.spatial.transform import Rotation
 import numpy as np
