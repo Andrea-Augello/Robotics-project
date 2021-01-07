@@ -13,7 +13,7 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 17 17
+  floorSize 31 27
   floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
@@ -21,67 +21,9 @@ RectangleArena {
   wallThickness 0.3
   wallHeight 3
 }
-CardboardBox {
-  translation -2.36 0.3 -0.87
-  name "cardboard box(6)"
-}
-CardboardBox {
-  translation -1.73 0.3 -0.87
-  name "cardboard box(5)"
-}
-CardboardBox {
-  translation -1.7 0.3 -1.53
-  name "cardboard box(4)"
-}
-CardboardBox {
-  translation -3.01 0.3 -0.84
-  name "cardboard box(2)"
-}
 Pedestrian {
   translation 1.92676 1.29 3.86683
   rotation 0 -1 0 -1.5707953071795862
-}
-Pedestrian {
-  translation -0.306239 1.27 -7.4404
-  rotation 0 1 0 -5.307179586466759e-06
-  name "pedestrian(4)"
-  shirtColor 0 0.448768 0
-}
-Pedestrian {
-  translation -4.58 1.27 -4.60729
-  rotation 0 -1 0 6.13667e-07
-  name "pedestrian(5)"
-  shirtColor 0 0.850233 0.855879
-}
-Pedestrian {
-  translation 5 1.27 -6
-  rotation 0 -1 0 6.53316937918704e-06
-  name "pedestrian(3)"
-  controllerArgs [
-    "--speed=0.4"
-    "--trajectory=5 -6,  5 5"
-  ]
-  shirtColor 1 1 1
-  pantsColor 0.2 0.2 0.2
-  shoesColor 0 0 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation -4.63 1.27 -3.56477
-  rotation 0 1 0 3.14159
-  name "pedestrian(6)"
-  shirtColor 0.671351 0 0.652461
-  pantsColor 0.130205 0.135622 0.26186
-  shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 Pedestrian {
   translation -4.66027 1.27 7.05799
@@ -324,28 +266,4 @@ Solid {
   ]
   name "solid(2)"
   boundingObject USE Tablecloth_shape
-}
-Solid {
-  translation 0 0.42 0
-  children [
-    DEF Cylinder_shape Shape {
-      appearance USE Tablecloth_appearance
-      geometry Cylinder {
-        height 0.7
-        radius 1.01
-      }
-    }
-  ]
-  name "solid(1)"
-  boundingObject USE Cylinder_shape
-}
-Radiator {
-  translation -4.1 0.61 -8.37
-  rotation 0 1 0 -1.5707953071795862
-}
-Door {
-  translation 2.36 0 -8.69
-}
-CardboardBox {
-  translation -1.69 0.3 -2.16
 }

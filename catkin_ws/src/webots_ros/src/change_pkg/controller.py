@@ -25,10 +25,11 @@ class Controller:
 
     def start(self):
         while False:
-            pass
-            self.__robot.movement.move_forward(3)
-            self.__robot.movement.rotate(-90)
-            self.__robot.odometry.movement_history()
+            for i in range(10):
+                self.__robot.movement.move_forward(10-0.5*i)
+                self.__robot.movement.rotate(-90)
+                self.__robot.print_info()
+                self.__robot.odometry.movement_history()
         while False:
             # Sensor characterization
             self.__robot.vision.clear_saved_frames()
@@ -102,6 +103,7 @@ class Controller:
             if distance > self.ESCAPING_DISTANCE:
                 self.scheduler.potential_field_mode() 
         elif mode == 'potential_field' and self.check_loop():
+            self.__robot.movement.rotate(180)
             self.scheduler.bug_mode()  
 
 
