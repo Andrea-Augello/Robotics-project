@@ -25,7 +25,7 @@ class Odometry:
 
     def update_position(self):
         coords, dist = self.history[0]
-        distance_traveled = math.hypot(self.x-coords[0], self.y-coords[1])
+        distance_traveled = dist + math.hypot(self.x-coords[0], self.y-coords[1])
         self.history.insert(0,((self.x, self.y),distance_traveled))
 
     def movement_history(self):

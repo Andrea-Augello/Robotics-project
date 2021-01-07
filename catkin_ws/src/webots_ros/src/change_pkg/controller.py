@@ -20,11 +20,11 @@ class Controller:
         self.MOVEMENT_LOOP_PRECISION = 0.01
         self.ROTATION_LOOP_PRECISION = 0.1
         self.ESCAPING_DISTANCE = 3
-        self.TARGET_DISTANCE = 1
+        self.TARGET_DISTANCE = 1.5
         self.SCAN_RATE = 10
 
     def start(self):
-        while True:
+        while False:
             pass
             self.__robot.movement.move_forward(3)
             self.__robot.movement.rotate(-90)
@@ -35,7 +35,7 @@ class Controller:
             self.__robot.vision.save_frame(self.__robot.sensors.camera.value)
             utils.loginfo(self.__robot.vision.locate_targets())
             time.sleep(3)
-        while False:
+        while True:
             self.exploration()
             self.go_to_gathering()
             self.__robot.warning()

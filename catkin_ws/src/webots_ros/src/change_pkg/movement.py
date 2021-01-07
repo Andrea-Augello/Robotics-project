@@ -55,9 +55,9 @@ class Movement:
         self.stop()
         if(abs(rotation) <= precision):
             return 0
-        current_angle = self.__robot.odometry.theta
-        target_angle=rotation+current_angle
-
+        starting_angle = self.__robot.odometry.theta
+        current_angle = starting_angle
+        target_angle=rotation+current_angle-math.copysign(precision,rotation)
         curr_angular_velocity = self.angular_velocity
         # adjust for discontinuity at +/-180°
         difference = rotation
@@ -88,7 +88,7 @@ class Movement:
             self.set_angular_velocity(curr_angular_velocity*(-direction)\
                     * (min(1,abs(difference/45))) )
         self.stop(linear=False)
-        return current_angle
+        return current_angle- starting_angle
 
 
     def move_forward(self, distance, precision=0.01):
@@ -129,7 +129,7 @@ class Movement:
                 and min([self.__robot.sensors.lidar.value[lidar_position-2][0],
                     self.__robot.sensors.lidar.value[lidar_position-1][0],
                     self.__robot.sensors.lidar.value[lidar_position][0],
-                    self.__robot.sensors.lidar.value[lidar_position+1][0]])>self.SECURITY_DISTANCE \
+                    self.__robot.sensors.lidar.value[lidar_position+1][0]])>self.SECURITY_DISTANCE*0.66 \
                 and not self.__robot.sensors.bumper.value):
             accel = self.__robot.sensors.accelerometer.value
             timestamp = accel.t
