@@ -16,5 +16,5 @@
     <node name="change_controller" pkg="webots_ros" type="change.py" required="$(arg auto_close)"/>
     <node name="interaction_controller" pkg="webots_ros" type="interaction_node.py" required="$(arg auto_close)"/>
     <node name="odometry_controller" pkg="webots_ros" type="odometry_node.py" required="$(arg auto_close)"/>
-
+    <param name="/use_sim_time" value="true"/>
 </launch>
