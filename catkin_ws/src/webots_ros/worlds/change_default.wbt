@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5776567755050876 0.5771969549958926 0.5771969549958957 4.189249903239788
-  position 1.284395514479314e-13 47.030095701809294 -1.1669035248993678e-14
+  orientation 0.5776567755050862 0.5771969549958951 0.5771969549958951 4.189249903239789
+  position 3.0591730397383713e-15 47.38081344516367 -8.260133111985155e-15
   follow "change"
   followType "None"
 }
@@ -20,18 +20,6 @@ RectangleArena {
   }
   wallThickness 0.3
   wallHeight 3
-}
-CardboardBox {
-  translation -2.36 0.3 -1.05
-  name "cardboard box(6)"
-}
-CardboardBox {
-  translation -1.73 0.3 -1.2
-  name "cardboard box(5)"
-}
-CardboardBox {
-  translation -1.7 0.3 -1.92
-  name "cardboard box(4)"
 }
 Pedestrian {
   translation 1.92676 1.29 3.86683
