@@ -35,7 +35,7 @@ class Odometry:
         self.start()
 
     def accelerometer_callback(self, values):
-        return 
+        return self.update_position()
         self.accelerometer_values_old = self.accelerometer_values.copy()
         
         ax =  values.linear_acceleration.y*math.cos(math.pi*self.theta/180) \
@@ -74,7 +74,7 @@ class Odometry:
             self.theta -= ((ang_vel+prev_ang_vel)/2 ) *elapsed_time
             self.theta = (self.theta) % 360
             self.theta = self.theta if self.theta <= 180 else self.theta -360
-            self.update_position()
+            #self.update_position()
         utils.debug("x: {:.2f} y: {:.2f} theta: {:.2f}".format(self.position[0], self.position[1], self.theta))        
     
     def update_position(self):
