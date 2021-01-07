@@ -30,10 +30,6 @@ class Odometry:
         self.__get_sensors_values()
         self.start()
 
-    def accelerometer_callback(self, values):
-        if abs(values.linear_acceleration.y) > 0.02:
-            self.theta -= 0.01*values.linear_acceleration.y*180/math.pi
-
 
     def gyro_callback(self, values):
         self.gyro_values_old = self.gyro_values.copy()
@@ -46,7 +42,7 @@ class Odometry:
             ang_vel = 180*self.gyro_values.z/math.pi
             elapsed_time = self.gyro_values.t - self.gyro_values_old.t
             elapsed_time = elapsed_time.to_sec()
-            self.theta -= 0.99*((ang_vel+prev_ang_vel)/2 ) *elapsed_time
+            self.theta -= ((ang_vel+prev_ang_vel)/2 ) *elapsed_time
             self.theta = (self.theta) % 360
             self.theta = self.theta if self.theta <= 180 else self.theta -360
         #utils.debug("x: {:.2f} y: {:.2f} theta: {:.2f}".format(self.position[0], self.position[1], self.theta))        
@@ -78,8 +74,7 @@ class Odometry:
 
     def __get_sensors_values(self):
         gyro=False
-        accelerometer = False
-        while not (gyro and accelerometer): 
+        while not gyro: 
             for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
                 if 'gyro' in sensor[0] and not gyro:
                     msg_type=globals()[sensor[1].split("/")[1]]
@@ -88,12 +83,6 @@ class Odometry:
                     self.__get_sensor_value(topic, device, msg_type)
                     gyro=True
                     break
-                elif 'accelerometer' in sensor[0] and not accelerometer:
-                    msg_type=globals()[sensor[1].split("/")[1]]
-                    topic=sensor[0]
-                    device=sensor[0].split("/")[2]
-                    self.__get_sensor_value(topic, device, msg_type)
-                    accelerometer=True    
 
 
     def start(self):
