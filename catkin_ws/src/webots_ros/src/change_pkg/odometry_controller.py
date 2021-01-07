@@ -12,7 +12,7 @@ class Odometry:
         self.robot_name = 'change'
         self.node_name = 'odometry_node'
         self.topic_name = 'odom'
-        self.time_step = 32
+        self.time_step = 16
         self.gyro_values=Vector()
         self.gyro_values_old=Vector()
         self.position=[2,-2.55]
@@ -74,7 +74,6 @@ class Odometry:
 
     def __get_sensors_values(self):
         gyro=False
-        accelerometer=False
         while not gyro: 
             for sensor in rospy.get_published_topics(namespace='/%s'%self.robot_name):
                 if 'gyro' in sensor[0] and not gyro:
@@ -83,6 +82,7 @@ class Odometry:
                     device=sensor[0].split("/")[2]
                     self.__get_sensor_value(topic, device, msg_type)
                     gyro=True
+                    break
 
 
     def start(self):
