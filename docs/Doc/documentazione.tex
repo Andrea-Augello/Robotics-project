@@ -26,6 +26,9 @@
 % provides the H option
 \usepackage{float}
 
+% provides subcaptions
+\usepackage{subcaption}
+
 \pdfsuppresswarningpagegroup=1
 
 \begin{document}
@@ -182,13 +185,22 @@
 
 	La $\omega [t]$ è data dall'interpolazione lineare descritta nell'equazione (\ref{eq:gyro-integration}).
 	
-	Abbiamo misurato le performance della stima di posizione e i risultati sono soddisfacenti per raggiungere l'obbiettivo proposto. In Fig. \ref{fig:dead_reckoning_error} sono mostrati i risultati delle misurazioni effettuate.
+	Abbiamo misurato le performance della stima di posizione e i risultati sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto. In Fig.~\ref{fig:dead_reckoning_error} sono mostrati i risultati delle misurazioni effettuate.
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.8\textwidth]{./img/dead_reckoning_error.pdf}
 		\caption{Errore nella stima della posizione}
 		\label{fig:dead_reckoning_error}
+	\end{figure}
+
+	In Fig.~\ref{fig:trajectory_error} viene mostrata chiaramente la differenza fra la traiettoria reale del \textbf{TIAGo} e la traiettoria calcolata con l'odometria.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./img/trajectories.pdf}
+		\caption{Errore nella stima della traiettoria}
+		\label{fig:trajectory_error}
 	\end{figure}
 	
 	
@@ -364,15 +376,57 @@
 
 	
 	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori}
-	Al fine di migliorare la stima sulla distanza 
-	$0.003116*x^5 - 0.09722*x^4 + 1.124*x^3 -5.908*x^2 + 14.5*x-7.367$
+	Al fine di migliorare la stima sulla distanza dei target abbiamo ritenuto utile paragonare le reali distanze dei target con le stime effettuate dal nostro sistema. In seguito ad analisi quantitative abbiamo ottenuto il polinomio 	$0.003116*x^5 - 0.09722*x^4 + 1.124*x^3 -5.908*x^2 + 14.5*x-7.367$,  che approssima la funzione di correzione della stima. Il grafico è mostrato nella Fig.~\ref{fig:interpolation}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.6\textwidth]{./img/nms.pdf}
-		\caption{Non maxima suppression}
-		\label{fig:nms}
+		\includegraphics[width=1\textwidth]{./img/interpolation.pdf}
+		\caption{Polinomio interpolante}
+		\label{fig:interpolation}
 	\end{figure}
+
+	Le performance del polinomio nella correzione della stima della distanza e dell'angolo si evince dalle Fig.~\ref{fig:boxes_plot}
+
+	\begin{figure}[ht]
+		\begin{subfigure}{.5\textwidth}
+			\centering
+			% include first image
+			\includegraphics[width=1\linewidth]{./img/angle_error.pdf}  
+			\label{fig:angle_plot}
+		\end{subfigure}
+		\begin{subfigure}{.5\textwidth}
+			\centering
+			% include second image
+			\includegraphics[width=1\linewidth]{./img/distance_error.pdf}  
+			\label{fig:distance_plot}
+		\end{subfigure}
+		\caption{Box plot relativi all'errore su angolo e distanza}
+		\label{fig:boxes_plot}
+	\end{figure}
+
+	La matrice di covarianza, mostrata in \ref{eq:covariance_matrix} mostra 
+	
+	\begin{equation}\label{eq:covariance_matrix}
+		V = \begin{bmatrix}
+			& 0.163  & 0.163 \\
+			&-0.0397 & 0.0752 \\
+		\end{bmatrix}
+	\end{equation}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./img/error_covariance.pdf}
+		\caption{Matrice di covarianza in 3 dimensioni}
+		\label{fig:error_covariance}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./img/error_covariance_flat.pdf}
+		\caption{Matrice di covarianza in 2 dimensioni}
+		\label{fig:error_covariance_flat}
+	\end{figure}
+	
 	
 	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
 	Le relazioni geometriche sulla distanza degli oggetti esposte nella
