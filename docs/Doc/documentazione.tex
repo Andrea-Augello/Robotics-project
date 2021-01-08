@@ -182,6 +182,16 @@
 
 	La $\omega [t]$ è data dall'interpolazione lineare descritta nell'equazione (\ref{eq:gyro-integration}).
 	
+	Abbiamo misurato le performance della stima di posizione e i risultati sono soddisfacenti per raggiungere l'obbiettivo proposto. In Fig. \ref{fig:dead_reckoning_error} sono mostrati i risultati delle misurazioni effettuate.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./img/dead_reckoning_error.pdf}
+		\caption{Errore nella stima della posizione}
+		\label{fig:dead_reckoning_error}
+	\end{figure}
+	
+	
 	\section{Rilevamento delle collisioni}\label{sec:Rilevamento-delle-collisioni} 
 	Il \textbf{TIAGo} è in grado di rilevare gli ostacoli grazie all'utilizzo di un sensore lidar. Nel nostro caso d'uso, la rilevazione degli ostacoli è difatti imprescidibile per raggiungere l'obbiettivo proposto in maniera soddisfacente. 
 	
@@ -290,7 +300,6 @@
 	\end{figure}
 	
 	\subsection{Calcolo della distanza}\label{subsec:Calcolo-della-distanza}
-	
 	L'altezza percepita dell'oggetto non è un indicatore affidabile della sua distanza dal robot in quanto parte dell'oggetto potrebbe essere occlusa o non presente nel frame. Inoltre classificatori quali HoG tendono a produrre ROI significativamente più alte dell'oggetto. La larghezza del torso, invece, è meno suscettibile a tali problemi, e non dipende dalla posizione (ad esempio seduto o alzato). Dobbiamo tuttavia ipotizzare che il torso abbia forma cilindrica introducendo quindi degli errori se l'obbiettivo non sta guardando la camera.	La posizione orizzontale dell'oggetto relativa alla camera può influenzare la larghezza percepita diminuendola quando aumenta la distanza dal centro dell'immagine. Ipotizzando che la camera abbia un FOV (field of view) di $2\alpha$ e sia distante $d$ dall'oggetto, la massima distanza orizzontale che un punto dell'immagine potrebbe avere dal centro del piano dell'immagine sarebbe $a = d \tan \alpha$ (Fig.~\ref{fig:error}).
 	
 	\begin{figure}[H]
@@ -355,10 +364,17 @@
 
 	
 	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori}
+	Al fine di migliorare la stima sulla distanza 
 	$0.003116*x^5 - 0.09722*x^4 + 1.124*x^3 -5.908*x^2 + 14.5*x-7.367$
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\textwidth]{./img/nms.pdf}
+		\caption{Non maxima suppression}
+		\label{fig:nms}
+	\end{figure}
+	
 	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
-
 	Le relazioni geometriche sulla distanza degli oggetti esposte nella
 	sezione~\ref{subsec:Calcolo-della-distanza} assumono che il target abbia la
 	stessa larghezza in ogni posa e che sia possibile ottenere dal
