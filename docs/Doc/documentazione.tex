@@ -81,7 +81,7 @@
 	\end{figure}
 	
 	\subsection{Bug}\label{subsec:Bug}
-	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots \cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare che si sta riproducendo un suono da file audio ed il metodo per verificare che il robot sta parlando presentavano difatti le funzioni callback invertite. In seguito al nostro avviso via email il bug è stato risolto nel successivo aggiornamento, come si evince dal commit github rilevante \cite{rosbug}, riga 32-34.
+	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots \cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare che si sta riproducendo un suono da file audio ed il metodo per verificare che il robot sta parlando presentavano difatti le funzioni callback invertite. In seguito al nostro avviso via email il bug è stato risolto nel successivo aggiornamento, come si evince dal commit GitHub rilevante \cite{rosbug}, riga 32-34.
 	
 	\subsection{Gestione dei nodi}\label{subsec:Gestione-dei-nodi}
 	\subsubsection{Webots node}\label{subsubsec:Webots-node}
@@ -250,7 +250,7 @@
 	
 	
 	\section{Rilevamento delle collisioni}\label{sec:Rilevamento-delle-collisioni} 
-	Il \textbf{TIAGo} è in grado di rilevare gli ostacoli grazie all'utilizzo di un sensore lidar. Nel nostro caso d'uso, la rilevazione degli ostacoli è difatti imprescidibile per raggiungere l'obbiettivo proposto in maniera soddisfacente. 
+	Il \textbf{TIAGo} è in grado di rilevare gli ostacoli grazie all'utilizzo di un sensore lidar. Nel nostro caso d'uso, la rilevazione degli ostacoli è difatti imprescindibile per raggiungere l'obbiettivo proposto in maniera soddisfacente. 
 	
 	Nell'immagine seguente viene mostrata la zona nella quale, se viene indicata dal lidar la presenza di un ostacolo, il \textbf{TIAGo} si ferma per ragioni di sicurezza al fine di evitare danni a persone e/o oggetti.
 	\begin{figure}[H]
@@ -263,7 +263,19 @@
 	\section{Object recognition}\label{sec:Object-recognition}
 	
 	\subsection{Campionamento delle immagini}\label{subsec:Campionamento-delle-immagini}
-	Il FOV della camera è di 57°, di conseguenza per ricoprire 360° è stato necessario effettuare 7 campionamenti. Il settimo campionamento, come si evince dalla figura \ref{fig:campionamento_immagini}, è sovrapposto al primo per una porzione di scena pari a 39° coincidente col primo campionamento.
+	Il FOV della camera è di 57°, di conseguenza per ricoprire 360° è stato
+	necessario effettuare 7 campionamenti. Il settimo campionamento, come si
+	evince dalla figura \ref{fig:campionamento_immagini}, è sovrapposto al
+	primo per una porzione di scena pari a 39° coincidente col primo
+	campionamento.
+
+	È però possibile che un individuo si trovi in una zona di confine tra due
+	campioni, e che quindi non risulti correttamente identificabile in nessuna
+	delle due immagini in cui è parzialmente contenuto. Per mitigare questo
+	problema effettuiamo una rudimentale operazione di image
+	mosaicing~\cite{ghosh2016survey} e campioniamo l'immagine così ottenuta
+	ad intervalli di 28°.
+	
 	
 	\begin{figure}[H]
 		\centering
@@ -273,8 +285,29 @@
 	\end{figure}
 	
 	\subsection{Yolo}\label{subsec:Yolo}
-	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di \textbf{object recognition}. A tal fine abbiamo valutato le performance di YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented gradients), HoG + SVG (support vector machines) + NMS (non maxima suppression).
-	In seguito a vari test su HoG abbiamo ritenuto essere problematica la larghezza delle bounding boxes fornite, in quanto, per motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che queste ultime siano il più possibili vicine alla reale larghezza delle persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non modelli 3D) fornisce risultati soddisfacenti, in seguito al finetuning degli iperparametri della rete. Tuttavia, considerando le caratterisiche hardware del robot mobile, abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere significativamente più efficiente (approssimativamente del 442\% \cite{tiny_yolo}), sacrificando in termini di precisione ma comunque sufficientemente preciso per il nostro obbiettivo. La tabella \ref{tab:yolotiny} \cite{He2019TFYOLOAI}, mostra l'architettura di YOLOv3-tiny. La tabella \ref{tab:comparisonversions} mostra un paragone fra le versioni di YOLO e le rispettive versioni tiny \cite{tiny_yolo}. Inoltre è rilevante in tal senso un paragone fra YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS (floating-point operations per second) addestrate sul dataset COCO, come illustrato dalla tabella \ref{tab:comparison}, i cui dati provengono dal sito di YOLO \cite{yolo}:
+	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di
+	\textbf{object recognition}. A tal fine abbiamo valutato le performance di
+	YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented
+	gradients), HoG + SVG (support vector machines) + NMS (non maxima
+	suppression).  In seguito a vari test su HoG abbiamo ritenuto essere
+	problematica la larghezza delle bounding boxes fornite, in quanto, per
+	motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che
+	queste ultime siano il più possibili vicine alla reale larghezza delle
+	persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali
+	(e non modelli 3D) fornisce risultati soddisfacenti, in seguito al
+	finetuning degli iperparametri della rete. Tuttavia, considerando le
+	caratterisiche hardware del robot mobile, abbiamo optato per l'uso di
+	YOLOv3-tiny, il quale risulta essere significativamente più efficiente
+	(approssimativamente del 442\% \cite{tiny_yolo}), sacrificando in termini
+	di precisione ma comunque sufficientemente preciso per il nostro
+	obbiettivo. La tabella \ref{tab:yolotiny} \cite{He2019TFYOLOAI}, mostra
+	l'architettura di YOLOv3-tiny. La tabella \ref{tab:comparisonversions}
+	mostra un paragone fra le versioni di YOLO e le rispettive versioni tiny
+	\cite{tiny_yolo}. Inoltre è rilevante in tal senso un paragone fra YOLOv3 e
+	YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS
+	(floating-point operations per second) addestrate sul dataset COCO, come
+	illustrato dalla tabella \ref{tab:comparison}, i cui dati provengono dal
+	sito di YOLO \cite{yolo}:
 	
 	\begin{table}[htpb]
 		\centering
@@ -370,7 +403,20 @@
 	\end{figure}
 	
 	\subsection{Calcolo della distanza}\label{subsec:Calcolo-della-distanza}
-	L'altezza percepita dell'oggetto non è un indicatore affidabile della sua distanza dal robot in quanto parte dell'oggetto potrebbe essere occlusa o non presente nel frame. Inoltre classificatori quali HoG tendono a produrre ROI significativamente più alte dell'oggetto. La larghezza del torso, invece, è meno suscettibile a tali problemi, e non dipende dalla posizione (ad esempio seduto o alzato). Dobbiamo tuttavia ipotizzare che il torso abbia forma cilindrica introducendo quindi degli errori se l'obbiettivo non sta guardando la camera.	La posizione orizzontale dell'oggetto relativa alla camera può influenzare la larghezza percepita diminuendola quando aumenta la distanza dal centro dell'immagine. Ipotizzando che la camera abbia un FOV (field of view) di $2\alpha$ e sia distante $d$ dall'oggetto, la massima distanza orizzontale che un punto dell'immagine potrebbe avere dal centro del piano dell'immagine sarebbe $a = d \tan \alpha$ (Fig.~\ref{fig:error}).
+	L'altezza percepita dell'oggetto non è un indicatore affidabile della sua
+	distanza dal robot in quanto parte dell'oggetto potrebbe essere occlusa o
+	non presente nel frame. Inoltre classificatori quali HoG tendono a produrre
+	ROI significativamente più alte dell'oggetto. La larghezza del torso,
+	invece, è meno suscettibile a tali problemi, e non dipende dalla posizione
+	(ad esempio seduto o alzato). Dobbiamo tuttavia ipotizzare che il torso
+	abbia forma cilindrica introducendo quindi degli errori se l'obbiettivo non
+	sta guardando la camera.	La posizione orizzontale dell'oggetto relativa
+	alla camera può influenzare la larghezza percepita diminuendola quando
+	aumenta la distanza dal centro dell'immagine per via delle distorsioni
+	introdotte dall'ottica della camera. Ipotizzando che la camera abbia un FOV
+	(field of view) di $2\alpha$ e sia distante $d$ dall'oggetto, la massima
+	distanza orizzontale che un punto dell'immagine potrebbe avere dal centro
+	del piano dell'immagine sarebbe $a = d \tan \alpha$ (Fig.~\ref{fig:error}).
 	
 	\begin{figure}[H]
 		\centering
