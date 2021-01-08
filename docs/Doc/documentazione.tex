@@ -326,7 +326,7 @@
 	{object~width(pixels) \times sensor~width(m)}
 	\end{equation}
 	
-	Poiché stiamo utilizzando un simulatore non è nota la larghezza del sensore
+	dove $f$ è il fuoco. Poiché stiamo utilizzando un simulatore non è nota la larghezza del sensore
 	da utilizzare per l'eq.~\ref{eq:obj_dist}. Abbiamo ovviato a tale problema
 	posizionando il robot ed un oggetto dalle dimensioni note in posizioni note
 	e abbiamo utilizzato questi dati insieme a delle misure in pixel nell'
@@ -453,25 +453,16 @@
 	condizioni la dimensione dell'area ad alta probabilità è direttamente
 	proporzionale alla distanza e all'ampliezza dell'angolo. Se quindi $
 	\alpha_1 $ coindicesse con $ \alpha _2 $ ad oggetti distanti verrebbero
-	associate aree molto più grandi. Per evitare questo problema, dopo avere
-	individuato un valore $ \alpha ^* $ appropriato questo viene scalato per un
-	coefficiente inversamente proporzionale alla distanza della cella, quindi $
-	\alpha _1 = \alpha ^*/d_1 $ e $ \alpha _2=\alpha ^*/d_2 $, da cui $A_1=A_2$ 
+	associate aree molto più grandi. 
 
 	\begin{subequations}\label{eq:circular_sector}
 	\begin{align*} 
-		A_1  = & \pi((d_1+l/2)^2-(d_1-l/2)^2)\frac{\alpha_1}{2\pi}  =  \alpha_1 d_1l\\
-		A_2  = & \pi((d_2+l/2)^2-(d_2-l/2)^2)\frac{\alpha_2}{2\pi}  =  \alpha_2 d_2l\\
+		A_1  = & \pi((d_1+l/2)^2-(d_1-l/2)^2)\frac{\alpha_1}{2\pi}  =  \alpha_1 d_1l \\
+		A_2  = & \pi((d_2+l/2)^2-(d_2-l/2)^2)\frac{\alpha_2}{2\pi}  =  \alpha_2 d_2l \\
 \tag{\ref{eq:circular_sector}}
-		\frac{A_1}{A_2} = & \frac	{\alpha_1 d_1} {\alpha_2 d_2} 
+		\frac{A_1}{A_2} = & \frac	{\alpha_1 d_1} {\alpha_2 d_2}
 	\end{align*}
 	\end{subequations}
-
-	Questa misura di distanza è in accordo con l'intuizione derivata dal fatto
-	che un oggeto più lontano occuperà una porzione più piccola dell'immagine,
-	di conseguenza ci sono meno posizioni valide che la ROI associata
-	all'oggetto può assumere, e quindi l'intervallo di valori che può assumere
-	l'angolo è ridotto.
 
 	\begin{figure}[htpb]
 		\centering
@@ -480,6 +471,18 @@
 		\label{fig:circular_sector}
 	\end{figure}
 		
+	Per evitare questo problema, dopo avere
+	individuato un valore $ \alpha ^* $ appropriato questo viene scalato per un
+	coefficiente inversamente proporzionale alla distanza della cella, quindi $
+	\alpha _1 = \alpha ^*/d_1 $ e $ \alpha _2=\alpha ^*/d_2 $, da cui $A_1=A_2$. 
+	
+	Questa misura di distanza è in accordo con l'intuizione derivata dal fatto
+	che un oggetto più lontano occuperà una porzione più piccola dell'immagine,
+	di conseguenza ci sono meno posizioni valide che la ROI associata
+	all'oggetto può assumere, e quindi l'intervallo di valori che può assumere
+	l'angolo è ridotto.
+
+	
 	Dato un insieme di osservazioni ottenute da una scansione $ Z_i $ aggiorniamo il belief precedente rispetto ad ogni cella della griglia di occupazione come mostrato nell'equazione~\ref{eq:belief-update}.
 
 	\begin{equation}\label{eq:belief-update}
