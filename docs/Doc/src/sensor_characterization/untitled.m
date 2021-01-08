@@ -63,4 +63,6 @@ surf(X,Y,normcdf);
 xlabel("Distance error");
 ylabel("Angle error");
 %%
-exportgraphics(f, "error_covariance_flat.pdf", 'BackgroundColor', 'none', 'ContentType', 'vector');
+exportgraphics(f, "error_covariance.png", 'BackgroundColor', 'none');
+%%
+corrcoef(data.measured_distance-data.distance, data.measured_angle)
