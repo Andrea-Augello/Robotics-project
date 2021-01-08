@@ -59,7 +59,7 @@
 	
 	\subsection{Descrizione}\label{subsec:Descrizione}
 	ROS \cite{ros.org} è un meta sistema operativo open-source. Fornisce tutti i servizi che caratterizzano un sistema operativo quali l'astrazione hardware, il controllo di dei dispositivi a basso livello, l'implementazione delle funzionalità più usate, lo scambio di messaggi fra processi e la gestione dei pacchetti. Fornisce inoltre librerie e strumenti per scrivere, ottenere e eseguire codice su più computer. Il "grafo" runtime è una rete peer-to-peer di processi (potenzialmente distribuiti su più macchine) collegati attraverso l'infrastruttura ROS. ROS implementa vari stili di comunicazione, fra i quali streaming di dati asincrono attraverso i \textbf{topics} e comunicazione sincrona attraverso i \textbf{servizi}. 
-	I topics sono bus con identificativi attraverso i quali i nodi scambiano messaggi. I topics hanno una semantica di publish/subscribe anonima, che separa la produzione di informazioni dal loro utilizzo. In generale, i nodi non sanno con chi comunicano. I nodi interessati a dei dati si iscrivono (subscribe) al topic rilevante. I nodi che generano dati pubblicano (publish) al topic rilevante. Possono esserci più publishers e subscribers per ogni topic. I topic sono pensati per un flusso unidirezionale di informazione. I nodi che devono utilizzare chiamate a procedure remote, ad esempio ricevere la risposta ad una richiesta, dovrebbero usare i servizi. Un servizio è definito da una coppia di messaggi: una richiesta ed una risposta. Un nodo ROS offre un servizio attraverso una stringa nome e un client chiama il servizio mandando la richiesta ed aspettando la risposta. Le librerie per i client solitamente presentano tale interazione allo sviluppatore come se fosse una procedura a chiamata remota. I servizi sono deviniti usando i file \textbf{srv}, che sono compilati in codice sorgente da una libreria del client ROS.
+	I topics sono bus con identificativi attraverso i quali i nodi scambiano messaggi. I topics hanno una semantica di publish/subscribe anonima, che separa la produzione di informazioni dal loro utilizzo. In generale, i nodi non sanno con chi comunicano. I nodi interessati a dei dati si iscrivono (subscribe) al topic rilevante. I nodi che generano dati pubblicano (publish) al topic rilevante. Possono esserci più publishers e subscribers per ogni topic. I topic sono pensati per un flusso unidirezionale di informazione. I nodi che devono utilizzare chiamate a procedure remote, ad esempio ricevere la risposta ad una richiesta, dovrebbero usare i servizi. Un servizio è definito da una coppia di messaggi: una richiesta ed una risposta. Un nodo ROS offre un servizio attraverso una stringa nome e un client chiama il servizio mandando la richiesta ed aspettando la risposta. Le librerie per i client solitamente presentano tale interazione allo sviluppatore come se fosse una procedura a chiamata remota. I servizi sono definiti usando i file \textbf{srv}, che sono compilati in codice sorgente da una libreria del client ROS.
 	
 	\begin{figure}[H]
 		\centering
@@ -72,7 +72,27 @@
 	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots \cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare che si sta riproducendo un suono da file audio ed il metodo per verificare che il robot sta parlando presentavano difatti le funzioni callback invertite. In seguito al nostro avviso via email il bug è stato risolto nel successivo aggiornamento, come si evince dal commit github rilevante \cite{rosbug}, riga 32-34.
 	
 	\subsection{Gestione dei nodi}\label{subsec:Gestione-dei-nodi}
-	Webots, controller, interazioni di input output audio video.
+	\subsubsection{Webots node}\label{subsubsec:Webots-node}
+	Questo nodo si occupa solamente di lanciare Webots, e di impostare il valore del clock di ROS in base al tempo della simulazione, in modo da potere effettuare le integrazioni del tempo correttamente. 
+	\subsubsection{Change node}\label{subsubsec:Change-node}
+	Questo è il nodo che si occupa della gran parte della elaborazione. Oltre ad arbitrare sui comportamenti da assumere, gestisce più moduli che si occupano di:
+	\begin{itemize}
+	\item acquisire i dati dai sensori
+	\item mandare i comandi ai motori
+	\item gestire il movimento, quindi rotazioni e traslazioni
+	\item acquisire e analizzare le immagini dalla camera
+	\end{itemize}
+	\subsubsection{Interaction node}\label{subsubsec:Interaction-node}
+	Questo nodo ha il compito di gestire le interazioni audio/video. In particolare viene sfruttato il display per caricare della immagini e il sintetizzatore vocale dello speaker per riprodurre messaggi audio. Ogni messaggio che viene riprodotto, prima in lingua italiana e poi inglese, viene anche visualizzato testualmente sullo schermo in italiano, inglese e cinese. 
+	I possibili comportamenti assunti dal robot sono:
+	\begin{itemize}
+	\item Salutare all'avvio
+	\item Mostrare sul display immagini che esortano a rispettare il distanziamento sociale
+	\item Riprodurre un messaggio audio (riportato anche testualmente sul display) che invita a rispettare il distanziamento sociale quando rileva un assembramento o quando scansiona l'ambiente
+	\end{itemize}
+	\subsubsection{Odometry node}\label{subsubsec:Odometry-node}
+	Il nodo che si occupa dell'odometria si occupa di stimare la posizione del robot, come spiegato approfonditamente nella sezione~\ref{subsec:Posizionamento}. In generale ciò che fa è integrare costantemente i valori del giroscopio e della velocità delle ruote per condividere posizione e orientamento del robot.
+	 
 	
 	\section{Dipendenze}\label{sec:Dipendenze} 
 	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
@@ -731,8 +751,17 @@
 		\caption{Automa a stati finiti }
 		\label{fig:fsa}
 	\end{figure}
+	
+	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
+	Riportiamo di seguito possibili modifiche da apportare:
+	\begin{itemize}
+	\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter pianificare il moto con algoritmi come A* \cite{A*} o RRT \cite{RRT}
+	\item Migliorare la modalità Tangent Bug
+	\item Utilizzare una depth-cam per stimare con più precisione la distanza delle persone
+	\item Tracciamento delle persone in real-time
+	\end{itemize}
 
-	\section{Conclusioni}
+	\section{Conclusioni}\label{sec:Conclusioni}
 	Durante lo sviluppo del progetto sono state affrontate numerose tematiche trattate durante il corso di \textit{Robotica}. L'esperienza di sviluppo ha permesso al team di apprezzare l'importanza di solide fondamenta teoriche unite ad una significativa esperienza pratica. In particolar luogo abbiamo riscontrato problemi concernenti vari ambiti, dalla robotica probabilistica all'esplorazione degli ambienti, la cui ricerca di risoluzione ci ha portato ad approfondire le fondamenta teoriche della materia. La performance raggiunta, nonostante le tempistiche, risulta soddisfacente.
 	
 	\newpage
