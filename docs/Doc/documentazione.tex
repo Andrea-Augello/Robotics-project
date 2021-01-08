@@ -89,10 +89,10 @@
 	\subsubsection{Change node}\label{subsubsec:Change-node}
 	Questo è il nodo che si occupa della gran parte della elaborazione. Oltre ad arbitrare sui comportamenti da assumere, gestisce più moduli che si occupano di:
 	\begin{itemize}
-	\item acquisire i dati dai sensori
-	\item mandare i comandi ai motori
-	\item gestire il movimento, quindi rotazioni e traslazioni
-	\item acquisire e analizzare le immagini dalla camera
+		\item acquisire i dati dai sensori
+		\item mandare i comandi ai motori
+		\item gestire il movimento, quindi rotazioni e traslazioni
+		\item acquisire e analizzare le immagini dalla camera
 	\end{itemize}
 	\subsubsection{Interaction node}\label{subsubsec:Interaction-node}
 	Questo nodo ha il compito di gestire le interazioni audio/video. In particolare viene sfruttato il display per caricare della immagini e il sintetizzatore vocale dello speaker per riprodurre messaggi audio. Ogni messaggio che viene riprodotto, prima in lingua italiana e poi inglese, viene anche visualizzato testualmente sullo schermo in italiano, inglese e cinese. 
@@ -187,32 +187,45 @@
 		\end{cases}
 	\end{equation}
 	
-	In un secondo momento abbiamo ritenuto opportuno utilizzare un nodo ROS che si occupasse di condividere costantemente la posizione e l'orientamento del robot, anche per predisporre il sistema per un eventuale algoritmo di SLAM. Ciò implica una integrazione costante dei valori del giroscopio e dell'accelerometro. 
+	In un secondo momento abbiamo ritenuto opportuno utilizzare un nodo ROS che
+	si occupasse di condividere costantemente la posizione e l'orientamento del
+	robot, anche per predisporre il sistema per un eventuale algoritmo di SLAM.
+	Ciò implica una integrazione costante dei valori del giroscopio e
+	dell'accelerometro. 
 	
-	Il giroscopio non ha causato nessun problema a differenza dell'accelerometro che invece, essendo soggetto a rumore, rilevava accelerazioni diverse da 0 anche da fermo. Queste accelerazioni, essendo integrate costantemente, producevano degli spostamenti significativi anche da fermi. 
+	Il giroscopio non ha causato nessun problema a differenza
+	dell'accelerometro che invece, essendo soggetto a rumore, rilevava
+	accelerazioni diverse da 0 anche da fermo. Queste accelerazioni, essendo
+	integrate costantemente, producevano degli spostamenti significativi anche
+	da fermi. 
 	
-	Abbiamo ritenuto necessario cambiare approccio, decidendo di utilizzare gli encoders delle ruote per determinare gli spostamenti. 
+	Abbiamo ritenuto necessario cambiare approccio, decidendo di utilizzare gli
+	encoders delle ruote per determinare gli spostamenti. 
 	
-	In particolare abbiamo integrato le velocità angolari $u[t]$ delle ruote, fornite da un servizio ROS, e aggiornando così la posizione. Avremmo anche potuto utilizzare queste informazioni per ricavarci l'orientamento del robot, ma abbiamo ritenuto più opportuno utilizzare le informazioni forniteci dal giroscopio. Lo stato del robot è dato da:
+	In particolare abbiamo integrato la velocità lineare del robot, calcolata a
+	partire dal raggio R e le velocità angolari $u[t]$ delle ruote, fornite da
+	un servizio ROS, e aggiornando così la posizione. Avremmo anche potuto
+	utilizzare queste informazioni per ricavarci l'orientamento del robot, ma
+	abbiamo ritenuto più opportuno utilizzare le informazioni forniteci dal
+	giroscopio. La posizione del robot è data da:
 	
 	\begin{equation}\label{eq:position-vector}
-		P[t] = \begin{bmatrix}
-			 & x[t] & y[t] & \theta [t] & 
+		\textbf{P}_i = \begin{bmatrix}
+			  x_i & y_i  
 		\end{bmatrix}^T
 	\end{equation}
 	
 	\begin{equation}\label{eq:linear-velocity}
-		v[t] = \frac{R (u_r[t]+u_l[t])}{2}
+		v_i = \frac{R (u_{r,i}+u_{l,i})}{2}
 	\end{equation}
 	
 	Questi valori sono aggiornati ad ogni intervallo di campionamento utilizzando la velocità lineare e la velocità angolare del robot \cite{572228}.
 	
 	\begin{equation}\label{eq:position-vector-update}
-		P[t+ \tau ] = P[t] + \tau \begin{pmatrix}
-			 & v[t]cos(\theta [t] ) & \\
-			 & v[t]sin(\theta [t] ) & \\
-			 & \omega [t]
-		\end{pmatrix}
+		\textbf{P}_i = \sum_{j = 1}^{i} \begin{bmatrix}
+			 & v_i\cos(\theta_i ) & \\
+			 & v_i\sin(\theta_i )
+		\end{bmatrix}\cdot (t_j-t_{j-1}) 
 	\end{equation}
 
 	La $\omega [t]$ è data dall'interpolazione lineare descritta nell'equazione (\ref{eq:gyro-integration}).
@@ -334,7 +347,20 @@
 
 	
 	\subsection{Triangolazione}\label{subsec:Triangolazione}
-	La triangolazione come metodo di individuazione delle persone, sebbene teoricamente possibile, presenta dei problemi nel nostro scenario. In primo luogo prendiamo in esame l'occlusione delle persone. Ad esempio, se due persone (5 e 2) sono una dietro l'altra lungo una retta immaginaria che le congiunge al robot (B), quest'ultimo non sarà in grado di individuare la persona 5. Inoltre, quando il robot effettua scan successivi, non sarebbe in grado di dedurre quali osservazioni derivano dalla stessa persona. Infatti, poiché nel nostro scenario abbiamo più persone in una stanza, non è possibile dedurre quali intersezioni delle rette corrispondono ad osservazioni reali o se si tratta di intersezioni spurie. 
+	La triangolazione come metodo di individuazione delle persone, sebbene
+	teoricamente possibile, presenta dei problemi nel nostro scenario. In primo
+	luogo prendiamo in esame l'occlusione delle persone. Ad esempio, se due
+	persone (5 e 2) sono una dietro l'altra lungo una retta immaginaria che le
+	congiunge al robot (B), quest'ultimo non sarà in grado di individuare la
+	persona 5. 
+	
+	Utilizzando una rappresentazione basata su oggetti si presenta anche il
+	problema dell'imputazione delle osservazioni. Quando il robot effettua scan
+	successivi, non sarebbe altrimenti in grado di dedurre quali osservazioni
+	derivano dalla stessa persona.  Poiché nel nostro scenario abbiamo più
+	persone in una stanza, non si potrebbe determinare quali intersezioni delle
+	rette corrispondono ad osservazioni reali o se si tratta di intersezioni
+	spurie. 
 	
 	\begin{figure}[H]
 		\centering
@@ -420,13 +446,13 @@
 	Le performance del polinomio nella correzione della stima della distanza e dell'angolo si evince dalle Fig.~\ref{fig:boxes_plot}
 
 	\begin{figure}[ht]
-		\begin{subfigure}{.5\textwidth}
+		\begin{subfigure}{.49\textwidth}
 			\centering
 			% include first image
 			\includegraphics[width=1\linewidth]{./img/angle_error.pdf}  
 			\label{fig:angle_plot}
 		\end{subfigure}
-		\begin{subfigure}{.5\textwidth}
+		\begin{subfigure}{.49\textwidth}
 			\centering
 			% include second image
 			\includegraphics[width=1\linewidth]{./img/distance_error.pdf}  
