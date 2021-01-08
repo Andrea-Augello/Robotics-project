@@ -39,17 +39,34 @@
 
 
 	\section{Introduzione}\label{sec:Introduzione}
-	L'esplosione della pandemia del coronavirus SARS-CoV-2 ha dato una forte spinta alla ricerca sia nel campo sanitario che informatico, mettendo in evidenza forti carenze dal punto di vista infrastrutturale.
+	L'esplosione della pandemia del coronavirus SARS-CoV-2 ha dato una forte
+	spinta alla ricerca sia nel campo sanitario che informatico, mettendo in
+	evidenza forti carenze dal punto di vista infrastrutturale.
 	
-	Al momento uno dei miglior modi di evitare la contrazione del coronavirus è di evitarne l'esposizione. Il distanziamento sociale si configura di conseguenza come un prerequisito per una significativa riduzione del numero di infetti, come evidenziato da simulazioni di un sistema ad agenti \cite{silva2020covid}. Un problema chiave si configura di conseguenza come il controllo del rispetto delle norme di distanziamento all'interno degli spazi chiusi.  
+	Al momento uno dei miglior modi di evitare la contrazione del coronavirus è
+	di evitarne l'esposizione. Il distanziamento sociale si configura di
+	conseguenza come un prerequisito per una significativa riduzione del numero
+	di infetti, come evidenziato da simulazioni di un sistema ad agenti
+	\cite{silva2020covid}. Un problema chiave si configura di conseguenza come
+	il controllo del rispetto delle norme di distanziamento all'interno degli
+	spazi chiusi.  
 	
 	\section{Stato dell'arte}\label{sec:Stato-dell-arte}
-	Un robot che si occupa di far rispettare il distanziamento sociale è quello proposto nell'articolo~\cite{sathyamoorthy2020covidrobot}. Sono stati usati un TurtleBot 2, una camera RGB-D e CCTV per il rilevamento degli assembramenti, una camera termica per rilevare la temperatura corporea e un lidar 2-D per evitare le collisioni.
+	Un robot che si occupa di far rispettare il distanziamento sociale è quello
+	proposto nell'articolo~\cite{sathyamoorthy2020covidrobot}. Sono stati usati
+	un TurtleBot 2, una camera RGB-D e CCTV per il rilevamento degli
+	assembramenti, una camera termica per rilevare la temperatura corporea e un
+	lidar 2-D per evitare le collisioni.
 	
-	Un altro esempio è quello proposto nell'articolo~\cite{fan2020autonomous}. In questo caso sono state usate 2 camere e CCTV per il rilevamento degli assembramenti e un lidar 3-D per evitare le collisioni.
+	Un altro esempio è quello proposto nell'articolo~\cite{fan2020autonomous}.
+	In questo caso sono state usate 2 camere e CCTV per il rilevamento degli
+	assembramenti e un lidar 3-D per evitare le collisioni.
 	
 	\section{Nome}\label{sec:Nome}
-	Il team ha scelto il nome \textbf{Change} in onore di \textbf{Chang'e 4} \cite{change4}, la missione parte della seconda fase del programma cinese di esplorazione lunare, durante il quale è andato a buon fine il primo atterraggio morbido sulla faccia nascosta della luna. 
+	Il team ha scelto il nome \textbf{Change} in onore di \textbf{Chang'e 4}
+	\cite{change4}, la missione parte della seconda fase del programma cinese
+	di esplorazione lunare, durante il quale è andato a buon fine il primo
+	atterraggio morbido sulla faccia nascosta della luna. 
 	
 	\section{Setup}\label{sec:Setup}
 	\begin{tabular}{|l|r|}
@@ -65,13 +82,49 @@
 
 
 	\section{Ambiente}\label{sec:Ambiente}
-	Abbiamo considerato opportuno analizzare e studiare il package \textbf{webots\_ros} \cite{cyberbotics} al fine di raggiungere una comprensione più profonda sulle metodologie per interfacciare i nodi ROS con il controller ROS standard per Webots. Inoltre è risultato necessario approfondire la documentazione ROS \cite{ros.org} al fine di installare e configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali relativi ai nodi e topics. Infine abbiamo impostato l'interfaccia ROS su Webots seguendo la documentazione cyberbotics rilevante \cite{webotsRosSetup}.
+	Abbiamo considerato opportuno analizzare e studiare il package
+	\textbf{webots\_ros} \cite{cyberbotics} al fine di raggiungere una
+	comprensione più profonda sulle metodologie per interfacciare i nodi ROS
+	con il controller ROS standard per Webots. Inoltre è risultato necessario
+	approfondire la documentazione ROS \cite{ros.org} al fine di installare e
+	configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali
+	relativi ai nodi e topics. Infine abbiamo impostato l'interfaccia ROS su
+	Webots seguendo la documentazione cyberbotics rilevante
+	\cite{webotsRosSetup}.
 	
 	\section{ROS}\label{sec:Ros}
 	
 	\subsection{Descrizione}\label{subsec:Descrizione}
-	ROS \cite{ros.org} è un meta sistema operativo open-source. Fornisce tutti i servizi che caratterizzano un sistema operativo quali l'astrazione hardware, il controllo di dei dispositivi a basso livello, l'implementazione delle funzionalità più usate, lo scambio di messaggi fra processi e la gestione dei pacchetti. Fornisce inoltre librerie e strumenti per scrivere, ottenere e eseguire codice su più computer. Il "grafo" runtime è una rete peer-to-peer di processi (potenzialmente distribuiti su più macchine) collegati attraverso l'infrastruttura ROS. ROS implementa vari stili di comunicazione, fra i quali streaming di dati asincrono attraverso i \textbf{topics} e comunicazione sincrona attraverso i \textbf{servizi}. 
-	I topics sono bus con identificativi attraverso i quali i nodi scambiano messaggi. I topics hanno una semantica di publish/subscribe anonima, che separa la produzione di informazioni dal loro utilizzo. In generale, i nodi non sanno con chi comunicano. I nodi interessati a dei dati si iscrivono (subscribe) al topic rilevante. I nodi che generano dati pubblicano (publish) al topic rilevante. Possono esserci più publishers e subscribers per ogni topic. I topic sono pensati per un flusso unidirezionale di informazione. I nodi che devono utilizzare chiamate a procedure remote, ad esempio ricevere la risposta ad una richiesta, dovrebbero usare i servizi. Un servizio è definito da una coppia di messaggi: una richiesta ed una risposta. Un nodo ROS offre un servizio attraverso una stringa nome e un client chiama il servizio mandando la richiesta ed aspettando la risposta. Le librerie per i client solitamente presentano tale interazione allo sviluppatore come se fosse una procedura a chiamata remota. I servizi sono definiti usando i file \textbf{srv}, che sono compilati in codice sorgente da una libreria del client ROS.
+	ROS \cite{ros.org} è un meta sistema operativo open-source. Fornisce tutti
+	i servizi che caratterizzano un sistema operativo quali l'astrazione
+	hardware, il controllo di dei dispositivi a basso livello,
+	l'implementazione delle funzionalità più usate, lo scambio di messaggi fra
+	processi e la gestione dei pacchetti. Fornisce inoltre librerie e strumenti
+	per scrivere, ottenere e eseguire codice su più computer. Il "grafo"
+	runtime è una rete peer-to-peer di processi (potenzialmente distribuiti su
+	più macchine) collegati attraverso l'infrastruttura ROS. ROS implementa
+	vari stili di comunicazione, fra i quali streaming di dati asincrono
+	attraverso i \textbf{topics} e comunicazione sincrona attraverso i
+	\textbf{servizi}. 
+
+	I topics sono bus con identificativi attraverso i quali i nodi scambiano
+	messaggi. I topics hanno una semantica di publish/subscribe anonima, che
+	separa la produzione di informazioni dal loro utilizzo. In generale, i nodi
+	non sanno con chi comunicano. I nodi interessati a dei dati si iscrivono
+	(subscribe) al topic rilevante. I nodi che generano dati pubblicano
+	(publish) al topic rilevante. Possono esserci più publishers e subscribers
+	per ogni topic. I topic sono pensati per un flusso unidirezionale di
+	informazione. I nodi che devono utilizzare chiamate a procedure remote, ad
+	esempio ricevere la risposta ad una richiesta, dovrebbero usare i servizi.
+	Un servizio è definito da una coppia di messaggi: una richiesta ed una
+	risposta. 
+	
+	Un nodo ROS offre un servizio attraverso una stringa nome e un
+	client chiama il servizio mandando la richiesta ed aspettando la risposta.
+	Le librerie per i client solitamente presentano tale interazione allo
+	sviluppatore come se fosse una procedura a chiamata remota. I servizi sono
+	definiti usando i file \textbf{srv}, che sono compilati in codice sorgente
+	da una libreria del client ROS.
 	
 	\begin{figure}[H]
 		\centering
@@ -81,13 +134,23 @@
 	\end{figure}
 	
 	\subsection{Bug}\label{subsec:Bug}
-	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots \cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare che si sta riproducendo un suono da file audio ed il metodo per verificare che il robot sta parlando presentavano difatti le funzioni callback invertite. In seguito al nostro avviso via email il bug è stato risolto nel successivo aggiornamento, come si evince dal commit GitHub rilevante \cite{rosbug}, riga 32-34.
+	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots
+	\cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare
+	che si sta riproducendo un suono da file audio ed il metodo per verificare
+	che il robot sta parlando presentavano difatti le funzioni callback
+	invertite. In seguito al nostro avviso via email il bug è stato risolto nel
+	successivo aggiornamento, come si evince dal commit GitHub rilevante
+	\cite{rosbug}, riga 32-34.
 	
 	\subsection{Gestione dei nodi}\label{subsec:Gestione-dei-nodi}
 	\subsubsection{Webots node}\label{subsubsec:Webots-node}
-	Questo nodo si occupa solamente di lanciare Webots, e di impostare il valore del clock di ROS in base al tempo della simulazione, in modo da potere effettuare le integrazioni del tempo correttamente. 
+	Questo nodo si occupa solamente di lanciare Webots, e di impostare il
+	valore del clock di ROS in base al tempo della simulazione, in modo da
+	potere effettuare le integrazioni del tempo correttamente.
 	\subsubsection{Change node}\label{subsubsec:Change-node}
-	Questo è il nodo che si occupa della gran parte della elaborazione. Oltre ad arbitrare sui comportamenti da assumere, gestisce più moduli che si occupano di:
+	Questo è il nodo che si occupa della gran parte della elaborazione. Oltre
+	ad arbitrare sui comportamenti da assumere, gestisce più moduli che si
+	occupano di: 
 	\begin{itemize}
 		\item acquisire i dati dai sensori
 		\item mandare i comandi ai motori
@@ -95,16 +158,36 @@
 		\item acquisire e analizzare le immagini dalla camera
 	\end{itemize}
 	\subsubsection{Interaction node}\label{subsubsec:Interaction-node}
-	Questo nodo ha il compito di gestire le interazioni audio/video. In particolare viene sfruttato il display per caricare della immagini e il sintetizzatore vocale dello speaker per riprodurre messaggi audio. Ogni messaggio che viene riprodotto, prima in lingua italiana e poi inglese, viene anche visualizzato testualmente sullo schermo in italiano, inglese e cinese. 
-	I possibili comportamenti assunti dal robot sono:
+	Questo nodo ha il compito di gestire le interazioni audio/video. In
+	particolare viene sfruttato il display per caricare della immagini e il
+	sintetizzatore vocale dello speaker per riprodurre messaggi audio. Ogni
+	messaggio che viene riprodotto, prima in lingua italiana e poi inglese,
+	viene anche visualizzato testualmente sullo schermo in italiano, inglese e
+	cinese.  I possibili comportamenti assunti dal robot sono:
 	\begin{itemize}
-	\item Salutare all'avvio
-	\item Mostrare sul display immagini che esortano a rispettare il distanziamento sociale
-	\item Riprodurre un messaggio audio (riportato anche testualmente sul display) che invita a rispettare il distanziamento sociale quando rileva un assembramento o quando scansiona l'ambiente
+		\item Salutare all'avvio
+		\item Mostrare sul display immagini che esortano a rispettare il
+			distanziamento sociale
+		\item Riprodurre un messaggio audio (riportato anche testualmente sul
+			display) che invita a rispettare il distanziamento sociale quando
+			rileva un assembramento o quando scansiona l'ambiente
 	\end{itemize}
+
 	\subsubsection{Odometry node}\label{subsubsec:Odometry-node}
-	Il nodo che si occupa dell'odometria si occupa di stimare la posizione del robot, come spiegato approfonditamente nella sezione~\ref{subsec:Posizionamento}. In generale ciò che fa è integrare costantemente i valori del giroscopio e della velocità delle ruote per condividere posizione e orientamento del robot.
+	Il nodo che si occupa dell'odometria si occupa di stimare la posizione del
+	robot, come spiegato approfonditamente nella
+	sezione~\ref{subsec:Posizionamento}. In generale ciò che fa è integrare
+	costantemente i valori del giroscopio e della velocità delle ruote per
+	condividere posizione e orientamento del robot.
 	 
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{img/rosgraph.pdf}
+		\caption{Architettura dei nodi ros, ottenuta tramite \textit{rqt}}
+		\label{fig:rosgraph}
+	\end{figure}
+
 	
 	\section{Dipendenze}\label{sec:Dipendenze} 
 	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
@@ -295,8 +378,8 @@
 	queste ultime siano il più possibili vicine alla reale larghezza delle
 	persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali
 	(e non modelli 3D) fornisce risultati soddisfacenti, in seguito al
-	finetuning degli iperparametri della rete. Tuttavia, considerando le
-	caratterisiche hardware del robot mobile, abbiamo optato per l'uso di
+	fine-tuning degli iperparametri della rete. Tuttavia, considerando le
+	caratteristiche hardware del robot mobile, abbiamo optato per l'uso di
 	YOLOv3-tiny, il quale risulta essere significativamente più efficiente
 	(approssimativamente del 442\% \cite{tiny_yolo}), sacrificando in termini
 	di precisione ma comunque sufficientemente preciso per il nostro
@@ -420,7 +503,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.8\textwidth]{./img/linearization_error.pdf}
+		\includegraphics[width=0.6\textwidth]{./img/linearization_error.pdf}
 		\caption{Errore nella stima della distanza con una linearizzazione a tratti della circonferenza}
 		\label{fig:error}
 	\end{figure}
@@ -443,7 +526,7 @@
 	\end{equation}
 	
 	Sotto tali ipotesi possiamo quindi calcolare la distanza di un oggetto come
-	mostrato in Eq.~\ref{eq:obj_dist}
+	mostrato in Eq.~\ref{eq:obj_dist} dove $f$ è il fuoco.
 	
 	\begin{equation}\label{eq:obj_dist}
 	object~distance(m) = 
@@ -451,7 +534,7 @@
 	{object~width(pixels) \times sensor~width(m)}
 	\end{equation}
 	
-	dove $f$ è il fuoco. Poiché stiamo utilizzando un simulatore non è nota la larghezza del sensore
+	Poiché stiamo utilizzando un simulatore non è nota la larghezza del sensore
 	da utilizzare per l'eq.~\ref{eq:obj_dist}. Abbiamo ovviato a tale problema
 	posizionando il robot ed un oggetto dalle dimensioni note in posizioni note
 	e abbiamo utilizzato questi dati insieme a delle misure in pixel nell'
@@ -465,8 +548,21 @@
 	\end{equation}
 	
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
-	Durante la fase di individuazione delle persone vengono individuate varie bounding box corrispondenti al medesimo individuo. Di conseguenza è stato necessario effettuare una fase di clustering al fine di scartare le bounding box duplicate. L'algoritmo di clustering utilizzato è DBSCAN (Density based scan) \cite{dbscan}, i cui parametri principali sono \textbf{eps}, ovvero la massima distanza fra due punti affinché vengano considerati appartenenti a un cluster (da non confondere con la massima distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il numero minimo di punti affinchè un cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di distanza. 
-	Come di evince dalla figura \ref{fig:nms}, la metrica utilizzata considera la lunghezza di un arco di circonferenza con raggio corrispondente alla distanza fra i due punti ed angolo $\alpha$ corrispondente  all'angolo fra i due punti rispetto alla posizione del robot.
+	Durante la fase di individuazione delle persone vengono individuate varie
+	bounding box corrispondenti al medesimo individuo. Di conseguenza è stato
+	necessario effettuare una fase di clustering al fine di scartare le
+	bounding box duplicate. L'algoritmo di clustering utilizzato è DBSCAN
+	(Density based scan) \cite{dbscan}, i cui parametri principali sono
+	\textbf{eps}, ovvero la massima distanza fra due punti affinché vengano
+	considerati appartenenti a un cluster (da non confondere con la massima
+	distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il
+	numero minimo di punti affinché un cluster sia valido (nel nostro caso è
+	uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di
+	distanza.  Come di evince dalla figura \ref{fig:nms}, la metrica utilizzata
+	considera la lunghezza di un arco di circonferenza con raggio
+	corrispondente alla distanza fra i due punti ed angolo $\alpha$
+	corrispondente  all'angolo fra i due punti rispetto alla posizione del
+	robot.
 	
 	Abbiamo ritenuto opportuno utilizzare l'implementazione dell'algoritmo fornita da \textbf{sklearn} \cite{scikit}.
 	
@@ -480,7 +576,12 @@
 
 	
 	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori}
-	Al fine di migliorare la stima sulla distanza dei target abbiamo ritenuto utile paragonare le reali distanze dei target con le stime effettuate dal nostro sistema. In seguito ad analisi quantitative abbiamo ottenuto il polinomio 	$0.003116*x^5 - 0.09722*x^4 + 1.124*x^3 -5.908*x^2 + 14.5*x-7.367$,  che approssima la funzione di correzione della stima. Il grafico è mostrato nella Fig.~\ref{fig:interpolation}
+	Al fine di migliorare la stima sulla distanza dei target abbiamo ritenuto
+	utile paragonare le reali distanze dei target con le stime effettuate dal
+	nostro sistema. In seguito ad analisi quantitative abbiamo ottenuto il
+	polinomio 	$0.003116*x^5 - 0.09722*x^4 + 1.124*x^3 -5.908*x^2 +
+	14.5*x-7.367$,  che approssima la funzione di correzione della stima. Il
+	grafico è mostrato nella Fig.~\ref{fig:interpolation}
 	
 	\begin{figure}[H]
 		\centering
@@ -543,7 +644,17 @@
 	rappresentazione basata su oggetti e abbiamo fatto ricorso ad un filtro di
 	occupazione bayesiano (BOF)~\cite{tay2008bayesian}.
 
-	Nelle classiche metodologie di tracciamento, il problema dell'associazione dei dati (data association), ovvero di associare un oggetto $o_t$ al tempo $t$ con un oggetto $o_t+1$ al tempo $t+1$, e della stima dello stato si configurano come classici problemi da risolvere. Nel filtro di occupazione bayesiano, il problema dell'associazione dei dati viene superato in quanto viene gestito da un livello di astrazione superiore. Il concetto di oggetto viene difatti riformulato da proprietà più utili quali occupazione o rischio, che vengono stimate direttamente per ogni cella utilizzando sia osservazioni dai sensori che conoscenze pregresse. Le caratteristiche di incertezza legate ai sensori vengono descritte, in questo modello, attraverso le probabilità di occupazione.
+	Nelle classiche metodologie di tracciamento, il problema dell'associazione
+	dei dati (data association), ovvero di associare un oggetto $o_t$ al tempo
+	$t$ con un oggetto $o_t+1$ al tempo $t+1$, e della stima dello stato si
+	configurano come classici problemi da risolvere. Nel filtro di occupazione
+	bayesiano, il problema dell'associazione dei dati viene superato in quanto
+	viene gestito da un livello di astrazione superiore. Il concetto di oggetto
+	viene difatti riformulato da proprietà più utili quali occupazione o
+	rischio, che vengono stimate direttamente per ogni cella utilizzando sia
+	osservazioni dai sensori che conoscenze pregresse. Le caratteristiche di
+	incertezza legate ai sensori vengono descritte, in questo modello,
+	attraverso le probabilità di occupazione.
 
 	Al fine di trasformare le osservazioni ottenute in una probabilità che le
 	persone si trovino effettivamente nella posizione indicata è stato
@@ -741,10 +852,25 @@
 	\subsection{Modalità di movimento}\label{subsec:Modalità-di-movimento}
 	
 	\subsubsection{Modalità esplorazione}\label{subsec:Modalita-esplorazione}
-	Quando il robot entra in modalità esplorazione il suo comportamento è di esplorazione casuale della mappa. Il robot continua ad esplorare ed effettuare scan periodici fino a quando non viene rilevato un obbiettivo. In tal caso il robot entra in modalità campi di potenziale. Se il robot incontra un ostacolo nel suo cammino ruota di $90^{\circ}$ nella direzione con più spazio e continua l'esplorazione casuale.
+	Quando il robot entra in modalità esplorazione il suo comportamento è di
+	esplorazione casuale della mappa. Il robot continua ad esplorare ed
+	effettuare scan periodici fino a quando non viene rilevato un obbiettivo.
+	In tal caso il robot entra in modalità campi di potenziale. Se il robot
+	incontra un ostacolo nel suo cammino ruota di $90^{\circ}$ nella direzione
+	con più spazio e continua l'esplorazione casuale.
 	
 	\subsubsection{Bug mode}\label{subsec:Bug-mode}
-	Quando il robot entra in modalità bug effettuiamo uno scan lidar. Poiché lavoriamo con valori discreti, confrontiamo i valori ottenuti con una soglia al fine di individuare le discontinuità nel profilo degli oggetti nel range. Analizziamo successivamente le discontinuità del segnale, corrispondenti ai bordi degli ostacoli, come si evince dalla fig. \ref{fig:bug}. Da tali punti viene calcolato l'angolo fra la retta che li congiunge con l'obbiettivo. Il robot si muove infine verso il punto al quale corrisponde l'angolo minore, che ci farà allontanare meno dall'obbiettivo. Se il profilo dell'ostacolo è una circonferenza, la retta fra il punto con angolo minimo e l'obbiettivo è tangente all'ostacolo, da cui il nome dell'algoritmo Tangent Bug \cite{503814}.
+	Quando il robot entra in modalità bug effettuiamo uno scan lidar. Poiché
+	lavoriamo con valori discreti, confrontiamo i valori ottenuti con una
+	soglia al fine di individuare le discontinuità nel profilo degli oggetti
+	nel range. Analizziamo successivamente le discontinuità del segnale,
+	corrispondenti ai bordi degli ostacoli, come si evince dalla fig.
+	\ref{fig:bug}. Da tali punti viene calcolato l'angolo fra la retta che li
+	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
+	quale corrisponde l'angolo minore, che ci farà allontanare meno
+	dall'obbiettivo. Se il profilo dell'ostacolo è una circonferenza, la retta
+	fra il punto con angolo minimo e l'obbiettivo è tangente all'ostacolo, da
+	cui il nome dell'algoritmo Tangent Bug \cite{503814}.
 	
 	\begin{figure}[H]
 		\centering
@@ -755,7 +881,14 @@
 
 	\subsubsection{Campi di potenziale}\label{subsec:Campi-di-potenziale}
 	
-	Una soluzione al classico problema di muoversi in uno spazio evitando le collisioni è l'uso di un modello basato sui campi di potenziale. Questi schemi richiedono la definizione di potenziali attrattivi e repulsivi. Purtuttavia, questi metodi presentano una problematica significativa: la presenza di un minimo locale causerà una forza totale sul punto nulla, e di conseguenza il robot si fermerà in una posizione non ideale. In \cite{volpe1990manipulator} viene proposto un modello di potenziale basato sulla  \ldots 
+	Una soluzione al classico problema di muoversi in uno spazio evitando le
+	collisioni è l'uso di un modello basato sui campi di potenziale. Questi
+	schemi richiedono la definizione di potenziali attrattivi e repulsivi.
+	Tuttavia, questi metodi presentano una problematica significativa: la
+	presenza di un minimo locale causerà una forza totale sul punto nulla, e di
+	conseguenza il robot si fermerà in una posizione non ideale. In
+	\cite{volpe1990manipulator} viene proposto un modello di potenziale basato
+	sulla  \ldots 
 
 	Il potenziale attrattivo è centrato sul target, ed è modellato come un
 	potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
@@ -827,7 +960,17 @@
 	
 	\subsection{Pianificazione}\label{subsec:Pianificazione}
 	
-	Nella figura \ref{fig:fsa} viene riportato l'automa a stati finiti che descrive i comportamenti del robot. In seguito all'avvio, \textbf{Change} effettua uno scan dell'ambiente. Nel caso in cui non vengano rilevati obbiettivi entra in modalità esplorazione, avviando l'esplorazione casuale e, dopo aver percorso una determinata distanza, effettua nuovamente uno scan dell'ambiente. Nel caso in cui venga rilevato un obbiettivo il robot entra in modalità campi di potenziale e si ferma nel caso in cui abbia raggiunto l'obbiettivo o percorso una determinata distanza. Se, in modalità campi di potenziale, il \textbf{TIAGo} rimane bloccato in un loop, entra in modalità Tangent Bug, fin quando non esce dal loop, e ritorna nella modalità campi di potenziale.
+	Nella figura \ref{fig:fsa} viene riportato l'automa a stati finiti che
+	descrive i comportamenti del robot. In seguito all'avvio, \textbf{Change}
+	effettua uno scan dell'ambiente. Nel caso in cui non vengano rilevati
+	obbiettivi entra in modalità esplorazione, avviando l'esplorazione casuale
+	e, dopo aver percorso una determinata distanza, effettua nuovamente uno
+	scan dell'ambiente. Nel caso in cui venga rilevato un obbiettivo il robot
+	entra in modalità campi di potenziale e si ferma nel caso in cui abbia
+	raggiunto l'obbiettivo o percorso una determinata distanza. Se, in modalità
+	campi di potenziale, il \textbf{TIAGo} rimane bloccato in un loop, entra in
+	modalità Tangent Bug, fin quando non esce dal loop, e ritorna nella
+	modalità campi di potenziale.
 	
 	\begin{figure}[H]
 		\centering
@@ -839,14 +982,24 @@
 	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
 	Riportiamo di seguito possibili modifiche da apportare:
 	\begin{itemize}
-	\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter pianificare il moto con algoritmi come A* \cite{A*} o RRT \cite{RRT}
-	\item Migliorare la modalità Tangent Bug
-	\item Utilizzare una depth-cam per stimare con più precisione la distanza delle persone
-	\item Tracciamento delle persone in real-time
+		\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
+			pianificare il moto con algoritmi come A* \cite{A*} o RRT
+			\cite{RRT}
+		\item Migliorare la modalità Tangent Bug
+		\item Utilizzare una depth-cam per stimare con più precisione la
+			distanza delle persone
+		\item Tracciamento delle persone in real-time
 	\end{itemize}
 
 	\section{Conclusioni}\label{sec:Conclusioni}
-	Durante lo sviluppo del progetto sono state affrontate numerose tematiche trattate durante il corso di \textit{Robotica}. L'esperienza di sviluppo ha permesso al team di apprezzare l'importanza di solide fondamenta teoriche unite ad una significativa esperienza pratica. In particolar luogo abbiamo riscontrato problemi concernenti vari ambiti, dalla robotica probabilistica all'esplorazione degli ambienti, la cui ricerca di risoluzione ci ha portato ad approfondire le fondamenta teoriche della materia. La performance raggiunta, nonostante le tempistiche, risulta soddisfacente.
+	Durante lo sviluppo del progetto sono state affrontate numerose tematiche
+	trattate durante il corso di \textit{Robotica}. L'esperienza di sviluppo ha
+	permesso al team di apprezzare l'importanza di solide fondamenta teoriche
+	unite ad una significativa esperienza pratica. In particolar luogo abbiamo
+	riscontrato problemi concernenti vari ambiti, dalla robotica probabilistica
+	all'esplorazione degli ambienti, la cui ricerca di risoluzione ci ha
+	portato ad approfondire le fondamenta teoriche della materia. La
+	performance raggiunta, nonostante le tempistiche, risulta soddisfacente.
 	
 	\newpage
     % Bibliography
