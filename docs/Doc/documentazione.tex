@@ -37,6 +37,16 @@
 	\maketitle
 	\tableofcontents
 
+
+	\section{Introduzione}\label{sec:Introduzione}
+	L'esplosione della pandemia CODIV-19 ha dato una forte spinta alla ricerca sia sul campo sanitario che informatico, mettendo in evidenza forti carenze dal punto di vista infrastrutturale.
+	
+	\section{Stato dell'arte}\label{sec:Stato-dell-arte}
+	\cite{sathyamoorthy2020covidrobot}
+	
+	\section{Nome}\label{sec:Nome}
+	Il team ha scelto il nome \textbf{Change} in onore di \textbf{Chang'e 4} \cite{change4}, la missione parte della seconda fase del programma cinese di esplorazione lunare, durante il quale è andato a buon fine il primo atterraggio morbido sulla faccia nascosta della luna. 
+	
 	\section{Setup}\label{sec:Setup}
 	\begin{tabular}{|l|r|}
 		\hline
@@ -49,8 +59,6 @@
 											& Raspberry Pi 3B+ \\ \hline
 	\end{tabular}
 
-	\section{Nome}\label{sec:Nome}
-	Il team ha scelto il nome \textbf{Change} in onore di \textbf{Chang'e 4} \cite{change4}, la missione parte della seconda fase del programma cinese di esplorazione lunare, durante il quale è andato a buon fine il primo atterraggio morbido sulla faccia nascosta della luna. 
 
 	\section{Ambiente}\label{sec:Ambiente}
 	Abbiamo considerato opportuno analizzare e studiare il package \textbf{webots\_ros} \cite{cyberbotics} al fine di raggiungere una comprensione più profonda sulle metodologie per interfacciare i nodi ROS con il controller ROS standard per Webots. Inoltre è risultato necessario approfondire la documentazione ROS \cite{ros.org} al fine di installare e configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali relativi ai nodi e topics. Infine abbiamo impostato l'interfaccia ROS su Webots seguendo la documentazione cyberbotics rilevante \cite{webotsRosSetup}.
@@ -424,11 +432,11 @@
 		\label{fig:boxes_plot}
 	\end{figure}
 
-	La matrice di covarianza, mostrata in \ref{eq:covariance_matrix} mostra 
+	La matrice di covarianza è mostrata nell'equazione~\ref{eq:covariance_matrix}  
 	
 	\begin{equation}\label{eq:covariance_matrix}
 		V = \begin{bmatrix}
-			& 0.163  & 0.163 \\
+			& 0.163  &-0.0397 \\
 			&-0.0397 & 0.0752 \\
 		\end{bmatrix}
 	\end{equation}
@@ -436,14 +444,14 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.8\textwidth]{./img/error_covariance.pdf}
-		\caption{Matrice di covarianza in 3 dimensioni}
+		\caption{Distribuzione gaussiana multivariata con covarianza data nell'equazione~\ref{eq:covariance_matrix} in 3 dimensioni}
 		\label{fig:error_covariance}
 	\end{figure}
 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.8\textwidth]{./img/error_covariance_flat.pdf}
-		\caption{Matrice di covarianza in 2 dimensioni}
+		\caption{Distribuzione gaussiana multivariata con covarianza data nell'equazione~\ref{eq:covariance_matrix}  in 2 dimensioni}
 		\label{fig:error_covariance_flat}
 	\end{figure}
 	
