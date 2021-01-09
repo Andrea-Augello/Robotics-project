@@ -191,7 +191,12 @@ class Movement:
             rotation = rotation + self.rotate(self.__robot.vision.HORIZONTAL_FOV,precision=1)
             error = (rotation - (i+1)*self.__robot.vision.HORIZONTAL_FOV)%360
             error = error if error < 180 else error-360
-            self.__robot.set_pose(error*math.pi/180,0)
+            postion=error*math.pi/180
+            if postion > self.__robot.motors.head_horizontal.max_position:
+                postion=self.__robot.motors.head_horizontal.max_position
+            if postion < self.__robot.motors.head_horizontal.min_position:
+                postion=self.__robot.motors.head_horizontal.min_position    
+            self.__robot.set_pose(postion,0)
             self.__robot.vision.save_frame(self.__robot.vision.update_frame(self.__robot.sensors.camera.value))
         offset = rotation % 360
         offset = offset if offset < 180 else offset-360
