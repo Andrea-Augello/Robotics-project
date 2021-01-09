@@ -141,9 +141,7 @@
 	\end{frame}
 
 	\begin{frame}{Interaction node}
-	Questo nodo ha il compito di gestire le interazioni audio/video. In
-	particolare viene sfruttato il display per caricare della immagini e il
-	sintetizzatore vocale dello speaker per riprodurre messaggi audio. Ogni
+	Questo nodo ha il compito di gestire le interazioni audio/video. Ogni
 	messaggio che viene riprodotto, prima in lingua italiana e poi inglese,
 	viene anche visualizzato testualmente sullo schermo in italiano, inglese e
 	cinese.  I possibili comportamenti assunti dal robot sono:
@@ -151,8 +149,7 @@
 		\item Salutare all'avvio
 		\item Mostrare sul display immagini che esortano a rispettare il
 			distanziamento sociale
-		\item Riprodurre un messaggio audio (riportato anche testualmente sul
-			display) che invita a rispettare il distanziamento sociale quando
+		\item Riprodurre un messaggio audio che invita a rispettare il distanziamento sociale quando
 			rileva un assembramento o quando scansiona l'ambiente
 	\end{itemize}
 	\end{frame}
@@ -169,22 +166,31 @@
 	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
 	\frame{\sectionpage}
 	\frame{
-	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}.
-	\newline Il \textbf{PAL Robotics TIAGo Iron} \cite{pages2016tiago} è un
-	robot umanoide a due ruote con torso e testa ma senza braccia articolate.
+
+	\begin{columns}
+		\begin{column}{0.7\textwidth}
+		Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}, un
+		robot umanoide a due ruote con torso e testa ma senza braccia articolate \cite{pages2016tiago}.
+		
+		Il datasheet del \textbf{TIAGo} \cite{tiago_datasheet} indica la presenza di speaker e display, non  presenti nel modello Webots \cite{tiagoiron}, che sono quindi stati aggiunti.
+		
+		La camera del \textbf{TIAGo} è RGB-D ma il modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una camera monoscopica RGB. 
+		
+		L'IMU utilizzata ha 6 gradi di libertà. 
+		
+		Il modello Webots del \textbf{TIAGo} presenta un lidar (Hokuyo URG-04LX-UG01 \cite{lidarspecs}) che, conformemente al datasheet,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (agli estremi è parzialmente occluso).
+		\end{column}
+		
+		\begin{column}{0.3\textwidth}
+			\begin{figure}[htpb]
+				\centering
+				\includegraphics[width=\textwidth]{./img/tiago.png}
+				\label{fig:tiago}
+			\end{figure}
+		\end{column}
+	\end{columns}
 	
-	Il datasheet del \textbf{TIAGo} \cite{tiago_datasheet} indica la presenza di speaker e display, non  presenti nel modello Webots \cite{tiagoiron}, che sono quindi stati aggiunti.
-	La camera del \textbf{TIAGo}, come indicato dal datasheet, è RGB-D. Il
-	modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una
-	camera monoscopica RGB. 
-	
-    L'IMU utilizzata ha 6 gradi di libertà ed è composta delle seguenti componenti:
-	\begin{enumerate}
-		\item giroscopio;	
-		\item accelerometro;
-	\end{enumerate}
-	
-	Il modello Webots del \textbf{TIAGo} presenta un lidar, ovvero il modello Hokuyo URG-04LX-UG01 \cite{lidarspecs} che, come specificato dalla documentazione del modello Webots,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (agli estremi è parzialmente occluso).}
+	}
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento} 
 	\frame{\sectionpage}

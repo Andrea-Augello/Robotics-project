@@ -2,6 +2,7 @@
 \beamer@slide {sec:Ros}{9}
 \beamer@slide {fig:rosgraph}{10}
 \beamer@slide {sec:TIAGo-Iron}{16}
+\beamer@slide {fig:tiago}{17}
 \beamer@slide {sec:Modello-del-moto-e-posizionamento}{19}
 \beamer@slide {eq:gyro-integration}{20}
 \beamer@slide {eq:odometry}{21}

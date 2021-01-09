@@ -1,40 +1,40 @@
 \babel@toc {italian}{}
 \babel@toc {italian}{}
-\contentsline {section}{\numberline {1}Introduzione}{2}{section.1}
-\contentsline {section}{\numberline {2}Stato dell'arte}{2}{section.2}
-\contentsline {section}{\numberline {3}Nome}{2}{section.3}
-\contentsline {section}{\numberline {4}Setup}{2}{section.4}
-\contentsline {section}{\numberline {5}Ambiente}{2}{section.5}
-\contentsline {section}{\numberline {6}ROS}{2}{section.6}
-\contentsline {subsection}{\numberline {6.1}Descrizione}{2}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}Bug}{3}{subsection.6.2}
-\contentsline {subsection}{\numberline {6.3}Gestione dei nodi}{3}{subsection.6.3}
-\contentsline {subsubsection}{\numberline {6.3.1}Webots node}{3}{subsubsection.6.3.1}
-\contentsline {subsubsection}{\numberline {6.3.2}Change node}{3}{subsubsection.6.3.2}
-\contentsline {subsubsection}{\numberline {6.3.3}Interaction node}{3}{subsubsection.6.3.3}
-\contentsline {subsubsection}{\numberline {6.3.4}Odometry node}{3}{subsubsection.6.3.4}
-\contentsline {section}{\numberline {7}Dipendenze}{4}{section.7}
-\contentsline {section}{\numberline {8}Obbiettivo}{4}{section.8}
-\contentsline {section}{\numberline {9}TIAGo Iron}{4}{section.9}
-\contentsline {section}{\numberline {10}Modello del moto e posizionamento}{5}{section.10}
-\contentsline {subsection}{\numberline {10.1}Orientamento}{5}{subsection.10.1}
-\contentsline {subsection}{\numberline {10.2}Spostamento}{5}{subsection.10.2}
-\contentsline {subsection}{\numberline {10.3}Posizionamento}{5}{subsection.10.3}
-\contentsline {section}{\numberline {11}Rilevamento delle collisioni}{7}{section.11}
-\contentsline {section}{\numberline {12}Object recognition}{7}{section.12}
-\contentsline {subsection}{\numberline {12.1}Campionamento delle immagini}{7}{subsection.12.1}
-\contentsline {subsection}{\numberline {12.2}Yolo}{8}{subsection.12.2}
-\contentsline {subsection}{\numberline {12.3}Triangolazione}{8}{subsection.12.3}
-\contentsline {subsection}{\numberline {12.4}Calcolo della distanza}{9}{subsection.12.4}
-\contentsline {subsection}{\numberline {12.5}Scarto dei duplicati}{10}{subsection.12.5}
-\contentsline {section}{\numberline {13}Posizione dei target}{11}{section.13}
-\contentsline {subsection}{\numberline {13.1}Correzione dei valori}{11}{subsection.13.1}
-\contentsline {subsection}{\numberline {13.2}Modello probabilistico}{13}{subsection.13.2}
-\contentsline {section}{\numberline {14}Pianificazione del moto}{17}{section.14}
-\contentsline {subsection}{\numberline {14.1}Modalit\IeC {\`a} di movimento}{17}{subsection.14.1}
-\contentsline {subsubsection}{\numberline {14.1.1}Modalit\IeC {\`a} esplorazione}{17}{subsubsection.14.1.1}
-\contentsline {subsubsection}{\numberline {14.1.2}Bug mode}{17}{subsubsection.14.1.2}
-\contentsline {subsubsection}{\numberline {14.1.3}Campi di potenziale}{17}{subsubsection.14.1.3}
-\contentsline {subsection}{\numberline {14.2}Pianificazione}{18}{subsection.14.2}
-\contentsline {section}{\numberline {15}Possibili modifiche}{19}{section.15}
-\contentsline {section}{\numberline {16}Conclusioni}{19}{section.16}
+\contentsline {section}{\numberline {1}Introduzione}{2}{section.1}%
+\contentsline {section}{\numberline {2}Obbiettivo}{2}{section.2}%
+\contentsline {section}{\numberline {3}Stato dell'arte}{2}{section.3}%
+\contentsline {section}{\numberline {4}Nome}{2}{section.4}%
+\contentsline {section}{\numberline {5}Setup}{2}{section.5}%
+\contentsline {section}{\numberline {6}Ambiente}{2}{section.6}%
+\contentsline {section}{\numberline {7}ROS}{2}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Descrizione}{2}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Bug}{3}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Gestione dei nodi}{3}{subsection.7.3}%
+\contentsline {subsubsection}{\numberline {7.3.1}Webots node}{3}{subsubsection.7.3.1}%
+\contentsline {subsubsection}{\numberline {7.3.2}Change node}{3}{subsubsection.7.3.2}%
+\contentsline {subsubsection}{\numberline {7.3.3}Interaction node}{3}{subsubsection.7.3.3}%
+\contentsline {subsubsection}{\numberline {7.3.4}Odometry node}{4}{subsubsection.7.3.4}%
+\contentsline {section}{\numberline {8}Dipendenze}{4}{section.8}%
+\contentsline {section}{\numberline {9}TIAGo Iron}{4}{section.9}%
+\contentsline {section}{\numberline {10}Modello del moto e posizionamento}{5}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Orientamento}{5}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Spostamento}{5}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Posizionamento}{5}{subsection.10.3}%
+\contentsline {section}{\numberline {11}Prevenzione delle collisioni}{7}{section.11}%
+\contentsline {section}{\numberline {12}Object recognition}{7}{section.12}%
+\contentsline {subsection}{\numberline {12.1}Campionamento delle immagini}{7}{subsection.12.1}%
+\contentsline {subsection}{\numberline {12.2}Yolo}{8}{subsection.12.2}%
+\contentsline {subsection}{\numberline {12.3}Triangolazione}{8}{subsection.12.3}%
+\contentsline {subsection}{\numberline {12.4}Calcolo della distanza}{10}{subsection.12.4}%
+\contentsline {subsection}{\numberline {12.5}Scarto dei duplicati}{11}{subsection.12.5}%
+\contentsline {section}{\numberline {13}Posizione dei target}{11}{section.13}%
+\contentsline {subsection}{\numberline {13.1}Correzione dei valori}{11}{subsection.13.1}%
+\contentsline {subsection}{\numberline {13.2}Modello probabilistico}{13}{subsection.13.2}%
+\contentsline {section}{\numberline {14}Scheduling dei comportamenti}{17}{section.14}%
+\contentsline {subsection}{\numberline {14.1}Modalità di movimento}{17}{subsection.14.1}%
+\contentsline {subsubsection}{\numberline {14.1.1}Modalità esplorazione}{17}{subsubsection.14.1.1}%
+\contentsline {subsubsection}{\numberline {14.1.2}Bug mode}{17}{subsubsection.14.1.2}%
+\contentsline {subsubsection}{\numberline {14.1.3}Campi di potenziale}{17}{subsubsection.14.1.3}%
+\contentsline {subsection}{\numberline {14.2}Automa a stati finiti}{18}{subsection.14.2}%
+\contentsline {section}{\numberline {15}Possibili modifiche}{19}{section.15}%
+\contentsline {section}{\numberline {16}Conclusioni}{19}{section.16}%
