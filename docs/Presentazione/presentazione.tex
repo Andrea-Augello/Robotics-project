@@ -49,25 +49,24 @@
 	\section{Introduzione}\label{sec:Introduzione}
 	\frame{\sectionpage}
 	\frame{
-	L'esplosione della pandemia del coronavirus SARS-CoV-2 ha dato una forte
-	spinta alla ricerca sia nel campo sanitario che informatico, mettendo in
-	evidenza forti carenze dal punto di vista infrastrutturale.
-	
-	Al momento uno dei miglior modi di evitare la contrazione del coronavirus è
-	di evitarne l'esposizione. Il distanziamento sociale si configura di
-	conseguenza come un prerequisito per una significativa riduzione del numero
-	di infetti, come evidenziato da simulazioni di un sistema ad agenti
-	\cite{silva2020covid}. Un problema chiave si configura di conseguenza come
-	il controllo del rispetto delle norme di distanziamento all'interno degli
-	spazi chiusi.  
+		La pandemia del coronavirus SARS-CoV-2 ha dato una forte
+		spinta alla ricerca sia nel campo sanitario che informatico, mettendo in
+		evidenza forti carenze dal punto di vista infrastrutturale.
+		
+		
+		Al momento, considerando la limitata disponibilità del vaccino alle masse, uno dei miglior modi di evitare la contrazione del coronavirus è
+		di evitarne l'esposizione. Il distanziamento sociale si configura di
+		conseguenza come un prerequisito per una significativa riduzione del numero
+		di infetti, come evidenziato da simulazioni di un sistema ad agenti
+		\cite{silva2020covid}. Un problema chiave si configura di conseguenza come
+		il controllo del rispetto delle norme di distanziamento all'interno degli
+		spazi chiusi. 
 	}
 
 	\begin{frame}{Obbiettivo}
-	L'obbiettivo del robot è di \textbf{evitare assembramenti in ambienti indoor}. 
-	Nella dimostrazione presentata il nostro robot rileva le persone nella
-	stanza e individua i possibili assembramenti. In seguito alla fase di
-	rilevazione si sposterà verso l'assembramento evitando gli ostacoli e,
-	arrivato, esorterà le persone al rispetto del distanziamento sociale.
+	L'obbiettivo del progetto è quello di sviluppare un robot con lo scopo di \textbf{evitare assembramenti in ambienti indoor} e di invitare a \textbf{rispettare le norme sul distanziamento sociale}. 
+	
+	Nella dimostrazione presentata il nostro robot rileva le persone nella stanza e individua i possibili assembramenti. In seguito alla fase di rilevazione si sposterà verso l'assembramento evitando gli ostacoli e, arrivato, esorterà le persone al rispetto del distanziamento sociale.
 	\end{frame}
 	
 	\begin{frame}{Stato dell'arte}
@@ -80,6 +79,18 @@
 	Un altro esempio è quello proposto nell'articolo~\cite{fan2020autonomous}.
 	In questo caso sono state usate 2 camere e CCTV per il rilevamento degli
 	assembramenti e un lidar 3-D per evitare le collisioni.
+	
+	\begin{figure}[H]
+		\begin{subfigure}{0.49\textwidth}
+			\centering
+			\includegraphics[width=0.8\linewidth]{./img/State_of_art_1.png}
+		\end{subfigure}
+		\begin{subfigure}{0.49\textwidth}
+			\centering
+			\includegraphics[width=0.8\linewidth]{./img/State_of_art_2.png}
+		\end{subfigure}
+	\end{figure}
+	
 	\end{frame}
 	
 	\begin{frame}{Setup}
@@ -157,40 +168,27 @@
 	
 	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
 	\frame{\sectionpage}
+	\frame{
 	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}.
 	\newline Il \textbf{PAL Robotics TIAGo Iron} \cite{pages2016tiago} è un
 	robot umanoide a due ruote con torso e testa ma senza braccia articolate.
-	Il modello è una piattaforma modulare mobile che permette l'interazione fra
-	esseri umani e robot. \newline Il datasheet del \textbf{TIAGo}
-	\cite{tiago_datasheet} indica la presenza di speaker e display, tuttavia
-	questi non sono presenti nel modello Webots \cite{tiagoiron}. Abbiamo
-	dunque ritenuto necessario per il nostro scopo aggiungere uno
-	\textbf{speaker} e un \textbf{display} con corrispondente solido di
-	supporto al modello.
+	
+	Il datasheet del \textbf{TIAGo} \cite{tiago_datasheet} indica la presenza di speaker e display, non  presenti nel modello Webots \cite{tiagoiron}, che sono quindi stati aggiunti.
 	La camera del \textbf{TIAGo}, come indicato dal datasheet, è RGB-D. Il
 	modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una
-	camera monoscopica RGB.
-
-	Inoltre è stato necessario contattare gli sviluppatori del \textbf{TIAGo}
-	per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote}
-	in quanto tale informazione è omessa dal datasheet. Ci è stato comunicato
-	che le ruote del \textbf{TIAGo} hanno diametro di $200\,mm$. Utilizzando
-	tale valore nei calcoli odometrici, abbiamo ottenuto valori differenti
-	dalle misurazioni. Abbiamo quindi attentamente letto il file \textit{proto}
-	del modello di Webots, e abbiamo scoperto che nel modello le ruote hanno un
-	diametro di $3\,cm$ inferiore. 
+	camera monoscopica RGB. 
 	
     L'IMU utilizzata ha 6 gradi di libertà ed è composta delle seguenti componenti:
 	\begin{enumerate}
 		\item giroscopio;	
 		\item accelerometro;
 	\end{enumerate}
-	Abbiamo ritenuto non necessario aggiungere il \textbf{magnetometro} in quanto in uno scenario reale sarebbe stato soggetto ad interferenze (significativamente più di un giroscopio), specialmente in un ambiente con molti oggetti metallici (quale potenzialmente lo scenario di utilizzo del nostro robot).
 	
-	Il modello Webots del \textbf{TIAGo} presenta un lidar, ovvero il modello Hokuyo URG-04LX-UG01 \cite{lidarspecs} che, come specificato dalla documentazione del modello Webots,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (agli estremi è parzialmente occluso). In seguito ad analisi sperimentale abbiamo dedotto che l'occlusione del lidar causa malfunzionamenti del package GMapping \cite{grisettiyz2005improving}, utilizzato per implementare le funzionalità di SLAM.
+	Il modello Webots del \textbf{TIAGo} presenta un lidar, ovvero il modello Hokuyo URG-04LX-UG01 \cite{lidarspecs} che, come specificato dalla documentazione del modello Webots,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (agli estremi è parzialmente occluso).}
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento} 
 	\frame{\sectionpage}
+	
 	\begin{frame}{Orientamento}
 		Il modello del moto è caratterizzato da rotazioni e traslazioni. Per le
 		rotazioni ci basiamo sui dati forniti dal giroscopio, il quale fornisce
