@@ -444,31 +444,21 @@
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
 
 	\begin{frame}[allowframebreaks]{Scarto dei duplicati}
-		Durante la fase di individuazione delle persone vengono individuate
-		varie bounding box corrispondenti al medesimo individuo. Di conseguenza
-		è stato necessario effettuare una fase di clustering al fine di
+		È stato necessario effettuare una fase di clustering al fine di
 		scartare le bounding box duplicate. L'algoritmo di clustering
 		utilizzato è DBSCAN (Density based scan) \cite{dbscan}, i cui parametri
 		principali sono \textbf{eps}, ovvero la massima distanza fra due punti
-		affinché vengano considerati appartenenti a un cluster (da non
-		confondere con la massima distanza fra i punti di un cluster),
+		affinché vengano considerati appartenenti a un cluster ,
 		\textbf{min\_samples}, ovvero il numero minimo di punti affinché un
 		cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo
-		scartare ROI) ed infine la metrica di distanza.  Come di evince dalla
-		figura \ref{fig:nms}, la metrica utilizzata considera la lunghezza di
-		un arco di circonferenza con raggio corrispondente alla distanza fra i
-		due punti ed angolo $\alpha$ corrispondente  all'angolo fra i due punti
-		rispetto alla posizione del robot.
+		scartare ROI) ed infine la metrica di distanza.
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.6\textwidth]{./img/nms.pdf}
-			\caption{Non maxima suppression}
-			\label{fig:nms}
+			\includegraphics[width=0.4\textwidth]{./img/nms.pdf}
 		\end{figure}
 	\end{frame}
 
-	
 	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori}
 	\begin{frame}{Correzione dei valori}
 		Per migliorare la stima sulla distanza abbiamo paragonato le reali

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.9)  9 JAN 2021 16:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.9)  9 JAN 2021 16:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1425,127 +1425,124 @@ Package pdftex.def Info: ./img/linearization_error.pdf  used on input line 442.
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/nms.pdf): PDF inclusion: found PD
 F version <1.7>, but at most version <1.5> allowed
-<./img/nms.pdf, id=1088, 265.40657pt x 246.8924pt>
+<./img/nms.pdf, id=1087, 265.40657pt x 246.8924pt>
 File: ./img/nms.pdf Graphic file (type pdf)
 <use ./img/nms.pdf>
-Package pdftex.def Info: ./img/nms.pdf  used on input line 469.
-(pdftex.def)             Requested size: 184.3758pt x 171.52377pt.
+Package pdftex.def Info: ./img/nms.pdf  used on input line 460.
+(pdftex.def)             Requested size: 122.91406pt x 114.3404pt.
 [35
 
-] [36
-
-
  <./img/nms.pdf>]
-<./img/interpolation.pdf, id=1161, 364.36125pt x 292.09125pt>
+<./img/interpolation.pdf, id=1135, 364.36125pt x 292.09125pt>
 File: ./img/interpolation.pdf Graphic file (type pdf)
 <use ./img/interpolation.pdf>
-Package pdftex.def Info: ./img/interpolation.pdf  used on input line 484.
+Package pdftex.def Info: ./img/interpolation.pdf  used on input line 475.
 (pdftex.def)             Requested size: 215.10196pt x 172.43483pt.
- [37
+ [36
 
  <./img/interpolation.pdf>]
-<./img/angle_error.pdf, id=1214, 372.39125pt x 287.0725pt>
+<./img/angle_error.pdf, id=1184, 372.39125pt x 287.0725pt>
 File: ./img/angle_error.pdf Graphic file (type pdf)
 <use ./img/angle_error.pdf>
-Package pdftex.def Info: ./img/angle_error.pdf  used on input line 506.
+Package pdftex.def Info: ./img/angle_error.pdf  used on input line 497.
 (pdftex.def)             Requested size: 150.57372pt x 116.07974pt.
-<./img/distance_error.pdf, id=1215, 372.39125pt x 287.0725pt>
+<./img/distance_error.pdf, id=1185, 372.39125pt x 287.0725pt>
 File: ./img/distance_error.pdf Graphic file (type pdf)
 <use ./img/distance_error.pdf>
-Package pdftex.def Info: ./img/distance_error.pdf  used on input line 506.
+Package pdftex.def Info: ./img/distance_error.pdf  used on input line 497.
 (pdftex.def)             Requested size: 150.57372pt x 116.07974pt.
- [38
+ [37
 
  <./img/angle_error.pdf> <./img/distance_error.pdf>]
-<./img/error_covariance.png, id=1252, 366.6498pt x 275.1078pt>
+<./img/error_covariance.png, id=1225, 366.6498pt x 275.1078pt>
 File: ./img/error_covariance.png Graphic file (type png)
 <use ./img/error_covariance.png>
-Package pdftex.def Info: ./img/error_covariance.png  used on input line 529.
+Package pdftex.def Info: ./img/error_covariance.png  used on input line 520.
 (pdftex.def)             Requested size: 150.57372pt x 112.97961pt.
-<./img/error_covariance_flat.png, id=1253, 369.5406pt x 291.489pt>
+<./img/error_covariance_flat.png, id=1226, 369.5406pt x 291.489pt>
 File: ./img/error_covariance_flat.png Graphic file (type png)
 <use ./img/error_covariance_flat.png>
 Package pdftex.def Info: ./img/error_covariance_flat.png  used on input line 52
-9.
+0.
 (pdftex.def)             Requested size: 150.57372pt x 118.77293pt.
- [39
+ [38
 
  <./img/error_covariance.png (PNG copy)> <./img/error_covariance_flat.png (PNG 
 copy)>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [40
+ [39
 
 ]
-<./img/pdf_benchmark.pdf, id=1315, 375.4025pt x 290.08376pt>
+<./img/pdf_benchmark.pdf, id=1288, 375.4025pt x 290.08376pt>
 File: ./img/pdf_benchmark.pdf Graphic file (type pdf)
 <use ./img/pdf_benchmark.pdf>
-Package pdftex.def Info: ./img/pdf_benchmark.pdf  used on input line 567.
+Package pdftex.def Info: ./img/pdf_benchmark.pdf  used on input line 558.
 (pdftex.def)             Requested size: 184.3758pt x 142.47424pt.
 
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.568 ...probability density function, funzione )}
+l.559 ...probability density function, funzione )}
                                                   
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
 
-[41 <./img/pdf_benchmark.pdf>]
+[40 <./img/pdf_benchmark.pdf>]
 
 LaTeX Font Warning: Font shape `T1/cmss/b/n' undefined
-(Font)              using `T1/cmss/m/n' instead on input line 592.
+(Font)              using `T1/cmss/m/n' instead on input line 583.
 
-[42]
-<./img/pdf_shape.pdf, id=1374, 374.39874pt x 292.09125pt>
+[41]
+<./img/pdf_shape.pdf, id=1346, 374.39874pt x 292.09125pt>
 File: ./img/pdf_shape.pdf Graphic file (type pdf)
 <use ./img/pdf_shape.pdf>
-Package pdftex.def Info: ./img/pdf_shape.pdf  used on input line 606.
+Package pdftex.def Info: ./img/pdf_shape.pdf  used on input line 597.
 (pdftex.def)             Requested size: 184.3758pt x 143.84352pt.
 
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.607 		\caption{Forma pdf}
+l.598 		\caption{Forma pdf}
                            
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
 
-[43 <./img/pdf_shape.pdf>]
+[42 <./img/pdf_shape.pdf>]
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/circular_sector.pdf): PDF inclusi
 on: found PDF version <1.7>, but at most version <1.5> allowed
-<img/circular_sector.pdf, id=1405, 114.35323pt x 35.93526pt>
+<img/circular_sector.pdf, id=1377, 114.35323pt x 35.93526pt>
 File: img/circular_sector.pdf Graphic file (type pdf)
 <use img/circular_sector.pdf>
-Package pdftex.def Info: img/circular_sector.pdf  used on input line 635.
+Package pdftex.def Info: img/circular_sector.pdf  used on input line 626.
 (pdftex.def)             Requested size: 153.64493pt x 48.28621pt.
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.636 ...ione probabile a seconda della distanza.}
+l.627 ...ione probabile a seconda della distanza.}
                                                   
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
 
-[44 <./img/circular_sector.pdf>]
+[43 <./img/circular_sector.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [45]
-[46] [47]
-<./img/image_segmentation.pdf, id=1528, 722.7pt x 361.35pt>
+ [44]
+[45] [46]
+<./img/image_segmentation.pdf, id=1502, 722.7pt x 361.35pt>
 File: ./img/image_segmentation.pdf Graphic file (type pdf)
 <use ./img/image_segmentation.pdf>
-Package pdftex.def Info: ./img/image_segmentation.pdf  used on input line 741.
+Package pdftex.def Info: ./img/image_segmentation.pdf  used on input line 732.
 (pdftex.def)             Requested size: 307.28987pt x 153.64615pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [48]
+ [47]
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.742 ...delle regioni (giallo) e i centri (blu) }
+l.733 ...delle regioni (giallo) e i centri (blu) }
                                                   
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
@@ -1557,7 +1554,7 @@ See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.746 	\section{Pianificazione del moto}
+l.737 	\section{Pianificazione del moto}
                                         \label{sec:Pianificazione-del-moto}
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1565,20 +1562,20 @@ If that doesn't work, type  X <return>  to quit.
 (./presentazione.toc)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [49 <./img/image_segmentation.pdf>] [50] [51
+ [48 <./img/image_segmentation.pdf>] [49] [50
 
-] [52
+] [51
 
 ]
-<./img/bug.pdf, id=1708, 291.0875pt x 288.07625pt>
+<./img/bug.pdf, id=1680, 291.0875pt x 288.07625pt>
 File: ./img/bug.pdf Graphic file (type pdf)
 <use ./img/bug.pdf>
-Package pdftex.def Info: ./img/bug.pdf  used on input line 778.
+Package pdftex.def Info: ./img/bug.pdf  used on input line 769.
 (pdftex.def)             Requested size: 122.91406pt x 121.64175pt.
- [53
+ [52
 
  <./img/bug.pdf>]
-Overfull \hbox (21.02968pt too wide) detected at line 820
+Overfull \hbox (21.02968pt too wide) detected at line 811
 []\OT1/mathkerncmss/m/sl/10 F[]\OT1/cmss/m/n/10 (\OT1/mathkerncmss/m/sl/10 obst
 acleDistance\OT1/cmss/m/n/10 ) = []
  []
@@ -1586,36 +1583,36 @@ acleDistance\OT1/cmss/m/n/10 ) = []
 
 Underfull \vbox (badness 1348) has occurred while \output is active []
 
- [54
+ [53
 
 ]
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/obstacle_fov.pdf): PDF inclusion:
  found PDF version <1.7>, but at most version <1.5> allowed
-<./img/obstacle_fov.pdf, id=1791, 199.96909pt x 102.4096pt>
+<./img/obstacle_fov.pdf, id=1765, 199.96909pt x 102.4096pt>
 File: ./img/obstacle_fov.pdf Graphic file (type pdf)
 <use ./img/obstacle_fov.pdf>
-Package pdftex.def Info: ./img/obstacle_fov.pdf  used on input line 828.
+Package pdftex.def Info: ./img/obstacle_fov.pdf  used on input line 819.
 (pdftex.def)             Requested size: 245.83282pt x 125.9068pt.
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.829 		\caption{FOV frontale del robot}
+l.820 		\caption{FOV frontale del robot}
                                         
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
 
-[55 <./img/obstacle_fov.pdf>]
-<./img/fsa.pdf, id=1840, 387.4475pt x 522.95375pt>
+[54 <./img/obstacle_fov.pdf>]
+<./img/fsa.pdf, id=1812, 387.4475pt x 522.95375pt>
 File: ./img/fsa.pdf Graphic file (type pdf)
 <use ./img/fsa.pdf>
-Package pdftex.def Info: ./img/fsa.pdf  used on input line 884.
+Package pdftex.def Info: ./img/fsa.pdf  used on input line 875.
 (pdftex.def)             Requested size: 153.64493pt x 207.38237pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [56]
-[57 <./img/fsa.pdf>]
+ [55]
+[56 <./img/fsa.pdf>]
 
 ! Package keyval Error: depth undefined.
 
@@ -1623,20 +1620,23 @@ See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.886 	\section{Possibili modifiche}
+l.877 	\section{Possibili modifiche}
                                     \label{sec:Possibli-modifiche}
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-(./presentazione.toc) [58
+(./presentazione.toc) [57
+
+] [58
 
 ] [59
 
-] [60
+] (./presentazione.bbl) [60
 
-] (./presentazione.bbl) [61
+ </usr/share/texlive/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>] [61
 
- </usr/share/texlive/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>] [62
+
+] [62
 
 
 ] [63
@@ -1645,14 +1645,11 @@ If that doesn't work, type  X <return>  to quit.
 ] [64
 
 
-] [65
-
-
 ]
-[66
+[65
 
 
-] [67
+] [66
 
 
 ]
@@ -1665,11 +1662,11 @@ If that doesn't work, type  X <return>  to quit.
 \tf@snm=\write8
 \openout8 = `presentazione.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 910.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 910.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 901.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 901.
  (./presentazione.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 910.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 910.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 901.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 901.
 Package rerunfilecheck Info: File `presentazione.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1681,38 +1678,41 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 27190 strings out of 481239
- 513355 string characters out of 5920377
+ 27188 strings out of 481239
+ 513341 string characters out of 5920377
  781849 words of memory out of 5000000
  41550 multiletter control sequences out of 15000+600000
  546096 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  58i,18n,67p,801b,738s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/
-fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-ss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf/fonts/type1/
-public/cm-super/sfsi0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsi
-1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0500.pfb></usr/share
-/texmf/fonts/type1/public/cm-super/sfss0700.pfb></usr/share/texmf/fonts/type1/p
-ublic/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0
-900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb></usr/share/
-texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share/texmf/fonts/type1/pu
-blic/cm-super/sfsx0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx10
-00.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on presentazione.pdf (67 pages, 8245537 bytes).
+pdfTeX warning (dest): name{Navigation67} has been referenced but does not ex
+ist, replaced by a fixed one
+
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/fo
+nts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss
+10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf/fonts/type1/pu
+blic/cm-super/sfsi0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsi10
+00.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0500.pfb></usr/share/t
+exmf/fonts/type1/public/cm-super/sfss0700.pfb></usr/share/texmf/fonts/type1/pub
+lic/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss090
+0.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb></usr/share/te
+xmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share/texmf/fonts/type1/publ
+ic/cm-super/sfsx0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1000
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+Output written on presentazione.pdf (66 pages, 8243574 bytes).
 PDF statistics:
- 2307 PDF objects out of 2487 (max. 8388607)
- 2112 compressed objects within 22 object streams
- 242 named destinations out of 1000 (max. 500000)
+ 2278 PDF objects out of 2487 (max. 8388607)
+ 2085 compressed objects within 21 object streams
+ 240 named destinations out of 1000 (max. 500000)
  158 words of extra memory for PDF output out of 10000 (max. 10000000)
 
