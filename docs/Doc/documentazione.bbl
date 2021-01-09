@@ -1,0 +1,189 @@
+\begin{thebibliography}{10}
+
+\bibitem{silva2020covid}
+Petr{\^o}nio~CL Silva, Paulo~VC Batista, H{\'e}lder~S Lima, Marcos~A Alves,
+  Frederico~G Guimar{\~a}es, and Rodrigo~CP Silva.
+\newblock Covid-abs: An agent-based model of covid-19 epidemic to simulate
+  health and economic effects of social distancing interventions.
+\newblock {\em Chaos, Solitons \& Fractals}, 139:110088, 2020.
+
+\bibitem{sathyamoorthy2020covidrobot}
+Adarsh~Jagan Sathyamoorthy, Utsav Patel, Yash~Ajay Savle, Moumita Paul, and
+  Dinesh Manocha.
+\newblock Covid-robot: Monitoring social distancing constraints in crowded
+  scenarios, 2020.
+
+\bibitem{fan2020autonomous}
+Tingxiang Fan, Zhiming Chen, Xuan Zhao, Jing Liang, Cong Shen, Dinesh Manocha,
+  Jia Pan, and Wei Zhang.
+\newblock Autonomous social distancing in urban environments using a quadruped
+  robot.
+\newblock {\em arXiv preprint arXiv:2008.08889}, 2020.
+
+\bibitem{change4}
+Hannah Devlin and Kate Lyons.
+\newblock Far side of the moon: China's chang'e 4 probe makes historic
+  touchdown, Jan 2019.
+
+\bibitem{cyberbotics}
+Cyberbotics.
+\newblock cyberbotics/webots\_ros.
+
+\bibitem{ros.org}
+Ros documentation from ros.org.
+
+\bibitem{webotsRosSetup}
+Webots.
+\newblock Webots user guide: Tutorial 8: Using ros.
+
+\bibitem{rosbug}
+Cyberbotics.
+\newblock commit b3f1029.
+
+\bibitem{opencv}
+G.~Bradski.
+\newblock {The OpenCV Library}.
+\newblock {\em Dr. Dobb's Journal of Software Tools}, 2000.
+
+\bibitem{imutils}
+A~Rosebrock.
+\newblock Imutils.
+
+\bibitem{scikit}
+Fabian Pedregosa, Ga{\"e}l Varoquaux, Alexandre Gramfort, Vincent Michel,
+  Bertrand Thirion, Olivier Grisel, Mathieu Blondel, Peter Prettenhofer, Ron
+  Weiss, Vincent Dubourg, et~al.
+\newblock Scikit-learn: Machine learning in python.
+\newblock {\em Journal of machine learning research}, 12(Oct):2825--2830, 2011.
+
+\bibitem{numpy}
+Charles~R. Harris, K.~Jarrod Millman, St{'{e}}fan~J. van~der Walt, Ralf
+  Gommers, Pauli Virtanen, David Cournapeau, Eric Wieser, Julian Taylor,
+  Sebastian Berg, Nathaniel~J. Smith, Robert Kern, Matti Picus, Stephan Hoyer,
+  Marten~H. van Kerkwijk, Matthew Brett, Allan Haldane, Jaime~Fern{'{a}}ndez
+  del R{'{\i}}o, Mark Wiebe, Pearu Peterson, Pierre G{'{e}}rard-Marchant, Kevin
+  Sheppard, Tyler Reddy, Warren Weckesser, Hameer Abbasi, Christoph Gohlke, and
+  Travis~E. Oliphant.
+\newblock Array programming with {numpy}.
+\newblock {\em Nature}, 585(7825):357--362, September 2020.
+
+\bibitem{matplotlib}
+J.~D. Hunter.
+\newblock Matplotlib: A 2d graphics environment.
+\newblock {\em Computing in Science \& Engineering}, 9(3):90--95, 2007.
+
+\bibitem{math}
+math - mathematical functions.
+
+\bibitem{pages2016tiago}
+Jordi Pages, Luca Marchionni, and Francesco Ferro.
+\newblock Tiago: the modular robot that adapts to different research needs.
+\newblock In {\em International workshop on robot modularity, IROS}, 2016.
+
+\bibitem{tiago_datasheet}
+Tiago datasheet.
+
+\bibitem{tiagoiron}
+Webots.
+\newblock Webots user guide: Pal robotics' tiago iron.
+
+\bibitem{lidarspecs}
+Webots.
+\newblock Lidar specifications.
+
+\bibitem{grisettiyz2005improving}
+Giorgio Grisettiyz, Cyrill Stachniss, and Wolfram Burgard.
+\newblock Improving grid-based slam with rao-blackwellized particle filters by
+  adaptive proposals and selective resampling.
+\newblock In {\em Proceedings of the 2005 IEEE international conference on
+  robotics and automation}, pages 2432--2437. IEEE, 2005.
+
+\bibitem{positioning}
+Kurt Seifert and Oscar Camacho.
+\newblock Implementing positioning algorithms using accelerometers.
+\newblock {\em Freescale Semiconductor}, pages 1--13, 2007.
+
+\bibitem{572228}
+S.~{Maeyama}, N.~{Ishikawa}, and S.~{Yuta}.
+\newblock Rule based filtering and fusion of odometry and gyroscope for a fail
+  safe dead reckoning system of a mobile robot.
+\newblock In {\em 1996 IEEE/SICE/RSJ International Conference on Multisensor
+  Fusion and Integration for Intelligent Systems (Cat. No.96TH8242)}, pages
+  541--548, 1996.
+
+\bibitem{ghosh2016survey}
+Debabrata Ghosh and Naima Kaabouch.
+\newblock A survey on image mosaicing techniques.
+\newblock {\em Journal of Visual Communication and Image Representation},
+  34:1--11, 2016.
+
+\bibitem{tiny_yolo}
+P.~{Adarsh}, P.~{Rathi}, and M.~{Kumar}.
+\newblock Yolo v3-tiny: Object detection and recognition using one stage
+  improved model.
+\newblock In {\em 2020 6th International Conference on Advanced Computing and
+  Communication Systems (ICACCS)}, pages 687--694, 2020.
+
+\bibitem{He2019TFYOLOAI}
+He, Huang, Wei, Li, and Guo.
+\newblock Tf-yolo: An improved incremental network for real-time object
+  detection.
+\newblock {\em Applied Sciences}, 9:3225, 2019.
+
+\bibitem{yolo}
+Joseph Redmon and Ali Farhadi.
+\newblock Yolov3: An incremental improvement.
+\newblock {\em arXiv}, 2018.
+
+\bibitem{dbscan}
+Martin Ester, Hans-Peter Kriegel, J{\"o}rg Sander, Xiaowei Xu, et~al.
+\newblock A density-based algorithm for discovering clusters in large spatial
+  databases with noise.
+\newblock In {\em Kdd}, volume~96, pages 226--231, 1996.
+
+\bibitem{tay2008bayesian}
+MK~Tay, Kamel Mekhnacha, Manuel Yguel, Christophe Coue, C{\'e}dric Pradalier,
+  Christian Laugier, Th~Fraichard, and Pierre Bessiere.
+\newblock The bayesian occupation filter.
+\newblock In {\em Probabilistic Reasoning and Decision Making in Sensory-Motor
+  Systems}, pages 77--98. Springer, 2008.
+
+\bibitem{otsu}
+Nobuyuki Otsu.
+\newblock A threshold selection method from gray-level histograms.
+\newblock {\em IEEE transactions on systems, man, and cybernetics},
+  9(1):62--66, 1979.
+
+\bibitem{contours}
+Satoshi Suzuki et~al.
+\newblock Topological structural analysis of digitized binary images by border
+  following.
+\newblock {\em Computer vision, graphics, and image processing}, 30(1):32--46,
+  1985.
+
+\bibitem{503814}
+I.~{Kamon}, E.~{Rivlin}, and E.~{Rimon}.
+\newblock A new range-sensor based globally convergent navigation algorithm for
+  mobile robots.
+\newblock In {\em Proceedings of IEEE International Conference on Robotics and
+  Automation}, volume~1, pages 429--435 vol.1, 1996.
+
+\bibitem{volpe1990manipulator}
+Richard Volpe and Pradeep Khosla.
+\newblock Manipulator control with superquadric artificial potential functions:
+  Theory and experiments.
+\newblock {\em IEEE Transactions on Systems, Man, and Cybernetics},
+  20(6):1423--1436, 1990.
+
+\bibitem{A*}
+Akshay Guruji, Himansh Agarwal, and Deep Parsediya.
+\newblock Time-efficient a* algorithm for robot path planning.
+\newblock {\em Procedia Technology}, 23:144--149, 12 2016.
+
+\bibitem{RRT}
+S.~{Karaman}, M.~R. {Walter}, A.~{Perez}, E.~{Frazzoli}, and S.~{Teller}.
+\newblock Anytime motion planning using the rrt*.
+\newblock In {\em 2011 IEEE International Conference on Robotics and
+  Automation}, pages 1478--1483, 2011.
+
+\end{thebibliography}

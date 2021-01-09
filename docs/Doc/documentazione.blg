@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: documentazione.aux
+The style file: unsrt.bst
+Database file #1: references.bib.bib
+Warning--can't use both volume and number fields in dbscan
+You've used 33 entries,
+            1791 wiz_defined-function locations,
+            618 strings with 9104 characters,
+and the built_in function-call counts, 7826 in all, are:
+= -- 630
+> -- 408
+< -- 10
++ -- 151
+- -- 118
+* -- 488
+:= -- 1176
+add.period$ -- 87
+call.type$ -- 33
+change.case$ -- 33
+chr.to.int$ -- 0
+cite$ -- 34
+duplicate$ -- 345
+empty$ -- 792
+format.name$ -- 118
+if$ -- 1783
+int.to.chr$ -- 0
+int.to.str$ -- 33
+missing$ -- 22
+newline$ -- 154
+num.names$ -- 30
+pop$ -- 130
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 243
+stack$ -- 0
+substring$ -- 464
+swap$ -- 113
+text.length$ -- 10
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 67
+width$ -- 35
+write$ -- 317
+(There was 1 warning)

@@ -1,0 +1,20 @@
+\babel@toc {italian}{}
+\babel@toc {italian}{}
+\beamer@sectionintoc {1}{Introduzione}{2}{0}{1}
+\beamer@sectionintoc {2}{Gestione dei nodi ROS}{8}{0}{2}
+\beamer@sectionintoc {3}{TIAGo Iron}{15}{0}{3}
+\beamer@sectionintoc {4}{Modello del moto e posizionamento}{18}{0}{4}
+\beamer@subsectionintoc {4}{1}{Posizionamento}{23}{0}{4}
+\beamer@sectionintoc {5}{Object recognition}{28}{0}{5}
+\beamer@sectionintoc {6}{Posizione dei target}{35}{0}{6}
+\beamer@subsectionintoc {6}{1}{Triangolazione}{37}{0}{6}
+\beamer@subsectionintoc {6}{2}{Calcolo della distanza}{38}{0}{6}
+\beamer@subsectionintoc {6}{3}{Scarto dei duplicati}{42}{0}{6}
+\beamer@subsectionintoc {6}{4}{Correzione dei valori}{44}{0}{6}
+\beamer@subsectionintoc {6}{5}{Modello probabilistico}{47}{0}{6}
+\beamer@sectionintoc {7}{Pianificazione del moto}{56}{0}{7}
+\beamer@subsubsectionintoc {7}{0}{1}{Modalit\IeC {\`a} esplorazione}{59}{0}{7}
+\beamer@subsubsectionintoc {7}{0}{2}{Bug mode}{60}{0}{7}
+\beamer@subsubsectionintoc {7}{0}{3}{Campi di potenziale}{61}{0}{7}
+\beamer@subsectionintoc {7}{1}{Pianificazione}{63}{0}{7}
+\beamer@sectionintoc {8}{Possibili modifiche}{65}{0}{8}
