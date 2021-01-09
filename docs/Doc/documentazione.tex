@@ -43,13 +43,18 @@
 	spinta alla ricerca sia nel campo sanitario che informatico, mettendo in
 	evidenza forti carenze dal punto di vista infrastrutturale.
 	
-	Al momento uno dei miglior modi di evitare la contrazione del coronavirus è
-	di evitarne l'esposizione. Il distanziamento sociale si configura di
+	
+	Al momento, considerando la limitata disponibilità del vaccino alle masse, uno dei miglior modi di evitare la contrazione del coronavirus è
+	di evitarne l'esposizione, oltre all' utilizzo di mascherine e dispositivi di protezione personale e la frequente igienizzazione delle mani. Il distanziamento sociale si configura di
 	conseguenza come un prerequisito per una significativa riduzione del numero
 	di infetti, come evidenziato da simulazioni di un sistema ad agenti
 	\cite{silva2020covid}. Un problema chiave si configura di conseguenza come
 	il controllo del rispetto delle norme di distanziamento all'interno degli
-	spazi chiusi.  
+	spazi chiusi. In tal senso l'utilizzo di un robot evita l'inutile esposizione da parte di un operatore all'agente patogeno. 
+	
+	\section{Obbiettivo}\label{sec:Obbiettivo} 
+	L'obbiettivo del progetto è quello di sviluppare un robot con lo scopo di \textbf{evitare assembramenti in ambienti indoor} e di invitare a \textbf{rispettare le norme sul distanziamento sociale}. \newline
+	Nella dimostrazione presentata il nostro robot rileva le persone nella stanza e individua i possibili assembramenti. In seguito alla fase di rilevazione si sposterà verso l'assembramento evitando gli ostacoli e, arrivato, esorterà le persone al rispetto del distanziamento sociale.
 	
 	\section{Stato dell'arte}\label{sec:Stato-dell-arte}
 	Un robot che si occupa di far rispettare il distanziamento sociale è quello
@@ -211,9 +216,6 @@
 			standard C \cite{math}.
 	\end{itemize}
 
-	\section{Obbiettivo}\label{sec:Obbiettivo} 
-	L'obbiettivo del robot è di \textbf{evitare assembramenti in ambienti indoor}. \newline
-	Nella dimostrazione presentata il nostro robot rileva le persone nella stanza e individua i possibili assembramenti. In seguito alla fase di rilevazione si sposterà verso l'assembramento evitando gli ostacoli e, arrivato, esorterà le persone al rispetto del distanziamento sociale.
 	
 	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
 	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron} \cite{pages2016tiago} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
@@ -358,6 +360,8 @@
 	problema effettuiamo una rudimentale operazione di image
 	mosaicing~\cite{ghosh2016survey} e campioniamo l'immagine così ottenuta
 	ad intervalli di 28°.
+	
+	Al fine di migliorare la precisione della scansione abbiamo ritenuto opportuno correggere la rotazione del robot con lo spostamento della testa.
 	
 	
 	\begin{figure}[H]
@@ -585,7 +589,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=1\textwidth]{./img/interpolation.pdf}
+		\includegraphics[width=0.8\textwidth]{./img/interpolation.pdf}
 		\caption{Polinomio interpolante}
 		\label{fig:interpolation}
 	\end{figure}
