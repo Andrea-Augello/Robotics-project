@@ -1,7 +1,6 @@
 from std_msgs.msg import *
 from sensor_msgs.msg import *
 import cv2
-import time
 import math
 
 class Movement:
@@ -41,6 +40,9 @@ class Movement:
                         speed[i] += ((accel[i]+prev_accel[i])/2)*elapsed_time
                 prev_stamp = timestamp
                 prev_accel = accel
+        else:
+            while abs(self.__robot.sensors.gyro.value.z) > 0.01:
+                pass
             
 
     def rotate(self,rotation, precision=1):
@@ -88,7 +90,7 @@ class Movement:
             self.set_angular_velocity(curr_angular_velocity*(-direction)\
                     * (min(1,abs(difference/45))) )
         self.stop(linear=False)
-        return current_angle- starting_angle
+        return self.__robot.odometry.theta - starting_angle
 
 
     def move_forward(self, distance, precision=0.01):
@@ -185,10 +187,14 @@ class Movement:
         self.__robot.vision.clear_saved_frames()
         rotation = 0
         self.__robot.vision.save_frame(self.__robot.vision.update_frame(self.__robot.sensors.camera.value))
-        for _ in range(math.ceil(360/self.__robot.vision.HORIZONTAL_FOV)-1):
-            rotation = rotation + self.rotate(self.__robot.vision.HORIZONTAL_FOV-2,0.1)
+        for i in range(math.ceil(360/self.__robot.vision.HORIZONTAL_FOV)-1):
+            rotation = rotation + self.rotate(self.__robot.vision.HORIZONTAL_FOV,precision=1)
+            error = (rotation - (i+1)*self.__robot.vision.HORIZONTAL_FOV)%360
+            error = error if error < 180 else error-360
+            self.__robot.set_pose(error*math.pi/180,0)
             self.__robot.vision.save_frame(self.__robot.vision.update_frame(self.__robot.sensors.camera.value))
         offset = rotation % 360
         offset = offset if offset < 180 else offset-360
+        self.__robot.set_pose(0,0)
         rotation = rotation + self.rotate(-offset,0.1)
         return rotation  
