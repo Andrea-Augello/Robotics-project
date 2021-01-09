@@ -1,5 +1,7 @@
 \documentclass[10pt]{beamer}
 \usetheme{Pittsburgh}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{bibliography item}{\insertbiblabel}
 
 \usepackage{graphicx}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
@@ -40,21 +42,17 @@
 \AtBeginSection[]
 {
   \begin{frame}<beamer>
-    \tableofcontents[currentsection,depth=1]
+    \tableofcontents[currentsection]
   \end{frame}
 }
 
+\logo{\includegraphics[width=0.2\textwidth]{./img/logo_unipa.png}}
 \author{Augello Andrea \and Castiglione Francesco Paolo \and La Martina Marco}
 \institute{Università degli studi di Palermo}
 \begin{document}
 \title[Chang'e]{Documentazione - Progetto di Robotica}
 	\begin{frame}
 		\titlepage
-		\begin{figure}[htpb]
-			\includegraphics[width=0.2\textwidth,left]{./img/logo_unipa.png}
-		\end{figure}
-		
-		
 	\end{frame}
 
 
@@ -123,6 +121,43 @@
 	\end{tabular}
 	\end{frame}
 
+	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
+	\frame{\sectionpage}
+	\frame{
+
+	\begin{columns}
+		\begin{column}{0.7\textwidth}
+		\justifying
+		Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}, un
+		robot umanoide a due ruote con torso e testa ma senza braccia
+		articolate \cite{pages2016tiago}.
+		
+		Il datasheet del \textbf{TIAGo} \cite{tiago_datasheet} indica la
+		presenza di speaker e display, non  presenti nel modello Webots
+		\cite{tiagoiron}, che sono quindi stati aggiunti.
+		
+		La camera del \textbf{TIAGo} è RGB-D ma il modello Webots ne è
+		sprovvisto, di conseguenza è stata utilizzata una camera monoscopica
+		RGB. 
+		
+		L'IMU utilizzata ha 6 gradi di libertà. 
+		
+		Il modello Webots del \textbf{TIAGo} presenta un lidar (Hokuyo
+		URG-04LX-UG01 \cite{lidarspecs}) che, conformemente al datasheet,  ha
+		un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (agli estremi è
+		parzialmente occluso).
+		\end{column}
+		
+		\begin{column}{0.3\textwidth}
+			\begin{figure}[htpb]
+				\centering
+				\includegraphics[width=\textwidth]{./img/tiago.png}
+				\label{fig:tiago}
+			\end{figure}
+		\end{column}
+	\end{columns}
+	
+	}
 
 	\section{Gestione dei nodi ROS}\label{sec:Ros}
 	\frame{\sectionpage}
@@ -145,10 +180,10 @@
 	ad arbitrare sui comportamenti da assumere, gestisce più moduli che si
 	occupano di: 
 	\begin{itemize}
-		\item acquisire i dati dai sensori
-		\item mandare i comandi ai motori
-		\item gestire il movimento, quindi rotazioni e traslazioni
-		\item acquisire e analizzare le immagini dalla camera
+		\pause\item acquisire i dati dai sensori
+		\pause\item mandare i comandi ai motori
+		\pause\item gestire il movimento, quindi rotazioni e traslazioni
+		\pause\item acquisire e analizzare le immagini dalla camera
 	\end{itemize}
 	\end{frame}
 
@@ -158,10 +193,10 @@
 	viene anche visualizzato testualmente sullo schermo in italiano, inglese e
 	cinese.  I possibili comportamenti assunti dal robot sono:
 	\begin{itemize}
-		\item Salutare all'avvio
-		\item Mostrare sul display immagini che esortano a rispettare il
+		\pause\item Salutare all'avvio
+		\pause\item Mostrare sul display immagini che esortano a rispettare il
 			distanziamento sociale
-		\item Riprodurre un messaggio audio che invita a rispettare il distanziamento sociale quando
+		\pause\item Riprodurre un messaggio audio che invita a rispettare il distanziamento sociale quando
 			rileva un assembramento o quando scansiona l'ambiente
 	\end{itemize}
 	\end{frame}
@@ -175,35 +210,6 @@
 	\end{frame}
 	
 	
-	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
-	\frame{\sectionpage}
-	\frame{
-
-	\begin{columns}
-		\begin{column}{0.7\textwidth}
-		\justifying
-		Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}, un
-		robot umanoide a due ruote con torso e testa ma senza braccia articolate \cite{pages2016tiago}.
-		
-		Il datasheet del \textbf{TIAGo} \cite{tiago_datasheet} indica la presenza di speaker e display, non  presenti nel modello Webots \cite{tiagoiron}, che sono quindi stati aggiunti.
-		
-		La camera del \textbf{TIAGo} è RGB-D ma il modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una camera monoscopica RGB. 
-		
-		L'IMU utilizzata ha 6 gradi di libertà. 
-		
-		Il modello Webots del \textbf{TIAGo} presenta un lidar (Hokuyo URG-04LX-UG01 \cite{lidarspecs}) che, conformemente al datasheet,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (agli estremi è parzialmente occluso).
-		\end{column}
-		
-		\begin{column}{0.3\textwidth}
-			\begin{figure}[htpb]
-				\centering
-				\includegraphics[width=\textwidth]{./img/tiago.png}
-				\label{fig:tiago}
-			\end{figure}
-		\end{column}
-	\end{columns}
-	
-	}
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento} 
 	\frame{\sectionpage}
@@ -249,11 +255,12 @@
 			\end{cases}
 		\end{equation}
 		
-		Abbiamo ritenuto necessario cambiare approccio, decidendo di utilizzare gli
-		encoders delle ruote per determinare gli spostamenti. 
+		\pause
+		Abbiamo ritenuto necessario cambiare approccio, decidendo di utilizzare
+		gli encoders delle ruote per determinare gli spostamenti. 
 		
-		Integriamo la velocità lineare del robot, calcolata a
-		partire dal raggio R e le velocità angolari $u[t]$ delle ruote.
+		Integriamo la velocità lineare del robot, calcolata a partire dal
+		raggio $R$ e le velocità angolari $u$ delle ruote.
 		
 		\begin{equation}\label{eq:linear-velocity}
 			v_i = \frac{R (u_{r,i}+u_{l,i})}{2}
@@ -263,8 +270,8 @@
 		
 		\begin{equation}\label{eq:position-vector-update}
 			\textbf{P}_i = \sum_{j = 1}^{i} \begin{bmatrix}
-				 & v_i\cos(\theta_i ) & \\
-				 & v_i\sin(\theta_i )
+				 & v_j\cos(\theta_j ) & \\
+				 & v_j\sin(\theta_j )
 			\end{bmatrix}\cdot (t_j-t_{j-1}) 
 		\end{equation}		
 		
@@ -284,7 +291,6 @@
 				\label{fig:trajectory_error}
 			\end{subfigure}
 		\end{figure}
-
 		Abbiamo misurato le performance della stima di posizione e i risultati
 		sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto.
 	\end{frame}
@@ -330,23 +336,24 @@
 	\end{frame}
 	
 	\begin{frame}{YOLO}
-		Abbiamo valutato le performance di
-		YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented
-		gradients), HoG + SVG (support vector machines).  In seguito a vari test su HoG abbiamo ritenuto essere
-		problematica la larghezza delle bounding boxes fornite. YOLOv3 fornisce risultati soddisfacenti.
+		Abbiamo valutato le performance di YOLOv3 (you only look once),\\
+		YOLOv3-tiny, HoG, HoG + SVG. In seguito a vari test su HoG abbiamo
+		ritenuto essere problematica la larghezza delle bounding boxes fornite.
+		YOLOv3 fornisce risultati soddisfacenti.
 		
-		Considerando le caratteristiche hardware del robot mobile, abbiamo optato per l'uso di
-		YOLOv3-tiny, il quale risulta essere significativamente più efficiente
-		(approssimativamente del 442\% \cite{tiny_yolo}). Inoltre è rilevante in tal senso un paragone fra YOLOv3 e
-		YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS
-		(floating-point operations per second) addestrate sul dataset COCO, come
-		illustrato dalla tabella.
+		Considerando le caratteristiche hardware del robot mobile, abbiamo
+		optato per l'uso di YOLOv3-tiny, il quale risulta essere
+		significativamente più efficiente (approssimativamente del 442\%
+		\cite{tiny_yolo}). Inoltre è rilevante in tal senso un paragone fra
+		YOLOv3 e YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS
+		(floating-point operations per second) addestrate sul dataset COCO,
+		come illustrato dalla tabella.
 		
 		\begin{table}[htpb]
 			\centering
-			\begin{tabular}{ |c|c|c|c| } 
+			\begin{tabular}{ c c c c } 
 				\hline
-				Model & mAP & FLOPS & FPS \\
+				\textbf{Model} & \textbf{mAP} & \textbf{FLOPS} & \textbf{FPS} \\
 				\hline	
 				 YOLOv3-320    & 51.5  &  38.97  Bn  &  45  \\ 
 				 YOLOv3-416    & 55.3  &  65.86  Bn  &  35  \\ 
@@ -357,7 +364,6 @@
 			\end{tabular}
 			\label{tab:comparison}
 		\end{table}
-		
 	\end{frame}
 
 	\section{Posizione dei target}\label{sec:Posizione-dei-target}
@@ -366,32 +372,32 @@
 	\subsection{Triangolazione}\label{subsec:Triangolazione}
 	\begin{frame}{Triangolazione}
 		\begin{columns}
-			\begin{column}{0.6\textwidth}
-				\justifying
-				La triangolazione come metodo di individuazione delle persone
-				presenta dei problemi nel nostro scenario:
-				\begin{itemize}
-					\justifying
-					\item Occlusione delle persone: se due persone
-						(5 e 2) sono una dietro l'altra lungo una retta
-						immaginaria che le congiunge al robot (B), quest'ultimo
-						non sarà in grado di individuare la più distante. 
-
-					\item Imputazione delle osservazioni: quando il robot
-						effettua scan successivi non è in grado di dedurre
-						quali osservazioni derivano dalla stessa persona.
-						Non è possibile determinare quali intersezioni
-						corrispondono ad osservazioni reali e quali sono spurie. 
-
-				\end{itemize}
-			\end{column}
-			
 			\begin{column}{0.4\textwidth}
 				\begin{figure}[htpb]
 					\centering
 					\includegraphics[width=\textwidth]{./img/ideal_object_triangulation.pdf}
 					\label{fig:triangulation}
 				\end{figure}
+			\end{column}
+
+			\begin{column}{0.6\textwidth}
+				\justifying
+				La triangolazione come metodo di individuazione delle persone
+				presenta dei problemi nel nostro scenario:
+				\begin{itemize}
+					\justifying
+					\pause\item Occlusione delle persone: se due persone
+						(5 e 2) sono una dietro l'altra lungo una retta
+						immaginaria che le congiunge al robot (B), quest'ultimo
+						non sarà in grado di individuare la più distante. 
+
+					\pause\item Imputazione delle osservazioni: quando il robot
+						effettua scan successivi non è in grado di dedurre
+						quali osservazioni derivano dalla stessa persona.
+						Non è possibile determinare quali intersezioni
+						corrispondono ad osservazioni reali e quali sono spurie. 
+
+				\end{itemize}
 			\end{column}
 		\end{columns}
 	\end{frame}
@@ -503,7 +509,8 @@
 
 	\framebreak
 
-	Nelle figure viene riportata la distribuzione gaussiana multivariata rispettivamente in 3 e 2 dimensioni :
+	Nelle figure viene riportata la distribuzione gaussiana multivariata
+	in 3 e 2 dimensioni con matrice di covarianza calcolata dai nostri test :
 	\begin{figure}[H]
 		\begin{subfigure}{0.49\linewidth}
 			\centering
@@ -564,7 +571,7 @@
 	\end{frame}
 
 	\subsection{Bibliografia}\label{subsec:Bibliografia}
-	\begin{frame}{Bibliografia}
+	\begin{frame}[allowframebreaks]{Bibliografia}
 		% Bibliography
 		\bibliographystyle{unsrt}
 		\bibliography{references.bib}.
