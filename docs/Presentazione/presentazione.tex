@@ -33,8 +33,7 @@
 \justifying
 
 % for logo
-\usepackage{pgf}  
-\logo{\pgfputat{\pgfxy(9.45,1.5)}{\pgfbox[center,base]{\includegraphics[width=1.7cm]{./img/logo_unipa.png}}}}  
+\usepackage[export]{adjustbox}
 
 \pdfsuppresswarningpagegroup=1
 \setcounter{tocdepth}{1}
@@ -51,6 +50,11 @@
 \title[Chang'e]{Documentazione - Progetto di Robotica}
 	\begin{frame}
 		\titlepage
+		\begin{figure}[htpb]
+			\includegraphics[width=0.2\textwidth,left]{./img/logo_unipa.png}
+		\end{figure}
+		
+		
 	\end{frame}
 
 
@@ -478,8 +482,7 @@
 	\end{frame}
 
 	\frame{
-	Le bontà della stima della distanza e dell'angolo si evince dalle
-	Fig.~\ref{fig:boxes_plot}
+	Le bontà della stima della distanza e dell'angolo si evince dalle figure :
 
 	\begin{figure}[ht]
 		\begin{subfigure}{.49\textwidth}
@@ -500,14 +503,7 @@
 	}
 
 	\frame{
-	Matrice di covarianza degli errori su angolo e distanza:
-	\begin{equation}\label{eq:covariance_matrix}
-		V = \begin{bmatrix}
-			& 0.163  &-0.0397 \\
-			&-0.0397 & 0.0752 \\
-		\end{bmatrix}
-	\end{equation}
-	
+	Nelle figure viene riportata la distribuzione gaussiana multivariata rispettivamente in 3 e 2 dimensioni :
 	\begin{figure}[H]
 		\begin{subfigure}{0.49\linewidth}
 			\centering
@@ -519,7 +515,6 @@
 			\includegraphics[width=\textwidth]{./img/error_covariance_flat.png}
 			\label{fig:error_covariance_flat}
 		\end{subfigure}
-		\caption{Distribuzione gaussiana multivariata con covarianza data nell'equazione~\ref{eq:covariance_matrix} }
 \end{figure}}
 	
 	
