@@ -44,18 +44,27 @@
 	evidenza forti carenze dal punto di vista infrastrutturale.
 	
 	
-	Al momento, considerando la limitata disponibilità del vaccino alle masse, uno dei miglior modi di evitare la contrazione del coronavirus è
-	di evitarne l'esposizione, oltre all' utilizzo di mascherine e dispositivi di protezione personale e la frequente igienizzazione delle mani. Il distanziamento sociale si configura di
-	conseguenza come un prerequisito per una significativa riduzione del numero
-	di infetti, come evidenziato da simulazioni di un sistema ad agenti
-	\cite{silva2020covid}. Un problema chiave si configura di conseguenza come
-	il controllo del rispetto delle norme di distanziamento all'interno degli
-	spazi chiusi. In tal senso l'utilizzo di un robot evita l'inutile esposizione da parte di un operatore all'agente patogeno. 
+	Al momento, considerando la limitata disponibilità del vaccino alle masse,
+	uno dei miglior modi di evitare la contrazione del coronavirus è di
+	evitarne l'esposizione, oltre all' utilizzo di mascherine e dispositivi di
+	protezione personale e la frequente igienizzazione delle mani. Il
+	distanziamento sociale si configura di conseguenza come un prerequisito per
+	una significativa riduzione del numero di infetti, come evidenziato da
+	simulazioni di un sistema ad agenti \cite{silva2020covid}. Un problema
+	chiave si configura di conseguenza come il controllo del rispetto delle
+	norme di distanziamento all'interno degli spazi chiusi. In tal senso
+	l'utilizzo di un robot evita l'inutile esposizione da parte di un operatore
+	all'agente patogeno. 
 	
 	\section{Obbiettivo}\label{sec:Obbiettivo} 
-	L'obbiettivo del progetto è quello di sviluppare un robot con lo scopo di \textbf{evitare assembramenti in ambienti indoor} e di invitare a \textbf{rispettare le norme sul distanziamento sociale}. 
+	L'obbiettivo del progetto è quello di sviluppare un robot con lo scopo di
+	\textbf{evitare assembramenti in ambienti indoor} e di invitare a
+	\textbf{rispettare le norme sul distanziamento sociale}. 
 	
-	Nella dimostrazione presentata il nostro robot rileva le persone nella stanza e individua i possibili assembramenti. In seguito alla fase di rilevazione si sposterà verso l'assembramento evitando gli ostacoli e, arrivato, esorterà le persone al rispetto del distanziamento sociale.
+	Nella dimostrazione presentata il nostro robot rileva le persone nella
+	stanza e individua i possibili assembramenti. In seguito alla fase di
+	rilevazione si sposta verso l'assembramento evitando gli ostacoli e,
+	arrivato, esorta le persone al rispetto del distanziamento sociale.
 	
 	\section{Stato dell'arte}\label{sec:Stato-dell-arte}
 	Un robot che si occupa di far rispettare il distanziamento sociale è quello
@@ -87,31 +96,32 @@
 	\end{tabular}
 
 
-	\section{Ambiente}\label{sec:Ambiente}
+	\section{Ambiente}\label{sec:Ambiente} 
+
 	Abbiamo considerato opportuno analizzare e studiare il package
-	\textbf{webots\_ros} \cite{cyberbotics} al fine di raggiungere una
+	\textbf{webots\_ros}~\cite{cyberbotics} al fine di raggiungere una
 	comprensione più profonda sulle metodologie per interfacciare i nodi ROS
 	con il controller ROS standard per Webots. Inoltre è risultato necessario
-	approfondire la documentazione ROS \cite{ros.org} al fine di installare e
-	configurare l'ambiente ROS ed inoltre per capire i concetti fondamentali
+	approfondire la documentazione ROS~\cite{ros.org} al fine di installare e
+	configurare l'ambiente di sviluppo ROS e per capire i concetti fondamentali
 	relativi ai nodi e topics. Infine abbiamo impostato l'interfaccia ROS su
-	Webots seguendo la documentazione cyberbotics rilevante
-	\cite{webotsRosSetup}.
-	
+	Webots seguendo la documentazione cyberbotics
+	rilevante~\cite{webotsRosSetup}.  
+
 	\section{ROS}\label{sec:Ros}
-	
 	\subsection{Descrizione}\label{subsec:Descrizione}
 	ROS \cite{ros.org} è un meta sistema operativo open-source. Fornisce tutti
 	i servizi che caratterizzano un sistema operativo quali l'astrazione
-	hardware, il controllo di dei dispositivi a basso livello,
+	hardware, il controllo dei dispositivi a basso livello,
 	l'implementazione delle funzionalità più usate, lo scambio di messaggi fra
 	processi e la gestione dei pacchetti. Fornisce inoltre librerie e strumenti
 	per scrivere, ottenere e eseguire codice su più computer. Il "grafo"
 	runtime è una rete peer-to-peer di processi (potenzialmente distribuiti su
-	più macchine) collegati attraverso l'infrastruttura ROS. ROS implementa
-	vari stili di comunicazione, fra i quali streaming di dati asincrono
-	attraverso i \textbf{topics} e comunicazione sincrona attraverso i
-	\textbf{servizi}. 
+	più macchine) collegati attraverso l'infrastruttura ROS. 
+	
+	ROS implementa vari stili di comunicazione, fra i quali streaming di dati
+	asincrono attraverso i \textbf{topics} e comunicazione sincrona attraverso
+	i \textbf{servizi}. 
 
 	I topics sono bus con identificativi attraverso i quali i nodi scambiano
 	messaggi. I topics hanno una semantica di publish/subscribe anonima, che
@@ -260,11 +270,13 @@
 	\end{equation}
 	
 	\subsection{Posizionamento}\label{subsec:Posizionamento}
-	Per stimare il posizionamento, inizialmente abbiamo utilizzato i dati dell'accelerometro
-	\cite{positioning}, in quanto le ruote possono essere soggette a
-	slittamento fornendo una misura imprecisa. Al segnale dell'accelerometro
-	veniva applicato un integrale doppio per ottenere lo spostamento
-	lineare(Eq.~\ref{eq:accel-integration}). Questa integrazione veniva effettuata solamente nel momento in cui al robot veniva dato il comando di muoversi.
+	Per stimare il posizionamento, inizialmente abbiamo utilizzato i dati
+	dell'accelerometro \cite{positioning}, in quanto le ruote possono essere
+	soggette a slittamento fornendo una misura imprecisa. Al segnale
+	dell'accelerometro veniva applicato un integrale doppio per ottenere lo
+	spostamento lineare(Eq.~\ref{eq:accel-integration}). Questa integrazione
+	veniva effettuata solamente nel momento in cui al robot veniva dato il
+	comando di muoversi per mitigare il drift.
 
 	\begin{equation}\label{eq:accel-integration}
 		\begin{cases}
@@ -274,10 +286,10 @@
 	\end{equation}
 	
 	In un secondo momento abbiamo ritenuto opportuno utilizzare un nodo ROS che
-	si occupasse di condividere costantemente la posizione e l'orientamento del
-	robot, anche per predisporre il sistema per un eventuale algoritmo di SLAM.
-	Ciò implica una integrazione costante dei valori del giroscopio e
-	dell'accelerometro. 
+	si occupasse di aggiornare e condividere costantemente la posizione e
+	l'orientamento del robot, anche per predisporre il sistema per un eventuale
+	algoritmo di SLAM.  Ciò implica una integrazione costante dei valori del
+	giroscopio e dell'accelerometro. 
 	
 	Il giroscopio non ha causato nessun problema a differenza
 	dell'accelerometro che invece, essendo soggetto a rumore, rilevava
@@ -289,7 +301,7 @@
 	encoders delle ruote per determinare gli spostamenti. 
 	
 	In particolare abbiamo integrato la velocità lineare del robot, calcolata a
-	partire dal raggio R e le velocità angolari $u[t]$ delle ruote, fornite da
+	partire dal raggio R e le velocità angolari $u_i$ delle ruote, fornite da
 	un servizio ROS, e aggiornando così la posizione. Avremmo anche potuto
 	utilizzare queste informazioni per ricavarci l'orientamento del robot, ma
 	abbiamo ritenuto più opportuno utilizzare le informazioni forniteci dal
@@ -362,7 +374,12 @@
 	mosaicing~\cite{ghosh2016survey} e campioniamo l'immagine così ottenuta
 	ad intervalli di 28°.
 	
-	Al fine di migliorare la precisione della scansione abbiamo ritenuto opportuno correggere la rotazione del robot con lo spostamento della testa.
+	La rotazione ha una precisione limitata, inferiore alla granularità con cui
+	possiamo ottenere informazioni sull'orientamento del robot. Nel corso di
+	una scansione l'errore sulle rotazioni può accumularsi e risultare
+	significativo. Per questo motivo compensiamo la differenza tra la posizione
+	effettiva stimata del robot e la posizione che dovrebbe occupare attraverso
+	una rotazione della testa.
 	
 	
 	\begin{figure}[H]
@@ -399,9 +416,9 @@
 	
 	\begin{table}[htpb]
 		\centering
-		\begin{tabular}{ |c|c|c|c|c|c| } 
+		\begin{tabular}{  c c c c c c  } 
 			\hline
-			Model & Number of n-layers & FLOPS & FPS & map value & Dataset \\
+			\textbf{Model} & \textbf{Number of n-layers} & \textbf{FLOPS} & \textbf{FPS} & \textbf{map value} & \textbf{Dataset} \\
 			\hline	
 			YOLOv1    		& 26.00   &  Not given  &  45.00   & 63.50 & VOC-data  \\ 
 			YOLOv1-tiny     & 9.00    &  Not given  &  155.00  & 52.80 & VOC-data  \\ 
@@ -417,9 +434,9 @@
 	
 	\begin{table}[htpb]
 		\centering
-		\begin{tabular}{ |c|c|c|c| } 
+		\begin{tabular}{  c c c c  } 
 			\hline
-			Model & mAP & FLOPS & FPS \\
+			\textbf{Model} & \textbf{mAP} & \textbf{FLOPS} & \textbf{FPS} \\
 			\hline	
 			 YOLOv3-320    & 51.5  &  38.97  Bn  &  45  \\ 
 			 YOLOv3-416    & 55.3  &  65.86  Bn  &  35  \\ 
@@ -434,9 +451,9 @@
 
 	\begin{table}[htpb]
 		\centering
-		\begin{tabular}{|c|c|c|c|c|c|}
+		\begin{tabular}{ c c c c c c }
 			\hline
-			Layer & Type & Filters & Size/Stride & Input & Output \\ \hline
+			\textbf{Layer} & \textbf{Type} & \textbf{Filters} & \textbf{Size/Stride} & \textbf{Input} & \textbf{Output} \\ \hline
 			0 & Convolutional & 16 & 3×3/1 & 416×416×3 & 416×416×16 \\
 			1 & Maxpool && 2×2/2 & 416×416×16 & 208×208×16\\
 			2 & Convolutional & 32 & 3×3/1 & 208×208×16&208×208×32\\
@@ -563,13 +580,14 @@
 	distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il
 	numero minimo di punti affinché un cluster sia valido (nel nostro caso è
 	uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di
-	distanza.  Come di evince dalla figura \ref{fig:nms}, la metrica utilizzata
+	distanza.  Come si evince dalla figura \ref{fig:nms}, la metrica utilizzata
 	considera la lunghezza di un arco di circonferenza con raggio
 	corrispondente alla distanza fra i due punti ed angolo $\alpha$
 	corrispondente  all'angolo fra i due punti rispetto alla posizione del
 	robot.
 	
-	Abbiamo ritenuto opportuno utilizzare l'implementazione dell'algoritmo fornita da \textbf{sklearn} \cite{scikit}.
+	Abbiamo ritenuto opportuno utilizzare l'implementazione dell'algoritmo
+	fornita da \textbf{sklearn} \cite{scikit}.
 	
 	\begin{figure}[H]
 		\centering
@@ -678,18 +696,18 @@
 		\label{fig:pdf_benchmark}
 	\end{figure}
 
-	Un'approssimazione di largo uso è la distribuzione triangolare.
-	Quest'ultima, tuttavia, presenta delle caratteristiche non desiderabili per
-	il nostro caso d'uso. Una proprietà desiderabile della nostra funzione,
+	La distribuzione triangolare è spesso utilizzata per approssimare una
+	gaussiana, tuttavia, presenta delle caratteristiche non volute per il
+	nostro caso d'uso. Una proprietà desiderabile della nostra funzione,
 	difatti, sono le "fat tails", ovvero le code della distribuzione devono
-	essere spesse e la distribuzione non deve tagliare nettamente. Quando, in
-	seguito ad un'osservazione, non abbiamo alcuna osservazione di conferma
-	nello scan successivo, non è infatti desiderabile che la probabilità di
-	trovare una persona in quel punto scenda a zero. Inoltre, in una prima
+	essere spesse e la distribuzione non deve tagliare nettamente. Quando, dopo
+	una prima osservazione, questa non viene confermata nello scan
+	immediatamente successivo, non è desiderabile che la probabilità di trovare
+	una persona in quel punto scenda a zero. Inoltre, in una prima
 	osservazione, un oggetto potrebbe essere occluso ed essere rilevato solo
 	successivamente, quindi se in quella zona la probabilità di rilevare un
 	target scendesse a zero non sarebbe possibile integrare correttamente
-	questa nuova informazione. Ulteriori complicazioni sorgerebbero in caso di
+	questa nuova informazione.  Ulteriori complicazioni sorgerebbero in caso di
 	target in movimento.
 	
 	Essendo la scansione una operazione estremamente costosa non è nemmeno
@@ -698,7 +716,7 @@
 
 	Al fine di ottene un'approssimazione di una gaussiana adatta al
 	nostro scenario, per modellare la probabilità che data l'occupazione della
-	cella in posizione $ {\bf x} $ si ottenga l'osservazione $ {\bf z} $ è
+	cella in posizione $ {\bf x} $ si ottenga l'osservazione $ {\bf z} $, è
 	stato utilizzato un funzionale ispirato al guadagno del filtro di
 	Butterworth.
 	\begin{equation}\label{eq:pdf}
@@ -719,16 +737,16 @@
 
 	Nell'equazione~\ref{eq:pdf} $K$ indica un parametro di scala per ottenere
 	CDF unitaria. $d$ è una funzione per il calcolo della distanza della cella
-	$ {\bf x} $ dalla stima di posizione $ {\bf z} $.
+	${\bf x}$ dalla stima di posizione ${\bf z}$.
 
 	La distanza euclidea porterebbe a formare aree ad alta probabilità di forma
-	circolare. Questo però non si adatta bene al nostro modello di errore del
-	sensore: l'angolo dell'oggetto rispetto al robot è noto con una precisione
-	molto elevata, mentre la maggior parte dell'incertezza si concentra nella
-	distanza. Calcoliamo quindi la distanza non come distanza euclidea tra le
-	coordinate cartesiane della cella e dell'osservazione, ma come norma $ L^2
-	$ delle coordinate polari, opportunamente normalizzate per tenere conto
-	della diversa incertezza sulla misura di angolo e distanza.
+	circolare. Questo però non si adatterebe bene al nostro modello di errore
+	del sensore: l'angolo dell'oggetto rispetto al robot è noto con una
+	precisione molto elevata, mentre la maggior parte dell'incertezza si
+	concentra nella distanza. Calcoliamo quindi la distanza non come distanza
+	euclidea tra le coordinate cartesiane della cella e dell'osservazione, ma
+	come norma $L^2$ delle coordinate polari, opportunamente normalizzate per
+	tenere conto della diversa incertezza sulla misura di angolo e distanza.
 
 	L'incertezza sulla distanza è ricavata dalle misure di calibrazione
 	effettuate. Per l'angolo è stato seguito un approccio differente:
@@ -778,7 +796,7 @@
 
 	\begin{equation}\label{eq:belief-update}
 		p({\bf x}_i | Z_i) = p({\bf x}_{i-1}) \cdot 
-		\sum_{{\bf z} \in Z_i} p({\bf z} | {\bf x})
+		\sum_{{\bf z} \in Z_i} p({\bf z} | {\bf x}_i)
 	\end{equation}
 	Al termine di ogni aggiornamento della mappa l'intera griglia viene inoltre
 	normalizzata per avere somma unitaria.  
@@ -897,24 +915,16 @@
 	potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
 	distanza (Eq.~\ref{eq:attractive-force}).
 
+	\begin{equation}\label{eq:attractive-force}
+		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
+	\end{equation}
+
+
 	Gli ostacoli generano invece un potenziale repulsivo. Questo ha un raggio
 	d'azione limitato, la forza repulsiva è massima per un ostacolo a distanza
 	nulla, e decresce in modo monotono fino ad annullarsi se la distanza
 	dell'ostacolo supera una soglia $d_t$ con la legge descritta
 	nell'equazione~\ref{eq:repulsive-force}.
-
-	La maggior parte dei potenziali repulsivi descritti in letteratura
-	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
-	moto anche se questo avviene parallelamente all'ostacolo. Per ovviare a
-	questo problema prendiamo in considerazione solo gli ostacoli situati in un
-	FOV frontale al robot con ampiezza $ \alpha  $ calcolata per permettere di
-	muoversi parallelamente ad una superficie mantenendo una distanza di
-	sicurezza $ h $ (Eq.~\ref{eq:obstacle_fov}, Fig.~\ref{fig:obstacle_fov}): 
-
-
-	\begin{equation}\label{eq:attractive-force}
-		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
-	\end{equation}
 
 	\begin{equation}\label{eq:repulsive-force}
 		F_{rep}(obstacleDistance) = \begin{cases}
@@ -925,6 +935,14 @@
 			0 & d > d_{thresh}
 		\end{cases}
 	\end{equation}
+
+	La maggior parte dei potenziali repulsivi descritti in letteratura
+	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
+	moto anche se questo avviene parallelamente all'ostacolo. Per ovviare a
+	questo problema prendiamo in considerazione solo gli ostacoli situati in un
+	FOV frontale al robot con ampiezza $ \alpha  $ calcolata per permettere di
+	muoversi parallelamente ad una superficie mantenendo una distanza di
+	sicurezza $ h $ (Eq.~\ref{eq:obstacle_fov}, Fig.~\ref{fig:obstacle_fov}): 
 
 	\begin{equation}\label{eq:obstacle_fov}
 		\alpha = {2}\sin^{-1}{\frac{h}{d_t}}
@@ -944,7 +962,9 @@
 	La traslazione viene calcolata in funzione dello spazio di movimento a
 	disposizione e dall'angolo rispetto al target secondo
 	l'equazione~\ref{eq:translation}, ottenuta per interpolazione del profilo
-	desiderato.
+	desiderato. L'angolo viene invece determinato dalla somma vettoriale delle
+	forze attrattive e repulsive. La rotazione viene inoltre sogliata per
+	evitare cambi di direzione troppo bruschi(Eq.~\ref{eq:angle}).
 
 	\begin{equation}\label{eq:translation}
 		d = 0.5 + \frac	{0.9\cdot obstacleDistance - 0.5}
