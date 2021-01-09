@@ -314,7 +314,7 @@
 		\end{bmatrix}\cdot (t_j-t_{j-1}) 
 	\end{equation}
 
-	La $\omega [t]$ è data dall'interpolazione lineare descritta nell'equazione (\ref{eq:gyro-integration}).
+	La $\theta_i$ è data dall'interpolazione lineare descritta nell'equazione (\ref{eq:gyro-integration}).
 	
 	Abbiamo misurato le performance della stima di posizione e i risultati sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto. In Fig.~\ref{fig:dead_reckoning_error} sono mostrati i risultati delle misurazioni effettuate.
 	
@@ -372,9 +372,9 @@
 		\label{fig:campionamento_immagini}
 	\end{figure}
 	
-	\subsection{Yolo}\label{subsec:Yolo}
+	\subsection{YOLO}\label{subsec:YOLO}
 	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di
-	\textbf{object recognition}. A tal fine abbiamo valutato le performance di
+	\textbf{object recognition}. Per fare ciò abbiamo valutato le performance di
 	YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented
 	gradients), HoG + SVG (support vector machines) + NMS (non maxima
 	suppression).  In seguito a vari test su HoG abbiamo ritenuto essere
