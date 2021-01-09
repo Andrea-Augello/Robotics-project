@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.9)  9 JAN 2021 15:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.9)  9 JAN 2021 15:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -946,20 +946,7 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count349
 \l__pdf_internal_box=\box92
 )
-(./presentazione.aux
-
-LaTeX Warning: Label `fig:dead_reckoning_error' multiply defined.
-
-
-LaTeX Warning: Label `sub@fig:dead_reckoning_error' multiply defined.
-
-
-LaTeX Warning: Label `fig:trajectory_error' multiply defined.
-
-
-LaTeX Warning: Label `sub@fig:trajectory_error' multiply defined.
-
-)
+(./presentazione.aux)
 \openout1 = `presentazione.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
@@ -1255,7 +1242,7 @@ See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.169 	\section{TIAGo Iron}
+l.166 	\section{TIAGo Iron}
                            \label{sec:TIAGo-Iron}
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1264,9 +1251,15 @@ If that doesn't work, type  X <return>  to quit.
 
 ] [16
 
-] [17
-
 ]
+<./img/tiago.png, id=504, 602.25pt x 1364.09625pt>
+File: ./img/tiago.png Graphic file (type png)
+<use ./img/tiago.png>
+Package pdftex.def Info: ./img/tiago.png  used on input line 193.
+(pdftex.def)             Requested size: 92.1879pt x 208.7893pt.
+ [17
+
+ <./img/tiago.png>]
 
 ! Package keyval Error: depth undefined.
 
@@ -1274,7 +1267,7 @@ See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.189 	\section{Modello del moto e posizionamento}
+l.195 	\section{Modello del moto e posizionamento}
                                                   \label{sec:Modello-del-mot...
 
 Try typing  <return>  to proceed.
@@ -1297,22 +1290,22 @@ If that doesn't work, type  X <return>  to quit.
 
 
 ]
-<./img/dead_reckoning_error.pdf, id=748, 377.41pt x 292.09125pt>
+<./img/dead_reckoning_error.pdf, id=751, 377.41pt x 292.09125pt>
 File: ./img/dead_reckoning_error.pdf Graphic file (type pdf)
 <use ./img/dead_reckoning_error.pdf>
-Package pdftex.def Info: ./img/dead_reckoning_error.pdf  used on input line 304
+Package pdftex.def Info: ./img/dead_reckoning_error.pdf  used on input line 310
 .
 (pdftex.def)             Requested size: 120.45943pt x 93.22597pt.
-<./img/trajectories.pdf, id=749, 359.3425pt x 292.09125pt>
+<./img/trajectories.pdf, id=752, 359.3425pt x 292.09125pt>
 File: ./img/trajectories.pdf Graphic file (type pdf)
 <use ./img/trajectories.pdf>
-Package pdftex.def Info: ./img/trajectories.pdf  used on input line 304.
+Package pdftex.def Info: ./img/trajectories.pdf  used on input line 310.
 (pdftex.def)             Requested size: 120.45943pt x 97.91467pt.
  [25
 
  <./img/dead_reckoning_error.pdf> <./img/trajectories.pdf>]
 
-LaTeX Warning: File `./img/collision_detection.pdf' not found on input line 322
+LaTeX Warning: File `./img/collision_detection.pdf' not found on input line 328
 .
 
 
@@ -1323,13 +1316,13 @@ See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.322 	\end{frame}
+l.328 	\end{frame}
                   
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 3
-22.
+28.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 ) [26
@@ -1342,7 +1335,7 @@ See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.324 	\section{Object recognition}
+l.330 	\section{Object recognition}
                                    \label{sec:Object-recognition}
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1353,7 +1346,7 @@ If that doesn't work, type  X <return>  to quit.
 
 ]
 LaTeX Font Info:    Trying to load font information for TS1+cmss on input line 
-346.
+352.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmss.fd
 File: ts1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
@@ -1361,10 +1354,10 @@ File: ts1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/pictures_sampling.pdf): PDF inclu
 sion: found PDF version <1.7>, but at most version <1.5> allowed
-<./img/pictures_sampling.pdf, id=877, 57.30508pt x 57.30508pt>
+<./img/pictures_sampling.pdf, id=880, 57.30508pt x 57.30508pt>
 File: ./img/pictures_sampling.pdf Graphic file (type pdf)
 <use ./img/pictures_sampling.pdf>
-Package pdftex.def Info: ./img/pictures_sampling.pdf  used on input line 346.
+Package pdftex.def Info: ./img/pictures_sampling.pdf  used on input line 352.
 (pdftex.def)             Requested size: 92.1879pt x 92.18752pt.
 [29
 
@@ -1387,7 +1380,7 @@ See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.447 	\section{Posizione dei target}
+l.453 	\section{Posizione dei target}
                                      \label{sec:Posizione-dei-target}
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1400,11 +1393,11 @@ If that doesn't work, type  X <return>  to quit.
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/ideal_object_triangulation.pdf): 
 PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<./img/ideal_object_triangulation.pdf, id=1088, 98.56523pt x 102.32127pt>
+<./img/ideal_object_triangulation.pdf, id=1091, 98.56523pt x 102.32127pt>
 File: ./img/ideal_object_triangulation.pdf Graphic file (type pdf)
 <use ./img/ideal_object_triangulation.pdf>
 Package pdftex.def Info: ./img/ideal_object_triangulation.pdf  used on input li
-ne 479.
+ne 485.
 (pdftex.def)             Requested size: 153.64493pt x 159.50343pt.
 [36
 
@@ -1412,14 +1405,14 @@ ne 479.
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/linearization_error.pdf): PDF inc
 lusion: found PDF version <1.7>, but at most version <1.5> allowed
-<./img/linearization_error.pdf, id=1135, 284.92749pt x 297.3258pt>
+<./img/linearization_error.pdf, id=1138, 284.92749pt x 297.3258pt>
 File: ./img/linearization_error.pdf Graphic file (type pdf)
 <use ./img/linearization_error.pdf>
-Package pdftex.def Info: ./img/linearization_error.pdf  used on input line 546.
+Package pdftex.def Info: ./img/linearization_error.pdf  used on input line 552.
 
 (pdftex.def)             Requested size: 184.3758pt x 192.40202pt.
 
-Overfull \hbox (27.01575pt too wide) detected at line 546
+Overfull \hbox (27.01575pt too wide) detected at line 552
 \OML/cmm/m/it/10 ^^O \OT1/cmss/m/n/10 = [] \OMS/cmsy/m/n/10 ^^@ \OT1/mathkerncm
 ss/m/sl/10 d \OT1/cmss/m/n/10 = [] \OMS/cmsy/m/n/10 ^^@ \OT1/mathkerncmss/m/sl/
 10 d \OT1/cmss/m/n/10 = \OT1/mathkerncmss/m/sl/10 d [] \OT1/cmss/m/n/10 = \OT1/
@@ -1441,10 +1434,10 @@ mathkerncmss/m/sl/10 d [][] []
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/nms.pdf): PDF inclusion: found PD
 F version <1.7>, but at most version <1.5> allowed
-<./img/nms.pdf, id=1254, 265.40657pt x 246.8924pt>
+<./img/nms.pdf, id=1257, 265.40657pt x 246.8924pt>
 File: ./img/nms.pdf Graphic file (type pdf)
 <use ./img/nms.pdf>
-Package pdftex.def Info: ./img/nms.pdf  used on input line 573.
+Package pdftex.def Info: ./img/nms.pdf  used on input line 579.
 (pdftex.def)             Requested size: 184.3758pt x 171.52377pt.
 [41
 
@@ -1452,41 +1445,41 @@ Package pdftex.def Info: ./img/nms.pdf  used on input line 573.
 
 
  <./img/nms.pdf>]
-<./img/interpolation.pdf, id=1326, 364.36125pt x 292.09125pt>
+<./img/interpolation.pdf, id=1329, 364.36125pt x 292.09125pt>
 File: ./img/interpolation.pdf Graphic file (type pdf)
 <use ./img/interpolation.pdf>
-Package pdftex.def Info: ./img/interpolation.pdf  used on input line 588.
+Package pdftex.def Info: ./img/interpolation.pdf  used on input line 594.
 (pdftex.def)             Requested size: 215.10196pt x 172.43483pt.
 
-Overfull \vbox (7.14496pt too high) detected at line 588
+Overfull \vbox (7.14496pt too high) detected at line 594
  []
 
 [43
 
  <./img/interpolation.pdf>]
-<./img/angle_error.pdf, id=1380, 372.39125pt x 287.0725pt>
+<./img/angle_error.pdf, id=1383, 372.39125pt x 287.0725pt>
 File: ./img/angle_error.pdf Graphic file (type pdf)
 <use ./img/angle_error.pdf>
-Package pdftex.def Info: ./img/angle_error.pdf  used on input line 610.
+Package pdftex.def Info: ./img/angle_error.pdf  used on input line 616.
 (pdftex.def)             Requested size: 150.57372pt x 116.07974pt.
-<./img/distance_error.pdf, id=1381, 372.39125pt x 287.0725pt>
+<./img/distance_error.pdf, id=1384, 372.39125pt x 287.0725pt>
 File: ./img/distance_error.pdf Graphic file (type pdf)
 <use ./img/distance_error.pdf>
-Package pdftex.def Info: ./img/distance_error.pdf  used on input line 610.
+Package pdftex.def Info: ./img/distance_error.pdf  used on input line 616.
 (pdftex.def)             Requested size: 150.57372pt x 116.07974pt.
  [44
 
  <./img/angle_error.pdf> <./img/distance_error.pdf>]
-<./img/error_covariance.png, id=1417, 366.6498pt x 275.1078pt>
+<./img/error_covariance.png, id=1420, 366.6498pt x 275.1078pt>
 File: ./img/error_covariance.png Graphic file (type png)
 <use ./img/error_covariance.png>
-Package pdftex.def Info: ./img/error_covariance.png  used on input line 633.
+Package pdftex.def Info: ./img/error_covariance.png  used on input line 639.
 (pdftex.def)             Requested size: 150.57372pt x 112.97961pt.
-<./img/error_covariance_flat.png, id=1418, 369.5406pt x 291.489pt>
+<./img/error_covariance_flat.png, id=1421, 369.5406pt x 291.489pt>
 File: ./img/error_covariance_flat.png Graphic file (type png)
 <use ./img/error_covariance_flat.png>
 Package pdftex.def Info: ./img/error_covariance_flat.png  used on input line 63
-3.
+9.
 (pdftex.def)             Requested size: 150.57372pt x 118.77293pt.
  [45
 
@@ -1497,16 +1490,16 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [46
 
 ]
-<./img/pdf_benchmark.pdf, id=1481, 375.4025pt x 290.08376pt>
+<./img/pdf_benchmark.pdf, id=1484, 375.4025pt x 290.08376pt>
 File: ./img/pdf_benchmark.pdf Graphic file (type pdf)
 <use ./img/pdf_benchmark.pdf>
-Package pdftex.def Info: ./img/pdf_benchmark.pdf  used on input line 671.
+Package pdftex.def Info: ./img/pdf_benchmark.pdf  used on input line 677.
 (pdftex.def)             Requested size: 184.3758pt x 142.47424pt.
 
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.672 ...probability density function, funzione )}
+l.678 ...probability density function, funzione )}
                                                   
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
@@ -1514,19 +1507,19 @@ Try `I\vskip-\lastskip' instead.
 [47 <./img/pdf_benchmark.pdf>]
 
 LaTeX Font Warning: Font shape `T1/cmss/b/n' undefined
-(Font)              using `T1/cmss/m/n' instead on input line 696.
+(Font)              using `T1/cmss/m/n' instead on input line 702.
 
 [48]
-<./img/pdf_shape.pdf, id=1537, 374.39874pt x 292.09125pt>
+<./img/pdf_shape.pdf, id=1540, 374.39874pt x 292.09125pt>
 File: ./img/pdf_shape.pdf Graphic file (type pdf)
 <use ./img/pdf_shape.pdf>
-Package pdftex.def Info: ./img/pdf_shape.pdf  used on input line 710.
+Package pdftex.def Info: ./img/pdf_shape.pdf  used on input line 716.
 (pdftex.def)             Requested size: 184.3758pt x 143.84352pt.
 
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.711 		\caption{Forma pdf}
+l.717 		\caption{Forma pdf}
                            
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
@@ -1535,15 +1528,15 @@ Try `I\vskip-\lastskip' instead.
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/circular_sector.pdf): PDF inclusi
 on: found PDF version <1.7>, but at most version <1.5> allowed
-<img/circular_sector.pdf, id=1571, 114.35323pt x 35.93526pt>
+<img/circular_sector.pdf, id=1574, 114.35323pt x 35.93526pt>
 File: img/circular_sector.pdf Graphic file (type pdf)
 <use img/circular_sector.pdf>
-Package pdftex.def Info: img/circular_sector.pdf  used on input line 739.
+Package pdftex.def Info: img/circular_sector.pdf  used on input line 745.
 (pdftex.def)             Requested size: 153.64493pt x 48.28621pt.
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.740 ...ione probabile a seconda della distanza.}
+l.746 ...ione probabile a seconda della distanza.}
                                                   
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
@@ -1552,10 +1545,10 @@ Try `I\vskip-\lastskip' instead.
 Underfull \vbox (badness 1769) has occurred while \output is active []
 
  [50 <./img/circular_sector.pdf>] [51] [52] [53]
-<./img/image_segmentation.pdf, id=1694, 722.7pt x 361.35pt>
+<./img/image_segmentation.pdf, id=1697, 722.7pt x 361.35pt>
 File: ./img/image_segmentation.pdf Graphic file (type pdf)
 <use ./img/image_segmentation.pdf>
-Package pdftex.def Info: ./img/image_segmentation.pdf  used on input line 845.
+Package pdftex.def Info: ./img/image_segmentation.pdf  used on input line 851.
 (pdftex.def)             Requested size: 307.28987pt x 153.64615pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1564,7 +1557,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.846 ...delle regioni (giallo) e i centri (blu) }
+l.852 ...delle regioni (giallo) e i centri (blu) }
                                                   
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
@@ -1576,7 +1569,7 @@ See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.850 	\section{Pianificazione del moto}
+l.856 	\section{Pianificazione del moto}
                                         \label{sec:Pianificazione-del-moto}
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1589,19 +1582,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 ] [58
 
 ]
-<./img/bug.pdf, id=1873, 291.0875pt x 288.07625pt>
+<./img/bug.pdf, id=1876, 291.0875pt x 288.07625pt>
 File: ./img/bug.pdf Graphic file (type pdf)
 <use ./img/bug.pdf>
-Package pdftex.def Info: ./img/bug.pdf  used on input line 882.
+Package pdftex.def Info: ./img/bug.pdf  used on input line 888.
 (pdftex.def)             Requested size: 122.91406pt x 121.64175pt.
 
-Overfull \vbox (3.40791pt too high) detected at line 882
+Overfull \vbox (3.40791pt too high) detected at line 888
  []
 
 [59
 
  <./img/bug.pdf>]
-Overfull \hbox (21.02968pt too wide) detected at line 924
+Overfull \hbox (21.02968pt too wide) detected at line 930
 []\OT1/mathkerncmss/m/sl/10 F[]\OT1/cmss/m/n/10 (\OT1/mathkerncmss/m/sl/10 obst
 acleDistance\OT1/cmss/m/n/10 ) = []
  []
@@ -1615,24 +1608,24 @@ Underfull \vbox (badness 1348) has occurred while \output is active []
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/obstacle_fov.pdf): PDF inclusion:
  found PDF version <1.7>, but at most version <1.5> allowed
-<./img/obstacle_fov.pdf, id=1957, 199.96909pt x 102.4096pt>
+<./img/obstacle_fov.pdf, id=1960, 199.96909pt x 102.4096pt>
 File: ./img/obstacle_fov.pdf Graphic file (type pdf)
 <use ./img/obstacle_fov.pdf>
-Package pdftex.def Info: ./img/obstacle_fov.pdf  used on input line 932.
+Package pdftex.def Info: ./img/obstacle_fov.pdf  used on input line 938.
 (pdftex.def)             Requested size: 245.83282pt x 125.9068pt.
 ! You can't use `\unskip' in vertical mode.
 \reset@color ...mer@zeropt \else \ifvmode \unskip 
                                                   \fi \ifhmode \unskip \fi \...
-l.933 		\caption{FOV frontale del robot}
+l.939 		\caption{FOV frontale del robot}
                                         
 Sorry...I usually can't take things from the current page.
 Try `I\vskip-\lastskip' instead.
 
 [61 <./img/obstacle_fov.pdf>]
-<./img/fsa.pdf, id=2005, 387.4475pt x 522.95375pt>
+<./img/fsa.pdf, id=2008, 387.4475pt x 522.95375pt>
 File: ./img/fsa.pdf Graphic file (type pdf)
 <use ./img/fsa.pdf>
-Package pdftex.def Info: ./img/fsa.pdf  used on input line 988.
+Package pdftex.def Info: ./img/fsa.pdf  used on input line 994.
 (pdftex.def)             Requested size: 153.64493pt x 207.38237pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1646,7 +1639,7 @@ See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.990 	\section{Possibili modifiche}
+l.996 	\section{Possibili modifiche}
                                     \label{sec:Possibli-modifiche}
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1688,11 +1681,11 @@ If that doesn't work, type  X <return>  to quit.
 \tf@snm=\write8
 \openout8 = `presentazione.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1014.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1014.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1020.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1020.
  (./presentazione.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1014.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1014.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1020.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1020.
 
 Package rerunfilecheck Info: File `presentazione.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
@@ -1701,14 +1694,14 @@ Package rerunfilecheck Info: File `presentazione.out' has not changed.
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 
-LaTeX Warning: There were multiply-defined labels.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 27189 strings out of 481239
- 513253 string characters out of 5920377
- 794054 words of memory out of 5000000
- 41526 multiletter control sequences out of 15000+600000
+ 27183 strings out of 481239
+ 512978 string characters out of 5920377
+ 794080 words of memory out of 5000000
+ 41518 multiletter control sequences out of 15000+600000
  546096 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  58i,15n,67p,801b,738s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1734,10 +1727,10 @@ texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share/texmf/fonts/type1/pu
 blic/cm-super/sfsx0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx10
 00.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on presentazione.pdf (73 pages, 7739707 bytes).
+Output written on presentazione.pdf (73 pages, 8279663 bytes).
 PDF statistics:
- 2477 PDF objects out of 2487 (max. 8388607)
- 2277 compressed objects within 23 object streams
- 257 named destinations out of 1000 (max. 500000)
- 148 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2480 PDF objects out of 2487 (max. 8388607)
+ 2278 compressed objects within 23 object streams
+ 258 named destinations out of 1000 (max. 500000)
+ 153 words of extra memory for PDF output out of 10000 (max. 10000000)
 

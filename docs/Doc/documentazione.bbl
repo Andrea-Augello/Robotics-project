@@ -168,13 +168,6 @@ I.~{Kamon}, E.~{Rivlin}, and E.~{Rimon}.
 \newblock In {\em Proceedings of IEEE International Conference on Robotics and
   Automation}, volume~1, pages 429--435 vol.1, 1996.
 
-\bibitem{volpe1990manipulator}
-Richard Volpe and Pradeep Khosla.
-\newblock Manipulator control with superquadric artificial potential functions:
-  Theory and experiments.
-\newblock {\em IEEE Transactions on Systems, Man, and Cybernetics},
-  20(6):1423--1436, 1990.
-
 \bibitem{A*}
 Akshay Guruji, Himansh Agarwal, and Deep Parsediya.
 \newblock Time-efficient a* algorithm for robot path planning.
