@@ -12,4 +12,4 @@
 \beamer@subsectionintoc {6}{3}{Scarto dei duplicati}{35}{0}{6}
 \beamer@subsectionintoc {6}{4}{Correzione dei valori}{36}{0}{6}
 \beamer@subsectionintoc {6}{5}{Modello probabilistico}{39}{0}{6}
-\beamer@subsectionintoc {6}{6}{Bibliografia}{40}{0}{6}
+\beamer@subsectionintoc {6}{6}{Bibliografia}{41}{0}{6}

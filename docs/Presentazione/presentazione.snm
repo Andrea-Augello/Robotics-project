@@ -38,4 +38,9 @@
 \beamer@slide {fig:error_covariance_flat}{36}
 \beamer@slide {sub@fig:error_covariance_flat}{36}
 \beamer@slide {subsec:Modello-probabilistico}{39}
-\beamer@slide {subsec:Bibliografia}{40}
+\beamer@slide {eq:pdf}{39}
+\beamer@slide {fig:pdf_shape}{39}
+\beamer@slide {sub@fig:pdf_shape}{39}
+\beamer@slide {fig:pdf_benchmark}{39}
+\beamer@slide {sub@fig:pdf_benchmark}{39}
+\beamer@slide {subsec:Bibliografia}{41}

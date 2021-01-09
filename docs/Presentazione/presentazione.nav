@@ -106,12 +106,14 @@
 \headcommand {\beamer@subsectionentry {0}{6}{5}{39}{Modello probabilistico}}
 \headcommand {\slideentry {6}{5}{1}{39/39}{Modello probabilistico}{0}}
 \headcommand {\beamer@framepages {39}{39}}
-\headcommand {\beamer@subsectionpages {39}{39}}
-\headcommand {\beamer@subsectionentry {0}{6}{6}{40}{Bibliografia}}
-\headcommand {\slideentry {6}{6}{1}{40/40}{Bibliografia}{0}}
-\headcommand {\beamer@framepages {40}{40}}
-\headcommand {\beamer@partpages {1}{40}}
-\headcommand {\beamer@subsectionpages {40}{40}}
-\headcommand {\beamer@sectionpages {29}{40}}
-\headcommand {\beamer@documentpages {40}}
-\headcommand {\gdef \inserttotalframenumber {40}}
+\headcommand {\slideentry {6}{5}{1}{39/40}{Modello probabilistico}{0}}
+\headcommand {\beamer@framepages {39}{40}}
+\headcommand {\beamer@subsectionpages {39}{40}}
+\headcommand {\beamer@subsectionentry {0}{6}{6}{41}{Bibliografia}}
+\headcommand {\slideentry {6}{6}{1}{41/41}{Bibliografia}{0}}
+\headcommand {\beamer@framepages {41}{41}}
+\headcommand {\beamer@partpages {1}{41}}
+\headcommand {\beamer@subsectionpages {41}{41}}
+\headcommand {\beamer@sectionpages {29}{41}}
+\headcommand {\beamer@documentpages {41}}
+\headcommand {\gdef \inserttotalframenumber {41}}
