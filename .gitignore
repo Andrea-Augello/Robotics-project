@@ -81,3 +81,5 @@ catkin_ws/src/CMakeLists.txt
 *.swp
 
 .vscode/
+
+*.gz
