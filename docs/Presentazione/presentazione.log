@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.9)  9 JAN 2021 18:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.9)  9 JAN 2021 18:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1241,19 +1241,30 @@ If that doesn't work, type  X <return>  to quit.
 
 ] [3
 
-] [4
+]
+
+LaTeX Warning: Citation `silva2020covid' on page 4 undefined on input line 76.
+
+[4
 
 ] [5
 
 ]
-<./img/State_of_art_1.png, id=173, 752.8125pt x 509.905pt>
+
+LaTeX Warning: Citation `sathyamoorthy2020covidrobot' on page 6 undefined on in
+put line 106.
+
+
+LaTeX Warning: Citation `fan2020autonomous' on page 6 undefined on input line 1
+06.
+
+<./img/State_of_art_1.png, id=165, 752.8125pt x 509.905pt>
 File: ./img/State_of_art_1.png Graphic file (type png)
 <use ./img/State_of_art_1.png>
 Package pdftex.def Info: ./img/State_of_art_1.png  used on input line 106.
 (pdftex.def)             Requested size: 120.45943pt x 81.58646pt.
 LaTeX Font Info:    Trying to load font information for U+msa on input line 106
 .
-
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
@@ -1270,7 +1281,7 @@ ut line 106.
 File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/ma
 thkerncmss.
 )
-<./img/State_of_art_2.png, id=174, 726.715pt x 571.13374pt>
+<./img/State_of_art_2.png, id=166, 726.715pt x 571.13374pt>
 File: ./img/State_of_art_2.png Graphic file (type png)
 <use ./img/State_of_art_2.png>
 Package pdftex.def Info: ./img/State_of_art_2.png  used on input line 106.
@@ -1278,7 +1289,23 @@ Package pdftex.def Info: ./img/State_of_art_2.png  used on input line 106.
 
 [6
 
- <./img/State_of_art_1.png> <./img/State_of_art_2.png>] [7
+ <./img/State_of_art_1.png> <./img/State_of_art_2.png>]
+
+LaTeX Warning: Citation `opencv' on page 7 undefined on input line 124.
+
+
+LaTeX Warning: Citation `imutils' on page 7 undefined on input line 124.
+
+
+LaTeX Warning: Citation `matplotlib' on page 7 undefined on input line 124.
+
+
+LaTeX Warning: Citation `numpy' on page 7 undefined on input line 124.
+
+
+LaTeX Warning: Citation `scikit' on page 7 undefined on input line 124.
+
+[7
 
 ]
 
@@ -1298,7 +1325,7 @@ If that doesn't work, type  X <return>  to quit.
 ] [9
 
 ]
-<img/rosgraph.pdf, id=301, 1047.915pt x 742.775pt>
+<img/rosgraph.pdf, id=279, 1047.915pt x 742.775pt>
 File: img/rosgraph.pdf Graphic file (type pdf)
 <use img/rosgraph.pdf>
 Package pdftex.def Info: img/rosgraph.pdf  used on input line 136.
@@ -1331,12 +1358,26 @@ If that doesn't work, type  X <return>  to quit.
 ] [16
 
 ]
-<./img/tiago.png, id=506, 602.25pt x 1364.09625pt>
+
+LaTeX Warning: Citation `pages2016tiago' on page 17 undefined on input line 206
+.
+
+
+LaTeX Warning: Citation `tiago_datasheet' on page 17 undefined on input line 20
+6.
+
+
+LaTeX Warning: Citation `tiagoiron' on page 17 undefined on input line 206.
+
+
+LaTeX Warning: Citation `lidarspecs' on page 17 undefined on input line 206.
+
+<./img/tiago.png, id=478, 602.25pt x 1364.09625pt>
 File: ./img/tiago.png Graphic file (type png)
 <use ./img/tiago.png>
 Package pdftex.def Info: ./img/tiago.png  used on input line 206.
 (pdftex.def)             Requested size: 92.1879pt x 208.7893pt.
- [17
+[17
 
  <./img/tiago.png>]
 
@@ -1360,16 +1401,23 @@ If that doesn't work, type  X <return>  to quit.
 
 ] [21
 
-] [22
+]
+
+LaTeX Warning: Citation `positioning' on page 22 undefined on input line 271.
+
+
+LaTeX Warning: Citation `572228' on page 22 undefined on input line 271.
+
+[22
 
 ]
-<./img/dead_reckoning_error.pdf, id=701, 377.41pt x 292.09125pt>
+<./img/dead_reckoning_error.pdf, id=662, 377.41pt x 292.09125pt>
 File: ./img/dead_reckoning_error.pdf Graphic file (type pdf)
 <use ./img/dead_reckoning_error.pdf>
 Package pdftex.def Info: ./img/dead_reckoning_error.pdf  used on input line 290
 .
 (pdftex.def)             Requested size: 120.45943pt x 93.22597pt.
-<./img/trajectories.pdf, id=702, 359.3425pt x 292.09125pt>
+<./img/trajectories.pdf, id=663, 359.3425pt x 292.09125pt>
 File: ./img/trajectories.pdf Graphic file (type pdf)
 <use ./img/trajectories.pdf>
 Package pdftex.def Info: ./img/trajectories.pdf  used on input line 290.
@@ -1380,7 +1428,7 @@ Package pdftex.def Info: ./img/trajectories.pdf  used on input line 290.
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/collision_avoidance.pdf): PDF inc
 lusion: found PDF version <1.7>, but at most version <1.5> allowed
-<./img/collision_avoidance.pdf, id=736, 28.38203pt x 39.38013pt>
+<./img/collision_avoidance.pdf, id=698, 28.38203pt x 39.38013pt>
 File: ./img/collision_avoidance.pdf Graphic file (type pdf)
 <use ./img/collision_avoidance.pdf>
 Package pdftex.def Info: ./img/collision_avoidance.pdf  used on input line 306.
@@ -1413,9 +1461,14 @@ LaTeX Font Info:    Trying to load font information for TS1+cmss on input line
 File: ts1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 
+LaTeX Warning: Citation `ghosh2016survey' on page 27 undefined on input line 33
+0.
+
+
+
 pdfTeX warning: /usr/bin/pdflatex (file ./img/pictures_sampling.pdf): PDF inclu
 sion: found PDF version <1.7>, but at most version <1.5> allowed
-<./img/pictures_sampling.pdf, id=829, 57.30508pt x 57.30508pt>
+<./img/pictures_sampling.pdf, id=787, 57.30508pt x 57.30508pt>
 File: ./img/pictures_sampling.pdf Graphic file (type pdf)
 <use ./img/pictures_sampling.pdf>
 Package pdftex.def Info: ./img/pictures_sampling.pdf  used on input line 330.
@@ -1427,6 +1480,9 @@ Overfull \hbox (6.91118pt too wide) in paragraph at lines 361--361
 []\T1/cmss/m/n/10 Abbiamo va-lu-ta-to le per-for-man-ce di YO-LOv3 (you on-ly l
 ook on-ce), YOLOv3-
  []
+
+
+LaTeX Warning: Citation `tiny_yolo' on page 28 undefined on input line 361.
 
 [28
 
@@ -1451,7 +1507,7 @@ If that doesn't work, type  X <return>  to quit.
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/ideal_object_triangulation.pdf): 
 PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<./img/ideal_object_triangulation.pdf, id=953, 98.56523pt x 102.32127pt>
+<./img/ideal_object_triangulation.pdf, id=906, 98.56523pt x 102.32127pt>
 File: ./img/ideal_object_triangulation.pdf Graphic file (type pdf)
 <use ./img/ideal_object_triangulation.pdf>
 Package pdftex.def Info: ./img/ideal_object_triangulation.pdf  used on input li
@@ -1463,7 +1519,7 @@ ne 397.
 
 pdfTeX warning: /usr/bin/pdflatex (file ./img/linearization_error.pdf): PDF inc
 lusion: found PDF version <1.7>, but at most version <1.5> allowed
-<./img/linearization_error.pdf, id=999, 284.92749pt x 297.3258pt>
+<./img/linearization_error.pdf, id=952, 284.92749pt x 297.3258pt>
 File: ./img/linearization_error.pdf Graphic file (type pdf)
 <use ./img/linearization_error.pdf>
 Package pdftex.def Info: ./img/linearization_error.pdf  used on input line 450.
@@ -1479,9 +1535,13 @@ Package pdftex.def Info: ./img/linearization_error.pdf  used on input line 450.
 
 ]
 
+LaTeX Warning: Citation `dbscan' on page 35 undefined on input line 468.
+
+
+
 pdfTeX warning: /usr/bin/pdflatex (file ./img/nms.pdf): PDF inclusion: found PD
 F version <1.7>, but at most version <1.5> allowed
-<./img/nms.pdf, id=1089, 265.40657pt x 246.8924pt>
+<./img/nms.pdf, id=1041, 265.40657pt x 246.8924pt>
 File: ./img/nms.pdf Graphic file (type pdf)
 <use ./img/nms.pdf>
 Package pdftex.def Info: ./img/nms.pdf  used on input line 468.
@@ -1489,229 +1549,47 @@ Package pdftex.def Info: ./img/nms.pdf  used on input line 468.
 [35
 
  <./img/nms.pdf>]
-<./img/interpolation.pdf, id=1136, 364.36125pt x 292.09125pt>
+<./img/interpolation.pdf, id=1086, 364.36125pt x 292.09125pt>
 File: ./img/interpolation.pdf Graphic file (type pdf)
 <use ./img/interpolation.pdf>
-Package pdftex.def Info: ./img/interpolation.pdf  used on input line 482.
-(pdftex.def)             Requested size: 215.10196pt x 172.43483pt.
- [36
-
- <./img/interpolation.pdf>]
-<./img/angle_error.pdf, id=1185, 372.39125pt x 287.0725pt>
+Package pdftex.def Info: ./img/interpolation.pdf  used on input line 520.
+(pdftex.def)             Requested size: 184.3758pt x 147.80574pt.
+<./img/angle_error.pdf, id=1087, 372.39125pt x 287.0725pt>
 File: ./img/angle_error.pdf Graphic file (type pdf)
 <use ./img/angle_error.pdf>
-Package pdftex.def Info: ./img/angle_error.pdf  used on input line 503.
+Package pdftex.def Info: ./img/angle_error.pdf  used on input line 520.
 (pdftex.def)             Requested size: 150.57372pt x 116.07974pt.
-<./img/distance_error.pdf, id=1186, 372.39125pt x 287.0725pt>
+<./img/distance_error.pdf, id=1088, 372.39125pt x 287.0725pt>
 File: ./img/distance_error.pdf Graphic file (type pdf)
 <use ./img/distance_error.pdf>
-Package pdftex.def Info: ./img/distance_error.pdf  used on input line 503.
+Package pdftex.def Info: ./img/distance_error.pdf  used on input line 520.
 (pdftex.def)             Requested size: 150.57372pt x 116.07974pt.
- [37
-
- <./img/angle_error.pdf> <./img/distance_error.pdf>]
-<./img/error_covariance.png, id=1224, 366.6498pt x 275.1078pt>
+<./img/error_covariance.png, id=1089, 366.6498pt x 275.1078pt>
 File: ./img/error_covariance.png Graphic file (type png)
 <use ./img/error_covariance.png>
-Package pdftex.def Info: ./img/error_covariance.png  used on input line 518.
+Package pdftex.def Info: ./img/error_covariance.png  used on input line 520.
 (pdftex.def)             Requested size: 150.57372pt x 112.97961pt.
-<./img/error_covariance_flat.png, id=1225, 369.5406pt x 291.489pt>
+<./img/error_covariance_flat.png, id=1090, 369.5406pt x 291.489pt>
 File: ./img/error_covariance_flat.png Graphic file (type png)
 <use ./img/error_covariance_flat.png>
-Package pdftex.def Info: ./img/error_covariance_flat.png  used on input line 51
-8.
+Package pdftex.def Info: ./img/error_covariance_flat.png  used on input line 52
+0.
 (pdftex.def)             Requested size: 150.57372pt x 118.77293pt.
- [38
+ [36
+
+ <./img/interpolation.pdf>] [37
+
+
+ <./img/angle_error.pdf> <./img/distance_error.pdf>] [38
+
 
  <./img/error_covariance.png (PNG copy)> <./img/error_covariance_flat.png (PNG 
 copy)>]
-<./img/pdf_benchmark.pdf, id=1258, 375.4025pt x 290.08376pt>
-File: ./img/pdf_benchmark.pdf Graphic file (type pdf)
-<use ./img/pdf_benchmark.pdf>
-Package pdftex.def Info: ./img/pdf_benchmark.pdf  used on input line 548.
-(pdftex.def)             Requested size: 184.3758pt x 142.47424pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Warning: Citation `tay2008bayesian' on page 39 undefined on input line 52
+9.
 
- [39
-
-]
-! You can't use `\unskip' in vertical mode.
-\reset@color ...mer@zeropt \else \ifvmode \unskip 
-                                                  \fi \ifhmode \unskip \fi \...
-l.549 ...probability density function, funzione )}
-                                                  
-Sorry...I usually can't take things from the current page.
-Try `I\vskip-\lastskip' instead.
-
-
-Underfull \vbox (badness 4229) has occurred while \output is active []
-
- [40 <./img/pdf_benchmark.pdf>]
-
-LaTeX Font Warning: Font shape `T1/cmss/b/n' undefined
-(Font)              using `T1/cmss/m/n' instead on input line 573.
-
-<./img/pdf_shape.pdf, id=1316, 374.39874pt x 292.09125pt>
-File: ./img/pdf_shape.pdf Graphic file (type pdf)
-<use ./img/pdf_shape.pdf>
-Package pdftex.def Info: ./img/pdf_shape.pdf  used on input line 587.
-(pdftex.def)             Requested size: 184.3758pt x 143.84352pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [41]
-! You can't use `\unskip' in vertical mode.
-\reset@color ...mer@zeropt \else \ifvmode \unskip 
-                                                  \fi \ifhmode \unskip \fi \...
-l.588 		\caption{Forma pdf}
-                           
-Sorry...I usually can't take things from the current page.
-Try `I\vskip-\lastskip' instead.
-
-
-Underfull \vbox (badness 1215) has occurred while \output is active []
-
- [42 <./img/pdf_shape.pdf>]
-
-pdfTeX warning: /usr/bin/pdflatex (file ./img/circular_sector.pdf): PDF inclusi
-on: found PDF version <1.7>, but at most version <1.5> allowed
-<img/circular_sector.pdf, id=1374, 114.35323pt x 35.93526pt>
-File: img/circular_sector.pdf Graphic file (type pdf)
-<use img/circular_sector.pdf>
-Package pdftex.def Info: img/circular_sector.pdf  used on input line 616.
-(pdftex.def)             Requested size: 153.64493pt x 48.28621pt.
-! You can't use `\unskip' in vertical mode.
-\reset@color ...mer@zeropt \else \ifvmode \unskip 
-                                                  \fi \ifhmode \unskip \fi \...
-l.617 ...ione probabile a seconda della distanza.}
-                                                  
-Sorry...I usually can't take things from the current page.
-Try `I\vskip-\lastskip' instead.
-
-[43 <./img/circular_sector.pdf>] [44] [45] [46]
-<./img/image_segmentation.pdf, id=1498, 722.7pt x 361.35pt>
-File: ./img/image_segmentation.pdf Graphic file (type pdf)
-<use ./img/image_segmentation.pdf>
-Package pdftex.def Info: ./img/image_segmentation.pdf  used on input line 722.
-(pdftex.def)             Requested size: 307.28987pt x 153.64615pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [47 <./img/image_segmentation.pdf>]
-! You can't use `\unskip' in vertical mode.
-\reset@color ...mer@zeropt \else \ifvmode \unskip 
-                                                  \fi \ifhmode \unskip \fi \...
-l.723 ...delle regioni (giallo) e i centri (blu) }
-                                                  
-Sorry...I usually can't take things from the current page.
-Try `I\vskip-\lastskip' instead.
-
-
-! Package xkeyval Error: `depth' undefined in families `beamertoc'.
-
-See the xkeyval package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.727 	\section{Pianificazione del moto}
-                                        \label{sec:Pianificazione-del-moto}
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-(./presentazione.toc)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [48]
-[49] [50
-
-] [51
-
-]
-<./img/bug.pdf, id=1676, 291.0875pt x 288.07625pt>
-File: ./img/bug.pdf Graphic file (type pdf)
-<use ./img/bug.pdf>
-Package pdftex.def Info: ./img/bug.pdf  used on input line 759.
-(pdftex.def)             Requested size: 122.91406pt x 121.64175pt.
- [52
-
- <./img/bug.pdf>]
-Overfull \hbox (21.02968pt too wide) detected at line 801
-[]\OT1/mathkerncmss/m/sl/10 F[]\OT1/cmss/m/n/10 (\OT1/mathkerncmss/m/sl/10 obst
-acleDistance\OT1/cmss/m/n/10 ) = []
- []
-
-
-Underfull \vbox (badness 1348) has occurred while \output is active []
-
- [53
-
-]
-
-pdfTeX warning: /usr/bin/pdflatex (file ./img/obstacle_fov.pdf): PDF inclusion:
- found PDF version <1.7>, but at most version <1.5> allowed
-<./img/obstacle_fov.pdf, id=1759, 199.96909pt x 102.4096pt>
-File: ./img/obstacle_fov.pdf Graphic file (type pdf)
-<use ./img/obstacle_fov.pdf>
-Package pdftex.def Info: ./img/obstacle_fov.pdf  used on input line 809.
-(pdftex.def)             Requested size: 245.83282pt x 125.9068pt.
-! You can't use `\unskip' in vertical mode.
-\reset@color ...mer@zeropt \else \ifvmode \unskip 
-                                                  \fi \ifhmode \unskip \fi \...
-l.810 		\caption{FOV frontale del robot}
-                                        
-Sorry...I usually can't take things from the current page.
-Try `I\vskip-\lastskip' instead.
-
-[54 <./img/obstacle_fov.pdf>]
-<./img/fsa.pdf, id=1806, 387.4475pt x 522.95375pt>
-File: ./img/fsa.pdf Graphic file (type pdf)
-<use ./img/fsa.pdf>
-Package pdftex.def Info: ./img/fsa.pdf  used on input line 865.
-(pdftex.def)             Requested size: 153.64493pt x 207.38237pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [55]
-[56 <./img/fsa.pdf>]
-
-! Package xkeyval Error: `depth' undefined in families `beamertoc'.
-
-See the xkeyval package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.867 	\section{Possibili modifiche}
-                                    \label{sec:Possibli-modifiche}
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-(./presentazione.toc) [57
-
-] [58
-
-] [59
-
-] (./presentazione.bbl) [60
-
- </usr/share/texlive/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>] [61
-
-
-] [62
-
-
-] [63
-
-
-] [64
-
-
-]
-[65
-
-
-] [66
-
+[39
 
 ]
 \tf@nav=\write6
@@ -1723,31 +1601,31 @@ If that doesn't work, type  X <return>  to quit.
 \tf@snm=\write8
 \openout8 = `presentazione.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 891.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 891.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 533.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 533.
  (./presentazione.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 891.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 891.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 533.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 533.
 Package rerunfilecheck Info: File `presentazione.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
 
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 28180 strings out of 481239
- 529679 string characters out of 5920377
- 799837 words of memory out of 5000000
- 42512 multiletter control sequences out of 15000+600000
- 546096 words of font info for 52 fonts, out of 8000000 for 9000
+ 27867 strings out of 481239
+ 523770 string characters out of 5920377
+ 790899 words of memory out of 5000000
+ 42321 multiletter control sequences out of 15000+600000
+ 545280 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 58i,18n,79p,801b,808s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/
-fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/
+ 58i,18n,79p,801b,746s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texmf
+/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texlive/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
@@ -1757,20 +1635,19 @@ b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf/fonts/type1/
-public/cm-super/sfsi0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsi
-1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0500.pfb></usr/share
-/texmf/fonts/type1/public/cm-super/sfss0700.pfb></usr/share/texmf/fonts/type1/p
-ublic/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0
-900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb></usr/share/
-texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share/texmf/fonts/type1/pu
-blic/cm-super/sfsx0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx10
-00.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on presentazione.pdf (66 pages, 8298055 bytes).
+xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf/fonts/type1
+/public/cm-super/sfsi0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfs
+s0500.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0700.pfb></usr/shar
+e/texmf/fonts/type1/public/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/
+public/cm-super/sfss0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss
+1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share
+/texmf/fonts/type1/public/cm-super/sfsx0700.pfb></usr/share/texmf/fonts/type1/p
+ublic/cm-super/sfsx1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/time
+s/utmr8a.pfb>
+Output written on presentazione.pdf (39 pages, 7999857 bytes).
 PDF statistics:
- 2274 PDF objects out of 2487 (max. 8388607)
- 2080 compressed objects within 21 object streams
- 238 named destinations out of 1000 (max. 500000)
- 163 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1327 PDF objects out of 1440 (max. 8388607)
+ 1217 compressed objects within 13 object streams
+ 131 named destinations out of 1000 (max. 500000)
+ 128 words of extra memory for PDF output out of 10000 (max. 10000000)
 

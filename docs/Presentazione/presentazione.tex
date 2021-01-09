@@ -468,7 +468,7 @@
 	\end{frame}
 
 	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori}
-	\begin{frame}{Correzione dei valori}
+	\begin{frame}[allowframebreaks]{Correzione dei valori}
 		Per migliorare la stima sulla distanza abbiamo paragonato le reali
 		distanze dei target con le stime effettuate dal sistema ottenendo il
 		polinomio interpolante $0.003116*x^5 - 0.09722*x^4 + 1.124*x^3
@@ -476,12 +476,12 @@
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\textwidth]{./img/interpolation.pdf}
+			\includegraphics[width=0.6\textwidth]{./img/interpolation.pdf}
 			\label{fig:interpolation}
 		\end{figure}
-	\end{frame}
 
-	\frame{
+	\framebreak
+	
 	Le bontà della stima della distanza e dell'angolo si evince dalle figure :
 
 	\begin{figure}[ht]
@@ -500,9 +500,9 @@
 		\caption{Box plot relativi all'errore su angolo e distanza}
 		\label{fig:boxes_plot}
 	\end{figure}
-	}
 
-	\frame{
+	\framebreak
+
 	Nelle figure viene riportata la distribuzione gaussiana multivariata rispettivamente in 3 e 2 dimensioni :
 	\begin{figure}[H]
 		\begin{subfigure}{0.49\linewidth}
@@ -515,375 +515,17 @@
 			\includegraphics[width=\textwidth]{./img/error_covariance_flat.png}
 			\label{fig:error_covariance_flat}
 		\end{subfigure}
-\end{figure}}
-	
-	
+	\end{figure}
+
+	\end{frame}
+
 	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
+	\begin{frame}{Modello probabilistico}
 	Nella nostra applicazione la distanza stimata
 	dell'oggetto sarà soggetta ad errore non trascurabile. Per questa
 	ragione e per i problemi legati alla triangolazione abbiamo abbandonato la
 	rappresentazione basata su oggetti e abbiamo fatto ricorso ad un filtro di
 	occupazione bayesiano (BOF)~\cite{tay2008bayesian}.
-
-	Nel filtro di occupazione bayesiano, il problema dell'associazione dei dati viene superato in quanto
-	viene gestito da un livello di astrazione superiore. Il concetto di oggetto
-	viene difatti riformulato da proprietà più utili quali occupazione o
-	rischio, che vengono stimate direttamente per ogni cella utilizzando sia
-	osservazioni dai sensori che conoscenze pregresse. Le caratteristiche di
-	incertezza legate ai sensori vengono descritte, in questo modello,
-	attraverso le probabilità di occupazione.
-
-	Al fine di trasformare le osservazioni ottenute in una probabilità che le
-	persone si trovino effettivamente nella posizione indicata è stato
-	necessario definire una funzione densità di probabilità. La distribuzione
-	normale, sebbene relativamente appropriata nel nostro scenario, è
-	computazionalmente onerosa. La griglia di occupazione ha diverse migliaia
-	di celle per cui va calcolata una pdf per ogni osservazione. Come si evince
-	dalla fig.~\ref{fig:pdf_benchmark} con un numero così elevato di iterazioni
-	i tempi di esecuzione non sarebbero accettabili, è stato quindi necessario
-	ricorrere ad una approssimazione.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.6\textwidth]{./img/pdf_benchmark.pdf}
-		\caption{Benchmark funzione densità di probabilità (probability density function, funzione )}
-		\label{fig:pdf_benchmark}
-	\end{figure}
-
-	Un'approssimazione di largo uso è la distribuzione triangolare.
-	Quest'ultima, tuttavia, presenta delle caratteristiche non desiderabili per
-	il nostro caso d'uso. Una proprietà desiderabile della nostra funzione,
-	difatti, sono le "fat tails", ovvero le code della distribuzione devono
-	essere spesse e la distribuzione non deve tagliare nettamente. Quando, in
-	seguito ad un'osservazione, non abbiamo alcuna osservazione di conferma
-	nello scan successivo, non è infatti desiderabile che la probabilità di
-	trovare una persona in quel punto scenda a zero. Inoltre, in una prima
-	osservazione, un oggetto potrebbe essere occluso ed essere rilevato solo
-	successivamente, quindi se in quella zona la probabilità di rilevare un
-	target scendesse a zero non sarebbe possibile integrare correttamente
-	questa nuova informazione. Ulteriori complicazioni sorgerebbero in caso di
-	target in movimento.
-	
-	Essendo la scansione una operazione estremamente costosa non è nemmeno
-	possibile affidarsi esclusivamente all'aggiunta di rumore alla griglia di
-	occupazione confidando in una eventuale convergenza.
-
-	Al fine di ottene un'approssimazione di una gaussiana adatta al
-	nostro scenario, per modellare la probabilità che data l'occupazione della
-	cella in posizione $ {\bf x} $ si ottenga l'osservazione $ {\bf z} $ è
-	stato utilizzato un funzionale ispirato al guadagno del filtro di
-	Butterworth.
-	\begin{equation}\label{eq:pdf}
-		p({\bf z}|{\bf x}) = \frac	{K}
-		{1 + d({\bf x},{\bf z})^4 } 
-	\end{equation}
-	Nell'equazione~\ref{eq:pdf} è mostrato il funzionale utilizzato. In
-	figura~\ref{fig:pdf_shape} si mostra un confronto della forma di questa
-	funzione rispetto ad una gaussiana con media nulla e deviazione standard
-	unitaria nel caso monodimensionale.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.6\textwidth]{./img/pdf_shape.pdf}
-		\caption{Forma pdf}
-		\label{fig:pdf_shape}
-	\end{figure}
-
-	Nell'equazione~\ref{eq:pdf} $K$ indica un parametro di scala per ottenere
-	CDF unitaria. $d$ è una funzione per il calcolo della distanza della cella
-	$ {\bf x} $ dalla stima di posizione $ {\bf z} $.
-
-	La distanza euclidea porterebbe a formare aree ad alta probabilità di forma
-	circolare. Questo però non si adatta bene al nostro modello di errore del
-	sensore: l'angolo dell'oggetto rispetto al robot è noto con una precisione
-	molto elevata, mentre la maggior parte dell'incertezza si concentra nella
-	distanza. Calcoliamo quindi la distanza non come distanza euclidea tra le
-	coordinate cartesiane della cella e dell'osservazione, ma come norma $ L^2
-	$ delle coordinate polari, opportunamente normalizzate per tenere conto
-	della diversa incertezza sulla misura di angolo e distanza.
-
-	L'incertezza sulla distanza è ricavata dalle misure di calibrazione
-	effettuate. Per l'angolo è stato seguito un approccio differente:
-	utilizzare una varianza calcolata a partire da una serie di osservazioni
-	porterebbe ad assegnare maggiore probabilità ad oggetti lontani.  In un
-	setup come quello in figura~\ref{fig:circular_sector}, con due target
-	rilevati, rispettivamente a distanza $d_1$ e $d_2$, le aree ad alta
-	probabilità relative ad entrambi i punti avranno lunghezza $l$ e ampiezze $
-	\alpha_1 \text{ e } \alpha_2  $. 
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.5\textwidth]{img/circular_sector.pdf}
-		\caption{Area della regione probabile a seconda della distanza.}
-		\label{fig:circular_sector}
-	\end{figure}
-
-	Come mostrato nell'equazione~\ref{eq:circular_sector}, con queste
-	condizioni la dimensione dell'area ad alta probabilità è direttamente
-	proporzionale alla distanza e all'ampiezza dell'angolo. Se quindi $
-	\alpha_1 $ coincidesse con $ \alpha _2 $ ad oggetti distanti verrebbero
-	associate aree molto più grandi. 
-
-	\begin{subequations}\label{eq:circular_sector}
-	\begin{align*} 
-		A_1  = & \pi((d_1+l/2)^2-(d_1-l/2)^2)\frac{\alpha_1}{2\pi}  =  \alpha_1 d_1l \\
-		A_2  = & \pi((d_2+l/2)^2-(d_2-l/2)^2)\frac{\alpha_2}{2\pi}  =  \alpha_2 d_2l \\
-\tag{\ref{eq:circular_sector}}
-		\frac{A_1}{A_2} = & \frac	{\alpha_1 d_1} {\alpha_2 d_2}
-	\end{align*}
-	\end{subequations}
-	
-		
-	Per evitare questo problema, dopo avere
-	individuato un valore $ \alpha ^* $ appropriato questo viene scalato per un
-	coefficiente inversamente proporzionale alla distanza della cella, quindi $
-	\alpha _1 = \alpha ^*/d_1 $ e $ \alpha _2=\alpha ^*/d_2 $, da cui $A_1=A_2$. 
-	
-	Questa misura di distanza è in accordo con l'intuizione derivata dal fatto
-	che un oggetto più lontano occuperà una porzione più piccola dell'immagine,
-	di conseguenza ci sono meno posizioni valide che la ROI associata
-	all'oggetto può assumere, e quindi l'intervallo di valori che può assumere
-	l'angolo è ridotto.
-
-	
-	Dato un insieme di osservazioni ottenute da una scansione $ Z_i $ aggiorniamo il belief precedente rispetto ad ogni cella della griglia di occupazione come mostrato nell'equazione~\ref{eq:belief-update}.
-
-	\begin{equation}\label{eq:belief-update}
-		p({\bf x}_i | Z_i) = p({\bf x}_{i-1}) \cdot 
-		\sum_{{\bf z} \in Z_i} p({\bf z} | {\bf x})
-	\end{equation}
-	Al termine di ogni aggiornamento della mappa l'intera griglia viene inoltre
-	normalizzata per avere somma unitaria.  
-	Questa formula è valida sotto le seguenti assunzioni:
-	\begin{itemize}
-		\item In uno stesso scan osservazioni separate si riferiscono ad
-			oggetti distinti. In altre parole date due osservazioni $z_1$ e
-			$z_2$ queste non hanno intersezione, quindi $ p(z_1 \cup z_2) =
-			p(z_1)+p(z_2)-p( z_1 \cap z_2) = p(z_1)+p(z_2) $ 
-
-			Questa assunzione è ragionevole ricordando che lo scan avviene
-			ruotando intorno al centro del robot e che viene effettuato uno
-			scarto dei duplicati tenendo conto dell'angolo, quindi non possono
-			esserci due osservazioni distinte derivanti dall'occupazione della
-			stessa posizione nella mappa.
-
-		\item In assenza di nuove osservazioni la stima dello stato del sistema
-			rimane invariata: $ \overline{bel}(x_i) = bel(x_{i-1}) $ 
-
-			Il robot non si muove abbastanza velocemente da poter inseguire e
-			raggiungere assembramenti di breve durata, ha senso quindi
-			limitarsi a considerare situazioni prevalentemente stazionarie e
-			assumere consistenza dell'ambiente tra uno scan e l'altro. Inoltre
-			gli scan sarebbero comunque troppo infrequenti per ottenere stime
-			significative sul movimento degli oggetti.
-
-	\end{itemize}
-
-	In pratica applicando direttamente queste formule si introdurrebbe un
-	errore nell'interpretazione delle informazioni: se per qualche ragione in
-	uno scan non venisse rilevato nessun oggetto, $ Z_i $ sarebbe l'insieme
-	vuoto. In mancanza di nuovi dati si potrebbero tentare due approcci:
-	resettare le stime o lasciarle del tutto invariate. Nessuno di questi
-	approcci si dimostra soddisfacente:
-	\begin{itemize} 
-		\item Lasciare invariato il belief a seguito di multiple scansioni
-			senza successo porterebbe a non notare che tutte le persone
-			nell'ambiente in cui ci si trova sono andate via, continuando a
-			considerare valide tutte le posizioni precedenti.
-		\item Dall'altro lato, un approccio troppo drastico quale
-			immediatamente scartare tutte le precedenti stime porterebbe a
-			perdere informazioni utili a causa di occlusioni temporanee (e.g.
-			il robot entra in una stanza vuota).
-	\end{itemize}
-
-	Per gestire questa situazione effettuiamo uno smoothing degli istogrammi
-	prima di ogni update essendoci una diminuzione della certezza delle misure.
-	Aggiungiamo inoltre del rumore. In questo modo in assenza di osservazioni
-	ci sarà una tendenza al ritorno ad uno stato iniziale, ma sarà graduale in
-	modo da evitare di scartare troppo rapidamente le informazioni pregresse.
-
-	Al fine di individuare le zone con alta probabilità di contenere persone
-	abbiamo utilizzato un approccio derivante dall'elaborazione delle immagini.
-	In primo luogo separiamo i punti nella mappa in punti ad alta probabilità
-	di essere occupati da persone e punti con bassa probabilità. Per effettuare
-	questa sogliatura abbiamo utilizzato il metodo Otsu~\cite{otsu}, il quale
-	applica un thresholding automatico calcolato minimizzando la varianza dei
-	valori di intensità all'interno delle classi e massimizzandola fra classi
-	differenti all'immagine in input.  
-	
-	Da questa sogliatura otteniamo una mappa binaria in cui sono evidenziate le
-	celle ad alta probabilità. Applicando l'algoritmo in~\cite{contours},
-	implementato in OpenCV, estraiamo le regioni ad alta probabilità contigue
-	ed i loro contorni. Per ogni regione verrà selezionato come centro il punto
-	con maggiore probabilità (Fig.~\ref{fig:image_segmentation}).
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=1\textwidth]{./img/image_segmentation.pdf}
-		\caption{Segmentazione immagine: a sinistra i valori grezzi del BOF, a destra i contorni delle regioni (giallo) e i centri (blu) }
-		\label{fig:image_segmentation}
-	\end{figure}
-
-	\section{Pianificazione del moto}\label{sec:Pianificazione-del-moto}
-	\frame{\sectionpage}
-	
-	\subsubsection{Modalità esplorazione}\label{subsec:Modalita-esplorazione}
-	\begin{frame}{Modalità esplorazione}
-		Quando il robot entra in modalità esplorazione il suo comportamento è
-		di esplorazione casuale della mappa. Il robot continua ad esplorare ed
-		effettuare scan periodici fino a quando non viene rilevato un
-		obbiettivo.  In tal caso il robot entra in modalità campi di
-		potenziale. Se il robot incontra un ostacolo nel suo cammino ruota di
-		$90^{\circ}$ nella direzione con più spazio e continua l'esplorazione
-		casuale.
-	\end{frame}
-	
-	\subsubsection{Bug mode}\label{subsec:Bug-mode}
-	\begin{frame}{Tangent bug~\cite{503814}}
-		Quando il robot entra in modalità bug effettuiamo uno scan lidar.
-		Poiché lavoriamo con valori discreti, confrontiamo i valori ottenuti
-		con una soglia al fine di individuare le discontinuità nel profilo
-		degli oggetti nel range. Analizziamo le discontinuità
-		del segnale per individuare i bordi degli ostacoli
-		(Fig.~\ref{fig:bug}). 
-		Il robot si muove verso il punto al quale corrisponde l'angolo più
-		vicino a quello del target, che ci farà allontanare meno
-		dall'obbiettivo.
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[width=0.4\textwidth]{./img/bug.pdf}
-			\caption{Profilo dell'ostacolo}
-			\label{fig:bug}
-		\end{figure}
-	\end{frame}
-
-	\subsubsection{Campi di potenziale}\label{subsec:Campi-di-potenziale}
-	
-	Una soluzione al classico problema di muoversi in uno spazio evitando le
-	collisioni è l'uso di un modello basato sui campi di potenziale. Questi
-	schemi richiedono la definizione di potenziali attrattivi e repulsivi.
-	Tuttavia, questi metodi presentano una problematica significativa: la
-	presenza di un minimo locale causerà una forza totale sul punto nulla, e di
-	conseguenza il robot si fermerà in una posizione non ideale. 
-
-	Il potenziale attrattivo è centrato sul target, ed è modellato come un
-	potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
-	distanza (Eq.~\ref{eq:attractive-force}).
-
-	Gli ostacoli generano invece un potenziale repulsivo. Questo ha un raggio
-	d'azione limitato, la forza repulsiva è massima per un ostacolo a distanza
-	nulla, e decresce in modo monotono fino ad annullarsi se la distanza
-	dell'ostacolo supera una soglia $d_t$ con la legge descritta
-	nell'equazione~\ref{eq:repulsive-force}.
-
-	La maggior parte dei potenziali repulsivi descritti in letteratura
-	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
-	moto anche se questo avviene parallelamente all'ostacolo. Per ovviare a
-	questo problema prendiamo in considerazione solo gli ostacoli situati in un
-	FOV frontale al robot con ampiezza $ \alpha  $ calcolata per permettere di
-	muoversi parallelamente ad una superficie mantenendo una distanza di
-	sicurezza $ h $ (Eq.~\ref{eq:obstacle_fov}, Fig.~\ref{fig:obstacle_fov}): 
-
-
-	\begin{equation}\label{eq:attractive-force}
-		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
-	\end{equation}
-
-	\begin{equation}\label{eq:repulsive-force}
-		F_{rep}(obstacleDistance) = \begin{cases}
-			k_r \cdot \left(
-				\frac{1}{obstacleDistance^2}-
-				\frac{1}{d_t^2}
-			\right)  & obstacleDistance \leq d_{t} \\
-			0 & d > d_{thresh}
-		\end{cases}
-	\end{equation}
-
-	\begin{equation}\label{eq:obstacle_fov}
-		\alpha = {2}\sin^{-1}{\frac{h}{d_t}}
-	\end{equation}
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.8\textwidth]{./img/obstacle_fov.pdf}
-		\caption{FOV frontale del robot}
-		\label{fig:obstacle_fov}
-	\end{figure}
-
-	L'approccio seguito consiste in due comportamenti calcolati
-	indipendentemente: il comportamento traslatorio e il comportamento
-	rotazionale.
-
-	La traslazione viene calcolata in funzione dello spazio di movimento a
-	disposizione e dall'angolo rispetto al target secondo
-	l'equazione~\ref{eq:translation}, ottenuta per interpolazione del profilo
-	desiderato.
-
-	\begin{equation}\label{eq:translation}
-		d = 0.5 + \frac	{0.9\cdot obstacleDistance - 0.5}
-		{1 + \left|
-				\frac{6\omega}{\pi}
-		\right|  } 
-	\end{equation}
-	
-	\begin{equation}\label{eq:angle}
-		\omega = \begin{cases}
-			\omega^*=\theta - \angle\left( \textbf{F}_{att} - \textbf{F}_{rep} \right)  & -\Omega \le \omega^* \le \Omega \\
-			-\Omega & \omega^* < -\Omega \\
-			\Omega & \omega^* < \Omega
-
-		\end{cases}	\end{equation}
-	
-	\subsection{Pianificazione}\label{subsec:Pianificazione}
-	\begin{frame}{Scheduling dei comportamenti}
-		
-		\begin{columns}
-			\begin{column}{0.5\textwidth}
-				In seguito all'avvio, \textbf{Change} effettua uno scan
-				dell'ambiente.  Nel caso in cui non vengano rilevati obbiettivi
-				entra in modalità esplorazione e, dopo aver percorso una
-				determinata distanza, effettua nuovamente uno scan
-				dell'ambiente. Nel caso in cui venga rilevato un obbiettivo il
-				robot entra in modalità campi di potenziale e si muove verso
-				l'obbiettivo, effettuando nuovi scan nel caso in cui abbia
-				raggiunto l'obbiettivo o percorso una determinata
-				distanza. Se, in modalità campi di potenziale, il
-				\textbf{TIAGo} rimane bloccato in un loop, entra in modalità
-				Tangent Bug, fin quando non esce dal loop, e ritorna nella
-				modalità campi di potenziale.
-			\end{column}
-			
-			\begin{column}{0.5\textwidth}
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth]{./img/fsa.pdf}
-					\label{fig:fsa}
-				\end{figure}
-			\end{column}
-		\end{columns}
-	\end{frame}
-	
-	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
-	\frame{\sectionpage}
-	\frame{
-		Riportiamo di seguito possibili modifiche da apportare:
-		\begin{itemize}
-			\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
-				pianificare il moto con algoritmi come A* \cite{A*} o RRT
-				\cite{RRT}
-			\item Migliorare la modalità Tangent Bug
-			\item Utilizzare una depth-cam per stimare con più precisione la
-				distanza delle persone
-			\item Tracciamento delle persone in real-time
-		\end{itemize}
-	}
-
-	\newpage
-    % Bibliography
-	\bibliographystyle{unsrt}
-	\begin{frame}[allowframebreaks]{Riferimenti bibliografici}
-		\bibliography{references.bib}
 	\end{frame}
 
 

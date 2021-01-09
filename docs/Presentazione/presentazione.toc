@@ -12,9 +12,3 @@
 \beamer@subsectionintoc {6}{3}{Scarto dei duplicati}{35}{0}{6}
 \beamer@subsectionintoc {6}{4}{Correzione dei valori}{36}{0}{6}
 \beamer@subsectionintoc {6}{5}{Modello probabilistico}{39}{0}{6}
-\beamer@sectionintoc {7}{Pianificazione del moto}{48}{0}{7}
-\beamer@subsubsectionintoc {7}{0}{1}{Modalità esplorazione}{51}{0}{7}
-\beamer@subsubsectionintoc {7}{0}{2}{Bug mode}{52}{0}{7}
-\beamer@subsubsectionintoc {7}{0}{3}{Campi di potenziale}{53}{0}{7}
-\beamer@subsectionintoc {7}{1}{Pianificazione}{55}{0}{7}
-\beamer@sectionintoc {8}{Possibili modifiche}{57}{0}{8}
