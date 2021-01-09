@@ -83,3 +83,7 @@ catkin_ws/src/CMakeLists.txt
 .vscode/
 
 *.gz
+
+*.snm
+
+*.nav
