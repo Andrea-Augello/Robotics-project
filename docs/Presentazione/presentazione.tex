@@ -28,6 +28,10 @@
 % provides subcaptions
 \usepackage{subcaption}
 
+% provides justification
+\usepackage{ragged2e}
+\justifying
+
 \pdfsuppresswarningpagegroup=1
 \setcounter{tocdepth}{1}
 \AtBeginSection[]
@@ -169,6 +173,7 @@
 
 	\begin{columns}
 		\begin{column}{0.7\textwidth}
+		\justifying
 		Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}, un
 		robot umanoide a due ruote con torso e testa ma senza braccia articolate \cite{pages2016tiago}.
 		
@@ -210,6 +215,7 @@
 	
 	\begin{frame}{Spostamento}
 		Per effettuare lo spostamento lineare utilizziamo il controllore PID
+		
 		(Proporzionale-Integrale-Derivativo) delle ruote fornito da Webots, che
 		richiede un angolo di rotazione target per ogni ruota. Utilizziamo quindi
 		l'angolo di rotazione corrente, e il diametro delle ruote per calcolare la
@@ -223,12 +229,10 @@
 	\end{frame}
 	
 	\subsection{Posizionamento}\label{subsec:Posizionamento}
-	\begin{frame}[allowframebreaks]{Posizionamento}
-		Per stimare il posizionamento, inizialmente abbiamo utilizzato i dati dell'accelerometro
-		\cite{positioning}, in quanto le ruote possono essere soggette a
-		slittamento fornendo una misura imprecisa. Al segnale dell'accelerometro
+	\begin{frame}{Posizionamento}
+		Inizialmente al segnale dell'accelerometro
 		veniva applicato un integrale doppio per ottenere lo spostamento
-		lineare(Eq.~\ref{eq:accel-integration}). Questa integrazione veniva effettuata solamente nel momento in cui al robot veniva dato il comando di muoversi.
+		lineare(Eq.~\ref{eq:accel-integration} 	\cite{positioning}).
 		
 		\begin{equation}\label{eq:accel-integration}
 			\begin{cases}
@@ -237,33 +241,11 @@
 			\end{cases}
 		\end{equation}
 		
-		In un secondo momento abbiamo ritenuto opportuno utilizzare un nodo ROS che
-		si occupasse di condividere costantemente la posizione e l'orientamento del
-		robot, anche per predisporre il sistema per un eventuale algoritmo di SLAM.
-		Ciò implica una integrazione costante dei valori del giroscopio e
-		dell'accelerometro. 
-		
-		Il giroscopio non ha causato nessun problema a differenza
-		dell'accelerometro che invece, essendo soggetto a rumore, rilevava
-		accelerazioni diverse da 0 anche da fermo. Queste accelerazioni, essendo
-		integrate costantemente, producevano degli spostamenti significativi anche
-		da fermi. 
-		
 		Abbiamo ritenuto necessario cambiare approccio, decidendo di utilizzare gli
 		encoders delle ruote per determinare gli spostamenti. 
 		
-		In particolare abbiamo integrato la velocità lineare del robot, calcolata a
-		partire dal raggio R e le velocità angolari $u[t]$ delle ruote, fornite da
-		un servizio ROS, e aggiornando così la posizione. Avremmo anche potuto
-		utilizzare queste informazioni per ricavarci l'orientamento del robot, ma
-		abbiamo ritenuto più opportuno utilizzare le informazioni forniteci dal
-		giroscopio. La posizione del robot è data da:
-		
-		\begin{equation}\label{eq:position-vector}
-			\textbf{P}_i = \begin{bmatrix}
-				  x_i & y_i  
-			\end{bmatrix}^T
-		\end{equation}
+		Integriamo la velocità lineare del robot, calcolata a
+		partire dal raggio R e le velocità angolari $u[t]$ delle ruote.
 		
 		\begin{equation}\label{eq:linear-velocity}
 			v_i = \frac{R (u_{r,i}+u_{l,i})}{2}
@@ -276,11 +258,7 @@
 				 & v_i\cos(\theta_i ) & \\
 				 & v_i\sin(\theta_i )
 			\end{bmatrix}\cdot (t_j-t_{j-1}) 
-		\end{equation}
-		
-		La $\omega [t]$ è data dall'interpolazione lineare descritta nell'equazione (\ref{eq:gyro-integration}).
-		
-		
+		\end{equation}		
 		
 	\end{frame}
 	\begin{frame}
@@ -300,20 +278,12 @@
 		\end{figure}
 
 		Abbiamo misurato le performance della stima di posizione e i risultati
-		sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto. In
-		Fig.~\ref{fig:dead_reckoning_error} sono mostrati i risultati delle
-		misurazioni effettuate.
-
-		In Fig.~\ref{fig:trajectory_error} viene mostrata chiaramente la
-		differenza fra la traiettoria reale del \textbf{TIAGo} e la traiettoria
-		calcolata con l'odometria.  
+		sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto.
 	\end{frame}
 	
 	\begin{frame}{Collision avoidance}
 		Il \textbf{TIAGo} è in grado di rilevare gli ostacoli grazie
-		all'utilizzo di un sensore lidar. Nel nostro caso d'uso, la rilevazione
-		degli ostacoli è difatti imprescindibile per raggiungere l'obbiettivo
-		proposto in maniera soddisfacente. 
+		all'utilizzo di un sensore lidar.  
 		
 		Nell'immagine seguente viene mostrata la zona nella quale, se viene
 		indicata dal lidar la presenza di un ostacolo, il \textbf{TIAGo} si
@@ -321,9 +291,9 @@
 		oggetti.
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.2\textwidth]{./img/collision_detection.pdf}
-			\caption{Collision detection}
-			\label{fig:collision_detection}
+			\includegraphics[width=0.2\textwidth]{./img/collision_avoidance.pdf}
+			\caption{Collision avoidance}
+			\label{fig:collision_avoidance}
 		\end{figure}
 	\end{frame}
 	
@@ -351,50 +321,18 @@
 		\end{figure}
 	\end{frame}
 	
-	\begin{frame}[allowframebreaks]{Yolo}
-		Al fine di riconoscere le persone è stato necessario utilizzare sistemi di
-		\textbf{object recognition}. A tal fine abbiamo valutato le performance di
+	\begin{frame}{YOLO}
+		Abbiamo valutato le performance di
 		YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented
-		gradients), HoG + SVG (support vector machines) + NMS (non maxima
-		suppression).  In seguito a vari test su HoG abbiamo ritenuto essere
-		problematica la larghezza delle bounding boxes fornite, in quanto, per
-		motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che
-		queste ultime siano il più possibili vicine alla reale larghezza delle
-		persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali
-		(e non modelli 3D) fornisce risultati soddisfacenti, in seguito al
-		fine-tuning degli iperparametri della rete. Tuttavia, considerando le
-		caratteristiche hardware del robot mobile, abbiamo optato per l'uso di
+		gradients), HoG + SVG (support vector machines).  In seguito a vari test su HoG abbiamo ritenuto essere
+		problematica la larghezza delle bounding boxes fornite. YOLOv3 fornisce risultati soddisfacenti.
+		
+		Considerando le caratteristiche hardware del robot mobile, abbiamo optato per l'uso di
 		YOLOv3-tiny, il quale risulta essere significativamente più efficiente
-		(approssimativamente del 442\% \cite{tiny_yolo}), sacrificando in termini
-		di precisione ma comunque sufficientemente preciso per il nostro
-		obbiettivo. La tabella \ref{tab:yolotiny} \cite{He2019TFYOLOAI}, mostra
-		l'architettura di YOLOv3-tiny. La tabella \ref{tab:comparisonversions}
-		mostra un paragone fra le versioni di YOLO e le rispettive versioni tiny
-		\cite{tiny_yolo}. Inoltre è rilevante in tal senso un paragone fra YOLOv3 e
+		(approssimativamente del 442\% \cite{tiny_yolo}). Inoltre è rilevante in tal senso un paragone fra YOLOv3 e
 		YOLOv3-tiny in termini di mAP (mean average precision) e FLOPS
 		(floating-point operations per second) addestrate sul dataset COCO, come
-		illustrato dalla tabella \ref{tab:comparison}, i cui dati provengono dal
-		sito di YOLO \cite{yolo}:
-		
-		\begin{table}[htpb]
-			\centering
-			\resizebox{\textwidth}{!}{
-				\begin{tabular}{ |c|c|c|c|c|c| } 
-					\hline
-					Model & Number of n-layers & FLOPS & FPS & map value & Dataset \\
-					\hline	
-					YOLOv1    		& 26.00   &  Not given  &  45.00   & 63.50 & VOC-data  \\ 
-					YOLOv1-tiny     & 9.00    &  Not given  &  155.00  & 52.80 & VOC-data  \\ 
-					YOLOv2    		& 32.00   &  62.95      &  40.00   & 48.20 & COCO-data \\ 
-					YOLOv2-tiny   	& 16.00   &  05.42	    &  244.00  & 23.60 & COCO-data \\
-					YOLOv3    		& 106.00  &  140.70	    &  20.00   & 57.80 & COCO-data \\
-					YOLOv3-tiny    	& 24.00   &  05.57	    &  220.00  & 33-20 & COCO-data \\
-					\hline
-				\end{tabular}
-			}
-			\caption{Paragone fra le versioni di YOLO con rispettive versioni tiny}
-			\label{tab:comparisonversions}
-		\end{table}
+		illustrato dalla tabella.
 		
 		\begin{table}[htpb]
 			\centering
@@ -409,45 +347,9 @@
 				 YOLOv3-spp    & 60.6  &  141.45 Bn  &  20  \\
 				\hline
 			\end{tabular}
-		    \caption{Paragone fra le versioni di YOLOv3}
 			\label{tab:comparison}
 		\end{table}
 		
-		\begin{table}[htpb]
-			\centering
-			\resizebox{0.7\textwidth}{!}{
-			\begin{tabular}{|c|c|c|c|c|c|}
-				\hline
-				Layer & Type & Filters & Size/Stride & Input & Output \\ \hline
-				0 & Convolutional & 16 & 3×3/1 & 416×416×3 & 416×416×16 \\
-				1 & Maxpool && 2×2/2 & 416×416×16 & 208×208×16\\
-				2 & Convolutional & 32 & 3×3/1 & 208×208×16&208×208×32\\
-				3 & Maxpool & & 2×2/2 & 28×208×32 & 104×104×32 \\
-				4 & Convolutional & 64 & 3×3/1 & 104×104×32 & 104×104×64\\
-				5 & Maxpool & & 2×2/2 & 104×104×64 & 52×52×64\\
-				6 & Convolutional & 128 & 3×3/1 & 52×52×64 & 52×52×128\\
-				7 & Maxpool & & 2×2/2 & 52×52×128 & 26×26×128\\
-				8 & Convolutional & 256 & 3×3/1 & 26×26×128 & 26×26×256\\
-				9 & Maxpool & & 2×2/2 & 26×26×256 & 13×13×256\\
-				10 & Convolutional & 512 & 3×3/1 & 13×13×256 & 13×13×512\\
-				11 & Maxpool & & 2×2/1 & 13×13×512 & 13×13×512\\
-				12 & Convolutional & 1024 & 3×3/1 & 13×13×512 & 13×13×1024\\
-				13 & Convolutional & 256 & 1×1/1 & 13×13×1024 & 13×13×256\\
-				14 & Convolutional & 512 & 3×3/1 & 13×13×256 & 13×13×512\\
-				15 & Convolutional & 255 & 1×1/1 & 13×13×512 & 13×13×255\\
-				16 & YOLO&&&&\\
-				17 & Route 13&&&&\\
-				18 & Convolutional & 128 & 1×1/1 & 13×13×256 & 13×13×128\\
-				19 & Up‐sampling && 2×2/1 & 13×13×128 & 26×26×128\\
-				20 & Route 19 8&&&&\\
-				21 & Convolutional & 256 & 3×3/1 & 13×13×384 & 13×13×256\\
-				22 & Convolutional & 255 & 1×1/1 & 13×13×256 & 13×13×256\\
-				23 & YOLO &&&&\\\hline
-			\end{tabular}
-			}
-		    \caption{Architettura di YOLOv3-tiny}
-		\label{tab:yolotiny}
-		\end{table}
 	\end{frame}
 
 	\section{Posizione dei target}\label{sec:Posizione-dei-target}
@@ -456,10 +358,12 @@
 	\subsection{Triangolazione}\label{subsec:Triangolazione}
 	\begin{frame}{Triangolazione}
 		\begin{columns}
-			\begin{column}{0.5\textwidth}
+			\begin{column}{0.6\textwidth}
+				\justifying
 				La triangolazione come metodo di individuazione delle persone
 				presenta dei problemi nel nostro scenario:
 				\begin{itemize}
+					\justifying
 					\item Occlusione delle persone: se due persone
 						(5 e 2) sono una dietro l'altra lungo una retta
 						immaginaria che le congiunge al robot (B), quest'ultimo
@@ -474,7 +378,7 @@
 				\end{itemize}
 			\end{column}
 			
-			\begin{column}{0.5\textwidth}
+			\begin{column}{0.4\textwidth}
 				\begin{figure}[htpb]
 					\centering
 					\includegraphics[width=\textwidth]{./img/ideal_object_triangulation.pdf}
@@ -486,27 +390,14 @@
 	
 	\subsection{Calcolo della distanza}\label{subsec:Calcolo-della-distanza}
 	\begin{frame}[allowframebreaks]{Calcolo della distanza}
-		L'altezza percepita dell'oggetto non è un indicatore affidabile della
-		sua distanza dal robot in quanto parte dell'oggetto potrebbe essere
-		occlusa o non presente nel frame. Inoltre classificatori quali HoG
-		tendono a produrre ROI significativamente più alte dell'oggetto. La
-		larghezza del torso, invece, è meno suscettibile a tali problemi, e non
-		dipende dalla posizione (ad esempio seduto o alzato). Dobbiamo tuttavia
-		ipotizzare che il torso abbia forma cilindrica introducendo quindi
-		degli errori se l'obbiettivo non sta guardando la camera.	La
-		posizione orizzontale dell'oggetto relativa alla camera può influenzare
-		la larghezza percepita diminuendola quando aumenta la distanza dal
-		centro dell'immagine per via delle distorsioni introdotte dall'ottica
-		della camera. Ipotizzando che la camera abbia un FOV (field of view) di
+		Ipotizzando che la camera abbia un FOV (field of view) di
 		$2\alpha$ e sia distante $d$ dall'oggetto, la massima distanza
 		orizzontale che un punto dell'immagine potrebbe avere dal centro del
-		piano dell'immagine sarebbe $a = d \tan \alpha$ (Fig.~\ref{fig:error}).
+		piano dell'immagine sarebbe $a = d \tan \alpha$.
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.6\textwidth]{./img/linearization_error.pdf}
-			\caption{Errore nella stima della distanza con una linearizzazione a tratti della circonferenza}
-			\label{fig:error}
+			\includegraphics[width=0.4\textwidth]{./img/linearization_error.pdf}
 		\end{figure}
 		
 		Ignorare la prospettiva significa effettuare un'approssimazione lineare
@@ -514,27 +405,20 @@
 		circonferenza di raggio $d$ centrata sulla camera. Di conseguenza
 		consideriamo il punto come se fosse più vicino di quanto non sia
 		realmente, commettendo l'errore mostrato nell' Eq.~\ref{eq:max_err}.
-		Con una camera con FOV di 1 radiante quale quella del TIAGo il massimo
-		errore causato dalla linearizzazione è quindi una sottostima del
-		13.9\%.
+		Con una camera con FOV di 1 radiante la sottostima è del 13.9\%.
 		
-		\begin{equation}
-		\epsilon = 
+		\begin{gather}
+		\begin{aligned}
+		\epsilon &= 
 		\sqrt{a^2+d^2} - d =
-		\sqrt{(d\tan \theta )^2+d^2}-d =
-		d\left( \sqrt{\frac{1}{\cos ^2 \alpha}}-1 \right) =
+		\sqrt{(d\tan \theta )^2+d^2}-d =\\
+		&=d\left( \sqrt{\frac{1}{\cos ^2 \alpha}}-1 \right) =
 		d \left( \sec \alpha -1 \right) 
+		\end{aligned}
 		\label{eq:max_err}
-		\end{equation}
+		\end{gather}
 		
-		Sotto tali ipotesi possiamo quindi calcolare la distanza di un oggetto
-		come mostrato in Eq.~\ref{eq:obj_dist}.
-		
-		\begin{equation}\label{eq:obj_dist}
-		object~distance(m) = 
-		\frac{f(m) \times real~width(m) \times image~width(pixels)}
-		{object~width(pixels) \times sensor~width(m)}
-		\end{equation}
+		\framebreak
 		
 		Poiché stiamo utilizzando un simulatore non è nota la larghezza del
 		sensore da utilizzare per l'eq.~\ref{eq:obj_dist}. Abbiamo ovviato a
@@ -542,6 +426,12 @@
 		in posizioni note e abbiamo utilizzato questi dati insieme a delle
 		misure in pixel nell' eq.~\ref{sensor_size}. Abbiamo così stimato le
 		dimensioni del sensore virtuale da utilizzare nei calcoli successivi.
+		
+		\begin{equation}\label{eq:obj_dist}
+		object~distance(m) = 
+		\frac{f(m) \times real~width(m) \times image~width(pixels)}
+		{object~width(pixels) \times sensor~width(m)}
+		\end{equation}
 		
 		\begin{equation}\label{sensor_size}
 		sensor~width(m) = 
