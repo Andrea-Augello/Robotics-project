@@ -758,14 +758,14 @@
 		raggio d'azione limitato, la forza repulsiva è massima per un ostacolo
 		a distanza nulla, e decresce in modo monotono fino ad annullarsi se la
 		distanza dell'ostacolo supera una soglia $d_t$ con la legge descritta
-		nell'equazione~\ref{eq:repulsive-force}.
+		nell'equazione:
 
 		\begin{equation}\label<2>{eq:repulsive-force}
-			F_{rep}(obstacleDistance) = \begin{cases}
+			F_{rep}(distance) = \begin{cases}
 				k_r \cdot \left(
-					\frac{1}{obstacleDistance^2}-
+					\frac{1}{distance^2}-
 					\frac{1}{d_t^2}
-				\right)  & obstacleDistance \leq d_{t} \\
+				\right)  & distance \leq d_{t} \\
 				0 & d > d_{thresh}
 			\end{cases}
 		\end{equation}
@@ -778,7 +778,7 @@
 	\end{figure}
 	\end{frame}
 
-	\begin{frame}{Campi di potenziale}{Scelta dell'ostacolo}
+	\begin{frame}{Campi di potenziale}{Rilevamento dell'ostacolo}
 
 	La maggior parte dei potenziali repulsivi descritti in letteratura
 	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
@@ -800,7 +800,7 @@
 	\end{figure}
 	
 	\end{frame}
-	\begin{frame}{Campi di potenziale}{Scelta dell'ostacolo}
+	\begin{frame}{Campi di potenziale}{Calcolo del movimento}
 
 	L'approccio seguito consiste in due comportamenti calcolati
 	indipendentemente: il comportamento traslatorio e il comportamento
@@ -814,7 +814,7 @@
 	evitare cambi di direzione troppo bruschi(Eq.~\ref{eq:angle}).
 
 	\begin{equation}\label{eq:translation}
-		d = 0.5 + \frac	{0.9\cdot obstacleDistance - 0.5}
+		d = 0.5 + \frac	{0.9\cdot distance - 0.5}
 		{1 + \left|
 				\frac{6\omega}{\pi}
 		\right|  } 
@@ -832,8 +832,18 @@
 	
 	\end{frame}
 	\begin{frame}{Automa a stati finiti}
-	Nella figura \ref{fig:fsa} viene riportato l'automa a stati finiti che
-	descrive i comportamenti del robot. In seguito all'avvio, \textbf{Change}
+	
+	\begin{columns}
+		\begin{column}{0.4\textwidth}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=1.2\textwidth]{./img/fsa.pdf}
+				\label{fig:fsa}
+			\end{figure}
+		\end{column}	
+		\begin{column}{0.6\textwidth}
+		\justifying
+	In seguito all'avvio, \textbf{Change}
 	effettua uno scan dell'ambiente. Nel caso in cui non vengano rilevati
 	obbiettivi entra in modalità esplorazione, avviando l'esplorazione casuale
 	e, dopo aver percorso una determinata distanza, effettua nuovamente uno
@@ -843,14 +853,36 @@
 	campi di potenziale, il \textbf{TIAGo} rimane bloccato in un loop, entra in
 	modalità Tangent Bug, fin quando non esce dal loop, e ritorna nella
 	modalità campi di potenziale.
+		\end{column}
+	\end{columns}	
 	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.6\textwidth]{./img/fsa.pdf}
-		\caption{Automa a stati finiti }
-		\label{fig:fsa}
-	\end{figure}
+	
 	\end{frame}
+	
+	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
+	\frame{\sectionpage}
+	Riportiamo di seguito possibili modifiche da apportare:
+	\begin{itemize}
+		\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
+			pianificare il moto con algoritmi come A* \cite{A*} o RRT
+			\cite{RRT}
+		\item Migliorare la modalità Tangent Bug
+		\item Utilizzare una depth-cam per stimare con più precisione la
+			distanza delle persone
+		\item Tracciamento delle persone in real-time
+	\end{itemize}
+
+	\section{Conclusioni}\label{sec:Conclusioni}
+	\frame{\sectionpage}
+	Durante lo sviluppo del progetto sono state affrontate numerose tematiche
+	trattate durante il corso di \textit{Robotica}. L'esperienza di sviluppo ha
+	permesso al team di apprezzare l'importanza di solide fondamenta teoriche
+	unite ad una significativa esperienza pratica. In particolar luogo abbiamo
+	riscontrato problemi concernenti vari ambiti, dalla robotica probabilistica
+	all'esplorazione degli ambienti, la cui ricerca di risoluzione ci ha
+	portato ad approfondire le fondamenta teoriche della materia. La
+	performance raggiunta, nonostante le tempistiche, risulta soddisfacente.
+
 
 	\subsection{Bibliografia}\label{subsec:Bibliografia}
 	\begin{frame}[allowframebreaks]{Bibliografia}
