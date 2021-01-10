@@ -14,6 +14,5 @@
     <env name="PYTHONPATH" value="$(env PYTHONPATH):$(env WEBOTS_HOME)/lib/controller/python27" unless="$(eval '1' if env('ROS_DISTRO') == 'noetic' else '0')" />
     <env name="PYTHONPATH" value="$(env PYTHONPATH):$(env WEBOTS_HOME)/lib/controller/python38" if="$(eval '1' if env('ROS_DISTRO') == 'noetic' else '0')" />
     <node name="change_controller" pkg="webots_ros" type="change.py" required="$(arg auto_close)"/>
-    <node name="interaction_controller" pkg="webots_ros" type="interaction_node.py" required="$(arg auto_close)"/>
     <param name="/use_sim_time" value="true"/>
 </launch>
