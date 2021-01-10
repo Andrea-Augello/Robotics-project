@@ -563,10 +563,10 @@
 	nostro caso d'uso. 
 	
 	\begin{itemize}
-		\item Non presenta le "fat tails"
-		\item Dopo una prima osservazione non confermata successivamente la probabilità scende a zero.
-		\item Le occlusioni annullano la probabilità
-		\item I target in movimento non verrebbero rilevati
+		\pause\item Non presenta le "fat tails"
+		\pause\item Dopo una prima osservazione non confermata successivamente la probabilità scende a zero.
+		\pause\item Le occlusioni annullano la probabilità
+		\pause\item I target in movimento non verrebbero rilevati
 	\end{itemize}
 	
 	Essendo la scansione una operazione estremamente costosa non è nemmeno
@@ -575,7 +575,7 @@
 
 	\framebreak
 
-	Al fine di ottene un'approssimazione di una gaussiana adatta al
+	Al fine di ottenere un'approssimazione di una gaussiana adatta al
 	nostro scenario, per modellare la probabilità che data l'occupazione della
 	cella in posizione $ {\bf x} $ si ottenga l'osservazione $ {\bf z} $, è
 	stato utilizzato un funzionale ispirato al guadagno del filtro di
@@ -595,6 +595,118 @@
 	
 	\framebreak
 	
+	La distanza euclidea porterebbe a formare aree ad alta probabilità di forma
+	circolare. Questo però non si adatterebbe bene al nostro modello di errore
+	del sensore: l'angolo dell'oggetto rispetto al robot è noto con una
+	precisione molto elevata, mentre la maggior parte dell'incertezza si
+	concentra nella distanza. Calcoliamo quindi la distanza non come distanza
+	euclidea tra le coordinate cartesiane della cella e dell'osservazione, ma
+	come norma $L^2$ delle coordinate polari, opportunamente normalizzate per
+	tenere conto della diversa incertezza sulla misura di angolo e distanza.
+	
+	\framebreak
+
+	L'incertezza sulla distanza è ricavata dalle misure di calibrazione
+	effettuate. Per l'angolo è stato seguito un approccio differente:
+	utilizzare una varianza calcolata a partire da una serie di osservazioni
+	porterebbe ad assegnare maggiore probabilità ad oggetti lontani. \\
+	In un
+	setup come quello in figura~\ref{fig:circular_sector}, con due target
+	rilevati, rispettivamente a distanza $d_1$ e $d_2$, le aree ad alta
+	probabilità relative ad entrambi i punti avranno lunghezza $l$ e ampiezze $
+	\alpha_1 \text{ e } \alpha_2  $. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.5\textwidth]{img/circular_sector.pdf}
+		\caption{Area della regione probabile a seconda della distanza.}
+		\label{fig:circular_sector}
+	\end{figure}
+
+	La dimensione dell'area ad alta probabilità è direttamente
+	proporzionale alla distanza e all'ampiezza dell'angolo. Se quindi $
+	\alpha_1 $ coincidesse con $ \alpha _2 $ ad oggetti distanti verrebbero
+	associate aree molto più grandi. 
+	\begin{subequations}\label{eq:circular_sector}
+	\begin{align*} 
+		A_1  = & \pi((d_1+l/2)^2-(d_1-l/2)^2)\frac{\alpha_1}{2\pi}  =  \alpha_1 d_1l \\
+		A_2  = & \pi((d_2+l/2)^2-(d_2-l/2)^2)\frac{\alpha_2}{2\pi}  =  \alpha_2 d_2l \\
+\tag{\ref{eq:circular_sector}}
+		\frac{A_1}{A_2} = & \frac	{\alpha_1 d_1} {\alpha_2 d_2}
+	\end{align*}
+	\end{subequations}
+	
+		
+	Per evitare questo problema, dopo avere
+	individuato un valore $ \alpha ^* $ appropriato questo viene scalato per un
+	coefficiente inversamente proporzionale alla distanza della cella, quindi $
+	\alpha _1 = \alpha ^*/d_1 $ e $ \alpha _2=\alpha ^*/d_2 $, da cui $A_1=A_2$. 
+	
+	\framebreak
+	
+	Dato un insieme di osservazioni ottenute da una scansione $ Z_i $ aggiorniamo il belief.
+	\begin{equation}\label{eq:belief-update}
+		p({\bf x}_i | Z_i) = p({\bf x}_{i-1}) \cdot 
+		\sum_{{\bf z} \in Z_i} p({\bf z} | {\bf x}_i)
+	\end{equation}
+
+	Questa formula è valida sotto le seguenti assunzioni:
+	\begin{itemize}
+		\item In uno stesso scan, date due osservazioni $z_1$ e
+			$z_2$ queste non hanno intersezione, quindi $ p(z_1 \cup z_2) =
+			p(z_1)+p(z_2)-p( z_1 \cap z_2) = p(z_1)+p(z_2) $ 
+
+		\item In assenza di nuove osservazioni la stima dello stato del sistema
+			rimane invariata: $ \overline{bel}(x_i) = bel(x_{i-1}) $ 
+
+	\end{itemize}
+
+	In pratica applicando direttamente queste formule si introdurrebbe un
+	errore nell'interpretazione delle informazioni: se per qualche ragione in
+	uno scan non venisse rilevato nessun oggetto, $ Z_i $ sarebbe l'insieme
+	vuoto. In mancanza di nuovi dati si potrebbero tentare due approcci:
+	resettare le stime o lasciarle del tutto invariate. Nessuno di questi
+	approcci si dimostra soddisfacente:
+	\begin{itemize} 
+		\item Lasciare invariato il belief a seguito di multiple scansioni
+			senza successo porterebbe a non notare che tutte le persone
+			nell'ambiente in cui ci si trova sono andate via, continuando a
+			considerare valide tutte le posizioni precedenti.
+		\item Dall'altro lato, un approccio troppo drastico quale
+			immediatamente scartare tutte le precedenti stime porterebbe a
+			perdere informazioni utili a causa di occlusioni temporanee (e.g.
+			il robot entra in una stanza vuota).
+	\end{itemize}
+
+	Per gestire questa situazione effettuiamo uno smoothing degli istogrammi
+	prima di ogni update essendoci una diminuzione della certezza delle misure.
+	Aggiungiamo inoltre del rumore. In questo modo in assenza di osservazioni
+	ci sarà una tendenza al ritorno ad uno stato iniziale, ma sarà graduale in
+	modo da evitare di scartare troppo rapidamente le informazioni pregresse.
+
+	Al fine di individuare le zone con alta probabilità di contenere persone
+	abbiamo utilizzato un approccio derivante dall'elaborazione delle immagini.
+	In primo luogo separiamo i punti nella mappa in punti ad alta probabilità
+	di essere occupati da persone e punti con bassa probabilità. Per effettuare
+	questa sogliatura abbiamo utilizzato il metodo Otsu~\cite{otsu}, il quale
+	applica un thresholding automatico calcolato minimizzando la varianza dei
+	valori di intensità all'interno delle classi e massimizzandola fra classi
+	differenti all'immagine in input.  
+	
+	Da questa sogliatura otteniamo una mappa binaria in cui sono evidenziate le
+	celle ad alta probabilità. Applicando l'algoritmo in~\cite{contours},
+	implementato in OpenCV, estraiamo le regioni ad alta probabilità contigue
+	ed i loro contorni. Per ogni regione verrà selezionato come centro il punto
+	con maggiore probabilità (Fig.~\ref{fig:image_segmentation}).
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\textwidth]{./img/image_segmentation.pdf}
+		\caption{Segmentazione immagine: a sinistra i valori grezzi del BOF, a destra i contorni delle regioni (giallo) e i centri (blu) }
+		\label{fig:image_segmentation}
+	\end{figure}
+
+		
 	\end{frame}
 
 	\subsection{Bibliografia}\label{subsec:Bibliografia}
