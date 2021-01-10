@@ -1,0 +1,142 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.5749676013540095 0.551926831601503 0.603977673388299 4.109140106228906
+  position 4.41779406591801 47.2710953240008 0.16787259016099165
+  follow "change"
+  followType "None"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 4 12
+  floorTileSize 2 2
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallThickness 0.3
+  wallHeight 3
+}
+Pedestrian {
+  translation 0.168802 1.27 4.96889
+  rotation 0 1 0 -1.5708053071795867
+  name "pedestrian(7)"
+  shirtColor 0.739193 0 0.0918135
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
+CardboardBox {
+  translation 0.77 0.3 -2.18
+}
+CardboardBox {
+  translation -1.04 0.3 -0.45
+  name "cardboard box(1)"
+}
+CardboardBox {
+  translation 0.63 0.3 1.34
+  name "cardboard box(2)"
+}
+CardboardBox {
+  translation -0.97 0.3 2.86
+  name "cardboard box(3)"
+}
+TiagoIron {
+  translation -0.416621 0.095 -4.22225
+  rotation 0.9997397762563311 0.015803042241100698 0.01645125000924864 -1.5711437638017518
+  name "change"
+  controller "ros"
+  controllerArgs [
+    "--name=change"
+    "--clock"
+    "--use-sim-time"
+  ]
+  displaySlot [
+    Solid {
+      translation 0.1 0 -0.25
+      rotation 0.6353159295275 -0.5360478155388282 -0.5559014383365626 1.98
+      children [
+        Speaker {
+        }
+        Display {
+          translation 0.00183016 0.0237368 -0.0641422
+          rotation 0.7071067811865475 -0.7071067811865475 0 0.2617996938995747
+          children [
+            DEF display_shape Shape {
+              appearance Appearance {
+                material Material {
+                  emissiveColor 1 1 1
+                }
+                texture ImageTexture {
+                  filtering 0
+                }
+              }
+              geometry Box {
+                size 0.24 0.135 0.01
+              }
+            }
+          ]
+          boundingObject Box {
+            size 0.24 0.135 0.02
+          }
+          physics Physics {
+          }
+          width 720
+          height 405
+        }
+        DEF G0 Group {
+          children [
+            Shape {
+              appearance Plaster {
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.05
+              }
+            }
+            Transform {
+              translation 0 0.0219067 -0.0544829
+              rotation 0.7071067811865475 -0.7071067811865475 0 0.261799
+              children [
+                Shape {
+                  appearance Plaster {
+                  }
+                  geometry Box {
+                    size 0.24 0.135 0.01
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      boundingObject USE G0
+      physics Physics {
+      }
+    }
+  ]
+  cameraSlot [
+    Camera {
+      rotation 0 1 0 -1.5707996938995747
+      fieldOfView 1
+      width 640
+      height 480
+      near 0.003
+      noise 0.007
+      lens Lens {
+      }
+      focus Focus {
+        focalLength 0.0036
+        maxFocalDistance 1000000
+        minFocalDistance 1
+      }
+      zoom Zoom {
+      }
+      recognition Recognition {
+      }
+    }
+  ]
+}
