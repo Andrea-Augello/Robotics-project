@@ -526,8 +526,9 @@
 
 	\end{frame}
 
-	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
-	\begin{frame}[allowframebreaks]{Modello probabilistico}
+	\section{Modello probabilistico}\label{sec:Modello-probabilistico}
+	\frame{\sectionpage}
+	\begin{frame}{Modello probabilistico}
 	Nella nostra applicazione la distanza stimata
 	dell'oggetto sarà soggetta ad errore non trascurabile. Per questa
 	ragione e per i problemi legati alla triangolazione abbiamo abbandonato la
@@ -541,7 +542,8 @@
 	osservazioni dai sensori che conoscenze pregresse. Le caratteristiche di
 	incertezza legate ai sensori vengono descritte, in questo modello,
 	attraverso le probabilità di occupazione.
-	\framebreak
+	\end{frame}
+	\begin{frame}{Funzione densità di probabilità I}
 	
 	Al fine di trasformare le osservazioni ottenute in una probabilità che le
 	persone si trovino effettivamente nella posizione indicata è stato
@@ -556,7 +558,8 @@
 		\label{fig:pdf_benchmark}
 	\end{figure}
 	
-	\framebreak
+	\end{frame}
+	\begin{frame}{Funzione densità di probabilità II}
 	
 	La distribuzione triangolare è spesso utilizzata per approssimare una
 	gaussiana, tuttavia, presenta delle caratteristiche non volute per il
@@ -569,11 +572,12 @@
 		\pause\item I target in movimento non verrebbero rilevati
 	\end{itemize}
 	
-	Essendo la scansione una operazione estremamente costosa non è nemmeno
+	\pause Essendo la scansione una operazione estremamente costosa non è nemmeno
 	possibile affidarsi esclusivamente all'aggiunta di rumore alla griglia di
 	occupazione confidando in una eventuale convergenza.
 
-	\framebreak
+	\end{frame}
+	\begin{frame}{Funzione densità di probabilità III}
 
 	Al fine di ottenere un'approssimazione di una gaussiana adatta al
 	nostro scenario, per modellare la probabilità che data l'occupazione della
@@ -593,9 +597,10 @@
 	\end{figure}
 	
 	
-	\framebreak
+	\end{frame}
+	\begin{frame}[allowframebreaks]{Parametri PDF}
 	
-	La distanza euclidea porterebbe a formare aree ad alta probabilità di forma
+	La distanza euclidea nell'equazione~\ref{eq:pdf} porterebbe a formare aree ad alta probabilità di forma
 	circolare. Questo però non si adatterebbe bene al nostro modello di errore
 	del sensore: l'angolo dell'oggetto rispetto al robot è noto con una
 	precisione molto elevata, mentre la maggior parte dell'incertezza si
@@ -642,7 +647,8 @@
 	coefficiente inversamente proporzionale alla distanza della cella, quindi $
 	\alpha _1 = \alpha ^*/d_1 $ e $ \alpha _2=\alpha ^*/d_2 $, da cui $A_1=A_2$. 
 	
-	\framebreak
+	\end{frame}
+	\begin{frame}{Aggiornamento bayesiano I}
 	
 	Dato un insieme di osservazioni ottenute da una scansione $ Z_i $ aggiorniamo il belief.
 	\begin{equation}\label{eq:belief-update}
@@ -652,61 +658,185 @@
 
 	Questa formula è valida sotto le seguenti assunzioni:
 	\begin{itemize}
-		\item In uno stesso scan, date due osservazioni $z_1$ e
+		\pause\item In uno stesso scan, date due osservazioni $z_1$ e
 			$z_2$ queste non hanno intersezione, quindi $ p(z_1 \cup z_2) =
 			p(z_1)+p(z_2)-p( z_1 \cap z_2) = p(z_1)+p(z_2) $ 
 
-		\item In assenza di nuove osservazioni la stima dello stato del sistema
+		\pause\item In assenza di nuove osservazioni la stima dello stato del sistema
 			rimane invariata: $ \overline{bel}(x_i) = bel(x_{i-1}) $ 
 
 	\end{itemize}
+	
+	\end{frame}
+	\begin{frame}{Aggiornamento bayesiano II}
 
-	In pratica applicando direttamente queste formule si introdurrebbe un
-	errore nell'interpretazione delle informazioni: se per qualche ragione in
-	uno scan non venisse rilevato nessun oggetto, $ Z_i $ sarebbe l'insieme
-	vuoto. In mancanza di nuovi dati si potrebbero tentare due approcci:
-	resettare le stime o lasciarle del tutto invariate. Nessuno di questi
-	approcci si dimostra soddisfacente:
+	In mancanza di nuovi dati si potrebbero tentare due approcci:
+	resettare le stime o lasciarle del tutto invariate. 
 	\begin{itemize} 
-		\item Lasciare invariato il belief a seguito di multiple scansioni
+		\pause\item Lasciare invariato il belief a seguito di multiple scansioni
 			senza successo porterebbe a non notare che tutte le persone
 			nell'ambiente in cui ci si trova sono andate via, continuando a
 			considerare valide tutte le posizioni precedenti.
-		\item Dall'altro lato, un approccio troppo drastico quale
+		\pause\item Dall'altro lato, un approccio troppo drastico quale
 			immediatamente scartare tutte le precedenti stime porterebbe a
-			perdere informazioni utili a causa di occlusioni temporanee (e.g.
-			il robot entra in una stanza vuota).
+			perdere informazioni utili a causa di occlusioni temporanee
 	\end{itemize}
-
-	Per gestire questa situazione effettuiamo uno smoothing degli istogrammi
-	prima di ogni update essendoci una diminuzione della certezza delle misure.
-	Aggiungiamo inoltre del rumore. In questo modo in assenza di osservazioni
-	ci sarà una tendenza al ritorno ad uno stato iniziale, ma sarà graduale in
-	modo da evitare di scartare troppo rapidamente le informazioni pregresse.
-
-	Al fine di individuare le zone con alta probabilità di contenere persone
-	abbiamo utilizzato un approccio derivante dall'elaborazione delle immagini.
-	In primo luogo separiamo i punti nella mappa in punti ad alta probabilità
-	di essere occupati da persone e punti con bassa probabilità. Per effettuare
-	questa sogliatura abbiamo utilizzato il metodo Otsu~\cite{otsu}, il quale
-	applica un thresholding automatico calcolato minimizzando la varianza dei
-	valori di intensità all'interno delle classi e massimizzandola fra classi
-	differenti all'immagine in input.  
 	
-	Da questa sogliatura otteniamo una mappa binaria in cui sono evidenziate le
-	celle ad alta probabilità. Applicando l'algoritmo in~\cite{contours},
-	implementato in OpenCV, estraiamo le regioni ad alta probabilità contigue
-	ed i loro contorni. Per ogni regione verrà selezionato come centro il punto
+	\pause Effettuiamo uno smoothing degli istogrammi
+	prima di ogni update e aggiungiamo inoltre del rumore. 
+	
+	\end{frame}
+	\begin{frame}{Individuazione dei cluster}
+	
+	Al fine di individuare le zone con alta probabilità di contenere persone, 
+	in primo luogo effettuiamo una sogliatura utilizzando il metodo Otsu~\cite{otsu}, 
+	ottenendo così una mappa binaria.
+		
+	Estraiamo le regioni ad alta probabilità contigue
+	ed i loro contorni~\cite{contours} e selezioniamo come centro il punto
 	con maggiore probabilità (Fig.~\ref{fig:image_segmentation}).
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=1\textwidth]{./img/image_segmentation.pdf}
-		\caption{Segmentazione immagine: a sinistra i valori grezzi del BOF, a destra i contorni delle regioni (giallo) e i centri (blu) }
+		\includegraphics[width=0.8\textwidth]{./img/image_segmentation.pdf}
 		\label{fig:image_segmentation}
 	\end{figure}
 
+	\end{frame}
+	
+	\section{Scheduling dei comportamenti}\label{sec:Scheduling-dei-comportamenti}
+	\frame{\sectionpage}
+	\subsection{Modalità esplorazione}\label{subsec:Modalita-esplorazione}
+	\begin{frame}{Modalità esplorazione}
+	Quando il robot entra in modalità esplorazione il suo comportamento è di
+	esplorazione casuale della mappa. Il robot continua ad esplorare ed
+	effettuare scan periodici fino a quando non viene rilevato un obbiettivo.
+	In tal caso il robot entra in modalità campi di potenziale. Se il robot
+	incontra un ostacolo nel suo cammino ruota di $90^{\circ}$ nella direzione
+	con più spazio e continua l'esplorazione casuale.
+	\end{frame}
+	
+	\subsection{Bug mode}\label{subsec:Bug-mode}
+	\begin{frame}{Bug mode}
+	Quando il robot entra in modalità bug~\cite{503814} effettuiamo uno scan lidar. 
+	Confrontiamo i valori ottenuti con una
+	soglia al fine di individuare le discontinuità nel profilo degli ostacoli. 
+	Analizziamo successivamente le discontinuità del segnale,
+	corrispondenti ai bordi degli ostacoli.
+	Da tali punti viene calcolato l'angolo fra la retta che li
+	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
+	quale corrisponde l'angolo minore, che ci farà allontanare meno
+	dall'obbiettivo.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.4\textwidth]{./img/bug.pdf}
+		\label{fig:bug}
+	\end{figure}
+
+	\end{frame}
+	\subsection{Campi di potenziale}\label{subsec:Campi-di-potenziale}
+	\begin{frame}[allowframebreaks]{Campi di potenziale}
+	Una soluzione al classico problema di muoversi in uno spazio evitando le
+	collisioni è l'uso di un modello basato sui campi di potenziale. Questi
+	schemi richiedono la definizione di potenziali attrattivi e repulsivi.
 		
+	Il potenziale attrattivo è centrato sul target, ed è modellato come un
+	potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
+	distanza (Eq.~\ref{eq:attractive-force}).
+
+	\begin{equation}\label{eq:attractive-force}
+		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
+	\end{equation}
+
+
+	Gli ostacoli generano invece un potenziale repulsivo. Questo ha un raggio
+	d'azione limitato, la forza repulsiva è massima per un ostacolo a distanza
+	nulla, e decresce in modo monotono fino ad annullarsi se la distanza
+	dell'ostacolo supera una soglia $d_t$ con la legge descritta
+	nell'equazione~\ref{eq:repulsive-force}.
+
+	\begin{equation}\label{eq:repulsive-force}
+		F_{rep}(obstacleDistance) = \begin{cases}
+			k_r \cdot \left(
+				\frac{1}{obstacleDistance^2}-
+				\frac{1}{d_t^2}
+			\right)  & obstacleDistance \leq d_{t} \\
+			0 & d > d_{thresh}
+		\end{cases}
+	\end{equation}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.4\textwidth]{./img/potential_field.jpg}
+		\label{fig:potential_field}
+	\end{figure}
+
+	La maggior parte dei potenziali repulsivi descritti in letteratura
+	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
+	moto anche se questo avviene parallelamente all'ostacolo. Per ovviare a
+	questo problema prendiamo in considerazione solo gli ostacoli situati in un
+	FOV frontale al robot con ampiezza $ \alpha  $ calcolata per permettere di
+	muoversi parallelamente ad una superficie mantenendo una distanza di
+	sicurezza $ h $ (Eq.~\ref{eq:obstacle_fov}, Fig.~\ref{fig:obstacle_fov}): 
+
+	\begin{equation}\label{eq:obstacle_fov}
+		\alpha = {2}\sin^{-1}{\frac{h}{d_t}}
+	\end{equation}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{./img/obstacle_fov.pdf}
+		\caption{FOV frontale del robot}
+		\label{fig:obstacle_fov}
+	\end{figure}
+
+	L'approccio seguito consiste in due comportamenti calcolati
+	indipendentemente: il comportamento traslatorio e il comportamento
+	rotazionale.
+
+	La traslazione viene calcolata in funzione dello spazio di movimento a
+	disposizione e dall'angolo rispetto al target secondo
+	l'equazione~\ref{eq:translation}, ottenuta per interpolazione del profilo
+	desiderato. L'angolo viene invece determinato dalla somma vettoriale delle
+	forze attrattive e repulsive. La rotazione viene inoltre sogliata per
+	evitare cambi di direzione troppo bruschi(Eq.~\ref{eq:angle}).
+
+	\begin{equation}\label{eq:translation}
+		d = 0.5 + \frac	{0.9\cdot obstacleDistance - 0.5}
+		{1 + \left|
+				\frac{6\omega}{\pi}
+		\right|  } 
+	\end{equation}
+	
+	\begin{equation}\label{eq:angle}
+		\omega = \begin{cases}
+			\omega^*=\theta - \angle\left( \textbf{F}_{att} - \textbf{F}_{rep} \right)  & -\Omega \le \omega^* \le \Omega \\
+			-\Omega & \omega^* < -\Omega \\
+			\Omega & \omega^* < \Omega
+
+		\end{cases}	\end{equation}
+	
+	\subsection{Automa a stati finiti}\label{subsec:Pianificazione}
+	
+	Nella figura \ref{fig:fsa} viene riportato l'automa a stati finiti che
+	descrive i comportamenti del robot. In seguito all'avvio, \textbf{Change}
+	effettua uno scan dell'ambiente. Nel caso in cui non vengano rilevati
+	obbiettivi entra in modalità esplorazione, avviando l'esplorazione casuale
+	e, dopo aver percorso una determinata distanza, effettua nuovamente uno
+	scan dell'ambiente. Nel caso in cui venga rilevato un obbiettivo il robot
+	entra in modalità campi di potenziale e si ferma nel caso in cui abbia
+	raggiunto l'obbiettivo o percorso una determinata distanza. Se, in modalità
+	campi di potenziale, il \textbf{TIAGo} rimane bloccato in un loop, entra in
+	modalità Tangent Bug, fin quando non esce dal loop, e ritorna nella
+	modalità campi di potenziale.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\textwidth]{./img/fsa.pdf}
+		\caption{Automa a stati finiti }
+		\label{fig:fsa}
+	\end{figure}
 	\end{frame}
 
 	\subsection{Bibliografia}\label{subsec:Bibliografia}
