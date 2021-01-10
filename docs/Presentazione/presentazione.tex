@@ -93,11 +93,11 @@
 	\begin{figure}[H]
 		\begin{subfigure}{0.49\textwidth}
 			\centering
-			\includegraphics[width=0.8\linewidth]{./img/State_of_art_1.png}
+			\includegraphics[width=0.8\linewidth]{./img/State_of_art_2.png}
 		\end{subfigure}
 		\begin{subfigure}{0.49\textwidth}
 			\centering
-			\includegraphics[width=0.8\linewidth]{./img/State_of_art_2.png}
+			\includegraphics[width=0.8\linewidth]{./img/State_of_art_1.png}
 		\end{subfigure}
 	\end{figure}
 	
@@ -266,6 +266,7 @@
 			v_i = \frac{R (u_{r,i}+u_{l,i})}{2}
 		\end{equation}
 		
+		\pause
 		Questi valori sono aggiornati ad ogni intervallo di campionamento utilizzando la velocità lineare e la velocità angolare del robot \cite{572228}.
 		
 		\begin{equation}\label{eq:position-vector-update}
@@ -832,63 +833,68 @@
 	
 	\end{frame}
 	\begin{frame}{Automa a stati finiti}
-	
 	\begin{columns}
-		\begin{column}{0.4\textwidth}
+		\begin{column}{0.3\textwidth}
 			\begin{figure}[H]
+				\hfuzz=42pt 
 				\centering
-				\includegraphics[width=1.2\textwidth]{./img/fsa.pdf}
+				\includegraphics[width=1.45\textwidth]{./img/fsa.pdf}
 				\label{fig:fsa}
 			\end{figure}
 		\end{column}	
-		\begin{column}{0.6\textwidth}
+		\begin{column}{0.7\textwidth}
 		\justifying
-	In seguito all'avvio, \textbf{Change}
-	effettua uno scan dell'ambiente. Nel caso in cui non vengano rilevati
-	obbiettivi entra in modalità esplorazione, avviando l'esplorazione casuale
-	e, dopo aver percorso una determinata distanza, effettua nuovamente uno
-	scan dell'ambiente. Nel caso in cui venga rilevato un obbiettivo il robot
-	entra in modalità campi di potenziale e si ferma nel caso in cui abbia
-	raggiunto l'obbiettivo o percorso una determinata distanza. Se, in modalità
-	campi di potenziale, il \textbf{TIAGo} rimane bloccato in un loop, entra in
-	modalità Tangent Bug, fin quando non esce dal loop, e ritorna nella
-	modalità campi di potenziale.
+		\begin{itemize}[<+->]
+			\item All'avvio, \textbf{Change} effettua uno scan dell'ambiente.
+			\item Se non vengono rilevati obbiettivi entra in modalità
+				esplorazione e, dopo aver percorso una determinata distanza,
+				effettua un nuovo scan
+			\item Se viene rilevato un obbiettivo il robot entra in modalità
+				campi di potenziale fermandosi una volta raggiunto l'obbiettivo
+				o percorso una determinata distanza.
+			\item Se, in modalità campi di potenziale, il \textbf{TIAGo} rimane
+				bloccato in un loop, entra in modalità bug fino all'uscita dal loop, e ritorna nella modalità campi di
+				potenziale.
+		\end{itemize}
 		\end{column}
 	\end{columns}	
-	
-	
 	\end{frame}
 	
 	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
 	\frame{\sectionpage}
+	\frame{
 	Riportiamo di seguito possibili modifiche da apportare:
-	\begin{itemize}
-		\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
-			pianificare il moto con algoritmi come A* \cite{A*} o RRT
-			\cite{RRT}
-		\item Migliorare la modalità Tangent Bug
-		\item Utilizzare una depth-cam per stimare con più precisione la
-			distanza delle persone
-		\item Tracciamento delle persone in real-time
-	\end{itemize}
+		\begin{itemize}[<+->]
+			\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
+				pianificare il moto con algoritmi come A* \cite{A*} o RRT
+				\cite{RRT}
+			\item Migliorare la modalità Tangent Bug
+			\item Utilizzare una depth-cam per stimare con più precisione la
+				distanza delle persone
+			\item Tracciamento delle persone in real-time
+		\end{itemize}
+	}
 
 	\section{Conclusioni}\label{sec:Conclusioni}
 	\frame{\sectionpage}
-	Durante lo sviluppo del progetto sono state affrontate numerose tematiche
-	trattate durante il corso di \textit{Robotica}. L'esperienza di sviluppo ha
-	permesso al team di apprezzare l'importanza di solide fondamenta teoriche
-	unite ad una significativa esperienza pratica. In particolar luogo abbiamo
-	riscontrato problemi concernenti vari ambiti, dalla robotica probabilistica
-	all'esplorazione degli ambienti, la cui ricerca di risoluzione ci ha
-	portato ad approfondire le fondamenta teoriche della materia. La
-	performance raggiunta, nonostante le tempistiche, risulta soddisfacente.
+	\frame{
+		Durante lo sviluppo del progetto sono state affrontate numerose
+		tematiche trattate durante il corso di \textit{Robotica}. L'esperienza
+		di sviluppo ha permesso al team di apprezzare l'importanza di solide
+		fondamenta teoriche unite ad una significativa esperienza pratica. In
+		particolar luogo abbiamo riscontrato problemi concernenti vari ambiti,
+		dalla robotica probabilistica all'esplorazione degli ambienti, la cui
+		ricerca di risoluzione ci ha portato ad approfondire le fondamenta
+		teoriche della materia. La performance raggiunta, nonostante le
+		tempistiche, risulta soddisfacente.
+	}
 
 
 	\subsection{Bibliografia}\label{subsec:Bibliografia}
 	\begin{frame}[allowframebreaks]{Bibliografia}
 		% Bibliography
 		\bibliographystyle{unsrt}
-		\bibliography{references.bib}.
+		\bibliography{references.bib}
 	\end{frame}
 
 \end{document}
