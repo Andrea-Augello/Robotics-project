@@ -84,16 +84,19 @@
 	atterraggio morbido sulla faccia nascosta della luna. 
 	
 	\section{Setup}\label{sec:Setup}
-	\begin{tabular}{|l|r|}
-		\hline
-		\multirow{2}{4em}{OS} & Ubuntu 18.04 \\
-							  & Ubuntu 20.04 \\ \hline
-		\multirow{2}{6em}{ROS version} & melodic \\
-									   & noetic \\ \hline
-		Webots & R2020b revision 1\\ \hline
-		\multirow{2}{11em}{Target hardware} & Raspberry Pi 4B \\
-											& Raspberry Pi 3B+ \\ \hline
-	\end{tabular}
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{l l}
+			\hline
+			{\bf OS} & Ubuntu 18.04 \\
+					 & Ubuntu 20.04 \\ \hline
+			{\bf ROS version} & melodic \\
+							  & noetic \\ \hline
+			\textbf{Webots} & R2020b revision 1\\ \hline
+			{\bf Target hardware} & Raspberry Pi 4B \\
+								  & Raspberry Pi 3B+ \\ \hline
+		\end{tabular}
+	\end{table}
 	
 
 	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
@@ -660,12 +663,17 @@
 	Le relazioni geometriche sulla distanza degli oggetti esposte nella
 	sezione~\ref{subsec:Calcolo-della-distanza} assumono che il target abbia la
 	stessa larghezza in ogni posa e che sia possibile ottenere dal
-	classificatore delle bounding box estremamente aderenti all'oggetto. Dato che queste
-	assunzioni non sono rispettate nella nostra applicazione la distanza
-	dell'oggetto sarà soggetta ad errore non trascurabile. Per questa
-	ragione e per i problemi legati alla triangolazione abbiamo abbandonato la
-	rappresentazione basata su oggetti e abbiamo fatto ricorso ad un filtro di
-	occupazione bayesiano (BOF)~\cite{tay2008bayesian}.
+	classificatore delle bounding box estremamente aderenti all'oggetto. Dato
+	che queste assunzioni non sono rispettate nella nostra applicazione la
+	distanza dell'oggetto sarà soggetta ad errore non trascurabile. La
+	correzione apportata con il polinomio interpolante migliora la precisione
+	del posizionamento, ma i risultati ottenuti rimangono poco soddisfacenti.
+	Inoltre basarsi esclusivamente su un singolo scan per determinare la
+	posizione dei target non sfrutta il fatto che la camera è situata su una
+	piattaforma mobile~\cite{sunderhauf2018}. Per questa ragione e per i
+	problemi legati alla triangolazione abbiamo abbandonato la rappresentazione
+	basata su oggetti e abbiamo fatto ricorso ad un filtro di occupazione
+	bayesiano (BOF)~\cite{tay2008bayesian}.
 
 	Nelle classiche metodologie di tracciamento, il problema dell'associazione
 	dei dati (data association), ovvero di associare un oggetto $o_t$ al tempo
