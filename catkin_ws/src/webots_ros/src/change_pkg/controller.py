@@ -24,12 +24,12 @@ class Controller:
         self.SCAN_RATE = 10
 
     def start(self):
-        while True:
+        while False:
             for i in range(10):
                 self.__robot.movement.move_forward(10-0.5*i)
                 self.__robot.movement.rotate(-90)
                 self.__robot.print_info()
-                #self.__robot.odometry.movement_history()
+                self.__robot.odometry.movement_history()
         while False:
             # Sensor characterization
             self.__robot.vision.clear_saved_frames()
