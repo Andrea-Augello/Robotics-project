@@ -736,10 +736,10 @@
 
 	\end{frame}
 	\subsection{Campi di potenziale}\label{subsec:Campi-di-potenziale}
-	\begin{frame}[allowframebreaks]{Campi di potenziale}
-	Una soluzione al classico problema di muoversi in uno spazio evitando le
-	collisioni è l'uso di un modello basato sui campi di potenziale. Questi
-	schemi richiedono la definizione di potenziali attrattivi e repulsivi.
+	\begin{frame}{Campi di potenziale}{Potenziale attrattivo}
+	
+	I modelli basati sui campi di potenziale richiedono la definizione di 
+	potenziali attrattivi e repulsivi.
 		
 	Il potenziale attrattivo è centrato sul target, ed è modellato come un
 	potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
@@ -749,7 +749,8 @@
 		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
 	\end{equation}
 
-
+	\end{frame}
+	\begin{frame}{Campi di potenziale}{Potenziale repulsivo}
 	Gli ostacoli generano invece un potenziale repulsivo. Questo ha un raggio
 	d'azione limitato, la forza repulsiva è massima per un ostacolo a distanza
 	nulla, e decresce in modo monotono fino ad annullarsi se la distanza
@@ -771,6 +772,9 @@
 		\includegraphics[width=0.4\textwidth]{./img/potential_field.jpg}
 		\label{fig:potential_field}
 	\end{figure}
+	
+	\end{frame}
+	\begin{frame}{Campi di potenziale}{Scelta dell'ostacolo}
 
 	La maggior parte dei potenziali repulsivi descritti in letteratura
 	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
@@ -778,7 +782,7 @@
 	questo problema prendiamo in considerazione solo gli ostacoli situati in un
 	FOV frontale al robot con ampiezza $ \alpha  $ calcolata per permettere di
 	muoversi parallelamente ad una superficie mantenendo una distanza di
-	sicurezza $ h $ (Eq.~\ref{eq:obstacle_fov}, Fig.~\ref{fig:obstacle_fov}): 
+	sicurezza $ h $ : 
 
 	\begin{equation}\label{eq:obstacle_fov}
 		\alpha = {2}\sin^{-1}{\frac{h}{d_t}}
@@ -786,10 +790,13 @@
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.8\textwidth]{./img/obstacle_fov.pdf}
+		\includegraphics[width=0.5\textwidth]{./img/obstacle_fov.pdf}
 		\caption{FOV frontale del robot}
 		\label{fig:obstacle_fov}
 	\end{figure}
+	
+	\end{frame}
+	\begin{frame}{Campi di potenziale}{Scelta dell'ostacolo}
 
 	L'approccio seguito consiste in due comportamenti calcolati
 	indipendentemente: il comportamento traslatorio e il comportamento
@@ -819,6 +826,8 @@
 	
 	\subsection{Automa a stati finiti}\label{subsec:Pianificazione}
 	
+	\end{frame}
+	\begin{frame}{Automa a stati finiti}
 	Nella figura \ref{fig:fsa} viene riportato l'automa a stati finiti che
 	descrive i comportamenti del robot. In seguito all'avvio, \textbf{Change}
 	effettua uno scan dell'ambiente. Nel caso in cui non vengano rilevati
