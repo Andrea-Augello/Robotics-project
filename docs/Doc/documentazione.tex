@@ -94,6 +94,28 @@
 		\multirow{2}{11em}{Target hardware} & Raspberry Pi 4B \\
 											& Raspberry Pi 3B+ \\ \hline
 	\end{tabular}
+	
+
+	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
+
+	\begin{itemize}
+		\item opencv 4.x, una libreria per la computer vision, usata per
+			operazioni di segmentazione \cite{opencv};
+		\item imutils 0.5.3, che include funzioni per semplici operazioni di image
+			processing quali traslazioni, rotazioni, ridimensionamento.
+			Utilizzato inoltre per effettuare Non Maxima Suppression(NMS)
+			\cite{imutils};
+		\item sklearn 0.21.3, una libreria per il machine learning comprendente
+			algoritmi di clustering quali DBSCAN \cite{scikit};
+		\item numpy 1.17.2, una libreria che fornisce supporto per array
+			multidimensionali, matrici ed operazioni matematiche per lavorare
+			su detti array \cite{numpy};
+		\item matplotlib 3.3.3, una libreria per creare visualizzazioni di dati
+			(statiche, dinamiche, interattive). Usata anche per calcolare la
+			posizione di punti rispetto a poligoni \cite{matplotlib}; 
+		\item math, una libreria che fornisce funzioni matematiche definite dallo
+			standard C \cite{math}.
+	\end{itemize}
 
 
 	\section{Ambiente}\label{sec:Ambiente} 
@@ -203,29 +225,7 @@
 		\caption{Architettura dei nodi ros, ottenuta tramite \textit{rqt}}
 		\label{fig:rosgraph}
 	\end{figure}
-
 	
-	\section{Dipendenze}\label{sec:Dipendenze} 
-	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
-
-	\begin{itemize}
-		\item opencv 4.x, una libreria per la computer vision, usata per
-			operazioni di segmentazione \cite{opencv};
-		\item imutils 0.5.3, che include funzioni per semplici operazioni di image
-			processing quali traslazioni, rotazioni, ridimensionamento.
-			Utilizzato inoltre per effettuare Non Maxima Suppression(NMS)
-			\cite{imutils};
-		\item sklearn 0.21.3, una libreria per il machine learning comprendente
-			algoritmi di clustering quali DBSCAN \cite{scikit};
-		\item numpy 1.17.2, una libreria che fornisce supporto per array
-			multidimensionali, matrici ed operazioni matematiche per lavorare
-			su detti array \cite{numpy};
-		\item matplotlib 3.3.3, una libreria per creare visualizzazioni di dati
-			(statiche, dinamiche, interattive). Usata anche per calcolare la
-			posizione di punti rispetto a poligoni \cite{matplotlib}; 
-		\item math, una libreria che fornisce funzioni matematiche definite dallo
-			standard C \cite{math}.
-	\end{itemize}
 
 	
 	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
