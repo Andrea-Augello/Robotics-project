@@ -198,7 +198,7 @@
 		\item acquisire e analizzare le immagini dalla camera
 	\end{itemize}
 	\subsubsection{Interaction node}\label{subsubsec:Interaction-node}
-	Questo nodo ha il compito di gestire le interazioni audio/video. In
+	Questo nodo ha il compito di gestire le interazioni audio/video ed è in esecuzione sul Raspberry. In
 	particolare viene sfruttato il display per caricare della immagini e il
 	sintetizzatore vocale dello speaker per riprodurre messaggi audio. Ogni
 	messaggio che viene riprodotto, prima in lingua italiana e poi inglese,
@@ -214,7 +214,7 @@
 	\end{itemize}
 
 	\subsubsection{Odometry node}\label{subsubsec:Odometry-node}
-	Il nodo che si occupa dell'odometria si occupa di stimare la posizione del
+	Il nodo che si occupa dell'odometria, eseguito sul Raspberry, si occupa di stimare la posizione del
 	robot, come spiegato approfonditamente nella
 	sezione~\ref{subsec:Posizionamento}. In generale ciò che fa è integrare
 	costantemente i valori del giroscopio e della velocità delle ruote per
