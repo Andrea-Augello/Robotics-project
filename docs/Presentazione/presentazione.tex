@@ -548,23 +548,50 @@
 	necessario definire una funzione densità di probabilità. La distribuzione
 	normale è computazionalmente onerosa. Abbiamo quindi fatto ricorso ad una approssimazione (Eq.~\ref{eq:pdf}).
 	
+	
+	
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=0.6\linewidth]{./img/pdf_benchmark.pdf}
+		\label{fig:pdf_benchmark}
+	\end{figure}
+	
+	\framebreak
+	
+	La distribuzione triangolare è spesso utilizzata per approssimare una
+	gaussiana, tuttavia, presenta delle caratteristiche non volute per il
+	nostro caso d'uso. 
+	
+	\begin{itemize}
+		\item Non presenta le "fat tails"
+		\item Dopo una prima osservazione non confermata successivamente la probabilità scende a zero.
+		\item Le occlusioni annullano la probabilità
+		\item I target in movimento non verrebbero rilevati
+	\end{itemize}
+	
+	Essendo la scansione una operazione estremamente costosa non è nemmeno
+	possibile affidarsi esclusivamente all'aggiunta di rumore alla griglia di
+	occupazione confidando in una eventuale convergenza.
+
+	\framebreak
+
+	Al fine di ottene un'approssimazione di una gaussiana adatta al
+	nostro scenario, per modellare la probabilità che data l'occupazione della
+	cella in posizione $ {\bf x} $ si ottenga l'osservazione $ {\bf z} $, è
+	stato utilizzato un funzionale ispirato al guadagno del filtro di
+	Butterworth.
+
 	\begin{equation}\label{eq:pdf}
 	p({\bf z}|{\bf x}) = \frac	{K}
 	{1 + d({\bf x},{\bf z})^4 } 
 	\end{equation}
 	
 	\begin{figure}[ht]
-		\begin{subfigure}{.49\textwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{./img/pdf_shape.pdf}
+		\includegraphics[width=0.5\linewidth]{./img/pdf_shape.pdf}
 		\label{fig:pdf_shape}
-		\end{subfigure}
-		\begin{subfigure}{.49\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{./img/pdf_benchmark.pdf}
-		\label{fig:pdf_benchmark}
-		\end{subfigure}
 	\end{figure}
+	
 	
 	\framebreak
 	
