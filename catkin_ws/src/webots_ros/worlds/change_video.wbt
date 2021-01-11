@@ -1,0 +1,334 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.5776567755050876 0.5771969549958943 0.5771969549958943 4.189249903239789
+  position -0.35524159018466667 48.96761287715251 0.33132238262180375
+  follow "change"
+  followType "None"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation -0.25 0 0
+  floorSize 17 17
+  floorTileSize 2 2
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallThickness 0.3
+  wallHeight 3
+}
+Pedestrian {
+  translation 1.92676 1.29 3.86683
+  rotation 0 -1 0 -1.5707953071795862
+}
+Pedestrian {
+  translation 3.52234 1.27 -5.77856
+  rotation 0 -1 0 8.37217e-06
+  name "pedestrian(4)"
+  shirtColor 0 0.448768 0
+}
+Pedestrian {
+  translation 3.52 1.27 -4.60729
+  rotation 0 1 0 3.14159
+  name "pedestrian(5)"
+  shirtColor 0 0.850233 0.855879
+}
+Pedestrian {
+  translation 5.16 1.27 -5.98
+  rotation 0 -1 0 6.53316937918704e-06
+  name "pedestrian(3)"
+  controllerArgs [
+    "--speed=0.4"
+    "--trajectory=5 -6,  5 5"
+  ]
+  shirtColor 1 1 1
+  pantsColor 0.2 0.2 0.2
+  shoesColor 0 0 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation -2.51 1.27 3.74523
+  rotation 0 1 0 -1.5707953071795862
+  name "pedestrian(6)"
+  shirtColor 0.671351 0 0.652461
+  pantsColor 0.130205 0.135622 0.26186
+  shoesColor 1 0.85745 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation -4.66027 1.27 7.05799
+  rotation 0 1 0 3.14159
+  name "pedestrian(2)"
+  shirtColor 0.788479 0.967712 0.084123
+  pantsColor 0 0 0
+  leftHandSlot [
+    BeerBottle {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation 7.10683 1.27 7.91489
+  rotation 0 1 0 -2.3561953071795863
+  name "pedestrian(1)"
+  shirtColor 0.972793 0.592737 0
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
+Pedestrian {
+  translation 2.9718 1.27 3.85621
+  rotation 0 1 0 -1.5708053071795867
+  name "pedestrian(7)"
+  shirtColor 0.739193 0 0.0918135
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
+Sofa {
+  translation -7.88569 0 -4.29106
+  color 0.3 0.04 0.0005
+  physics Physics {
+    density 100
+  }
+}
+Armchair {
+  translation -6.58 0 -6.33
+  rotation 0 1 0 -1.5707953071795862
+  color 0.3 0.04 0.0005
+}
+Armchair {
+  translation -6.58 0 4.04
+  rotation 0 1 0 1.5708
+  name "armchair(1)"
+  color 0.3 0.04 0.0005
+}
+PottedTree {
+  translation -7.69 0 -7.94
+}
+PottedTree {
+  translation -7.69 0 7.98
+  name "potted tree(1)"
+}
+Table {
+  translation -6.56 -0.3 1.49
+  rotation 0 1 0 7.73713e-07
+}
+LandscapePainting {
+  translation -1.12243e-05 1.61 8.5
+  rotation 0 1 0 3.14159
+}
+Clock {
+  translation -8.47 2.03 1.81093e-05
+  rotation 0 1 0 1.5708
+}
+Television {
+  translation -6.6 0.76 1.49
+  rotation 0 1 0 1.01503e-06
+}
+RoundTable {
+  translation 1.76 0 0
+}
+Solid {
+  translation 1.81 0.87 0.8
+  children [
+    DEF Sanitizer_shape Shape {
+      appearance DEF Sanitizer_appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.2
+        radius 0.05
+      }
+    }
+    Solid {
+      translation 0 0.1 0
+      children [
+        DEF Ejection_tube_shape Shape {
+          appearance USE Sanitizer_appearance
+          geometry Cylinder {
+            height 0.07
+            radius 0.01
+          }
+        }
+        Solid {
+          translation 0 0.04 0.05
+          rotation 1 0 0 -1.5707953071795862
+          children [
+            DEF Ejection_tube_oriz_shape Shape {
+              appearance USE Sanitizer_appearance
+              geometry Cylinder {
+                height 0.15
+                radius 0.01
+              }
+            }
+          ]
+          boundingObject USE Ejection_tube_oriz_shape
+        }
+      ]
+    }
+  ]
+  boundingObject DEF Sanitizer_shape Shape {
+    appearance DEF Sanitizer_appearance PBRAppearance {
+      metalness 0
+    }
+    geometry Cylinder {
+      height 0.2
+      radius 0.05
+    }
+  }
+  physics Physics {
+  }
+}
+FruitBowl {
+  translation 1.62 0.759803 0
+}
+Apple {
+  translation 2.26 0.819508 0
+}
+TiagoIron {
+  translation -2.55 0.095 -2
+  rotation 0.9997397762563311 0.015803042241100698 0.01645125000924864 -1.5711437638017518
+  name "change"
+  controller "ros"
+  controllerArgs [
+    "--name=change"
+    "--clock"
+    "--use-sim-time"
+  ]
+  displaySlot [
+    Solid {
+      translation 0.1 0 -0.25
+      rotation 0.6353159295275 -0.5360478155388282 -0.5559014383365626 1.98
+      children [
+        Speaker {
+        }
+        Display {
+          translation 0.00183016 0.0237368 -0.0641422
+          rotation 0.7071067811865475 -0.7071067811865475 0 0.2617996938995747
+          children [
+            DEF display_shape Shape {
+              appearance Appearance {
+                material Material {
+                  emissiveColor 1 1 1
+                }
+                texture ImageTexture {
+                  filtering 0
+                }
+              }
+              geometry Box {
+                size 0.24 0.135 0.01
+              }
+            }
+          ]
+          boundingObject Box {
+            size 0.24 0.135 0.02
+          }
+          physics Physics {
+          }
+          width 720
+          height 405
+        }
+        DEF G0 Group {
+          children [
+            Shape {
+              appearance Plaster {
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.05
+              }
+            }
+            Transform {
+              translation 0 0.0219067 -0.0544829
+              rotation 0.7071067811865475 -0.7071067811865475 0 0.261799
+              children [
+                Shape {
+                  appearance Plaster {
+                  }
+                  geometry Box {
+                    size 0.24 0.135 0.01
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      boundingObject USE G0
+      physics Physics {
+      }
+    }
+  ]
+  cameraSlot [
+    Camera {
+      rotation 0 1 0 -1.5707996938995747
+      fieldOfView 1
+      width 640
+      height 480
+      near 0.003
+      noise 0.007
+      lens Lens {
+      }
+      focus Focus {
+        focalLength 0.0036
+        maxFocalDistance 1000000
+        minFocalDistance 1
+      }
+      zoom Zoom {
+      }
+      recognition Recognition {
+      }
+    }
+  ]
+}
+Solid {
+  translation -6.59 0.2 1.5
+  rotation 0 1 0 3.14159
+  children [
+    DEF Tablecloth_shape Shape {
+      appearance DEF Tablecloth_appearance PBRAppearance {
+        baseColor 0.05 0.38 0.05
+        transparency 0.3
+        metalness 0
+      }
+      geometry Box {
+        size 1.83 0.5 1.03
+      }
+    }
+  ]
+  name "solid(2)"
+  boundingObject USE Tablecloth_shape
+}
+Solid {
+  translation 1.74 0.42 0
+  children [
+    DEF Cylinder_shape Shape {
+      appearance USE Tablecloth_appearance
+      geometry Cylinder {
+        height 0.7
+        radius 1.01
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE Cylinder_shape
+}
+Radiator {
+  translation -4.1 0.61 -8.37
+  rotation 0 1 0 -1.5707953071795862
+}
+Door {
+  translation 2.36 0 -8.69
+}
