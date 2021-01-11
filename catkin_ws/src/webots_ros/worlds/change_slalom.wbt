@@ -3,10 +3,9 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5749676013540095 0.551926831601503 0.603977673388299 4.109140106228906
-  position 4.41779406591801 47.2710953240008 0.16787259016099165
+  orientation 0.0007034840330623157 -0.9939807281658056 -0.1095528052821561 3.1543580058623872
+  position 0.09338092091275679 2.262011281667105 -8.99649897541231
   follow "change"
-  followType "None"
 }
 TexturedBackground {
 }
@@ -19,15 +18,23 @@ RectangleArena {
     type "light strip"
   }
   wallThickness 0.3
-  wallHeight 3
+  wallHeight 1
 }
 Pedestrian {
-  translation 0.168802 1.27 4.96889
-  rotation 0 1 0 -1.5708053071795867
+  translation 0.128802 1.27 4.96889
+  rotation 0 1 0 -2.8798053071795864
   name "pedestrian(7)"
   shirtColor 0.739193 0 0.0918135
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
+}
+Pedestrian {
+  translation -0.824044 1.27 5.3512
+  rotation 0 -1 0 -2.8797853071795863
+  name "pedestrian(1)"
+  shirtColor 0.756863 0.490196 0.0666667
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.729412 0.741176 0.713725
 }
 CardboardBox {
   translation 0.77 0.3 -2.18

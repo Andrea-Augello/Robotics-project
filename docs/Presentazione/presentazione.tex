@@ -68,7 +68,7 @@
 		di evitarne l'esposizione. Il distanziamento sociale si configura di
 		conseguenza come un prerequisito per una significativa riduzione del numero
 		di infetti, come evidenziato da simulazioni di un sistema ad agenti
-		\cite{silva2020covid}. Un problema chiave si configura di conseguenza come
+		\cite{silva2020covid}. Un problema chiave risulta essere
 		il controllo del rispetto delle norme di distanziamento all'interno degli
 		spazi chiusi. 
 	}
@@ -79,26 +79,24 @@
 	Nella dimostrazione presentata il nostro robot rileva le persone nella stanza e individua i possibili assembramenti. In seguito alla fase di rilevazione si sposterà verso l'assembramento evitando gli ostacoli e, arrivato, esorterà le persone al rispetto del distanziamento sociale.
 	\end{frame}
 	
-	\begin{frame}{Stato dell'arte}
-	Un robot che si occupa di far rispettare il distanziamento sociale è quello
-	proposto nell'articolo~\cite{sathyamoorthy2020covidrobot}. Sono stati usati
-	un TurtleBot 2, una camera RGB-D e CCTV per il rilevamento degli
-	assembramenti, una camera termica per rilevare la temperatura corporea e un
-	lidar 2-D per evitare le collisioni.
-	
-	Un altro esempio è quello proposto nell'articolo~\cite{fan2020autonomous}.
-	In questo caso sono state usate 2 camere e CCTV per il rilevamento degli
-	assembramenti e un lidar 3-D per evitare le collisioni.
+	\begin{frame}[allowframebreaks]{Stato dell'arte}
+	Un TurtleBot 2, con una camera RGB-D e CCTV per il rilevamento degli assembramenti, una camera termica FLIR C3 per rilevare la temperatura corporea e un lidar 2-D per evitare le collisioni. L'elaborazione delle immagini provenienti da CCTV è eseguita in un laptop con una CPU Intel i7 7th generation e una GPU Nvidia GTX1060, mentre il resto dell'elaborazione è eseguita su una CPU Intel i9 8th generation e una GPU Nvidia RTX2080 montate sul robot.
 	
 	\begin{figure}[H]
-		\begin{subfigure}{0.49\textwidth}
-			\centering
-			\includegraphics[width=0.8\linewidth]{./img/State_of_art_2.png}
-		\end{subfigure}
-		\begin{subfigure}{0.49\textwidth}
-			\centering
-			\includegraphics[width=0.8\linewidth]{./img/State_of_art_1.png}
-		\end{subfigure}
+		\centering
+		\includegraphics[width=0.6\linewidth]{./img/State_of_art_1.png}
+	\end{figure}
+	
+	\framebreak
+	
+	Un Laikago con 2 camere laterali e CCTV per il rilevamento degli
+		assembramenti e un lidar 3-D per evitare le collisioni. 
+		L'elaborazione riguardante il modulo visivo è effettuata in una NVIDIA Jetson AGX Xavier,
+		il resto è eseguito in una CPU Intel i5 8259U. Il rilevamento delle persone viene effettuato tramite la rete YOLO.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\linewidth]{./img/State_of_art_2.png}
 	\end{figure}
 	
 	\end{frame}
