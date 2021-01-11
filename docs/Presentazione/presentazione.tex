@@ -214,16 +214,51 @@
 	\frame{\sectionpage}
 	
 	\begin{frame}{Orientamento}
-		Il modello del moto è caratterizzato da rotazioni e traslazioni. Per le
-		rotazioni ci basiamo sui dati forniti dal giroscopio, il quale fornisce
-		una velocità angolare. Calcoliamo quindi l'angolo di rotazione
-		effettuando un'integrazione discreta dei campioni con interpolazione
-		lineare del primo ordine (Eq.~\ref{eq:gyro-integration}).  
-		\begin{equation}\label{eq:gyro-integration}
-			\theta_i = \sum_{j=1}^i \frac{\omega _{j-1}+\omega _j}{2} \left( t_j-t_{j-1} \right) 
-		\end{equation}
-		Noto l'angolo corrente e l'angolo target utilizziamo un controllore
-		proporzionale per raggiungere l'angolo desiderato.
+		\only<1>{
+			Il modello del moto è caratterizzato da rotazioni e traslazioni.
+			Per le rotazioni ci basiamo sui dati forniti dal giroscopio,
+			fondendoli con quelli provenienti dagli encoder delle
+			ruote~\cite{gyrodometry}.  Calcoliamo quindi l'angolo di rotazione
+			effettuando un'integrazione discreta dei campioni della velocità
+			angolare con una interpolazione lineare del primo ordine
+			(Eq.~\ref{eq:gyro-integration}).  
+			\begin{equation}\label{eq:gyro-integration}
+				\theta_i = \sum_{j=1}^i \frac{\omega _{j-1}+\omega _j}{2} \left( t_j-t_{j-1} \right) 
+			\end{equation}
+
+			Noto l'angolo corrente e l'angolo target utilizziamo un controllore
+			proporzionale per raggiungere l'angolo desiderato.
+		}
+		\only<2>{
+			\begin{columns}
+				\begin{column}{0.49\textwidth}
+					\includegraphics[width=\linewidth]{img/sensor_fusion.pdf}
+
+					La fusione dei dati dei sensori riduce il MSE della stima
+					da 55 (solo giroscopio) a 32.
+				\end{column}
+				\begin{column}{0.51\textwidth}
+					\begin{algorithm}[H]
+					\caption{Stima dell'angolo}\label{alg:angle}
+						\DontPrintSemicolon
+						\SetAlgoLined
+						\SetKwProg{Fn}{function}{:}{end}
+						
+						\KwData{$\omega_{gyro,i},\,\omega_{odom,i},\,\omega_{i-1},\,\theta_{i-1}$}
+						\KwResult{$\theta_i$}
+						$ \delta \leftarrow \omega_{gyro,i}-\omega_{odom,i} $ \;
+						\uIf{ $ \left| \delta/\omega_{gyro,i} \right| > thresh  $ }
+							{$\omega_i \leftarrow \omega_{gyro,i}$}
+						\Else 
+							{$\omega_i \leftarrow \omega_{odom,i}$}
+						$\theta_i \leftarrow  \theta_{i-1}+ \frac{\omega _{i-1}+\omega _i}{2} \left( t_j-t_{j-1} \right) $\;
+
+						\Return{$\theta _i$}\;
+					\end{algorithm}
+					
+				\end{column}
+			\end{columns}
+		}
 	\end{frame}
 	
 	\begin{frame}{Spostamento}
@@ -404,10 +439,16 @@
 	
 	\subsection{Calcolo della distanza}\label{subsec:Calcolo-della-distanza}
 	\begin{frame}[allowframebreaks]{Calcolo della distanza}
-		Ipotizzando che la camera abbia un FOV (field of view) di
-		$2\alpha$ e sia distante $d$ dall'oggetto, la massima distanza
-		orizzontale che un punto dell'immagine potrebbe avere dal centro del
-		piano dell'immagine sarebbe $a = d \tan \alpha$.
+
+		L’altezza percepita dell’oggetto non è un indicatore affidabile della
+		sua distanza dal robot in quanto parte dell’oggetto potrebbe essere
+		occlusa o non presente nel frame. La larghezza del torso, invece, è
+		meno suscettibile a tali problemi, e non dipende dalla posizione. 
+
+		Ipotizzando che la camera abbia un FOV di $2\alpha$ e sia distante $d$
+		dall'oggetto, la massima distanza orizzontale che un punto
+		dell'immagine potrebbe avere dal centro del piano dell'immagine sarebbe
+		$a = d \tan \alpha$.
 		
 		\begin{figure}[H]
 			\centering
@@ -457,7 +498,7 @@
 	
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
 
-	\begin{frame}[allowframebreaks]{Scarto dei duplicati}
+	\begin{frame}{Scarto dei duplicati}
 		È stato necessario effettuare una fase di clustering al fine di
 		scartare le bounding box duplicate. L'algoritmo di clustering
 		utilizzato è DBSCAN (Density based scan) \cite{dbscan}, i cui parametri
@@ -548,7 +589,8 @@
 	Al fine di trasformare le osservazioni ottenute in una probabilità che le
 	persone si trovino effettivamente nella posizione indicata è stato
 	necessario definire una funzione densità di probabilità. La distribuzione
-	normale è computazionalmente onerosa. Abbiamo quindi fatto ricorso ad una approssimazione (Eq.~\ref{eq:pdf}).
+	normale è computazionalmente onerosa. Abbiamo quindi fatto ricorso ad una
+	approssimazione.
 	
 	
 	
@@ -614,12 +656,10 @@
 	L'incertezza sulla distanza è ricavata dalle misure di calibrazione
 	effettuate. Per l'angolo è stato seguito un approccio differente:
 	utilizzare una varianza calcolata a partire da una serie di osservazioni
-	porterebbe ad assegnare maggiore probabilità ad oggetti lontani. \\
-	In un
-	setup come quello in figura~\ref{fig:circular_sector}, con due target
-	rilevati, rispettivamente a distanza $d_1$ e $d_2$, le aree ad alta
-	probabilità relative ad entrambi i punti avranno lunghezza $l$ e ampiezze $
-	\alpha_1 \text{ e } \alpha_2  $. 
+	porterebbe ad assegnare maggiore probabilità ad oggetti lontani. \\ In un
+	setup come quello in figura, con due target rilevati, rispettivamente a
+	distanza $d_1$ e $d_2$, le aree ad alta probabilità relative ad entrambi i
+	punti avranno lunghezza $l$ e ampiezze $ \alpha_1 \text{ e } \alpha_2  $. 
 	
 	\begin{figure}[H]
 		\centering
