@@ -51,10 +51,10 @@
 	distanziamento sociale si configura di conseguenza come un prerequisito per
 	una significativa riduzione del numero di infetti, come evidenziato da
 	simulazioni di un sistema ad agenti \cite{silva2020covid}. Un problema
-	chiave si configura di conseguenza come il controllo del rispetto delle
-	norme di distanziamento all'interno degli spazi chiusi. In tal senso
-	l'utilizzo di un robot evita l'inutile esposizione da parte di un operatore
-	all'agente patogeno.
+	chiave risulta essere il controllo del rispetto delle norme di
+	distanziamento all'interno degli spazi chiusi. In tal senso l'utilizzo di
+	un robot evita l'inutile esposizione da parte di un operatore all'agente
+	patogeno.
 	
 	\subsection{Nome}\label{subsec:Nome}
 	Il team ha scelto come nome del robot \textbf{Change} in onore di \textbf{Chang'e 4}
@@ -248,19 +248,13 @@
 	
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento} 
-	\subsection{Orientamento}\label{subsec:Orientamento}
-	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per le
-	rotazioni ci basiamo sui dati forniti dal giroscopio, il quale fornisce una
-	velocità angolare. Calcoliamo quindi l'angolo di rotazione effettuando
-	un'integrazione discreta dei campioni con interpolazione lineare del primo
-	ordine (Eq.~\ref{eq:gyro-integration}).  
-	\begin{equation}\label{eq:gyro-integration}
-		\theta_i = \sum_{j=1}^i \frac{\omega _{j-1}+\omega _j}{2} \left( t_j-t_{j-1} \right) 
-	\end{equation}
-	Noto l'angolo corrente e l'angolo target utilizziamo un controllore
-	proporzionale per raggiungere l'angolo desiderato.
-	
-	\subsection{Spostamento}\label{subsec:Spostamento}
+
+	\subsection{Traslazione e Rotazione}\label{subsec:Spostamento}
+
+	Il \textbf{TIAGo} consente guida differenziale, in particolare noi
+	definiamo gli spostamenti in termini di spezzate, alternando traslazioni
+	lineari e rotazioni.
+
 	Per effettuare lo spostamento lineare utilizziamo il controllore PID
 	(Proporzionale-Integrale-Derivativo) delle ruote fornito da Webots, che
 	richiede un angolo di rotazione target per ogni ruota. Utilizziamo quindi
@@ -272,8 +266,66 @@
 	currentAngle+2\pi\frac    {distance}
 					{2\pi \cdot diameter}
 	\end{equation}
+
+
+	Per la traslazione ci affidiamo alla stima della posa
+	(Sezione~\ref{subsec:Orientamento}): noto l'angolo corrente e l'angolo
+	target moduliamo la velocità angolare tramite un controllore proporzionale
+	per raggiungere l'angolo desiderato.
 	
-	\subsection{Posizionamento}\label{subsec:Posizionamento}
+
+	\subsection{Stima dell'orientamento}\label{subsec:Orientamento}
+	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per le
+	rotazioni ci siamo inizialmente basati sui dati forniti dal giroscopio, il
+	quale fornisce una velocità angolare. L'angolo di rotazione era calcolato
+	quindi effettuando un'integrazione discreta dei campioni con interpolazione
+	lineare del primo ordine (Eq.~\ref{eq:gyro-integration}).  
+	\begin{equation}\label{eq:gyro-integration}
+		\theta_i = \sum_{j=1}^i \frac{\omega _{j-1}+\omega _j}{2} \left( t_j-t_{j-1} \right) 
+	\end{equation}
+
+	L'integrazione dei dati del giroscopio è soggetta ad un drift più
+	significativo che l'uso dell'odometria attraverso gli encoder delle
+	ruote(Eq.~\ref{eq:odometry-angle})
+
+	\begin{equation}\label{eq:odometry-angle}
+		w_{odom}= \frac	{R(u_{r,i}-u_{l,i})} {L} 
+	\end{equation}
+	
+	L'errore nella stima odometrica però ha anche componenti non sistematiche
+	difficili da stimare e correggere, per stimare la velocità di rotazione
+	effettuiamo quindi una fusione basata su regole dei dati forniti da encoder
+	e giroscopio~\cite{gyrodometry, 572228} come mostrato
+	nell'algoritmo~\ref{alg:angle}.
+
+	\begin{algorithm}[H]
+	\caption{Stima dell'angolo}\label{alg:angle}
+		\DontPrintSemicolon
+		\SetAlgoLined
+		\SetKwProg{Fn}{function}{:}{end}
+		
+		\KwData{$\omega_{gyro,i},\,\omega_{odom,i},\,\omega_{i-1},\,\theta_{i-1}$}
+		\KwResult{$\theta_i$}
+		$ \delta \leftarrow \omega_{gyro,i}-\omega_{odom,i} $ \;
+		\uIf{ $ \left| \delta/\omega_{gyro,i} \right| > thresh  $ }
+			{$\omega_i \leftarrow \omega_{gyro,i}$}
+		\Else 
+			{$\omega_i \leftarrow \omega_{odom,i}$}
+		$\theta_i \leftarrow  \theta_{i-1}+ \frac{\omega _{i-1}+\omega _i}{2} \left( t_j-t_{j-1} \right) $\;
+
+		\Return{$\theta _i$}\;
+	\end{algorithm}
+
+	Questa fusione dei dati ottenuti dai sensori porta un sostanziale miglioramento della stima della posa del robot: il MSE tra la stima e la posa reale scende a $ 32 $ dai $ 55 $ con il solo giroscopio (Fig.~\ref{fig:sensor_fusion}).
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.5\textwidth]{./img/sensor_fusion.pdf}
+		\caption{Errore sulla stima della posa}
+		\label{fig:sensor_fusion}
+	\end{figure}
+	
+	\subsection{Stima della posizione}\label{subsec:Posizionamento}
 	Per stimare il posizionamento, inizialmente abbiamo utilizzato i dati
 	dell'accelerometro \cite{positioning}, in quanto le ruote possono essere
 	soggette a slittamento fornendo una misura imprecisa. Al segnale
@@ -330,7 +382,7 @@
 		\end{bmatrix}\cdot (t_j-t_{j-1}) 
 	\end{equation}
 
-	La $\theta_i$ è data dall'interpolazione lineare descritta nell'equazione (\ref{eq:gyro-integration}).
+	La $\theta_i$ è ottenuta come descritto nella sezione~\ref{subsec:Orientamento}.
 	
 	Abbiamo misurato le performance della stima di posizione e i risultati sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto. In Fig.~\ref{fig:dead_reckoning_error} sono mostrati i risultati delle misurazioni effettuate.
 	
