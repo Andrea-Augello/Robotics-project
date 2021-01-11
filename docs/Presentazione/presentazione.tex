@@ -251,6 +251,10 @@
 		currentAngle+2\pi\frac    {distance}
 						{2\pi \cdot diameter}
 		\end{equation}
+			Noto l'angolo corrente e l'angolo target utilizziamo un controllore
+			proporzionale per raggiungere l'angolo desiderato.
+
+
 	\end{frame}
 	
 	\begin{frame}{Collision avoidance}
@@ -301,10 +305,6 @@
 			\end{equation}
 			
 			L'errore nella stima odometrica però ha anche componenti non sistematiche difficili da stimare e correggere, per stimare la velocità di rotazione effettuiamo quindi una fusione dei dati forniti da encoder e giroscopio.
-
-			Noto l'angolo corrente e l'angolo target utilizziamo un controllore
-			proporzionale per raggiungere l'angolo desiderato.
-
 		}
 		\only<3>{
 			\begin{columns}
@@ -967,10 +967,16 @@
 			\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
 				pianificare il moto con algoritmi come A* \cite{A*} o RRT
 				\cite{RRT}
-			\item Migliorare la modalità Tangent Bug
+			\item Utilizzare le informazioni ottenute dalla camera (e.g. flusso
+				ottico~\cite{Deng_Arif_Yang_Xi_Quan_Cai_2020}) anche per
+				migliorare le stime sulla posizione.
 			\item Utilizzare una depth-cam per stimare con più precisione la
 				distanza delle persone
 			\item Tracciamento delle persone in real-time
+			\item Utilizzare più robot distribuiti nell'ambiente per aggiornare in
+				modo collaborativo~\cite{miner2007swarm} le stime sulla
+				distribuzione delle persone, eventualmente anche con una mappatura
+				semantica degli ambienti~\cite{kostavelis2015semantic}
 		\end{itemize}
 	\end{frame}
 
