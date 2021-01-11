@@ -1,10 +1,10 @@
-\documentclass[10pt]{beamer}
+\documentclass[aspectratio=169, leqno]{beamer}
 \usetheme{Pittsburgh}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{bibliography item}{\insertbiblabel}
 
 \usepackage{graphicx}
-\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage[ruled,vlined]{algorithm2e}
 \usepackage{color,soul}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -81,24 +81,47 @@
 	\end{frame}
 	
 	\begin{frame}[allowframebreaks]{Stato dell'arte}
-	Un TurtleBot 2, con una camera RGB-D e CCTV per il rilevamento degli assembramenti, una camera termica FLIR C3 per rilevare la temperatura corporea e un lidar 2-D per evitare le collisioni. L'elaborazione delle immagini provenienti da CCTV è eseguita in un laptop con una CPU Intel i7 7th generation e una GPU Nvidia GTX1060, mentre il resto dell'elaborazione è eseguita su una CPU Intel i9 8th generation e una GPU Nvidia RTX2080 montate sul robot.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.6\linewidth]{./img/State_of_art_1.png}
-	\end{figure}
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{./img/State_of_art_1.png}
+			\end{figure}
+			\end{column}
+			
+			\begin{column}{0.5\textwidth}
+				\justifying
+				Un TurtleBot 2, con una camera RGB-D e CCTV per il rilevamento
+				degli assembramenti, una camera termica FLIR C3 per rilevare la
+				temperatura corporea e un lidar 2-D per evitare le collisioni.
+				L'elaborazione delle immagini provenienti da CCTV è eseguita in un
+				laptop con una CPU Intel i7 7th generation e una GPU Nvidia
+				GTX1060, mentre il resto dell'elaborazione è eseguita su una CPU
+				Intel i9 8th generation e una GPU Nvidia RTX2080 montate sul robot.
+			\end{column}
+			
+		\end{columns}
 	
 	\framebreak
 	
-	Un Laikago con 2 camere laterali e CCTV per il rilevamento degli
-		assembramenti e un lidar 3-D per evitare le collisioni. 
-		L'elaborazione riguardante il modulo visivo è effettuata in una NVIDIA Jetson AGX Xavier,
-		il resto è eseguito in una CPU Intel i5 8259U. Il rilevamento delle persone viene effettuato tramite la rete YOLO.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.6\linewidth]{./img/State_of_art_2.png}
-	\end{figure}
+	\begin{columns}
+		\begin{column}{0.5\linewidth}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{./img/State_of_art_2.png}
+			\end{figure}
+		\end{column}
+
+		\begin{column}{0.5\linewidth}
+		\justifying
+			Un Laikago con 2 camere laterali e CCTV per il rilevamento degli
+			assembramenti e un lidar 3-D per evitare le collisioni.
+			L'elaborazione riguardante il modulo visivo è effettuata in una
+			NVIDIA Jetson AGX Xavier, il resto è eseguito in una CPU Intel i5
+			8259U. Il rilevamento delle persone viene effettuato tramite la
+			rete YOLO.
+		\end{column}
+	\end{columns}
 	
 	\end{frame}
 	
@@ -126,7 +149,15 @@
 	\frame{
 
 	\begin{columns}
-		\begin{column}{0.7\textwidth}
+		\begin{column}{0.2\textwidth}
+			\begin{figure}[htpb]
+				\centering
+				\includegraphics[width=\textwidth]{./img/tiago.png}
+				\label{fig:tiago}
+			\end{figure}
+		\end{column}
+
+		\begin{column}{0.8\textwidth}
 		\justifying
 		Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}, un
 		robot umanoide a due ruote con torso e testa ma senza braccia
@@ -148,13 +179,6 @@
 		parzialmente occluso).
 		\end{column}
 		
-		\begin{column}{0.3\textwidth}
-			\begin{figure}[htpb]
-				\centering
-				\includegraphics[width=\textwidth]{./img/tiago.png}
-				\label{fig:tiago}
-			\end{figure}
-		\end{column}
 	\end{columns}
 	
 	}
@@ -164,7 +188,7 @@
 
 	\frame{\begin{figure}[H]
 		\centering
-		\includegraphics[width=1\textwidth]{img/rosgraph.pdf}
+		\includegraphics[width=0.7\textwidth]{img/rosgraph.pdf}
 		\caption{Architettura dei nodi ROS, ottenuta tramite \textit{rqt}}
 		\label{fig:rosgraph}
 	\end{figure}
@@ -193,6 +217,7 @@
 	viene anche visualizzato testualmente sullo schermo in italiano, inglese e
 	cinese.  I possibili comportamenti assunti dal robot sono:
 	\begin{itemize}
+		\justifying
 		\pause\item Salutare all'avvio
 		\pause\item Mostrare sul display immagini che esortano a rispettare il
 			distanziamento sociale
@@ -232,13 +257,14 @@
 		}
 		\only<2>{
 			\begin{columns}
-				\begin{column}{0.49\textwidth}
+				\begin{column}{0.50\textwidth}
 					\includegraphics[width=\linewidth]{img/sensor_fusion.pdf}
 
+					\justifying
 					La fusione dei dati dei sensori riduce il MSE della stima
 					da 55 (solo giroscopio) a 32.
 				\end{column}
-				\begin{column}{0.51\textwidth}
+				\begin{column}{0.50\textwidth}
 					\begin{algorithm}[H]
 					\caption{Stima dell'angolo}\label{alg:angle}
 						\DontPrintSemicolon
@@ -247,14 +273,16 @@
 						
 						\KwData{$\omega_{gyro,i},\,\omega_{odom,i},\,\omega_{i-1},\,\theta_{i-1}$}
 						\KwResult{$\theta_i$}
+
+						\;
 						$ \delta \leftarrow \omega_{gyro,i}-\omega_{odom,i} $ \;
 						\uIf{ $ \left| \delta/\omega_{gyro,i} \right| > thresh  $ }
 							{$\omega_i \leftarrow \omega_{gyro,i}$}
 						\Else 
 							{$\omega_i \leftarrow \omega_{odom,i}$}
-						$\theta_i \leftarrow  \theta_{i-1}+ \frac{\omega _{i-1}+\omega _i}{2} \left( t_j-t_{j-1} \right) $\;
+						$\theta_i \leftarrow  \theta_{i-1}+ \frac{\omega _{i-1}+\omega _i}{2} \left( t_j-t_{j-1} \right) $\;\;
 
-						\Return{$\theta _i$}\;
+						\Return{$\theta _i$}\;\;
 					\end{algorithm}
 					
 				\end{column}
@@ -279,40 +307,39 @@
 	
 	\subsection{Posizionamento}\label{subsec:Posizionamento}
 	\begin{frame}{Posizionamento}
+		\only<1>{
 		Inizialmente al segnale dell'accelerometro
 		veniva applicato un integrale doppio per ottenere lo spostamento
-		lineare(Eq.~\ref{eq:accel-integration} 	\cite{positioning}).
-		
+		lineare~\cite{positioning}.
 		\begin{equation}\label{eq:accel-integration}
 			\begin{cases}
 				\textbf{v}_i & = \sum_{j=1}^{i} \frac{\textbf{a} _{j-1}+\textbf{a} _j}{2} \left( t_j-t_{j-1} \right) \\
 				\textbf{s}_i & = \sum_{j=1}^{i} \frac{\textbf{v} _{j-1}+\textbf{v} _j}{2} \left( t_j-t_{j-1} \right) 
 			\end{cases}
 		\end{equation}
-		
-		\pause
+		}
+		\only<2->{
+		\stepcounter{equation}
 		Abbiamo ritenuto necessario cambiare approccio, decidendo di utilizzare
 		gli encoders delle ruote per determinare gli spostamenti. 
 		
 		Integriamo la velocità lineare del robot, calcolata a partire dal
 		raggio $R$ e le velocità angolari $u$ delle ruote.
-		
 		\begin{equation}\label{eq:linear-velocity}
 			v_i = \frac{R (u_{r,i}+u_{l,i})}{2}
 		\end{equation}
-		
-		\pause
 		Questi valori sono aggiornati ad ogni intervallo di campionamento utilizzando la velocità lineare e la velocità angolare del robot \cite{572228}.
-		
 		\begin{equation}\label{eq:position-vector-update}
 			\textbf{P}_i = \sum_{j = 1}^{i} \begin{bmatrix}
 				 & v_j\cos(\theta_j ) & \\
 				 & v_j\sin(\theta_j )
 			\end{bmatrix}\cdot (t_j-t_{j-1}) 
 		\end{equation}		
+		}
 		
 	\end{frame}
 	\begin{frame}
+		\frametitle{Posizionamento}
 		\begin{figure}[H]
 			\begin{subfigure}{0.49\textwidth}
 				\centering
@@ -327,24 +354,37 @@
 				\label{fig:trajectory_error}
 			\end{subfigure}
 		\end{figure}
-		Abbiamo misurato le performance della stima di posizione e i risultati
-		sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto.
+		\begin{columns}
+			\begin{column}{0.85\linewidth}
+				\justifying
+				Abbiamo misurato le performance della stima di posizione e i risultati
+				sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto.
+			\end{column}
+			\begin{column}{0.15\linewidth} \end{column}
+		\end{columns}
 	\end{frame}
 	
 	\begin{frame}{Collision avoidance}
-		Il \textbf{TIAGo} è in grado di rilevare gli ostacoli grazie
-		all'utilizzo di un sensore lidar.  
-		
-		Nell'immagine seguente viene mostrata la zona nella quale, se viene
-		indicata dal lidar la presenza di un ostacolo, il \textbf{TIAGo} si
-		ferma per ragioni di sicurezza al fine di evitare danni a persone e/o
-		oggetti.
-		\begin{figure}[H]
-			\centering
-			\includegraphics[width=0.2\textwidth]{./img/collision_avoidance.pdf}
-			\caption{Collision avoidance}
-			\label{fig:collision_avoidance}
-		\end{figure}
+		\begin{columns}
+			\begin{column}{0.2\linewidth}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{./img/collision_avoidance.pdf}
+					\label{fig:collision_avoidance}
+				\end{figure}
+			\end{column}
+			\begin{column}{0.8\linewidth}
+				\justifying
+				Il \textbf{TIAGo} è in grado di rilevare gli ostacoli
+				grazie all'utilizzo di un sensore lidar.  
+
+				Nell'immagine viene mostrata la zona nella quale, se
+				viene indicata dal lidar la presenza di un ostacolo, il
+				\textbf{TIAGo} si ferma per ragioni di sicurezza al fine di
+				evitare danni a persone e/o oggetti.
+			\end{column}
+			
+		\end{columns}
 	\end{frame}
 	
 	\section{Object recognition}\label{sec:Object-recognition}
@@ -352,8 +392,8 @@
 	
 	\begin{frame}{Campionamento delle immagini}
 		Il FOV della camera è di 57°, quindi per ricoprire 360° è necessario
-		effettuare 7 campionamenti. Il settimo campionamento, come si vede in
-		figura \ref{fig:campionamento_immagini}, è sovrapposto al primo per 39°.
+		effettuare 7 campionamenti. L'ultimo campionamento è sovrapposto al
+		primo per 39°.
 
 		È possibile che un individuo si trovi in una zona di confine
 		tra due campioni, e che quindi non sia correttamente identificabile in
@@ -366,13 +406,12 @@
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.3\textwidth]{./img/pictures_sampling.pdf}
-			\caption{Campionamento delle immagini}
 			\label{fig:campionamento_immagini}
 		\end{figure}
 	\end{frame}
 	
 	\begin{frame}{YOLO}
-		Abbiamo valutato le performance di YOLOv3 (you only look once),\\
+		Abbiamo valutato le performance di YOLOv3 (you only look once),
 		YOLOv3-tiny, HoG, HoG + SVG + NMS . In seguito a vari test su HoG abbiamo
 		ritenuto essere problematica la larghezza delle bounding boxes fornite.
 		YOLOv3 fornisce risultati soddisfacenti.
@@ -408,7 +447,7 @@
 	\subsection{Triangolazione}\label{subsec:Triangolazione}
 	\begin{frame}{Triangolazione}
 		\begin{columns}
-			\begin{column}{0.4\textwidth}
+			\begin{column}{0.3\textwidth}
 				\begin{figure}[htpb]
 					\centering
 					\includegraphics[width=\textwidth]{./img/ideal_object_triangulation.pdf}
@@ -416,7 +455,7 @@
 				\end{figure}
 			\end{column}
 
-			\begin{column}{0.6\textwidth}
+			\begin{column}{0.7\textwidth}
 				\justifying
 				La triangolazione come metodo di individuazione delle persone
 				presenta dei problemi nel nostro scenario:
@@ -443,7 +482,7 @@
 
 		L’altezza percepita dell’oggetto non è un indicatore affidabile della
 		sua distanza dal robot in quanto parte dell’oggetto potrebbe essere
-		occlusa o non presente nel frame. La larghezza del torso, invece, è
+		occlusa o non presente nel frame. La larghezza del torso è
 		meno suscettibile a tali problemi, e non dipende dalla posizione. 
 
 		Ipotizzando che la camera abbia un FOV di $2\alpha$ e sia distante $d$
@@ -453,7 +492,7 @@
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.4\textwidth]{./img/linearization_error.pdf}
+			\includegraphics[width=0.3\textwidth]{./img/linearization_error.pdf}
 		\end{figure}
 		
 		Ignorare la prospettiva significa effettuare un'approssimazione lineare
@@ -511,7 +550,7 @@
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.4\textwidth]{./img/nms.pdf}
+			\includegraphics[width=0.32\textwidth]{./img/nms.pdf}
 		\end{figure}
 	\end{frame}
 
@@ -524,7 +563,7 @@
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.6\textwidth]{./img/interpolation.pdf}
+			\includegraphics[width=0.45\textwidth]{./img/interpolation.pdf}
 			\label{fig:interpolation}
 		\end{figure}
 
@@ -536,16 +575,15 @@
 		\begin{subfigure}{.49\textwidth}
 			\centering
 			% include first image
-			\includegraphics[width=1\linewidth]{./img/angle_error.pdf}  
+			\includegraphics[width=0.85\linewidth]{./img/angle_error.pdf}  
 			\label{fig:angle_plot}
 		\end{subfigure}
 		\begin{subfigure}{.49\textwidth}
 			\centering
 			% include second image
-			\includegraphics[width=1\linewidth]{./img/distance_error.pdf}  
+			\includegraphics[width=0.85\linewidth]{./img/distance_error.pdf}  
 			\label{fig:distance_plot}
 		\end{subfigure}
-		\caption{Box plot relativi all'errore su angolo e distanza}
 		\label{fig:boxes_plot}
 	\end{figure}
 
@@ -556,12 +594,12 @@
 	\begin{figure}[H]
 		\begin{subfigure}{0.49\linewidth}
 			\centering
-			\includegraphics[width=\textwidth]{./img/error_covariance.png}
+			\includegraphics[width=0.7\textwidth]{./img/error_covariance.png}
 			\label{fig:error_covariance}
 		\end{subfigure}
 		\begin{subfigure}{0.49\linewidth}
 			\centering
-			\includegraphics[width=\textwidth]{./img/error_covariance_flat.png}
+			\includegraphics[width=0.7\textwidth]{./img/error_covariance_flat.png}
 			\label{fig:error_covariance_flat}
 		\end{subfigure}
 	\end{figure}
@@ -597,7 +635,7 @@
 	
 	\begin{figure}[ht]
 		\centering
-		\includegraphics[width=0.6\linewidth]{./img/pdf_benchmark.pdf}
+		\includegraphics[width=0.45\linewidth]{./img/pdf_benchmark.pdf}
 		\label{fig:pdf_benchmark}
 	\end{figure}
 	
@@ -609,6 +647,7 @@
 	nostro caso d'uso. 
 	
 	\begin{itemize}
+		\justifying
 		\pause\item Non presenta le "fat tails"
 		\pause\item Dopo una prima osservazione non confermata successivamente la probabilità scende a zero.
 		\pause\item Le occlusioni annullano la probabilità
@@ -627,7 +666,6 @@
 	cella in posizione $ {\bf x} $ si ottenga l'osservazione $ {\bf z} $, è
 	stato utilizzato un funzionale ispirato al guadagno del filtro di
 	Butterworth.
-
 	\begin{equation}\label{eq:pdf}
 	p({\bf z}|{\bf x}) = \frac	{K}
 	{1 + d({\bf x},{\bf z})^4 } 
@@ -635,7 +673,7 @@
 	
 	\begin{figure}[ht]
 		\centering
-		\includegraphics[width=0.5\linewidth]{./img/pdf_shape.pdf}
+		\includegraphics[width=0.4\linewidth]{./img/pdf_shape.pdf}
 		\label{fig:pdf_shape}
 	\end{figure}
 	
@@ -682,11 +720,18 @@
 	\end{align*}
 	\end{subequations}
 	
-		
-	Per evitare questo problema, dopo avere
-	individuato un valore $ \alpha ^* $ appropriato questo viene scalato per un
-	coefficiente inversamente proporzionale alla distanza della cella, quindi $
-	\alpha _1 = \alpha ^*/d_1 $ e $ \alpha _2=\alpha ^*/d_2 $, da cui $A_1=A_2$. 
+	\begin{columns}
+		\begin{column}{0.005\linewidth} \end{column}
+		\begin{column}{0.845\linewidth}
+			\justifying
+			Per evitare questo problema, dopo avere individuato un valore $
+			\alpha ^* $ appropriato questo viene scalato per un coefficiente
+			inversamente proporzionale alla distanza della cella, quindi $
+			\alpha _1 = \alpha ^*/d_1 $ e $ \alpha _2=\alpha ^*/d_2 $, da cui
+			$A_1=A_2$. 
+		\end{column}
+		\begin{column}{0.15\linewidth} \end{column}
+	\end{columns}
 	
 	\end{frame}
 	\begin{frame}{Aggiornamento bayesiano I}
@@ -699,6 +744,7 @@
 
 	Questa formula è valida sotto le seguenti assunzioni:
 	\begin{itemize}
+		\justifying
 		\pause\item In uno stesso scan, date due osservazioni $z_1$ e
 			$z_2$ queste non hanno intersezione, quindi $ p(z_1 \cup z_2) =
 			p(z_1)+p(z_2)-p( z_1 \cap z_2) = p(z_1)+p(z_2) $ 
@@ -714,6 +760,7 @@
 	In mancanza di nuovi dati si potrebbero tentare due approcci:
 	resettare le stime o lasciarle del tutto invariate. 
 	\begin{itemize} 
+		\justifying
 		\pause\item Lasciare invariato il belief a seguito di multiple scansioni
 			senza successo porterebbe a non notare che tutte le persone
 			nell'ambiente in cui ci si trova sono andate via, continuando a
@@ -739,7 +786,7 @@
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.8\textwidth]{./img/image_segmentation.pdf}
+		\includegraphics[width=0.68\textwidth]{./img/image_segmentation.pdf}
 	\end{figure}
 
 	\end{frame}
@@ -770,7 +817,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.4\textwidth]{./img/bug.pdf}
+		\includegraphics[width=0.3\textwidth]{./img/bug.pdf}
 		\label{fig:bug}
 	\end{figure}
 
@@ -814,7 +861,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.4\textwidth]{./img/potential_field.jpg}
+		\includegraphics[width=0.25\textwidth]{./img/potential_field.jpg}
 		\label{fig:potential_field}
 	\end{figure}
 	\end{frame}
@@ -835,8 +882,7 @@
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.5\textwidth]{./img/obstacle_fov.pdf}
-		\caption{FOV frontale del robot}
+		\includegraphics[width=0.35\textwidth]{./img/obstacle_fov.pdf}
 		\label{fig:obstacle_fov}
 	\end{figure}
 	
@@ -853,14 +899,12 @@
 	desiderato. L'angolo viene invece determinato dalla somma vettoriale delle
 	forze attrattive e repulsive. La rotazione viene inoltre sogliata per
 	evitare cambi di direzione troppo bruschi(Eq.~\ref{eq:angle}).
-
 	\begin{equation}\label{eq:translation}
 		d = 0.5 + \frac	{0.9\cdot distance - 0.5}
 		{1 + \left|
 				\frac{6\omega}{\pi}
 		\right|  } 
 	\end{equation}
-	
 	\begin{equation}\label{eq:angle}
 		\omega = \begin{cases}
 			\omega^*=\theta - \angle\left( \textbf{F}_{att} - \textbf{F}_{rep} \right)  & -\Omega \le \omega^* \le \Omega \\
@@ -874,17 +918,15 @@
 	\end{frame}
 	\begin{frame}{Automa a stati finiti}
 	\begin{columns}
-		\begin{column}{0.3\textwidth}
-			\begin{figure}[H]
+		\begin{column}{0.25\textwidth}
 				\hfuzz=42pt 
 				\centering
-				\includegraphics[width=1.45\textwidth]{./img/fsa.pdf}
-				\label{fig:fsa}
-			\end{figure}
+				\includegraphics[width=1.4\textwidth]{./img/fsa.pdf}
 		\end{column}	
-		\begin{column}{0.7\textwidth}
+		\begin{column}{0.75\textwidth}
 		\justifying
 		\begin{itemize}[<+->]
+			\justifying
 			\item All'avvio, \textbf{Change} effettua uno scan dell'ambiente.
 			\item Se non vengono rilevati obbiettivi entra in modalità
 				esplorazione e, dopo aver percorso una determinata distanza,
@@ -905,6 +947,7 @@
 	\frame{
 	Riportiamo di seguito possibili modifiche da apportare:
 		\begin{itemize}[<+->]
+			\justifying
 			\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
 				pianificare il moto con algoritmi come A* \cite{A*} o RRT
 				\cite{RRT}
@@ -913,20 +956,6 @@
 				distanza delle persone
 			\item Tracciamento delle persone in real-time
 		\end{itemize}
-	}
-
-	\section{Conclusioni}\label{sec:Conclusioni}
-	\frame{\sectionpage}
-	\frame{
-		Durante lo sviluppo del progetto sono state affrontate numerose
-		tematiche trattate durante il corso di \textit{Robotica}. L'esperienza
-		di sviluppo ha permesso al team di apprezzare l'importanza di solide
-		fondamenta teoriche unite ad una significativa esperienza pratica. In
-		particolar luogo abbiamo riscontrato problemi concernenti vari ambiti,
-		dalla robotica probabilistica all'esplorazione degli ambienti, la cui
-		ricerca di risoluzione ci ha portato ad approfondire le fondamenta
-		teoriche della materia. La performance raggiunta, nonostante le
-		tempistiche, risulta soddisfacente.
 	}
 
 	\begin{frame}

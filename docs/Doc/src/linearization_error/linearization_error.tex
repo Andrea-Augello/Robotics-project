@@ -25,18 +25,21 @@
 \begin{document}
 
 		
-		\begin{tikzpicture}
-			\draw (0,0) -- (0,5);
-			\draw (-3.5,5) -- (3,5);
-			\draw (0,0) -- ++ (120:6);
-			\draw (0,0) -- ++ (60:5) arc (60:120:5);
-			\draw[dashed] (0,0) circle[radius=5];
+		\begin{tikzpicture}[>=stealth]
+			\draw (0,0) -- (0,2);
+			\draw (-2.5,2) -- (2,2);
+			\draw (0,0) -- ++ (120:3);
+			\draw (0,0) -- ++ (60:2) arc (60:120:2);
+			\draw[dashed] (0,0) circle[radius=2];
 			\draw (0,0) -- ++ (90:1) arc (90:120:1);
-			\draw (0,0) ++ (60:5) -- ++ (-5,0);
+			\draw (0,0) ++ (60:2) -- ++ (-2,0);
 			\node[anchor=east] (alpha) at(-0.15,1.25) {$\alpha$};
-			\node[anchor=east] (epsilon) at(-2.75,4.6) {$\epsilon$};
-			\node[anchor=east] (d) at (-0.15, 2.5) {$d$};
-			\node[anchor=east] (a) at (-1.25, 5.25) {$a$};
+			\node[anchor=east] (epsilon) at(-1.1,1.8) {$\epsilon$};
+			\draw[<->] (2.5,2)--(2.5,0);
+			\node[anchor=east] (d) at (+2.5, 1) {$d$};
+			\node[anchor=east] (a) at (-0.55, 2.25) {$a$};
+			\node[] () at (2.5,0) {$$};
+			
 		\end{tikzpicture}
 		
 		
