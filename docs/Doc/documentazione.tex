@@ -270,8 +270,16 @@
 
 	Per la traslazione ci affidiamo alla stima della posa
 	(Sezione~\ref{subsec:Orientamento}): noto l'angolo corrente e l'angolo
-	target moduliamo la velocità angolare tramite un controllore proporzionale
-	per raggiungere l'angolo desiderato.
+	target moduliamo la velocità angolare (Eq.~\ref{eq:odometry-angle}) tramite
+	un controllore proporzionale per raggiungere l'angolo desiderato.
+
+	Una volta raggiunta la configurazione desiderata invochiamo una procedura
+	di stop che attende il termine della frenata prima di effettuare la
+	successiva operazione di movimento. Per determinare se il robot sia
+	effettivamente fermo non è possibile fare affidamento sull'encoder delle
+	ruote, in quanto durante questa fase sono fortemente soggette a
+	slittamento. Utilizziamo quindi giroscopio e accelerometro per stimare la
+	velocità corrente del robot.
 	
 
 	\subsection{Stima dell'orientamento}\label{subsec:Orientamento}
@@ -1044,7 +1052,6 @@
 
 		\end{cases}	\end{equation}
 	
-	\newpage
 	\subsection{Automa a stati finiti}\label{subsec:Pianificazione}
 	
 	Nella figura \ref{fig:fsa} viene riportato l'automa a stati finiti che
