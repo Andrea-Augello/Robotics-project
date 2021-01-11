@@ -170,12 +170,12 @@
 	}
 
 	\begin{frame}{Webots node}
-	Questo nodo si occupa solamente di lanciare Webots, e di impostare il
+	Il nodo Webots si occupa solamente di lanciare Webots, e di impostare il
 	valore del clock di ROS in base al tempo della simulazione, in modo da
 	potere effettuare le integrazioni del tempo correttamente.
 	\end{frame}
 	\begin{frame}{Change controller node}
-	Questo è il nodo che si occupa della gran parte della elaborazione. Oltre
+	Il nodo Change controller che si occupa della gran parte della elaborazione. Oltre
 	ad arbitrare sui comportamenti da assumere, gestisce più moduli che si
 	occupano di: 
 	\begin{itemize}
@@ -187,7 +187,7 @@
 	\end{frame}
 
 	\begin{frame}{Interaction node}
-	Questo nodo ha il compito di gestire le interazioni audio/video. Ogni
+	Il nodo Interaction ha il compito di gestire le interazioni audio/video. Ogni
 	messaggio che viene riprodotto, prima in lingua italiana e poi inglese,
 	viene anche visualizzato testualmente sullo schermo in italiano, inglese e
 	cinese.  I possibili comportamenti assunti dal robot sono:
@@ -201,7 +201,7 @@
 	\end{frame}
 
 	\begin{frame}{Odometry node}
-	Il nodo che si occupa dell'odometria si occupa di stimare la posizione del
+	Il nodo Odometry si occupa di stimare la posizione del
 	robot, come spiegato approfonditamente nella
 	sezione~\ref{sec:Modello-del-moto-e-posizionamento}. In generale ciò che fa
 	è integrare costantemente i valori del giroscopio e della velocità delle
