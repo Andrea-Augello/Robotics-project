@@ -266,7 +266,7 @@
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento} 
 
-	\subsection{Traslazione e Rotazione}\label{subsec:Spostamento}
+	\subsection{Spostamento}\label{subsec:Spostamento}
 
 	Il \textbf{TIAGo} consente guida differenziale, in particolare noi
 	definiamo gli spostamenti in termini di spezzate, alternando traslazioni
@@ -284,7 +284,7 @@
 	\end{equation}
 
 
-	Per la traslazione ci affidiamo alla stima della posa
+	Per la rotazione ci affidiamo alla stima della posa
 	(Sezione~\ref{subsec:Orientamento}): noto l'angolo corrente e l'angolo
 	target moduliamo la velocità angolare (Eq.~\ref{eq:odometry-angle}) tramite
 	un controllore proporzionale per raggiungere l'angolo desiderato.
@@ -368,6 +368,16 @@
 	\end{figure}
 	
 	\subsection{Stima della posizione}\label{subsec:Posizionamento}
+	Il robot è pensato per operare in interni, quindi i sistemi GNSS non sono
+	affidabili.
+	La maggior parte dei sistemi di posizionamento per interni fanno
+	affidamento su sensori distribuiti nell'ambiente per ottenere una posizione
+	relativa a questi~\cite{mendoza2019meta}.
+
+	Noi abbiamo deciso di utilizzare un sistema di dead reckoning per
+	permettere l'utilizzo del robot in qualunque ambiente senza complesse
+	operazioni di installazione e calibrazione.
+
 	Per stimare il posizionamento, inizialmente abbiamo utilizzato i dati
 	dell'accelerometro \cite{positioning}, in quanto le ruote possono essere
 	soggette a slittamento fornendo una misura imprecisa. Al segnale
@@ -1103,10 +1113,16 @@
 		\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
 			pianificare il moto con algoritmi come A* \cite{A*} o RRT
 			\cite{RRT}
-		\item Migliorare la modalità Tangent Bug
+		\item Utilizzare le informazioni ottenute dalla camera (e.g. flusso
+			ottico~\cite{Deng_Arif_Yang_Xi_Quan_Cai_2020}) anche per migliorare
+			le stime sulla posizione.
 		\item Utilizzare una depth-cam per stimare con più precisione la
 			distanza delle persone
 		\item Tracciamento delle persone in real-time
+		\item Utilizzare più robot distribuiti nell'ambiente per aggiornare in
+			modo collaborativo~\cite{miner2007swarm} le stime sulla
+			distribuzione delle persone, eventualmente anche con una mappatura
+			semantica degli ambienti~\cite{kostavelis2015semantic}
 	\end{itemize}
 
 	\section{Conclusioni}\label{sec:Conclusioni}
