@@ -327,7 +327,7 @@
 
 						\;
 						$ \delta \leftarrow \omega_{gyro,i}-\omega_{odom,i} $ \;
-						\uIf{ $ \left| \delta/\omega_{gyro,i} \right| > thresh  $ }
+						\uIf{ $ \left| \delta\right| > thresh  $ }
 							{$\omega_i \leftarrow \omega_{gyro,i}$}
 						\Else 
 							{$\omega_i \leftarrow \omega_{odom,i}$}
