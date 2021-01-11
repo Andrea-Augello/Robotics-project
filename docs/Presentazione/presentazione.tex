@@ -59,7 +59,7 @@
 
 	\section{Introduzione}\label{sec:Introduzione}
 	\frame{\sectionpage}
-	\frame{
+	\begin{frame}{Introduzione}
 		La pandemia del coronavirus SARS-CoV-2 ha dato una forte
 		spinta alla ricerca sia nel campo sanitario che informatico, mettendo in
 		evidenza forti carenze dal punto di vista infrastrutturale.
@@ -72,7 +72,7 @@
 		\cite{silva2020covid}. Un problema chiave risulta essere
 		il controllo del rispetto delle norme di distanziamento all'interno degli
 		spazi chiusi. 
-	}
+	\end{frame}
 
 	\begin{frame}{Obbiettivo}
 	L'obbiettivo del progetto è quello di sviluppare un robot con lo scopo di \textbf{evitare assembramenti in ambienti indoor} e di invitare a \textbf{rispettare le norme sul distanziamento sociale}. 
@@ -144,9 +144,8 @@
 	\end{tabular}
 	\end{frame}
 
-	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
-	\frame{\sectionpage}
-	\frame{
+	\subsection{TIAGo Iron}\label{subsec:TIAGo-Iron} 
+	\begin{frame}{TIAGo Iron}
 
 	\begin{columns}
 		\begin{column}{0.2\textwidth}
@@ -181,18 +180,18 @@
 		
 	\end{columns}
 	
-	}
+	\end{frame}
 
 	\section{Gestione dei nodi ROS}\label{sec:Ros}
 	\frame{\sectionpage}
 
-	\frame{\begin{figure}[H]
+	\begin{frame}{ROS nodes}
+		\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.7\textwidth]{img/rosgraph.pdf}
-		\caption{Architettura dei nodi ROS, ottenuta tramite \textit{rqt}}
 		\label{fig:rosgraph}
 	\end{figure}
-	}
+	\end{frame}
 
 	\begin{frame}{Webots node}
 	Il nodo Webots si occupa solamente di lanciare Webots, e di impostare il
@@ -238,10 +237,48 @@
 
 	\section{Modello del moto e posizionamento}\label{sec:Modello-del-moto-e-posizionamento} 
 	\frame{\sectionpage}
+		
+	\begin{frame}{Spostamento}
+		Il modello del moto è caratterizzato da rotazioni e traslazioni.
+		Per effettuare lo spostamento lineare utilizziamo il controllore PID
+		(Proporzionale-Integrale-Derivativo) delle ruote fornito da Webots, che
+		richiede un angolo di rotazione target per ogni ruota. Utilizziamo quindi
+		l'angolo di rotazione corrente, e il diametro delle ruote per calcolare la
+		posizione delle ruote necessaria al fine di ottenere lo spostamento
+		desiderato (Eq.~\ref{eq:odometry}).
+		\begin{equation}\label{eq:odometry}
+		targetAngle =
+		currentAngle+2\pi\frac    {distance}
+						{2\pi \cdot diameter}
+		\end{equation}
+	\end{frame}
+	
+	\begin{frame}{Collision avoidance}
+		\begin{columns}
+			\begin{column}{0.2\linewidth}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{./img/collision_avoidance.pdf}
+					\label{fig:collision_avoidance}
+				\end{figure}
+			\end{column}
+			\begin{column}{0.8\linewidth}
+				\justifying
+				Il \textbf{TIAGo} è in grado di rilevare gli ostacoli
+				grazie all'utilizzo di un sensore lidar.  
+
+				Nell'immagine viene mostrata la zona nella quale, se
+				viene indicata dal lidar la presenza di un ostacolo, il
+				\textbf{TIAGo} si ferma per ragioni di sicurezza al fine di
+				evitare danni a persone e/o oggetti.
+			\end{column}
+			
+		\end{columns}
+	\end{frame}
+
 	
 	\begin{frame}{Orientamento}
 		\only<1>{
-			Il modello del moto è caratterizzato da rotazioni e traslazioni.
 			Per le rotazioni ci basiamo sui dati forniti dal giroscopio,
 			fondendoli con quelli provenienti dagli encoder delle
 			ruote~\cite{gyrodometry}.  Calcoliamo quindi l'angolo di rotazione
@@ -289,21 +326,7 @@
 			\end{columns}
 		}
 	\end{frame}
-	
-	\begin{frame}{Spostamento}
-		Per effettuare lo spostamento lineare utilizziamo il controllore PID
-		
-		(Proporzionale-Integrale-Derivativo) delle ruote fornito da Webots, che
-		richiede un angolo di rotazione target per ogni ruota. Utilizziamo quindi
-		l'angolo di rotazione corrente, e il diametro delle ruote per calcolare la
-		posizione delle ruote necessaria al fine di ottenere lo spostamento
-		desiderato (Eq.~\ref{eq:odometry}).
-		\begin{equation}\label{eq:odometry}
-		targetAngle =
-		currentAngle+2\pi\frac    {distance}
-						{2\pi \cdot diameter}
-		\end{equation}
-	\end{frame}
+
 	
 	\subsection{Posizionamento}\label{subsec:Posizionamento}
 	\begin{frame}{Posizionamento}
@@ -364,29 +387,7 @@
 		\end{columns}
 	\end{frame}
 	
-	\begin{frame}{Collision avoidance}
-		\begin{columns}
-			\begin{column}{0.2\linewidth}
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth]{./img/collision_avoidance.pdf}
-					\label{fig:collision_avoidance}
-				\end{figure}
-			\end{column}
-			\begin{column}{0.8\linewidth}
-				\justifying
-				Il \textbf{TIAGo} è in grado di rilevare gli ostacoli
-				grazie all'utilizzo di un sensore lidar.  
-
-				Nell'immagine viene mostrata la zona nella quale, se
-				viene indicata dal lidar la presenza di un ostacolo, il
-				\textbf{TIAGo} si ferma per ragioni di sicurezza al fine di
-				evitare danni a persone e/o oggetti.
-			\end{column}
-			
-		\end{columns}
-	\end{frame}
-	
+		
 	\section{Object recognition}\label{sec:Object-recognition}
 	\frame{\sectionpage}
 	
@@ -944,7 +945,7 @@
 	
 	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
 	\frame{\sectionpage}
-	\frame{
+	\begin{frame}{Possibili modifiche}
 	Riportiamo di seguito possibili modifiche da apportare:
 		\begin{itemize}[<+->]
 			\justifying
@@ -956,7 +957,7 @@
 				distanza delle persone
 			\item Tracciamento delle persone in real-time
 		\end{itemize}
-	}
+	\end{frame}
 
 	\begin{frame}
 		\centering
