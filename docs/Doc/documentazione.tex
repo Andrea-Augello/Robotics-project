@@ -1,6 +1,6 @@
 \documentclass[a4paper]{article}
 
-\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage[a4paper, margin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage{color,soul}
@@ -62,7 +62,7 @@
 	di esplorazione lunare, durante il quale è andato a buon fine il primo
 	atterraggio morbido sulla faccia nascosta della luna. 
 	
-	\section{Obbiettivo}\label{sec:Obbiettivo} 
+	\subsection{Obbiettivo}\label{subsec:Obbiettivo} 
 	L'obbiettivo del progetto è quello di sviluppare un robot con lo scopo di
 	\textbf{evitare assembramenti in ambienti indoor} e di invitare a
 	\textbf{rispettare le norme sul distanziamento sociale}. 
@@ -72,7 +72,7 @@
 	rilevazione si sposta verso l'assembramento evitando gli ostacoli e,
 	arrivato, esorta le persone al rispetto del distanziamento sociale.
 	
-	\section{Stato dell'arte}\label{sec:Stato-dell-arte}
+	\subsection{Stato dell'arte}\label{subsec:Stato-dell-arte}
 	Allo stato dell'arte, non sono presenti molte soluzioni al problema proposto, poiché l'esplosione della pandemia del coronavirus SARS-CoV-2 è relativamente recente. Sono state trovate solamente 2 proposte:
 	\begin{itemize} 
 		\item Utilizzare un TurtleBot 2, con una camera RGB-D e CCTV per il rilevamento degli
@@ -101,14 +101,14 @@
 		\end{tabular}
 	\end{table}
 	
-
+	\newpage
 	La seguente è una lista delle librerie utilizzate nel nostro progetto ed una breve spiegazione della loro funzione e rilevanza:
 
 	\begin{itemize}
 		\item opencv 4.x, una libreria per la computer vision, usata per
 			operazioni di segmentazione \cite{opencv};
-		\item imutils 0.5.3, che include funzioni per semplici operazioni di image
-			processing quali traslazioni, rotazioni, ridimensionamento.
+		\item imutils 0.5.3, che include funzioni per semplici operazioni di
+			image processing quali traslazioni, rotazioni, ridimensionamento.
 			Utilizzato inoltre per effettuare Non Maxima Suppression(NMS)
 			\cite{imutils};
 		\item sklearn 0.21.3, una libreria per il machine learning comprendente
@@ -124,13 +124,30 @@
 	\end{itemize}
 
 
-	\section{TIAGo Iron}\label{sec:TIAGo-Iron} 
-	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}. \newline Il \textbf{PAL Robotics TIAGo Iron} \cite{pages2016tiago} è un robot umanoide a due ruote con torso e testa ma senza braccia articolate. Il modello è una piattaforma modulare mobile che permette l'interazione fra esseri umani e robot. \newline
-	Il datasheet del \textbf{TIAGo} \cite{tiago_datasheet} indica la presenza di speaker e display, tuttavia questi non sono presenti nel modello Webots \cite{tiagoiron}. Abbiamo dunque ritenuto necessario per il nostro scopo aggiungere uno \textbf{speaker} e un \textbf{display} con corrispondente solido di supporto al modello.
-	La camera del \textbf{TIAGo}, come indicato dal datasheet, è RGB-D. Il modello Webots ne è sprovvisto, di conseguenza è stata utilizzata una camera monoscopica RGB.
-	Inoltre è stato necessario contattare gli sviluppatori del \textbf{TIAGo} per chiedere informazioni circa le dimensioni esatte delle \textbf{ruote} in quanto tale informazione è omessa dal datasheet. Ci è stato comunicato che le ruote del \textbf{TIAGo} hanno diametro di $200\,mm$. Utilizzando tale valore nei calcoli odometrici, abbiamo ottenuto valori differenti dalle misurazioni. Abbiamo quindi attentamente letto il file \textit{proto} del modello di Webots, e abbiamo scoperto che nel modello le ruote hanno un diametro di $3\,cm$ inferiore. 
+	\subsection{TIAGo Iron}\label{subsec:TIAGo-Iron} 
+	Il robot scelto per l'obbiettivo proposto è il \textbf{TIAGo Iron}.
+	\newline Il \textbf{PAL Robotics TIAGo Iron} \cite{pages2016tiago} è un
+	robot umanoide a due ruote con torso e testa ma senza braccia articolate.
+	Il modello è una piattaforma modulare mobile che permette l'interazione fra
+	esseri umani e robot. \newline Il datasheet del \textbf{TIAGo}
+	\cite{tiago_datasheet} indica la presenza di speaker e display, tuttavia
+	questi non sono presenti nel modello Webots \cite{tiagoiron}. Abbiamo
+	dunque ritenuto necessario per il nostro scopo aggiungere uno
+	\textbf{speaker} e un \textbf{display} con corrispondente solido di
+	supporto al modello.  La camera del \textbf{TIAGo}, come indicato dal
+	datasheet, è RGB-D. Il modello Webots ne è sprovvisto, di conseguenza è
+	stata utilizzata una camera monoscopica RGB.  Inoltre è stato necessario
+	contattare gli sviluppatori del \textbf{TIAGo} per chiedere informazioni
+	circa le dimensioni esatte delle \textbf{ruote} in quanto tale informazione
+	è omessa dal datasheet. Ci è stato comunicato che le ruote del
+	\textbf{TIAGo} hanno diametro di $200\,mm$. Utilizzando tale valore nei
+	calcoli odometrici, abbiamo ottenuto valori differenti dalle misurazioni.
+	Abbiamo quindi attentamente letto il file \textit{proto} del modello di
+	Webots, e abbiamo scoperto che nel modello le ruote hanno un diametro di
+	$3\,cm$ inferiore. 
 	
-    L'IMU utilizzata ha 6 gradi di libertà ed è composta delle seguenti componenti:
+	L'IMU utilizzata ha 6 gradi di libertà ed è composta delle seguenti
+	componenti:
 	\begin{enumerate}
 		\item giroscopio;	
 		\item accelerometro;
@@ -139,7 +156,7 @@
 	
 	Il modello Webots del \textbf{TIAGo} presenta un lidar, ovvero il modello Hokuyo URG-04LX-UG01 \cite{lidarspecs} che, come specificato nel datasheet,  ha un range di $5.6\,m$ ed un FOV di $240^{\circ}$ (agli estremi è parzialmente occluso). In seguito ad analisi sperimentale abbiamo dedotto che l'occlusione del lidar causa malfunzionamenti del package GMapping \cite{grisettiyz2005improving}, utilizzato per implementare le funzionalità di SLAM.
 
-	\section{Ambiente}\label{sec:Ambiente} 
+	\subsection{Ambiente}\label{subsec:Ambiente} 
 
 	Abbiamo considerato opportuno analizzare e studiare il package
 	\textbf{webots\_ros}~\cite{cyberbotics} al fine di raggiungere una
@@ -241,7 +258,7 @@
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.6\textwidth]{img/rosgraph.pdf}
+		\includegraphics[width=0.8\textwidth]{img/rosgraph.pdf}
 		\caption{Architettura dei nodi ROS, ottenuta tramite \textit{rqt}}
 		\label{fig:rosgraph}
 	\end{figure}
@@ -255,12 +272,11 @@
 	definiamo gli spostamenti in termini di spezzate, alternando traslazioni
 	lineari e rotazioni.
 
-	Per effettuare lo spostamento lineare utilizziamo il controllore PID
-	(Proporzionale-Integrale-Derivativo) delle ruote fornito da Webots, che
-	richiede un angolo di rotazione target per ogni ruota. Utilizziamo quindi
-	l'angolo di rotazione corrente, e il diametro delle ruote per calcolare la
-	posizione delle ruote necessaria al fine di ottenere lo spostamento
-	desiderato (Eq.~\ref{eq:odometry}).
+	Per effettuare lo spostamento lineare utilizziamo il controllore PID delle
+	ruote fornito da Webots, che richiede un angolo di rotazione target per
+	ogni ruota. Utilizziamo quindi l'angolo di rotazione corrente, e il
+	diametro delle ruote per calcolare la posizione delle ruote necessaria al
+	fine di ottenere lo spostamento desiderato (Eq.~\ref{eq:odometry}).
 	\begin{equation}\label{eq:odometry}
 	targetAngle =
 	currentAngle+2\pi\frac    {distance}
@@ -280,6 +296,23 @@
 	ruote, in quanto durante questa fase sono fortemente soggette a
 	slittamento. Utilizziamo quindi giroscopio e accelerometro per stimare la
 	velocità corrente del robot.
+
+	\subsection{Prevenzione delle collisioni}\label{subsec:Rilevamento-delle-collisioni} 
+	Il \textbf{TIAGo} è in grado di rilevare gli ostacoli grazie all'utilizzo
+	di un sensore lidar. Nel nostro caso d'uso, la rilevazione degli ostacoli è
+	difatti imprescindibile per raggiungere l'obbiettivo proposto in maniera
+	soddisfacente. 
+	
+	Nell'immagine seguente viene mostrata la zona nella quale, se viene
+	indicata dal lidar la presenza di un ostacolo, il \textbf{TIAGo} si ferma
+	per ragioni di sicurezza al fine di evitare danni a persone e/o oggetti.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.2\textwidth]{./img/collision_avoidance.pdf}
+		\caption{Collision avoidance}
+		\label{fig:collision_avoidance}
+	\end{figure}
+	
 	
 
 	\subsection{Stima dell'orientamento}\label{subsec:Orientamento}
@@ -288,6 +321,7 @@
 	quale fornisce una velocità angolare. L'angolo di rotazione era calcolato
 	quindi effettuando un'integrazione discreta dei campioni con interpolazione
 	lineare del primo ordine (Eq.~\ref{eq:gyro-integration}).  
+
 	\begin{equation}\label{eq:gyro-integration}
 		\theta_i = \sum_{j=1}^i \frac{\omega _{j-1}+\omega _j}{2} \left( t_j-t_{j-1} \right) 
 	\end{equation}
@@ -410,17 +444,6 @@
 		\label{fig:trajectory_error}
 	\end{figure}
 	
-	
-	\section{Prevenzione delle collisioni}\label{sec:Rilevamento-delle-collisioni} 
-	Il \textbf{TIAGo} è in grado di rilevare gli ostacoli grazie all'utilizzo di un sensore lidar. Nel nostro caso d'uso, la rilevazione degli ostacoli è difatti imprescindibile per raggiungere l'obbiettivo proposto in maniera soddisfacente. 
-	
-	Nell'immagine seguente viene mostrata la zona nella quale, se viene indicata dal lidar la presenza di un ostacolo, il \textbf{TIAGo} si ferma per ragioni di sicurezza al fine di evitare danni a persone e/o oggetti.
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.2\textwidth]{./img/collision_avoidance.pdf}
-		\caption{Collision avoidance}
-		\label{fig:collision_avoidance}
-	\end{figure}
 	
 	\section{Object recognition}\label{sec:Object-recognition}
 	
@@ -548,6 +571,7 @@
 	\end{table}
 
 	\newpage
+	\section{Posizione dei target}\label{sec:Posizione-dei-target}
 	\subsection{Triangolazione}\label{subsec:Triangolazione}
 	La triangolazione come metodo di individuazione delle persone, sebbene
 	teoricamente possibile, presenta dei problemi nel nostro scenario. In primo
@@ -589,7 +613,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.5\textwidth]{./img/linearization_error.pdf}
+		\includegraphics[width=0.45\textwidth]{./img/linearization_error.pdf}
 		\caption{Errore nella stima della distanza con una linearizzazione a tratti della circonferenza}
 		\label{fig:error}
 	\end{figure}
@@ -661,7 +685,6 @@
 	\end{figure}
 	
 	\newpage
-	\section{Posizione dei target}\label{sec:Posizione-dei-target}
 	
 	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori}
 	Al fine di migliorare la stima sulla distanza dei target abbiamo ritenuto
@@ -827,13 +850,14 @@
 	probabilità relative ad entrambi i punti avranno lunghezza $l$ e ampiezze $
 	\alpha_1 \text{ e } \alpha_2  $. 
 	
-	\begin{figure}[H]
+	\begin{figure}[b]
 		\centering
 		\includegraphics[width=0.4\textwidth]{img/circular_sector.pdf}
 		\caption{Area della regione probabile a seconda della distanza.}
 		\label{fig:circular_sector}
 	\end{figure}
 
+	\newpage
 	Come mostrato nell'equazione~\ref{eq:circular_sector}, con queste
 	condizioni la dimensione dell'area ad alta probabilità è direttamente
 	proporzionale alla distanza e all'ampiezza dell'angolo. Se quindi $
@@ -1006,7 +1030,6 @@
 		\end{cases}
 	\end{equation}
 
-	\newpage
 	La maggior parte dei potenziali repulsivi descritti in letteratura
 	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
 	moto anche se questo avviene parallelamente all'ostacolo. Per ovviare a
@@ -1073,6 +1096,7 @@
 		\label{fig:fsa}
 	\end{figure}
 	
+	\newpage
 	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
 	Riportiamo di seguito possibili modifiche da apportare:
 	\begin{itemize}
