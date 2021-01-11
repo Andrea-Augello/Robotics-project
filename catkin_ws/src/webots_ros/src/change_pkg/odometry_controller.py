@@ -40,6 +40,8 @@ class Odometry:
         if self.gyro_values_old.t != 0:
             prev_ang_vel = 180*self.gyro_values_old.z/math.pi
             ang_vel = 180*self.gyro_values.z/math.pi
+            gyro_angular_velocity= (self.motors.right.velocity - self.motors.left.velocity) / self.WHEEL_DISTANCE 
+            ang_vel = gyro_angular_velocity if ang_vel != 0 and abs((ang_vel - gyro_angular_velocity)/ang_vel) < 0.1 else ang_vel
             elapsed_time = self.gyro_values.t - self.gyro_values_old.t
             elapsed_time = elapsed_time.to_sec()
             self.theta -= ((ang_vel+prev_ang_vel)/2 ) *elapsed_time
