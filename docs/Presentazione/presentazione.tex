@@ -825,7 +825,7 @@
 	Confrontiamo i valori ottenuti con una
 	soglia al fine di individuare le discontinuità nel profilo degli ostacoli. 
 	Analizziamo successivamente le discontinuità del segnale,
-	corrispondenti ai bordi degli ostacoli.
+	corrispondenti ai vertici degli ostacoli.
 	Da tali punti viene calcolato l'angolo fra la retta che li
 	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
 	quale corrisponde l'angolo minore, che ci farà allontanare meno
@@ -870,7 +870,7 @@
 					\frac{1}{distance^2}-
 					\frac{1}{d_t^2}
 				\right)  & distance \leq d_{t} \\
-				0 & d > d_{thresh}
+				0 & d > d_{t}
 			\end{cases}
 		\end{equation}
 	}

@@ -991,7 +991,7 @@
 	lavoriamo con valori discreti, confrontiamo i valori ottenuti con una
 	soglia al fine di individuare le discontinuità nel profilo degli oggetti
 	nel range. Analizziamo successivamente le discontinuità del segnale,
-	corrispondenti ai bordi degli ostacoli, come si evince dalla fig.
+	corrispondenti ai vertici degli ostacoli, come si evince dalla fig.
 	\ref{fig:bug}. Da tali punti viene calcolato l'angolo fra la retta che li
 	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
 	quale corrisponde l'angolo minore, che ci farà allontanare meno
@@ -1031,12 +1031,12 @@
 	nell'equazione~\ref{eq:repulsive-force}.
 
 	\begin{equation}\label{eq:repulsive-force}
-		F_{rep}(obstacleDistance) = \begin{cases}
+		F_{rep}(distance) = \begin{cases}
 			k_r \cdot \left(
-				\frac{1}{obstacleDistance^2}-
+				\frac{1}{distance^2}-
 				\frac{1}{d_t^2}
-			\right)  & obstacleDistance \leq d_{t} \\
-			0 & d > d_{thresh}
+			\right)  & distance \leq d_{t} \\
+			0 & d > d_{t}
 		\end{cases}
 	\end{equation}
 
