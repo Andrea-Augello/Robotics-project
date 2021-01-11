@@ -294,11 +294,13 @@
 		\only<2>{
 			L'integrazione dei dati del giroscopio è soggetta ad un drift più
 			significativo che l'uso dell'odometria attraverso gli encoder delle
-			ruote
+			ruote.
 
 			\begin{equation}\label{eq:odometry-angle}
 				w_{odom}= \frac	{R(u_{r,i}-u_{l,i})} {L} 
 			\end{equation}
+			
+			L'errore nella stima odometrica però ha anche componenti non sistematiche difficili da stimare e correggere, per stimare la velocità di rotazione effettuiamo quindi una fusione dei dati forniti da encoder e giroscopio.
 
 			Noto l'angolo corrente e l'angolo target utilizziamo un controllore
 			proporzionale per raggiungere l'angolo desiderato.
