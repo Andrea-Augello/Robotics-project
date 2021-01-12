@@ -670,20 +670,36 @@
 	
 	\subsection{Scarto dei duplicati}\label{subsec:Scarto-dei-duplicati}
 	Durante la fase di individuazione delle persone vengono individuate varie
-	bounding box corrispondenti al medesimo individuo. Di conseguenza è stato
-	necessario effettuare una fase di clustering al fine di scartare le
-	bounding box duplicate. L'algoritmo di clustering utilizzato è DBSCAN
-	(Density based scan) \cite{dbscan}, i cui parametri principali sono
-	\textbf{eps}, ovvero la massima distanza fra due punti affinché vengano
-	considerati appartenenti a un cluster (da non confondere con la massima
-	distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero il
-	numero minimo di punti affinché un cluster sia valido (nel nostro caso è
-	uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di
-	distanza.  Come si evince dalla figura \ref{fig:nms}, la metrica utilizzata
-	considera la lunghezza di un arco di circonferenza con raggio
-	corrispondente alla distanza fra i due punti ed angolo $\alpha$
-	corrispondente  all'angolo fra i due punti rispetto alla posizione del
-	robot.
+	bounding box corrispondenti al medesimo individuo, sia per la strategia di
+	campionamento adottata, sia per le caratteristiche della rete neurale
+	utilizzata. Di conseguenza è stato necessario effettuare una fase di
+	clustering al fine di scartare le bounding box duplicate. 
+
+	L'interpolazione dei campioni e la sovrapposizione parziale del primo e
+	l'ultimo campione non permettono di utilizzare una non maxima suppression
+	basata sull'indice di Jacquard, rendendo necessario l'uso di un algoritmo
+	di clustering.
+	
+	Algoritmi di clustering più comuni come il K-means non si prestano bene al
+	nostro scopo, in quanto richiedono conoscenza a priori sul numero di
+	cluster. 
+	
+	Abbiamo quindi utilizzato l'algoritmo DBSCAN (Density based scan)
+	\cite{dbscan}, i cui parametri principali sono \textbf{eps}, ovvero la
+	massima distanza fra due punti affinché vengano considerati appartenenti a
+	un cluster (da non confondere con la massima distanza fra i punti di un
+	cluster), \textbf{min\_samples}, ovvero il numero minimo di punti affinché
+	un cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo
+	scartare ROI) ed infine la metrica di distanza.  
+	
+	Come si evince dalla figura \ref{fig:nms}, la metrica utilizzata considera
+	la lunghezza di un arco di circonferenza con raggio corrispondente alla
+	distanza fra i due punti ed angolo $\alpha$ corrispondente  all'angolo fra
+	i due punti rispetto alla posizione del robot. In questo modo si tiene
+	conto sia della distanza orizzontale tra le roi che della loro distanza
+	percepita, permettendo di discriminare tra due ROI che ricoprono
+	parzialmente un individuo vicino e due roi corrispondenti ad individui
+	diversi situati a grande distanza.
 	
 	Abbiamo ritenuto opportuno utilizzare l'implementazione dell'algoritmo
 	fornita da \textbf{sklearn} \cite{scikit}.
@@ -695,7 +711,6 @@
 		\label{fig:nms}
 	\end{figure}
 	
-	\newpage
 	
 	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori}
 	Al fine di migliorare la stima sulla distanza dei target abbiamo ritenuto
@@ -754,7 +769,6 @@
 		\label{fig:error_covariance_flat}
 	\end{figure}
 	
-	\newpage
 	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
 	Le relazioni geometriche sulla distanza degli oggetti esposte nella
 	sezione~\ref{subsec:Calcolo-della-distanza} assumono che il target abbia la
@@ -861,7 +875,7 @@
 	probabilità relative ad entrambi i punti avranno lunghezza $l$ e ampiezze $
 	\alpha_1 \text{ e } \alpha_2  $. 
 	
-	\begin{figure}[b]
+	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.4\textwidth]{img/circular_sector.pdf}
 		\caption{Area della regione probabile a seconda della distanza.}
