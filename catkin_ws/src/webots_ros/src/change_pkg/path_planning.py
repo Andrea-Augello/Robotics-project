@@ -22,11 +22,11 @@ class Path_planner:
         self.area_target = 0
         self.resolution = resolution
         self.radius=radius
-        self.KP = 5
-        self.ETA = 25
+        self.KP = 10
+        self.ETA = 100
         self.OSCILLATIONS_DETECTION_LENGTH = 3
         self.SECURITY_DISTANCE = 2.0
-        self.MAX_DEVIATION = 45
+        self.MAX_DEVIATION = 75
         self.MIN_EXPLORATION_STEP = 1
         self.LIDAR_THRESHOLD = 0.15 # Percentage of lidar FOV to discard, this
         # prevents steering to avoid objects that do not represent an obstacle
@@ -164,6 +164,30 @@ class Path_planner:
             return (0,-90)
 
 
+    def attractive_field(self,x,y):
+        """TODO: Docstring for attractive_field.
+
+        :returns: Strengh felt in the current point according to 
+
+        """
+        dist =  np.hypot( x - self.target[0], y - self.target[1]) 
+        if dist > self.SECURITY_DISTANCE:
+            attractive_force = self.KP * dist
+        else:
+            attractive_force = self.KP*self.SECURITY_DISTANCE
+        return attractive_force
+
+    def repulsive_field(self, obstacles):
+        repulsive_force = [0,0]
+        for obstacle in obstacles:
+            # repulsive_potential_module = self.ETA * (1/obstacle[0]**2-1/self.SECURITY_DISTANCE**2 )
+            x = obstacle[0]
+            repulsive_potential_module = -self.ETA*(math.exp(-2.0*x)*(x+1))/math.pow(x,2)
+            repulsive_force[0] += repulsive_potential_module * math.sin(obstacle[1]/180*math.pi)
+            repulsive_force[1] += repulsive_potential_module * math.cos(obstacle[1]/180*math.pi)
+        return repulsive_force
+
+
     def next_step_direction(self):
         """ 
         Using the potential fields method computes the movement direction for
@@ -178,18 +202,11 @@ class Path_planner:
         sup_limit=size-inf_limit
         obstacles = [ p for p in self.__robot.sensors.lidar.value[inf_limit:sup_limit] if self.is_obstacle(p[0]) ]
         if len(obstacles):
-            attractive_potential = self.KP * np.hypot(
-                    self.__robot.odometry.x - self.target[0],
-                    self.__robot.odometry.y - self.target[1])
-            repulsive_potential = [0,0]
-            for obstacle in obstacles:
-                repulsive_potential_module = self.ETA \
-                        * (1/obstacle[0]**2-1/self.SECURITY_DISTANCE**2 )
-                repulsive_potential[0] = repulsive_potential_module * math.sin(obstacle[1]/180*math.pi)
-                repulsive_potential[1] = repulsive_potential_module * math.cos(obstacle[1]/180*math.pi)
+            attractive_potential = self.attractive_field(self.__robot.odometry.x, self.__robot.odometry.y)
+            repulsive_potential =  self.repulsive_field(obstacles)
             direction = 180/math.pi*math.atan2( 
-                    attractive_potential*math.sin(target_angle/180*math.pi) - repulsive_potential[0],
-                    attractive_potential*math.cos(target_angle/180*math.pi) - repulsive_potential[1] )
+                    attractive_potential*math.sin(target_angle/180*math.pi) + repulsive_potential[0],
+                    attractive_potential*math.cos(target_angle/180*math.pi) + repulsive_potential[1] )
             direction = max(-self.MAX_DEVIATION, min(self.MAX_DEVIATION, direction))
             if abs(direction) < 3:
                 direction = 20 if int(10*direction)%2 else -20
