@@ -366,7 +366,9 @@
 		\begin{equation}\label{eq:linear-velocity}
 			v_i = \frac{R (u_{r,i}+u_{l,i})}{2}
 		\end{equation}
-		Questi valori sono aggiornati ad ogni intervallo di campionamento utilizzando la velocità lineare e la velocità angolare del robot \cite{572228}.
+		La stima della posizione viene aggiornata ad ogni intervallo di
+		campionamento utilizzando la velocità lineare e l'orientamento del
+		robot \cite{572228}.
 		\begin{equation}\label{eq:position-vector-update}
 			\textbf{P}_i = \sum_{j = 1}^{i} \begin{bmatrix}
 				 & v_j\cos(\theta_j ) & \\
@@ -395,8 +397,9 @@
 		\begin{columns}
 			\begin{column}{0.85\linewidth}
 				\justifying
-				Abbiamo misurato le performance della stima di posizione e i risultati
-				sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto.
+				Abbiamo misurato le performance della stima di posizione e i
+				risultati sono ritenuti soddisfacenti per raggiungere
+				l'obbiettivo proposto.
 			\end{column}
 			\begin{column}{0.15\linewidth} \end{column}
 		\end{columns}
@@ -840,46 +843,61 @@
 	\end{frame}
 	\subsection{Campi di potenziale}\label{subsec:Campi-di-potenziale}
 	\begin{frame}{Campi di potenziale}
-	\only<1>{
 		\framesubtitle{Potenziale attrattivo}
 		
 		I modelli basati sui campi di potenziale richiedono la definizione di 
 		potenziali attrattivi e repulsivi.
 			
 		Il potenziale attrattivo è centrato sul target, ed è modellato come un
-		potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
-		distanza (Eq.~\ref{eq:attractive-force}).
+		potenziale conico.
 
-		\begin{equation}\label{eq:attractive-force}
-			F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
-		\end{equation}
-	}
-   \stepcounter{equation}
+		\begin{columns}
+			\begin{column}{0.74\linewidth}
+				\begin{subequations}
+				\begin{align} 
+					U_{att}(d) & = \begin{cases}
+					2k_ad_t\left| d \right| -k_ad_t^2 	& \left| d \right| \ge d_t\\
+					k_ad^2 								& \left| d \right| < d_t 
+				\end{cases}\\
+					F_{att}(d) & = \begin{cases}
+					-2k_ad_t & \left| d \right| \ge d_t\\
+					-2k_ad  & \left| d \right| < d_t 
+				\end{cases}
+				\end{align}
+				\end{subequations}
+			\end{column}
+			\begin{column}{0.2\linewidth}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{./img/potential_field.jpg}
+				\end{figure}
+			\end{column}
+		\end{columns}
+	\end{frame}
 
-	\only<2>{
+	\begin{frame}{Campi di potenziale}
 		\framesubtitle{Potenziale repulsivo}
 		Gli ostacoli generano invece un potenziale repulsivo. Questo ha un
 		raggio d'azione limitato, la forza repulsiva è massima per un ostacolo
-		a distanza nulla, e decresce in modo monotono fino ad annullarsi se la
-		distanza dell'ostacolo supera una soglia $d_t$ con la legge descritta
-		nell'equazione:
-
-		\begin{equation}\label<2>{eq:repulsive-force}
-			F_{rep}(distance) = \begin{cases}
-				k_r \cdot \left(
-					\frac{1}{distance^2}-
-					\frac{1}{d_t^2}
-				\right)  & distance \leq d_{t} \\
-				0 & d > d_{t}
-			\end{cases}
-		\end{equation}
-	}
-	
+		a distanza nulla, e decresce in modo monotono fino ad annullarsi,
+		seguendo la legge descritta nell'equazione:
+		\begin{columns}
+			\begin{column}{0.74\linewidth}
+		\begin{subequations}
+			\begin{align}
+				U_{rep}(d) =& k_r \frac{e^{d\zeta}}{d}\\
+				F_{rep}(d)= &-\frac	{e^{-d\zeta}(2d+1)} {d^{2}} 
+			\end{align}
+		\end{subequations}
+			\end{column}
+			\begin{column}{0.2\linewidth}
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.25\textwidth]{./img/potential_field.jpg}
+		\includegraphics[width=\textwidth]{./img/potential_field.jpg}
 		\label{fig:potential_field}
 	\end{figure}
+			\end{column}
+		\end{columns}
 	\end{frame}
 
 	\begin{frame}{Campi di potenziale}{Rilevamento dell'ostacolo}

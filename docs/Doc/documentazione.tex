@@ -425,7 +425,8 @@
 		v_i = \frac{R (u_{r,i}+u_{l,i})}{2}
 	\end{equation}
 	
-	Questi valori sono aggiornati ad ogni intervallo di campionamento utilizzando la velocità lineare e la velocità angolare del robot \cite{572228}.
+	Questi valori sono aggiornati ad ogni intervallo di campionamento
+	utilizzando la velocità lineare e l'orientamento del robot \cite{572228}.
 	
 	\begin{equation}\label{eq:position-vector-update}
 		\textbf{P}_i = \sum_{j = 1}^{i} \begin{bmatrix}
@@ -1016,37 +1017,62 @@
 	conseguenza il robot si fermerà in una posizione non ideale. 
 	
 	Il potenziale attrattivo è centrato sul target, ed è modellato come un
-	potenziale quadratico, la forza attrattiva è quindi lineare rispetto alla
-	distanza (Eq.~\ref{eq:attractive-force}).
+	potenziale conico (Eq.~\ref{eq:conic-potential}).
+	\begin{equation}\label{eq:conic-potential}
+		U_{att}(d) = \begin{cases}
+			2k_ad_t\left| d \right| -k_ad_t^2 	& \left| d \right| \ge d_t\\
+			k_ad^2 								& \left| d \right| < d_t 
+		\end{cases}
+	\end{equation}
+	La forza attrattiva è quindi costante al di fuori di un threshold $
+	d_t $ e lineare rispetto alla distanza all'interno
+	(Eq.~\ref{eq:attractive-force}).
 
 	\begin{equation}\label{eq:attractive-force}
-		F_{att}( \textbf{x}) = k_a\cdot \left| {\bf x - x_d} \right| 
-	\end{equation}
-
-
-	Gli ostacoli generano invece un potenziale repulsivo. Questo ha un raggio
-	d'azione limitato, la forza repulsiva è massima per un ostacolo a distanza
-	nulla, e decresce in modo monotono fino ad annullarsi se la distanza
-	dell'ostacolo supera una soglia $d_t$ con la legge descritta
-	nell'equazione~\ref{eq:repulsive-force}.
-
-	\begin{equation}\label{eq:repulsive-force}
-		F_{rep}(distance) = \begin{cases}
-			k_r \cdot \left(
-				\frac{1}{distance^2}-
-				\frac{1}{d_t^2}
-			\right)  & distance \leq d_{t} \\
-			0 & d > d_{t}
+		F_{att}(d) = 
+		\begin{cases}
+			-2k_ad_t & \left| d \right| \ge d_t\\
+			-2k_ad  & \left| d \right| < d_t 
 		\end{cases}
 	\end{equation}
 
-	La maggior parte dei potenziali repulsivi descritti in letteratura
-	dipendono esclusivamente dalla distanza dall'ostacolo, interferendo con il
-	moto anche se questo avviene parallelamente all'ostacolo. Per ovviare a
-	questo problema prendiamo in considerazione solo gli ostacoli situati in un
-	FOV frontale al robot con ampiezza $ \alpha  $ calcolata per permettere di
-	muoversi parallelamente ad una superficie mantenendo una distanza di
-	sicurezza $ h $ (Eq.~\ref{eq:obstacle_fov}, Fig.~\ref{fig:obstacle_fov}): 
+
+	Gli ostacoli generano invece un potenziale repulsivo. Il potenziale
+	repulsivo deve avere una serie di proprietà desiderabili per cui
+	utilizziamo un potenziale superquadratico~\cite{volpe1990manipulator}.
+	\begin{enumerate}
+		\item Il potenziale deve avere simmetria sferica nelle lunghe distanze
+			per evitare la creazione di minimi locali quando viene sommato ad
+			un potenziale attrattivo
+		\item I contorni del potenziale vicino la superficie dovrebbero seguire
+			i contorni della superficie dell'ostacolo per evitare di eliminare
+			larghe porzioni dello spazio di lavoro.
+		\item Il potenziale di un ostacolo deve avere un raggio di influenza
+			limitato
+		\item Il potenziale e il suo gradiente devono essere continui
+	\end{enumerate}
+
+	Il potenziale utilizzato varia con la legge descritta
+	nell'equazione~\ref{eq:repulsive-potential}, il parametro $ \zeta $ regola
+	la velocità con cui il potenziale aumenta vicino all'ostacolo e decade
+	allontanandosi.
+
+	\begin{equation}\label{eq:repulsive-potential}
+		U_{rep}(d) = k_r \frac{e^{d\zeta}}{d}
+	\end{equation}
+
+	La forza repulsiva è ottenuta derivando il potenziale (Eq.~\ref{eq:repulsive-force}).
+	\begin{equation}\label{eq:repulsive-force}
+		F_{rep}(d)=- \frac	{e^{-d\zeta}(2d+1)} {d^{2}} 
+	\end{equation}
+
+	Il potenziale repulsivo dipende esclusivamente dalla distanza
+	dall'ostacolo, interferendo con il moto anche se questo avviene
+	parallelamente all'ostacolo. Per ovviare a questo problema prendiamo in
+	considerazione solo gli ostacoli situati in un FOV frontale al robot con
+	ampiezza $ \alpha  $ calcolata per permettere di muoversi parallelamente ad
+	una superficie mantenendo una distanza di sicurezza $ h $
+	(Eq.~\ref{eq:obstacle_fov}, Fig.~\ref{fig:obstacle_fov}): 
 
 	\begin{equation}\label{eq:obstacle_fov}
 		\alpha = {2}\sin^{-1}{\frac{h}{d_t}}
@@ -1106,7 +1132,6 @@
 		\label{fig:fsa}
 	\end{figure}
 	
-	\newpage
 	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
 	Riportiamo di seguito possibili modifiche da apportare:
 	\begin{itemize}
