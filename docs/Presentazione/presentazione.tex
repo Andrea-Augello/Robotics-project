@@ -282,7 +282,7 @@
 
 	
 	\begin{frame}{Orientamento}
-		\only<1>{
+		\only<1|handout:1>{
 			Per le rotazioni ci basiamo sui dati forniti dal giroscopio,
 			fondendoli con quelli provenienti dagli encoder delle
 			ruote~\cite{gyrodometry}.  Calcoliamo quindi l'angolo di rotazione
@@ -295,7 +295,7 @@
 			
 		}
 		\stepcounter{equation}
-		\only<2>{
+		\only<2|handout:2>{
 			L'integrazione dei dati del giroscopio è soggetta ad un drift più
 			significativo che l'uso dell'odometria attraverso gli encoder delle
 			ruote.
@@ -306,7 +306,7 @@
 			
 			L'errore nella stima odometrica però ha anche componenti non sistematiche difficili da stimare e correggere, per stimare la velocità di rotazione effettuiamo quindi una fusione dei dati forniti da encoder e giroscopio.
 		}
-		\only<3>{
+		\only<3|handout:3>{
 			\begin{columns}
 				\begin{column}{0.50\textwidth}
 					\includegraphics[width=\linewidth]{img/sensor_fusion.pdf}
@@ -345,7 +345,7 @@
 	\subsection{Posizionamento}\label{subsec:Posizionamento}
 	\begin{frame}{Posizionamento}
 		\stepcounter{equation}
-		\only<1>{
+		\only<1|handout:1>{
 		Inizialmente al segnale dell'accelerometro
 		veniva applicato un integrale doppio per ottenere lo spostamento
 		lineare~\cite{positioning}.
@@ -357,7 +357,7 @@
 		\end{equation}
 		}
 		\stepcounter{equation}
-		\only<2>{
+		\only<2|handout:2>{
 		Abbiamo ritenuto necessario cambiare approccio, decidendo di utilizzare
 		gli encoders delle ruote per determinare gli spostamenti. 
 		
@@ -822,25 +822,6 @@
 	con più spazio e continua l'esplorazione casuale.
 	\end{frame}
 	
-	\subsection{Bug mode}\label{subsec:Bug-mode}
-	\begin{frame}{Bug mode}
-	Quando il robot entra in modalità bug~\cite{503814} effettuiamo uno scan lidar. 
-	Confrontiamo i valori ottenuti con una
-	soglia al fine di individuare le discontinuità nel profilo degli ostacoli. 
-	Analizziamo successivamente le discontinuità del segnale,
-	corrispondenti ai vertici degli ostacoli.
-	Da tali punti viene calcolato l'angolo fra la retta che li
-	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
-	quale corrisponde l'angolo minore, che ci farà allontanare meno
-	dall'obbiettivo.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.3\textwidth]{./img/bug.pdf}
-		\label{fig:bug}
-	\end{figure}
-
-	\end{frame}
 	\subsection{Campi di potenziale}\label{subsec:Campi-di-potenziale}
 	\begin{frame}{Campi di potenziale}
 		\framesubtitle{Potenziale attrattivo}
@@ -951,6 +932,28 @@
 	\subsection{Automa a stati finiti}\label{subsec:Pianificazione}
 	
 	\end{frame}
+
+
+	\subsection{Bug mode}\label{subsec:Bug-mode}
+	\begin{frame}{Bug mode}
+	Quando il robot entra in modalità bug~\cite{503814} effettuiamo uno scan lidar. 
+	Confrontiamo i valori ottenuti con una
+	soglia al fine di individuare le discontinuità nel profilo degli ostacoli. 
+	Analizziamo successivamente le discontinuità del segnale,
+	corrispondenti ai vertici degli ostacoli.
+	Da tali punti viene calcolato l'angolo fra la retta che li
+	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
+	quale corrisponde l'angolo minore, che ci farà allontanare meno
+	dall'obbiettivo.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.3\textwidth]{./img/bug.pdf}
+		\label{fig:bug}
+	\end{figure}
+	\end{frame}
+
+
 	\begin{frame}{Automa a stati finiti}
 	\begin{columns}
 		\begin{column}{0.25\textwidth}
