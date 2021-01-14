@@ -877,7 +877,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.4\textwidth]{img/circular_sector.pdf}
+		\includegraphics[width=0.5\textwidth]{img/circular_sector.pdf}
 		\caption{Area della regione probabile a seconda della distanza.}
 		\label{fig:circular_sector}
 	\end{figure}
@@ -984,7 +984,7 @@
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.75\textwidth]{./img/image_segmentation.pdf}
+		\includegraphics[width=0.95\textwidth]{./img/image_segmentation.pdf}
 		\caption{Segmentazione immagine: a sinistra i valori grezzi del BOF, a destra i contorni delle regioni (giallo) e i centri (blu) }
 		\label{fig:image_segmentation}
 	\end{figure}
@@ -1001,26 +1001,6 @@
 	incontra un ostacolo nel suo cammino ruota di $90^{\circ}$ nella direzione
 	con più spazio e continua l'esplorazione casuale.
 	
-	\subsubsection{Bug mode}\label{subsec:Bug-mode}
-	Quando il robot entra in modalità bug effettuiamo uno scan lidar. Poiché
-	lavoriamo con valori discreti, confrontiamo i valori ottenuti con una
-	soglia al fine di individuare le discontinuità nel profilo degli oggetti
-	nel range. Analizziamo successivamente le discontinuità del segnale,
-	corrispondenti ai vertici degli ostacoli, come si evince dalla fig.
-	\ref{fig:bug}. Da tali punti viene calcolato l'angolo fra la retta che li
-	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
-	quale corrisponde l'angolo minore, che ci farà allontanare meno
-	dall'obbiettivo. Se il profilo dell'ostacolo è una circonferenza, la retta
-	fra il punto con angolo minimo e l'obbiettivo è tangente all'ostacolo, da
-	cui il nome dell'algoritmo Tangent Bug \cite{503814}.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.25\textwidth]{./img/bug.pdf}
-		\caption{Profilo dell'ostacolo}
-		\label{fig:bug}
-	\end{figure}
-
 	\subsubsection{Campi di potenziale}\label{subsec:Campi-di-potenziale}
 	
 	Una soluzione al classico problema di muoversi in uno spazio evitando le
@@ -1094,7 +1074,7 @@
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.6\textwidth]{./img/obstacle_fov.pdf}
+		\includegraphics[width=0.8\textwidth]{./img/obstacle_fov.pdf}
 		\caption{FOV frontale del robot}
 		\label{fig:obstacle_fov}
 	\end{figure}
@@ -1124,6 +1104,34 @@
 			\Omega & \omega^* < \Omega
 
 		\end{cases}	\end{equation}
+
+	\subsubsection{Tangent Bug}\label{subsec:Bug-mode}
+
+	La tecnica dei campi di potenziale può portare a dei minimi locali dai
+	quali il robot non può uscire. Per questa ragione abbiamo previsto
+	un'euristica di loop detection basata sul confronto delle posizioni passate
+	per cercare di identificare queste situazioni ed utilizzare la strategia di
+	movimento tanget bug al posto dei campi di potenziale.
+
+	Quando il robot entra in modalità bug effettuiamo uno scan lidar. Poiché
+	lavoriamo con valori discreti, confrontiamo i valori ottenuti con una
+	soglia al fine di individuare le discontinuità nel profilo degli oggetti
+	nel range. Analizziamo successivamente le discontinuità del segnale,
+	corrispondenti ai vertici degli ostacoli, come si evince dalla fig.
+	\ref{fig:bug}. Da tali punti viene calcolato l'angolo fra la retta che li
+	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
+	quale corrisponde l'angolo minore, che ci farà allontanare meno
+	dall'obbiettivo. Se il profilo dell'ostacolo è una circonferenza, la retta
+	fra il punto con angolo minimo e l'obbiettivo è tangente all'ostacolo, da
+	cui il nome dell'algoritmo Tangent Bug \cite{503814}.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.55\textwidth]{./img/bug.pdf}
+		\caption{Profilo dell'ostacolo}
+		\label{fig:bug}
+	\end{figure}
+
 	
 	\subsection{Automa a stati finiti}\label{subsec:Pianificazione}
 	
