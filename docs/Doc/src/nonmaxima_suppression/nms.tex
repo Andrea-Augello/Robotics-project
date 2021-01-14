@@ -27,18 +27,20 @@
 	\begin{tikzpicture}[>=stealth]
 		\node[] (Robot) at (0,0) {\textbullet};
 		\node[below] (label) at (0,0) {Robot};
-		\node[] (A) at (7,8) {\textbullet};
-		\node[] (B) at (5,4) {\textbullet};
-		\draw[dashed, shorten >=-200] (Robot) -- ($(B)+(0,0)$);
-		\draw[dashed, shorten >=-30] (Robot) -- ($(A)+(0,0)$);
-		\draw[] (A) -- (B) node[left] at ($(A)!0.5!(B)$) {$l$};
-		\draw ($(Robot)+(49:2)$) arc (49:38:2) node[midway] (a) {};
+		\node[] (A) at (3,3) {\textbullet};
+		\node[] (B) at (2,1) {\textbullet};
+		\draw[dashed, shorten >=-200, ultra thin] (Robot) -- ($(B)+(0,0)$);
+		\draw[dashed, shorten >=-30, ultra thin] (Robot) -- ($(A)+(0,0)$);
+
+		\draw[] (A) -- (B) node[right] at ($(A)!0.5!(B)$) {$l$};
+
+		\draw ($(Robot)+(45:2)$) arc (45:27:2) node[midway] (a) {};
 		\node[] (alpha) at ($(a)+(0.1,0.1)$) {$\alpha $};
-		\draw (A) arc (63:52:4.472136) 
-			node[] (d) {};
+		\draw[] (A) arc (64:46:2.236068) node[] (d) {};
 		\node[above] (D) at (d) {$d$};
-		\draw[dotted] (d) arc (52:38:4.472136);
+		\draw[dotted] (d) arc (46:26:2.236068);
 		
+		%\draw (B) circle [radius=2.236068];
 		
 		
 	\end{tikzpicture}

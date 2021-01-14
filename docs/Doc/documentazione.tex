@@ -168,6 +168,19 @@
 	Webots seguendo la documentazione cyberbotics
 	rilevante~\cite{webotsRosSetup}.  
 
+	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots
+	\cite{cyberbotics}, abbiamo riscontrato un bug. Il metodo per verificare
+	che si stia riproducendo un suono da file audio ed il metodo per verificare
+	che il robot stia parlando presentavano difatti le funzioni callback
+	invertite. In seguito al nostro avviso via email il bug è stato risolto nel
+	successivo aggiornamento, come si evince dal commit GitHub rilevante
+	\cite{rosbug}, riga 32-34.
+
+	La nuova versione di webots però causava problemi di retrocompatibilità con
+	il codice scritto precedentemente.  Abbiamo quindi ricompilato solamente il
+	controllore cambiando ciò che ci serviva senza aggiornare webots.
+	
+
 	\section{ROS}\label{sec:Ros}
 	\subsection{Descrizione}\label{subsec:Descrizione}
 	ROS \cite{ros.org} è un meta sistema operativo open-source. Fornisce tutti
@@ -207,15 +220,6 @@
 		\caption{Concetti di base ROS}
 		\label{fig:ros_concepts}
 	\end{figure}
-	
-	\subsection{Bug}\label{subsec:Bug}
-	Nel file RosSpeaker.cpp, parte del controllore ROS per Webots
-	\cite{cyberbotics}, è stato riscontrato un bug. Il metodo per verificare
-	che si stia riproducendo un suono da file audio ed il metodo per verificare
-	che il robot stia parlando presentavano difatti le funzioni callback
-	invertite. In seguito al nostro avviso via email il bug è stato risolto nel
-	successivo aggiornamento, come si evince dal commit GitHub rilevante
-	\cite{rosbug}, riga 32-34.
 	
 	\subsection{Gestione dei nodi}\label{subsec:Gestione-dei-nodi}
 	\subsubsection{Webots node}\label{subsubsec:Webots-node}
@@ -284,7 +288,7 @@
 	\end{equation}
 
 
-	Per la rotazione ci affidiamo alla stima della posa
+	Per le rotazioni ci affidiamo alla stima della posa
 	(Sezione~\ref{subsec:Orientamento}): noto l'angolo corrente e l'angolo
 	target moduliamo la velocità angolare (Eq.~\ref{eq:odometry-angle}) tramite
 	un controllore proporzionale per raggiungere l'angolo desiderato.
@@ -293,7 +297,7 @@
 	di stop che attende il termine della frenata prima di effettuare la
 	successiva operazione di movimento. Per determinare se il robot sia
 	effettivamente fermo non è possibile fare affidamento sull'encoder delle
-	ruote, in quanto durante questa fase sono fortemente soggette a
+	ruote, in quanto durante questa fase le ruote sono fortemente soggette a
 	slittamento. Utilizziamo quindi giroscopio e accelerometro per stimare la
 	velocità corrente del robot.
 
@@ -303,42 +307,49 @@
 	difatti imprescindibile per raggiungere l'obbiettivo proposto in maniera
 	soddisfacente. 
 	
-	Nell'immagine seguente viene mostrata la zona nella quale, se viene
-	indicata dal lidar la presenza di un ostacolo, il robot si ferma
+	In figura~\ref{fig:collision_avoidance} viene mostrata la zona nella quale,
+	se viene indicata dal lidar la presenza di un ostacolo, il robot si ferma
 	per ragioni di sicurezza al fine di evitare danni a persone e/o oggetti.
-	\begin{figure}[H]
+
+	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.2\textwidth]{./img/collision_avoidance.pdf}
 		\caption{Collision avoidance}
 		\label{fig:collision_avoidance}
 	\end{figure}
 	
+	La zona di sicurezza ha profondità differenti a seconda dell'angolo
+	rispetto alla direzione del moto del robot per permettere di ignorare gli
+	ostacoli laterali senza avere punti ciechi per ostacoli vicini.
 	
 
 	\subsection{Stima dell'orientamento}\label{subsec:Orientamento}
-	Il modello del moto è caratterizzato da rotazioni e traslazioni. Per le
-	rotazioni ci siamo inizialmente basati sui dati forniti dal giroscopio, il
-	quale fornisce una velocità angolare. L'angolo di rotazione era calcolato
-	quindi effettuando un'integrazione discreta dei campioni con interpolazione
-	lineare del primo ordine (Eq.~\ref{eq:gyro-integration}).  
+
+	Il  moto è caratterizzato da rotazioni e traslazioni, che trattiamo
+	separatamente.
+	
+	Per la stima dell'orientamento ci siamo inizialmente basati sui dati
+	forniti dal giroscopio, il quale fornisce una velocità angolare. La posa
+	del robot era calcolata quindi effettuando un'integrazione discreta dei
+	campioni con interpolazione lineare del primo ordine
+	(Eq.~\ref{eq:gyro-integration}).  
 
 	\begin{equation}\label{eq:gyro-integration}
 		\theta_i = \sum_{j=1}^i \frac{\omega _{j-1}+\omega _j}{2} \left( t_j-t_{j-1} \right) 
 	\end{equation}
 
 	L'integrazione dei dati del giroscopio è soggetta ad un drift più
-	significativo che l'uso dell'odometria attraverso gli encoder delle
-	ruote(Eq.~\ref{eq:odometry-angle})
+	significativo che l'uso dell'odometria attraverso gli encoder delle ruote.
+	L'errore nella stima odometrica però ha anche componenti non sistematiche
+	difficili da stimare e correggere. Per ottenere una stima più accurata
+	sulla velocità di rotazione effettuiamo quindi una fusione basata su
+	regole~\cite{gyrodometry, 572228} dei dati sulla velocità angolare forniti
+	da encoder (Eq.~\ref{eq:odometry-angle}) e giroscopio come mostrato
+	nell'algoritmo~\ref{alg:angle}.
 
 	\begin{equation}\label{eq:odometry-angle}
 		w_{odom}= \frac	{R(u_{r,i}-u_{l,i})} {L} 
 	\end{equation}
-	
-	L'errore nella stima odometrica però ha anche componenti non sistematiche
-	difficili da stimare e correggere, per stimare la velocità di rotazione
-	effettuiamo quindi una fusione basata su regole dei dati forniti da encoder
-	e giroscopio~\cite{gyrodometry, 572228} come mostrato
-	nell'algoritmo~\ref{alg:angle}.
 
 	\begin{algorithm}[H]
 	\caption{Stima dell'angolo}\label{alg:angle}
@@ -358,16 +369,21 @@
 		\Return{$\theta _i$}\;
 	\end{algorithm}
 
-	Questa fusione dei dati ottenuti dai sensori porta un sostanziale miglioramento della stima della posa del robot: il MSE tra la stima e la posa reale scende a $ 32 $ dai $ 55 $ con il solo giroscopio (Fig.~\ref{fig:sensor_fusion}).
+	Questa fusione dei dati ottenuti dai sensori porta un sostanziale
+	miglioramento della stima della posa del robot: il MSE tra la stima e la
+	posa reale scende a $ 32 $ dai $ 55 $ con il solo giroscopio
+	(Fig.~\ref{fig:sensor_fusion}).
 
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.5\textwidth]{./img/sensor_fusion.pdf}
-		\caption{Errore sulla stima della posa}
+		\includegraphics[width=0.6\textwidth]{./img/sensor_fusion.pdf}
+		\caption{Errore sulla stima della posa misurato durante una rotazione
+		di 360°}
 		\label{fig:sensor_fusion}
 	\end{figure}
 	
 	\subsection{Stima della posizione}\label{subsec:Posizionamento}
+
 	Il robot è pensato per operare in interni, quindi i sistemi GNSS non sono
 	affidabili.
 	La maggior parte dei sistemi di posizionamento per interni fanno
@@ -376,15 +392,23 @@
 
 	Noi abbiamo deciso di utilizzare un sistema di dead reckoning per
 	permettere l'utilizzo del robot in qualunque ambiente senza complesse
-	operazioni di installazione e calibrazione.
+	operazioni di installazione e calibrazione, e senza dovere apportare
+	modifiche all'hardware presente sul robot. Il vettore posizione
+	(Eq.~\ref{eq:position-vector}) è quindi definito rispetto ad una posizione
+	iniziale, non in coordinate assolute.
 
+	\begin{equation}\label{eq:position-vector}
+		\textbf{P}_i = \begin{bmatrix}
+			  x_i & y_i  
+		\end{bmatrix}^T
+	\end{equation}
+	
 	Per stimare il posizionamento, inizialmente abbiamo utilizzato i dati
-	dell'accelerometro \cite{positioning}, in quanto le ruote possono essere
-	soggette a slittamento fornendo una misura imprecisa. Al segnale
-	dell'accelerometro veniva applicato un integrale doppio per ottenere lo
-	spostamento lineare(Eq.~\ref{eq:accel-integration}). Questa integrazione
-	veniva effettuata solamente nel momento in cui al robot veniva dato il
-	comando di muoversi per mitigare il drift.
+	dell'accelerometro \cite{positioning}. Al segnale dell'accelerometro veniva
+	applicato un integrale doppio per ottenere lo spostamento
+	lineare(Eq.~\ref{eq:accel-integration}). Questa integrazione veniva
+	effettuata solamente nel momento in cui al robot veniva dato il comando di
+	muoversi per mitigare il drift.
 
 	\begin{equation}\label{eq:accel-integration}
 		\begin{cases}
@@ -393,40 +417,36 @@
 		\end{cases}
 	\end{equation}
 	
-	In un secondo momento abbiamo ritenuto opportuno utilizzare un nodo ROS che
-	si occupasse di aggiornare e condividere costantemente la posizione e
-	l'orientamento del robot, anche per predisporre il sistema per un eventuale
-	algoritmo di SLAM.  Ciò implica una integrazione costante dei valori del
-	giroscopio e dell'accelerometro. 
+	Questo modello assumeva che nel corso dell'intera traslazione il robot
+	mantenesse lo stesso orientamento. Nella realtà l'attivazione non
+	perfettamente simultanea degli attuatori, nonché possibili slittamenti o
+	terreni non uniformi, portano il robot a non seguire traiettorie
+	perfettamente rettilinee, rendendo questa stima della posizione fortemente
+	imprecisa, con drift superiori al metro dopo pochi minuti di esecuzione.
+
+	Abbiamo quindi ritenuto opportuno utilizzare un nodo ROS che si occupasse
+	di aggiornare e condividere costantemente la posizione e l'orientamento del
+	robot, per gestire meglio modifiche non pianificate della traiettoria, e
+	per predisporre il sistema per un eventuale algoritmo di SLAM.  Ciò implica
+	una integrazione costante della velocità angolare e dell'accelerometro. 
 	
-	Il giroscopio non ha causato nessun problema a differenza
-	dell'accelerometro che invece, essendo soggetto a rumore, rilevava
-	accelerazioni diverse da 0 anche da fermo. Queste accelerazioni, essendo
-	integrate costantemente, producevano degli spostamenti significativi anche
-	da fermi. 
-	
-	Abbiamo ritenuto necessario cambiare approccio, decidendo di utilizzare gli
-	encoders delle ruote per determinare gli spostamenti. 
+	Il rumore dell'accelerometro essendo costantemente soggetto ad una doppia
+	integrazione, produce un drift non trascurabile quando il robot è fermo.
+	Abbiamo quindi ritenuto necessario cambiare approccio, decidendo di
+	utilizzare gli encoders delle ruote per determinare gli spostamenti. 
 	
 	In particolare abbiamo integrato la velocità lineare del robot, calcolata a
-	partire dal raggio R e le velocità angolari $u_i$ delle ruote, fornite da
-	un servizio ROS, e aggiornando così la posizione. Avremmo anche potuto
-	utilizzare queste informazioni per ricavarci l'orientamento del robot, ma
-	abbiamo ritenuto più opportuno utilizzare le informazioni forniteci dal
-	giroscopio. La posizione del robot è data da:
+	partire dal raggio R e le velocità angolari $u_i$ delle
+	ruote(Eq.~\ref{eq:linear-velocity}), fornite da un servizio ROS, e
+	aggiornando così la posizione. La posizione del robot è quindi data da:
 	
-	\begin{equation}\label{eq:position-vector}
-		\textbf{P}_i = \begin{bmatrix}
-			  x_i & y_i  
-		\end{bmatrix}^T
-	\end{equation}
-	
+
 	\begin{equation}\label{eq:linear-velocity}
 		v_i = \frac{R (u_{r,i}+u_{l,i})}{2}
 	\end{equation}
 	
 	Questi valori sono aggiornati ad ogni intervallo di campionamento
-	utilizzando la velocità lineare e l'orientamento del robot \cite{572228}.
+	utilizzando la velocità lineare e l'orientamento del robot \cite{572228}:
 	
 	\begin{equation}\label{eq:position-vector-update}
 		\textbf{P}_i = \sum_{j = 1}^{i} \begin{bmatrix}
@@ -435,35 +455,51 @@
 		\end{bmatrix}\cdot (t_j-t_{j-1}) 
 	\end{equation}
 
-	La $\theta_i$ è ottenuta come descritto nella sezione~\ref{subsec:Orientamento}.
+	\noindent La $\theta_i$ nell'equazione \ref{eq:position-vector} è ottenuta
+	come descritto nella sezione~\ref{subsec:Orientamento}.
 	
-	Abbiamo misurato le performance della stima di posizione e i risultati sono ritenuti soddisfacenti per raggiungere l'obbiettivo proposto. In Fig.~\ref{fig:dead_reckoning_error} sono mostrati i risultati delle misurazioni effettuate.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.75\textwidth]{./img/dead_reckoning_error.pdf}
-		\caption{Errore nella stima della posizione}
-		\label{fig:dead_reckoning_error}
-	\end{figure}
+	Abbiamo misurato le performance della stima di posizione e i risultati sono
+	ritenuti soddisfacenti per raggiungere l'obbiettivo proposto. Nella
+	figura~\ref{fig:position_error} sono mostrati i risultati delle misure
+	effettuate rispetto al ground truth indicato dal simulatore, sia in termini
+	di traiettoria (Fig.~\ref{fig:trajectory_error}) che in termini di errore
+	sulla singola direzione (Fig.~\ref{fig:dead_reckoning_error}).
 
-	In Fig.~\ref{fig:trajectory_error} viene mostrata chiaramente la differenza fra la traiettoria reale del robot e la traiettoria calcolata con l'odometria.
-	
 	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.75\textwidth]{./img/trajectories.pdf}
-		\caption{Errore nella stima della traiettoria}
-		\label{fig:trajectory_error}
+			\centering
+		\begin{subfigure}{0.49\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{./img/dead_reckoning_error.pdf}
+			\caption{}
+			\label{fig:dead_reckoning_error}
+		\end{subfigure}
+		\begin{subfigure}{0.5\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{./img/trajectories.pdf}
+			\caption{}
+			\label{fig:trajectory_error}
+		\end{subfigure}
+		\caption{Performance della stima dello stato del robot}
+		\label{fig:position_error}
 	\end{figure}
 	
 	
 	\section{Object recognition}\label{sec:Object-recognition}
 	
 	\subsection{Campionamento delle immagini}\label{subsec:Campionamento-delle-immagini}
+
 	Il FOV della camera è di 57°, di conseguenza per ricoprire 360° è stato
 	necessario effettuare 7 campionamenti. Il settimo campionamento, come si
 	evince dalla figura \ref{fig:campionamento_immagini}, è sovrapposto al
 	primo per una porzione di scena pari a 39° coincidente col primo
 	campionamento.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.4\textwidth]{./img/pictures_sampling.pdf}
+		\caption{Campionamento delle immagini}
+		\label{fig:campionamento_immagini}
+	\end{figure}
 
 	È però possibile che un individuo si trovi in una zona di confine tra due
 	campioni, e che quindi non risulti correttamente identificabile in nessuna
@@ -472,38 +508,39 @@
 	mosaicing~\cite{ghosh2016survey} e campioniamo l'immagine così ottenuta
 	ad intervalli di 28°.
 	
-	La rotazione ha una precisione limitata, inferiore alla granularità con cui
-	possiamo ottenere informazioni sull'orientamento del robot. Nel corso di
-	una scansione l'errore sulle rotazioni può accumularsi e risultare
-	significativo. Per questo motivo compensiamo la differenza tra la posizione
-	effettiva stimata del robot e la posizione che dovrebbe occupare attraverso
-	una rotazione della testa.
+	La rotazione ha una accuratezza limitata, inferiore alla granularità con
+	cui possiamo ottenere informazioni sull'orientamento del robot. Nel corso
+	di una scansione l'errore sulle rotazioni può accumularsi e risultare
+	significativo. Per questo motivo compensiamo la differenza tra la posa
+	stimata del robot e la posa che dovrebbe assumere attraverso una rotazione
+	della testa, che può essere effettuato velocemente con una buona
+	precisione.
 	
 	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.4\textwidth]{./img/pictures_sampling.pdf}
-		\caption{Campionamento delle immagini}
-		\label{fig:campionamento_immagini}
-	\end{figure}
-	
-	\subsection{YOLO}\label{subsec:YOLO}
+	\subsection{Riconoscimento dei target}\label{subsec:YOLO}
+
 	Al fine di riconoscere le persone è stato necessario utilizzare sistemi di
 	\textbf{object recognition}. Per fare ciò abbiamo valutato le performance di
 	YOLOv3 (you only look once), YOLOv3-tiny, HoG (Histogram of oriented
 	gradients), HoG + SVM (support vector machines) + NMS (non maxima
-	suppression).  In seguito a vari test su HoG abbiamo ritenuto essere
-	problematica la larghezza delle bounding boxes fornite, in quanto, per
-	motivazioni che verranno chiarite nel paragrafo successivo, vogliamo che
-	queste ultime siano il più possibile vicine alla reale larghezza delle
-	persone. YOLOv3, nonostante sia stato addestrato su foto di persone reali
-	(e non modelli 3D) fornisce risultati soddisfacenti, in seguito al
-	fine-tuning dei threshold. Tuttavia, considerando le
-	caratteristiche hardware del robot mobile, abbiamo optato per l'uso di
-	YOLOv3-tiny, il quale risulta essere significativamente più efficiente
-	(approssimativamente del 442\% \cite{tiny_yolo}), sacrificando in termini
-	di precisione ma comunque sufficientemente preciso per il nostro
-	obbiettivo. La tabella \ref{tab:yolotiny} \cite{He2019TFYOLOAI}, mostra
+	suppression).  
+	
+	In seguito a vari test su HoG abbiamo ritenuto essere problematica la
+	larghezza delle bounding boxes fornite, in quanto, per motivazioni che
+	verranno chiarite nel paragrafo successivo, vogliamo che queste ultime
+	siano il più possibile vicine alla reale larghezza delle persone
+	nell'immagine.  
+	
+	YOLOv3, nonostante sia stato addestrato su foto di persone reali (e non
+	modelli 3D poco fedeli quali quelli adoperati nella simulazione) fornisce
+	risultati soddisfacenti, in seguito al fine-tuning dei threshold.
+	Tuttavia, considerando le caratteristiche hardware del robot mobile,
+	abbiamo optato per l'uso di YOLOv3-tiny, il quale risulta essere
+	significativamente più efficiente (approssimativamente del 442\%
+	\cite{tiny_yolo}), sacrificando in termini di precisione ma risultando
+	comunque sufficientemente preciso per il nostro obbiettivo. 
+	
+	La tabella \ref{tab:yolotiny} tratta da \cite{He2019TFYOLOAI}, mostra
 	l'architettura di YOLOv3-tiny. La tabella \ref{tab:comparisonversions}
 	mostra un paragone fra le versioni di YOLO e le rispettive versioni tiny
 	\cite{tiny_yolo}. Inoltre è rilevante in tal senso un paragone fra YOLOv3 e
@@ -511,6 +548,40 @@
 	(floating-point operations per second) addestrate sul dataset COCO, come
 	illustrato dalla tabella \ref{tab:comparison}, i cui dati provengono dal
 	sito di YOLO \cite{yolo}:
+
+	\begin{table}[htpb]
+		\centering
+		\begin{tabular}{ c c c c c c }
+			\hline
+			\textbf{Layer} & \textbf{Type} & \textbf{Filters} & \textbf{Size/Stride} & \textbf{Input} & \textbf{Output} \\ \hline
+			0 & Convolutional & 16 & 3×3/1 & 416×416×3 & 416×416×16 \\
+			1 & Maxpool && 2×2/2 & 416×416×16 & 208×208×16\\
+			2 & Convolutional & 32 & 3×3/1 & 208×208×16&208×208×32\\
+			3 & Maxpool & & 2×2/2 & 28×208×32 & 104×104×32 \\
+			4 & Convolutional & 64 & 3×3/1 & 104×104×32 & 104×104×64\\
+			5 & Maxpool & & 2×2/2 & 104×104×64 & 52×52×64\\
+			6 & Convolutional & 128 & 3×3/1 & 52×52×64 & 52×52×128\\
+			7 & Maxpool & & 2×2/2 & 52×52×128 & 26×26×128\\
+			8 & Convolutional & 256 & 3×3/1 & 26×26×128 & 26×26×256\\
+			9 & Maxpool & & 2×2/2 & 26×26×256 & 13×13×256\\
+			10 & Convolutional & 512 & 3×3/1 & 13×13×256 & 13×13×512\\
+			11 & Maxpool & & 2×2/1 & 13×13×512 & 13×13×512\\
+			12 & Convolutional & 1024 & 3×3/1 & 13×13×512 & 13×13×1024\\
+			13 & Convolutional & 256 & 1×1/1 & 13×13×1024 & 13×13×256\\
+			14 & Convolutional & 512 & 3×3/1 & 13×13×256 & 13×13×512\\
+			15 & Convolutional & 255 & 1×1/1 & 13×13×512 & 13×13×255\\
+			16 & YOLO&&&&\\
+			17 & Route 13&&&&\\
+			18 & Convolutional & 128 & 1×1/1 & 13×13×256 & 13×13×128\\
+			19 & Up‐sampling && 2×2/1 & 13×13×128 & 26×26×128\\
+			20 & Route 19 8&&&&\\
+			21 & Convolutional & 256 & 3×3/1 & 13×13×384 & 13×13×256\\
+			22 & Convolutional & 255 & 1×1/1 & 13×13×256 & 13×13×256\\
+			23 & YOLO &&&&\\\hline
+		\end{tabular}
+	    \caption{Architettura di YOLOv3-tiny}
+	\label{tab:yolotiny}
+	\end{table}
 	
 	\begin{table}[htpb]
 		\centering
@@ -547,43 +618,10 @@
 		\label{tab:comparison}
 	\end{table}
 
-	\begin{table}[htpb]
-		\centering
-		\begin{tabular}{ c c c c c c }
-			\hline
-			\textbf{Layer} & \textbf{Type} & \textbf{Filters} & \textbf{Size/Stride} & \textbf{Input} & \textbf{Output} \\ \hline
-			0 & Convolutional & 16 & 3×3/1 & 416×416×3 & 416×416×16 \\
-			1 & Maxpool && 2×2/2 & 416×416×16 & 208×208×16\\
-			2 & Convolutional & 32 & 3×3/1 & 208×208×16&208×208×32\\
-			3 & Maxpool & & 2×2/2 & 28×208×32 & 104×104×32 \\
-			4 & Convolutional & 64 & 3×3/1 & 104×104×32 & 104×104×64\\
-			5 & Maxpool & & 2×2/2 & 104×104×64 & 52×52×64\\
-			6 & Convolutional & 128 & 3×3/1 & 52×52×64 & 52×52×128\\
-			7 & Maxpool & & 2×2/2 & 52×52×128 & 26×26×128\\
-			8 & Convolutional & 256 & 3×3/1 & 26×26×128 & 26×26×256\\
-			9 & Maxpool & & 2×2/2 & 26×26×256 & 13×13×256\\
-			10 & Convolutional & 512 & 3×3/1 & 13×13×256 & 13×13×512\\
-			11 & Maxpool & & 2×2/1 & 13×13×512 & 13×13×512\\
-			12 & Convolutional & 1024 & 3×3/1 & 13×13×512 & 13×13×1024\\
-			13 & Convolutional & 256 & 1×1/1 & 13×13×1024 & 13×13×256\\
-			14 & Convolutional & 512 & 3×3/1 & 13×13×256 & 13×13×512\\
-			15 & Convolutional & 255 & 1×1/1 & 13×13×512 & 13×13×255\\
-			16 & YOLO&&&&\\
-			17 & Route 13&&&&\\
-			18 & Convolutional & 128 & 1×1/1 & 13×13×256 & 13×13×128\\
-			19 & Up‐sampling && 2×2/1 & 13×13×128 & 26×26×128\\
-			20 & Route 19 8&&&&\\
-			21 & Convolutional & 256 & 3×3/1 & 13×13×384 & 13×13×256\\
-			22 & Convolutional & 255 & 1×1/1 & 13×13×256 & 13×13×256\\
-			23 & YOLO &&&&\\\hline
-		\end{tabular}
-	    \caption{Architettura di YOLOv3-tiny}
-	\label{tab:yolotiny}
-	\end{table}
-
 	\newpage
 	\section{Posizione dei target}\label{sec:Posizione-dei-target}
 	\subsection{Triangolazione}\label{subsec:Triangolazione}
+
 	La triangolazione come metodo di individuazione delle persone, sebbene
 	teoricamente possibile, presenta dei problemi nel nostro scenario. In primo
 	luogo prendiamo in esame l'occlusione delle persone. Ad esempio, se due
@@ -607,24 +645,28 @@
 	\end{figure}
 	
 	\subsection{Calcolo della distanza}\label{subsec:Calcolo-della-distanza}
-	L'altezza percepita dell'oggetto non è un indicatore affidabile della sua
-	distanza dal robot in quanto parte dell'oggetto potrebbe essere occlusa o
-	non presente nel frame. Inoltre classificatori quali HoG tendono a produrre
-	ROI significativamente più alte dell'oggetto. La larghezza del torso,
-	invece, è meno suscettibile a tali problemi, e non dipende dalla posizione
-	(ad esempio seduto o alzato). Dobbiamo tuttavia ipotizzare che il torso
-	abbia forma cilindrica introducendo quindi degli errori se l'obbiettivo non
-	sta guardando la camera.	La posizione orizzontale dell'oggetto relativa
-	alla camera può influenzare la larghezza percepita diminuendola quando
-	aumenta la distanza dal centro dell'immagine per via delle distorsioni
-	introdotte dall'ottica della camera. Ipotizzando che la camera abbia un FOV
-	(field of view) di $2\alpha$ e sia distante $d$ dall'oggetto, la massima
-	distanza orizzontale che un punto dell'immagine potrebbe avere dal centro
-	del piano dell'immagine sarebbe $a = d \tan \alpha$ (Fig.~\ref{fig:error}).
+
+	Per stimare la distanza delle persone ci basiamo sulla loro dimensione
+	nell'immagine.  L'altezza percepita dell'oggetto non è un indicatore
+	affidabile della sua distanza dal robot in quanto parte dell'oggetto
+	potrebbe essere occlusa o non presente nel frame. Inoltre classificatori
+	quali HoG tendono a produrre ROI significativamente più alte dell'oggetto.
+	La larghezza del torso, invece, è meno suscettibile a tali problemi, e non
+	dipende dalla posa (ad esempio seduto o alzato). Dobbiamo tuttavia
+	ipotizzare che il torso abbia forma cilindrica introducendo quindi degli
+	errori se l'obbiettivo non sta guardando la camera.	
+	
+	La posizione orizzontale dell'oggetto relativa alla camera può inoltre
+	influenzare la larghezza percepita diminuendola quando aumenta la distanza
+	dal centro dell'immagine per via delle distorsioni introdotte dall'ottica
+	della camera. Ipotizzando che la camera abbia un FOV (field of view) di
+	$2\alpha$ e sia distante $d$ dall'oggetto, la massima distanza orizzontale
+	che un punto dell'immagine potrebbe avere dal centro del piano
+	dell'immagine sarebbe $a = d \tan \alpha$ (Fig.~\ref{fig:error}).
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.45\textwidth]{./img/linearization_error.pdf}
+		\includegraphics[width=0.4\textwidth]{./img/linearization_error.pdf}
 		\caption{Errore nella stima della distanza con una linearizzazione a tratti della circonferenza}
 		\label{fig:error}
 	\end{figure}
@@ -706,7 +748,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.36\textwidth]{./img/nms.pdf}
+		\includegraphics[width=0.4\textwidth]{./img/nms.pdf}
 		\caption{Non maxima suppression}
 		\label{fig:nms}
 	\end{figure}

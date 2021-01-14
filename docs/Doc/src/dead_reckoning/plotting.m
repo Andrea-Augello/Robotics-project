@@ -36,7 +36,7 @@ ylabel('y')
 legend('Dead reckoning','Ground truth','Location','SouthWest');
 exportgraphics(f, "trajectories.pdf", 'BackgroundColor', 'none', 'ContentType', 'vector');
 %% error
-f=figure()
+f=figure();
 x = [0
     10.0
     19.5
@@ -54,6 +54,7 @@ hold on
 plot(x, deadreckoning.y- groundtruth.y);
 xlabel('Distance traveled')
 ylabel('Dead reckoning error')
+legend('X error','Y error')
+
 exportgraphics(f, "dead_reckoning_error.pdf", 'BackgroundColor', 'none', 'ContentType', 'vector');
 
-legend('X error','Y error')
