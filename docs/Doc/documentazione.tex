@@ -64,7 +64,7 @@
 	
 	\subsection{Obbiettivo}\label{subsec:Obbiettivo} 
 	L'obbiettivo del progetto è quello di sviluppare un robot con lo scopo di
-	\textbf{evitare assembramenti in ambienti indoor} e di invitare a
+	\textbf{scoraggiare assembramenti in ambienti indoor} e di invitare a
 	\textbf{rispettare le norme sul distanziamento sociale}. 
 	
 	Nella dimostrazione presentata il nostro robot rileva le persone nella
@@ -622,12 +622,16 @@
 	\section{Posizione dei target}\label{sec:Posizione-dei-target}
 	\subsection{Triangolazione}\label{subsec:Triangolazione}
 
-	La triangolazione come metodo di individuazione delle persone, sebbene
-	teoricamente possibile, presenta dei problemi nel nostro scenario. In primo
-	luogo prendiamo in esame l'occlusione delle persone. Ad esempio, se due
-	persone (5 e 2) sono una dietro l'altra lungo una retta immaginaria che le
-	congiunge al robot (B), quest'ultimo non sarà in grado di individuare la
-	persona 5. 
+	L'angolo dell'ogetto rispetto al robot può essere calcolato in modo preciso
+	a partire dalla posizione dell'immagine. L'immagine monoscopica però non
+	contiene alcuna informazione sulla profondità.
+
+	Utilizzare la triangolazione come metodo di individuazione delle persone,
+	sebbene teoricamente possibile, presenta dei problemi nel nostro scenario.
+	In primo luogo prendiamo in esame l'occlusione delle persone. Ad esempio,
+	se due persone (5 e 2) sono una dietro l'altra lungo una retta immaginaria
+	che le congiunge al robot (B), quest'ultimo non sarà in grado di
+	individuare la persona 5. 
 	
 	Utilizzando una rappresentazione basata su oggetti si presenta anche il
 	problema dell'imputazione delle osservazioni. Quando il robot effettua scan
@@ -639,12 +643,17 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.3\textwidth]{./img/ideal_object_triangulation.pdf}
+		\includegraphics[width=0.29\textwidth]{./img/ideal_object_triangulation.pdf}
 		\caption{Triangolazione}
 		\label{fig:triangulation}
 	\end{figure}
 	
 	\subsection{Calcolo della distanza}\label{subsec:Calcolo-della-distanza}
+
+	Non essendo possibile usare unicamente l'angolo per determinare la
+	posizione dei target, utilizziamo le informazioni semantiche ottenute in
+	fase di riconoscimento per fare stime sulla profondità nell'immagine
+	bidimensionale.
 
 	Per stimare la distanza delle persone ci basiamo sulla loro dimensione
 	nell'immagine.  L'altezza percepita dell'oggetto non è un indicatore
@@ -666,7 +675,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.4\textwidth]{./img/linearization_error.pdf}
+		\includegraphics[width=0.29\textwidth]{./img/linearization_error.pdf}
 		\caption{Errore nella stima della distanza con una linearizzazione a tratti della circonferenza}
 		\label{fig:error}
 	\end{figure}
@@ -717,10 +726,11 @@
 	utilizzata. Di conseguenza è stato necessario effettuare una fase di
 	scarto delle bounding box duplicate. 
 
-	L'interpolazione dei campioni e la sovrapposizione parziale del primo e
-	l'ultimo campione non permettono di utilizzare una non maxima suppression
-	basata sull'indice di Jacquard, rendendo necessario l'uso di un algoritmo
-	di clustering.
+	Ogni individuo può apparire in più di una immagine per via
+	dell'interpolazione dei campioni e la sovrapposizione parziale del primo e
+	l'ultimo campione. Non è quindi possibile effettuare una non maxima
+	suppression basata sull'indice di Jacquard sull'output della rete neurale.
+	Risulta quindi necessario l'uso di un algoritmo di clustering.
 	
 	Algoritmi di clustering più comuni come il K-means non si prestano bene al
 	nostro scopo, in quanto richiedono conoscenza a priori sul numero di
@@ -728,39 +738,42 @@
 	
 	Abbiamo quindi utilizzato l'algoritmo DBSCAN (Density based scan)
 	\cite{dbscan}, i cui parametri principali sono \textbf{eps}, ovvero la
-	massima distanza fra due punti affinché vengano considerati appartenenti a
-	un cluster (da non confondere con la massima distanza fra i punti di un
-	cluster), \textbf{min\_samples}, ovvero il numero minimo di punti affinché
-	un cluster sia valido (nel nostro caso è uguale a 1 in quanto non vogliamo
-	scartare ROI) ed infine la metrica di distanza.  
+	massima distanza che un punto può avere dal resto del cluster affinché
+	venga considerato appartenente al cluster (da non confondere con la
+	massima distanza fra i punti di un cluster), \textbf{min\_samples}, ovvero
+	il numero minimo di punti affinché un cluster sia valido (nel nostro caso è
+	uguale a 1 in quanto non vogliamo scartare ROI) ed infine la metrica di
+	distanza.  
 	
 	Come si evince dalla figura \ref{fig:nms}, la metrica utilizzata considera
 	la lunghezza di un arco di circonferenza con raggio corrispondente alla
-	distanza fra i due punti ed angolo $\alpha$ corrispondente  all'angolo fra
-	i due punti rispetto alla posizione del robot. In questo modo si tiene
-	conto sia della distanza orizzontale tra le roi che della loro distanza
-	percepita, permettendo di discriminare tra due ROI che ricoprono
-	parzialmente un individuo vicino e due roi corrispondenti ad individui
-	diversi situati a grande distanza.
+	distanza stimata fra i centri delle due ROI ed angolo $\alpha$
+	corrispondente all'angolo fra i due punti rispetto alla posizione del
+	robot. In questo modo si tiene conto sia della distanza orizzontale tra le
+	ROI che della loro distanza percepita, permettendo di discriminare tra due
+	ROI che ricoprono parzialmente un individuo vicino e due ROI corrispondenti
+	ad individui diversi situati a grande distanza.
 	
 	Abbiamo ritenuto opportuno utilizzare l'implementazione dell'algoritmo
 	fornita da \textbf{sklearn} \cite{scikit}.
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.4\textwidth]{./img/nms.pdf}
-		\caption{Non maxima suppression}
+		\includegraphics[width=0.37\textwidth]{./img/nms.pdf}
+		\caption{Metrica di distanza per il DBSCAN}
 		\label{fig:nms}
 	\end{figure}
 	
 	
-	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori}
+	\subsection{Correzione dei valori}\label{subsec:Correzione-dei-valori} 
+	
 	Al fine di migliorare la stima sulla distanza dei target abbiamo ritenuto
 	utile paragonare le reali distanze dei target con le stime effettuate dal
-	nostro sistema. In seguito ad analisi quantitative abbiamo ottenuto il
-	polinomio 	$0.003116*x^5 - 0.09722*x^4 + 1.124*x^3 -5.908*x^2 +
-	14.5*x-7.367$,  che approssima la funzione di correzione della stima. Il
-	grafico è mostrato nella Fig.~\ref{fig:interpolation}
+	nostro sistema. Abbiamo sperimentalmente ottenuto il polinomio
+	$0.003116x^5 - 0.09722x^4 + 1.124x^3 -5.908x^2 + 14.5x-7.367$,  che
+	approssima la funzione di correzione della stima. 
+	
+	In Fig.~\ref{fig:interpolation} viene mostrato il confronto tra le stime originali e l'effettiva distanza dei target, e l'andamento della funzione di correzione. Al di fuori dell'intervallo mostrato la rete non è in grado di individuare correttamente le persone.
 	
 	\begin{figure}[H]
 		\centering
@@ -769,7 +782,9 @@
 		\label{fig:interpolation}
 	\end{figure}
 
-	Le performance del polinomio nella correzione della stima della distanza e dell'angolo si evince dalle Fig.~\ref{fig:boxes_plot}
+	Le performance del polinomio nella correzione della stima della distanza e
+	la bontà della stima dell'angolo si evincono dalle
+	Fig.~\ref{fig:boxes_plot}
 
 	\begin{figure}[ht]
 		\begin{subfigure}{.49\textwidth}
@@ -788,7 +803,8 @@
 		\label{fig:boxes_plot}
 	\end{figure}
 
-	La matrice di covarianza è mostrata nell'equazione~\ref{eq:covariance_matrix}  
+	La matrice di covarianza degli errori nelle stime è mostrata
+	nell'equazione~\ref{eq:covariance_matrix}  
 	
 	\begin{equation}\label{eq:covariance_matrix}
 		V = \begin{bmatrix}
@@ -810,6 +826,8 @@
 		\caption{Distribuzione gaussiana multivariata con covarianza data nell'equazione~\ref{eq:covariance_matrix}  in 2 dimensioni}
 		\label{fig:error_covariance_flat}
 	\end{figure}
+
+	
 	
 	\subsection{Modello probabilistico}\label{subsec:Modello-probabilistico}
 	Le relazioni geometriche sulla distanza degli oggetti esposte nella
@@ -837,7 +855,11 @@
 	rischio, che vengono stimate direttamente per ogni cella utilizzando sia
 	osservazioni dai sensori che conoscenze pregresse. Le caratteristiche di
 	incertezza legate ai sensori vengono descritte, in questo modello,
-	attraverso le probabilità di occupazione.
+	attraverso le probabilità di occupazione.  Nel nostro caso utilizziamo un
+	filtro di occupazione bayesiana 2D. I filtri 4D mantengono anche
+	informazioni sulla velocità. Noi effettuiamo scan con una frequenza troppo
+	bassa perché le stime sulla velocità siano significative, e ci limitiamo a
+	considerare situazioni statiche.
 
 	Al fine di trasformare le osservazioni ottenute in una probabilità che le
 	persone si trovino effettivamente nella posizione indicata è stato
@@ -856,8 +878,8 @@
 		\label{fig:pdf_benchmark}
 	\end{figure}
 
-	La distribuzione triangolare è spesso utilizzata per approssimare una
-	gaussiana, tuttavia, presenta delle caratteristiche non volute per il
+	La distribuzione triangolare è spesso utilizzata per approssimare le
+	gaussiane, tuttavia, presenta delle caratteristiche non volute per il
 	nostro caso d'uso. Una proprietà desiderabile della nostra funzione,
 	difatti, sono le "fat tails", ovvero le code della distribuzione devono
 	essere spesse e la distribuzione non deve tagliare nettamente. Quando, dopo
@@ -895,7 +917,7 @@
 		\label{fig:pdf_shape}
 	\end{figure}
 
-	Nell'equazione~\ref{eq:pdf} $K$ indica un parametro di scala per ottenere
+	Nell'equazione~\ref{eq:pdf}, $K$ indica un parametro di scala per ottenere
 	CDF unitaria. $d$ è una funzione per il calcolo della distanza della cella
 	${\bf x}$ dalla stima di posizione ${\bf z}$.
 
@@ -905,8 +927,9 @@
 	precisione molto elevata, mentre la maggior parte dell'incertezza si
 	concentra nella distanza. Calcoliamo quindi la distanza non come distanza
 	euclidea tra le coordinate cartesiane della cella e dell'osservazione, ma
-	come norma $L^2$ delle coordinate polari, opportunamente normalizzate per
-	tenere conto della diversa incertezza sulla misura di angolo e distanza.
+	come norma $L^2$ delle coordinate polari centrate sul robot, opportunamente
+	normalizzate per tenere conto della diversa incertezza sulla misura di
+	angolo e distanza.
 
 	L'incertezza sulla distanza è ricavata dalle misure di calibrazione
 	effettuate. Per l'angolo è stato seguito un approccio differente:
@@ -917,9 +940,9 @@
 	probabilità relative ad entrambi i punti avranno lunghezza $l$ e ampiezze $
 	\alpha_1 \text{ e } \alpha_2  $. 
 	
-	\begin{figure}[H]
+	\begin{figure}[b]
 		\centering
-		\includegraphics[width=0.5\textwidth]{img/circular_sector.pdf}
+		\includegraphics[width=0.6\textwidth]{img/circular_sector.pdf}
 		\caption{Area della regione probabile a seconda della distanza.}
 		\label{fig:circular_sector}
 	\end{figure}
@@ -965,8 +988,9 @@
 	\begin{itemize}
 		\item In uno stesso scan osservazioni separate si riferiscono ad
 			oggetti distinti. In altre parole date due osservazioni $z_1$ e
-			$z_2$ queste non hanno intersezione, quindi $ p(z_1 \cup z_2) =
-			p(z_1)+p(z_2)-p( z_1 \cap z_2) = p(z_1)+p(z_2) $ 
+			$z_2$ queste non possono essere generate dall'occupazione della
+			stessa cella, quindi $ p(z_1 \cup z_2) = p(z_1)+p(z_2)-p( z_1 \cap
+			z_2) = p(z_1)+p(z_2) $ 
 
 			Questa assunzione è ragionevole ricordando che lo scan avviene
 			ruotando intorno al centro del robot e che viene effettuato uno
@@ -1019,10 +1043,11 @@
 	differenti all'immagine in input.  
 	
 	Da questa sogliatura otteniamo una mappa binaria in cui sono evidenziate le
-	celle ad alta probabilità. Applicando l'algoritmo in~\cite{contours},
-	implementato in OpenCV, estraiamo le regioni ad alta probabilità contigue
-	ed i loro contorni. Per ogni regione verrà selezionato come centro il punto
-	con maggiore probabilità (Fig.~\ref{fig:image_segmentation}).
+	celle ad alta probabilità. Applicando l'algoritmo di estrazione dei
+	contorni in~\cite{contours}, implementato in OpenCV, estraiamo le regioni
+	ad alta probabilità contigue ed i loro contorni. Per ogni regione verrà
+	selezionato come centro il punto con maggiore probabilità
+	(Fig.~\ref{fig:image_segmentation}).
 
 	\begin{figure}[H]
 		\centering
@@ -1048,9 +1073,6 @@
 	Una soluzione al classico problema di muoversi in uno spazio evitando le
 	collisioni è l'uso di un modello basato sui campi di potenziale. Questi
 	schemi richiedono la definizione di potenziali attrattivi e repulsivi.
-	Tuttavia, questi metodi presentano una problematica significativa: la
-	presenza di un minimo locale causerà una forza totale sul punto nulla, e di
-	conseguenza il robot si fermerà in una posizione non ideale. 
 	
 	Il potenziale attrattivo è centrato sul target, ed è modellato come un
 	potenziale conico (Eq.~\ref{eq:conic-potential}).
@@ -1060,9 +1082,12 @@
 			k_ad^2 								& \left| d \right| < d_t 
 		\end{cases}
 	\end{equation}
-	La forza attrattiva è quindi costante al di fuori di un threshold $
+
+	\noindent La forza attrattiva è quindi costante al di fuori di un threshold $
 	d_t $ e lineare rispetto alla distanza all'interno
-	(Eq.~\ref{eq:attractive-force}).
+	(Eq.~\ref{eq:attractive-force}).  Rispetto ad utilizzare un potenziale
+	quadratico a qualunque distanza, avere forza attrattiva costante a grandi
+	distanze permette di avere un comportamento del robot più prevedibile.
 
 	\begin{equation}\label{eq:attractive-force}
 		F_{att}(d) = 
@@ -1074,8 +1099,8 @@
 
 
 	Gli ostacoli generano invece un potenziale repulsivo. Il potenziale
-	repulsivo deve avere una serie di proprietà desiderabili per cui
-	utilizziamo un potenziale superquadratico~\cite{volpe1990manipulator}.
+	repulsivo deve avere una serie di proprietà desiderabili che ci portano
+	ad utilizzare un potenziale superquadratico~\cite{volpe1990manipulator}:
 	\begin{enumerate}
 		\item Il potenziale deve avere simmetria sferica nelle lunghe distanze
 			per evitare la creazione di minimi locali quando viene sommato ad
@@ -1088,7 +1113,7 @@
 		\item Il potenziale e il suo gradiente devono essere continui
 	\end{enumerate}
 
-	Il potenziale utilizzato varia con la legge descritta
+	\noindent Il potenziale utilizzato varia con la legge descritta
 	nell'equazione~\ref{eq:repulsive-potential}, il parametro $ \zeta $ regola
 	la velocità con cui il potenziale aumenta vicino all'ostacolo e decade
 	allontanandosi.
@@ -1097,7 +1122,11 @@
 		U_{rep}(d) = k_r \frac{e^{d\zeta}}{d}
 	\end{equation}
 
-	La forza repulsiva è ottenuta derivando il potenziale (Eq.~\ref{eq:repulsive-force}).
+	La forza repulsiva è ottenuta derivando il potenziale
+	(Eq.~\ref{eq:repulsive-force}). Al decrescere della distanza dall'ostacolo
+	la forza repulsiva tenderà ad infinito, garantendo che indipendentemente
+	dalla forza attrattiva il robot non colliderà con gli ostacoli.
+
 	\begin{equation}\label{eq:repulsive-force}
 		F_{rep}(d)=- \frac	{e^{-d\zeta}(2d+1)} {d^{2}} 
 	\end{equation}
@@ -1117,20 +1146,22 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.8\textwidth]{./img/obstacle_fov.pdf}
-		\caption{FOV frontale del robot}
+		\caption{}
 		\label{fig:obstacle_fov}
 	\end{figure}
 
-	L'approccio seguito consiste in due comportamenti calcolati
-	indipendentemente: il comportamento traslatorio e il comportamento
-	rotazionale.
+	Una volta calcolata la forza subita dal robot, l'approccio seguito per
+	determinare il moto consiste nell'individuazione di due comportamenti
+	calcolati indipendentemente: il comportamento traslatorio e il
+	comportamento rotazionale.
 
 	La traslazione viene calcolata in funzione dello spazio di movimento a
-	disposizione e dall'angolo rispetto al target secondo
-	l'equazione~\ref{eq:translation}, ottenuta per interpolazione del profilo
-	desiderato. L'angolo viene invece determinato dalla somma vettoriale delle
-	forze attrattive e repulsive. La rotazione viene inoltre sogliata per
-	evitare cambi di direzione troppo bruschi(Eq.~\ref{eq:angle}).
+	disposizione e dall'angolo del movimento rispetto alla posizione del target
+	secondo l'equazione~\ref{eq:translation}, ottenuta per interpolazione del
+	profilo desiderato. L'angolo di rotazione viene invece determinato dalla
+	somma vettoriale delle forze attrattive e repulsive. La rotazione viene
+	inoltre sogliata per evitare cambi di direzione troppo
+	bruschi(Eq.~\ref{eq:angle}).
 
 	\begin{equation}\label{eq:translation}
 		d = 0.5 + \frac	{0.9\cdot distance - 0.5}
@@ -1163,9 +1194,11 @@
 	\ref{fig:bug}. Da tali punti viene calcolato l'angolo fra la retta che li
 	congiunge con l'obbiettivo. Il robot si muove infine verso il punto al
 	quale corrisponde l'angolo minore, che ci farà allontanare meno
-	dall'obbiettivo. Se il profilo dell'ostacolo è una circonferenza, la retta
-	fra il punto con angolo minimo e l'obbiettivo è tangente all'ostacolo, da
-	cui il nome dell'algoritmo Tangent Bug \cite{503814}.
+	dall'obbiettivo, o verso l'obbiettivo stesso se non viene rilevato un
+	ostacolo in quella direzione. Se il profilo dell'ostacolo è una
+	circonferenza, la retta fra il punto con angolo minimo e l'obbiettivo è
+	tangente all'ostacolo, da cui il nome dell'algoritmo Tangent Bug
+	\cite{503814}.
 	
 	\begin{figure}[H]
 		\centering
@@ -1178,16 +1211,16 @@
 	\subsection{Automa a stati finiti}\label{subsec:Pianificazione}
 	
 	Nella figura \ref{fig:fsa} viene riportato l'automa a stati finiti che
-	descrive i comportamenti del robot. In seguito all'avvio, il robot
-	effettua uno scan dell'ambiente. Nel caso in cui non vengano rilevati
-	obbiettivi entra in modalità esplorazione, avviando l'esplorazione casuale
-	e, dopo aver percorso una determinata distanza, effettua nuovamente uno
-	scan dell'ambiente. Nel caso in cui venga rilevato un obbiettivo il robot
-	entra in modalità campi di potenziale e si ferma nel caso in cui abbia
-	raggiunto l'obbiettivo o percorso una determinata distanza. Se, in modalità
-	campi di potenziale, il robot rimane bloccato in un loop, entra in
-	modalità Tangent Bug, fin quando non esce dal loop, e ritorna nella
-	modalità campi di potenziale.
+	descrive i comportamenti del robot. In seguito all'avvio, il robot effettua
+	uno scan dell'ambiente. Nel caso in cui non vengano rilevati obbiettivi
+	entra in modalità esplorazione, avviando l'esplorazione casuale e, dopo
+	aver percorso una determinata distanza, effettua nuovamente uno scan
+	dell'ambiente. Nel caso in cui venga rilevato un obbiettivo il robot entra
+	in modalità campi di potenziale e si ferma nel caso in cui abbia raggiunto
+	l'obbiettivo o percorso una determinata distanza. Se, in modalità campi di
+	potenziale, il robot rimane bloccato in un loop, entra in modalità Tangent
+	Bug, fin quando non esce dal loop, per poi ritornare nella modalità campi
+	di potenziale.
 	
 	\begin{figure}[H]
 		\centering
@@ -1197,7 +1230,7 @@
 	\end{figure}
 	
 	\section{Possibili modifiche}\label{sec:Possibli-modifiche}
-	Riportiamo di seguito possibili modifiche da apportare:
+	Riportiamo di seguito possibili estensioni al lavoro fatto:
 	\begin{itemize}
 		\item Aggiungere un algoritmo per effettuare SLAM, in modo da poter
 			pianificare il moto con algoritmi come A* \cite{A*} o RRT
@@ -1206,23 +1239,24 @@
 			ottico~\cite{Deng_Arif_Yang_Xi_Quan_Cai_2020}) anche per migliorare
 			le stime sulla posizione.
 		\item Utilizzare una depth-cam per stimare con più precisione la
-			distanza delle persone
-		\item Tracciamento delle persone in real-time
+			distanza delle persone.
+		\item Tracciamento delle persone in real-time.
 		\item Utilizzare più robot distribuiti nell'ambiente per aggiornare in
 			modo collaborativo~\cite{miner2007swarm} le stime sulla
 			distribuzione delle persone, eventualmente anche con una mappatura
-			semantica degli ambienti~\cite{kostavelis2015semantic}
+			semantica degli ambienti~\cite{kostavelis2015semantic}.
 	\end{itemize}
 
 	\section{Conclusioni}\label{sec:Conclusioni}
+
 	Durante lo sviluppo del progetto sono state affrontate numerose tematiche
 	trattate durante il corso di \textit{Robotica}. L'esperienza di sviluppo ha
 	permesso al team di apprezzare l'importanza di solide fondamenta teoriche
 	unite ad una significativa esperienza pratica. In particolar luogo abbiamo
-	riscontrato problemi concernenti vari ambiti, dalla robotica probabilistica
-	all'esplorazione degli ambienti, la cui ricerca di risoluzione ci ha
-	portato ad approfondire le fondamenta teoriche della materia. La
-	performance raggiunta, nonostante le tempistiche, risulta soddisfacente.
+	affrontato problemi concernenti vari ambiti, dalla robotica probabilistica
+	alla navigazione basata su odometria/INS in ambienti senza GNSS. La
+	performance raggiunta, considerati i tempi di sviluppo, risulta
+	soddisfacente.
 	
 	\newpage
     % Bibliography
