@@ -20,8 +20,7 @@ def logerr(text):
     rospy.logerr(text)
 
 def debug(text):
-    return
-    #rospy.logwarn(text)
+    rospy.logwarn(text)
 
 def publish_interaction(topic, message): 
     rate = rospy.Rate(10) # 10hz

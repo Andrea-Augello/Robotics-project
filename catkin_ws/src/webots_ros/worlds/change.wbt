@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5776567755050862 0.5771969549958951 0.5771969549958951 4.189249903239789
-  position 3.0591730397383713e-15 47.38081344516367 -8.260133111985155e-15
+  orientation 0.5798096836507681 0.572866871555117 0.5793481494053894 4.182739131646028
+  position 0.929121041996448 47.34899760982927 0.04057330387264946
   follow "change"
   followType "None"
 }
@@ -22,40 +22,23 @@ RectangleArena {
   wallHeight 3
 }
 Pedestrian {
-  translation 1.92676 1.29 3.86683
+  translation 2 1.29 4
   rotation 0 -1 0 -1.5707953071795862
 }
 Pedestrian {
-  translation -0.306239 1.27 -7.4404
+  translation 0 1.27 -7
   rotation 0 1 0 -5.307179586466759e-06
   name "pedestrian(4)"
   shirtColor 0 0.448768 0
 }
 Pedestrian {
-  translation -4.58 1.27 -4.60729
+  translation -4 1.27 -4
   rotation 0 -1 0 6.13667e-07
   name "pedestrian(5)"
   shirtColor 0 0.850233 0.855879
 }
 Pedestrian {
-  translation 5 1.27 -6
-  rotation 0 -1 0 6.53316937918704e-06
-  name "pedestrian(3)"
-  controllerArgs [
-    "--speed=0.4"
-    "--trajectory=5 -6,  5 5"
-  ]
-  shirtColor 1 1 1
-  pantsColor 0.2 0.2 0.2
-  shoesColor 0 0 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation -4.63 1.27 -3.56477
+  translation -4 1.27 -3
   rotation 0 1 0 3.14159
   name "pedestrian(6)"
   shirtColor 0.671351 0 0.652461
@@ -68,7 +51,7 @@ Pedestrian {
   ]
 }
 Pedestrian {
-  translation -4.66027 1.27 7.05799
+  translation -5 1.27 7
   rotation 0 1 0 3.14159
   name "pedestrian(2)"
   shirtColor 0.788479 0.967712 0.084123
@@ -80,15 +63,7 @@ Pedestrian {
   ]
 }
 Pedestrian {
-  translation 7.10683 1.27 7.91489
-  rotation 0 1 0 -2.3561953071795863
-  name "pedestrian(1)"
-  shirtColor 0.972793 0.592737 0
-  shoesColor 1 0.999969 0.999985
-  skinColor 0.389014 0.297383 0.280034
-}
-Pedestrian {
-  translation 2.9718 1.27 3.85621
+  translation 3 1.27 4
   rotation 0 1 0 -1.5708053071795867
   name "pedestrian(7)"
   shirtColor 0.739193 0 0.0918135
