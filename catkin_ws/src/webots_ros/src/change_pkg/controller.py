@@ -85,7 +85,8 @@ class Controller:
         targets = [self.__robot.odometry.polar_to_abs_cartesian(i) for i in lista]
         targets_2= [(i[1],-i[0]) for i in targets]
         file = open("/home/frank/git/Robotics-project/catkin_ws/src/webots_ros/src/change_pkg/test_positions/test.txt","a")
-        file.write(str(targets_2) + "\n")
+        string="[{},{}]\n".format(str(self.__robot.odometry.get_position()),str(targets_2))
+        file.write(string)
         file.close()
         x = [i[0] for i in targets]
         y = [i[1] for i in targets]

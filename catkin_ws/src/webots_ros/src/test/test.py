@@ -17,7 +17,7 @@ class Change:
         self.odometry = odometry.Odometry()
         self.controller = controller.Controller(self) 
 
-def get_targets():
+def get_data():
     f = open(os.path.dirname(__file__)+"/test_positions/test.txt", "r")
     observations=[]
     for x in f:
@@ -35,9 +35,9 @@ def print_clusters(clusters):
 def main():
     robot = Change()
     people_density = pd.GridMap(robot)
-    targets=get_targets()
-    clusters_targets=people_density.observation_update(trasform(targets[0]))
-    print(trasform(targets[0]))
+    data=get_data()
+    clusters_targets=people_density.observation_update(trasform(data[0][1]))
+    print(trasform(data[0][1]))
     print_clusters(clusters_targets)
     people_density.draw_heat_map()
 
