@@ -8,7 +8,6 @@ import people_density as people_density
 import matplotlib.pyplot as plt
 import matplotlib.path as mpltPath
 import time
-import os
 
 class Controller:
     def __init__(self, robot):
@@ -84,7 +83,7 @@ class Controller:
     def print_targets(self,lista):
         targets = [self.__robot.odometry.polar_to_abs_cartesian(i) for i in lista]
         targets_2= [(i[1],-i[0]) for i in targets]
-        file = open(os.path.dirname(__file__)+"/test_positions/test.txt","a")
+        file = open("/home/frank/git/Robotics-project/catkin_ws/src/webots_ros/src/change_pkg/test_positions/test.txt","a")
         file.write(str(targets_2) + "\n")
         file.close()
         x = [i[0] for i in targets]
