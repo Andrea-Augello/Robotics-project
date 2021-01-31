@@ -18,15 +18,13 @@ class Change:
         self.controller = controller.Controller(self) 
 
 def get_data():
-    f = open(os.path.dirname(__file__)+"/test_positions/test.txt", "r")
+    f = open(os.path.dirname(__file__)+"/test_positions/change_test.txt", "r")
     observations=[]
     for x in f:
         observations.append(ast.literal_eval(x))
     f.close()
     return observations
-
-def trasform(targets):
-    return [(-i[1],i[0]) for i in targets]   
+ 
 
 def print_clusters(clusters):
     for cluster in clusters:
@@ -36,10 +34,12 @@ def main():
     robot = Change()
     people_density = pd.GridMap(robot)
     data=get_data()
-    clusters_targets=people_density.observation_update(trasform(data[0][1]))
-    print(trasform(data[0][1]))
-    print_clusters(clusters_targets)
-    people_density.draw_heat_map()
+    for observation in data:
+        robot.odometry.update(observation[0])
+        clusters_targets=people_density.observation_update(observation[1])
+        print(observation[1])
+        print_clusters(clusters_targets)
+        people_density.draw_heat_map_inverted()
 
 if __name__ == '__main__':
    main()  

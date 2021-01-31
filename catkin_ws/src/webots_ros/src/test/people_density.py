@@ -45,6 +45,16 @@ class GridMap:
         plt.axis("equal")
         plt.show()
 
+
+    def draw_heat_map_inverted(self):
+        mx, my = self.calc_grid_index()
+        max_value = max([max(i_data) for i_data in self.data])
+        fig,ax1 = plt.subplots(1,1)
+        ax1.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
+        ax1.invert_xaxis()
+        plt.show()
+   
+
     def draw_clusters(self,clusters):
         x=[]
         y=[]
@@ -123,7 +133,7 @@ class GridMap:
                 # else 1/(1+distance.mahalanobis( 
                     # [(o_distance-p_distance),(angle_diff)],
                     # [0,0], IV)**4)) +0.05
-                else 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/32)**4)) \
+                else 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/16)**4)) \
                 + 0.05 
 
 

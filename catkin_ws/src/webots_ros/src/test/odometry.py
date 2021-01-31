@@ -18,6 +18,11 @@ class Odometry:
         self.y=values.pose.pose.position.y
         self.theta=values.pose.pose.position.z      
         
+    def update(self,data):
+        self.x=data[0]
+        self.y=data[1] 
+        self.theta=data[2]  
+    
 
     def get_position(self):
         return (self.x,self.y)    
