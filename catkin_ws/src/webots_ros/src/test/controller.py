@@ -80,19 +80,19 @@ class Controller:
     def get_odometer(self):
         return self.__robot.odometry.history[0][1]
 
-    def print_targets(self,lista):
-        targets = [self.__robot.odometry.polar_to_abs_cartesian(i) for i in lista]
-        targets_2= [(i[1],-i[0]) for i in targets]
+    def print_targets(self,targets):
+        #targets = [self.__robot.odometry.polar_to_abs_cartesian(i) for i in lista]
+        #targets_2= [(i[1],-i[0]) for i in targets]
         file = open("/home/frank/git/Robotics-project/catkin_ws/src/webots_ros/src/change_pkg/test_positions/test.txt","a")
-        string="[{},{}]\n".format(str(self.__robot.odometry.get_position()),str(targets_2))
+        string="[{},{}]\n".format(str(self.__robot.odometry.get_position()),str(targets))
         file.write(string)
         file.close()
-        x = [i[0] for i in targets]
-        y = [i[1] for i in targets]
-        fig,ax1 = plt.subplots(1,1)
-        ax1.invert_xaxis()
-        ax1.scatter(x,y)
-        plt.show()
+        #x = [i[0] for i in targets]
+        #y = [i[1] for i in targets]
+        #fig,ax1 = plt.subplots(1,1)
+        #ax1.invert_xaxis()
+        #ax1.scatter(x,y)
+        #plt.show()
 
     def scan(self):
         self.__robot.movement.scan()
