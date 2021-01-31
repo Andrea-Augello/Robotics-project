@@ -21,7 +21,7 @@ class Odometry:
         
 
     def get_position(self):
-        return (self.x,self.y)    
+        return (self.x,self.y, self.theta)    
 
     def update_position(self):
         coords, dist = self.history[0]
