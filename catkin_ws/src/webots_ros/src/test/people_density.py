@@ -53,6 +53,17 @@ class GridMap:
         ax1.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
         ax1.invert_xaxis()
         plt.show()
+
+    def draw_heat_map_inverted_centroids(self, centroids):
+        x=[i[0] for i in centroids]
+        y=[i[1] for i in centroids]
+        mx, my = self.calc_grid_index()
+        max_value = max([max(i_data) for i_data in self.data])
+        fig,ax1 = plt.subplots(1,1)
+        ax1.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
+        ax1.scatter(x,y)
+        ax1.invert_xaxis()
+        plt.show()    
    
 
     def draw_clusters(self,clusters):
@@ -113,7 +124,7 @@ class GridMap:
                 self.data[ix][iy] += np.random.rand()*noise
         self.normalize_probability()
         #return self.find_clusters_2()
-        return self.find_centroid()
+        return self.find_centroid_3(z)
 
     def calc_gaussian_observation_pdf(self, z, iz, ix, iy):
         # predicted range
@@ -136,21 +147,24 @@ class GridMap:
                 else 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/16)**4)) \
                 + 0.05 
 
-
-
-    def find_centroid(self):
-        im = np.array(self.data)
-        max_value = max([max(i_data) for i_data in self.data])
-        min_value = min([min(i_data) for i_data in self.data])
+    def matrix_to_img(self,matrix):
+        im = np.array(matrix)
+        max_value = max([max(i_data) for i_data in matrix])
+        min_value = min([min(i_data) for i_data in matrix])
         im = im-min_value
-        im = im /(max_value-min_value)
+        r=max_value-min_value
+        if r==0:
+            r=1
+        im = im /r
         im = 255 * im
         im = im.astype(np.uint8)
         im = im.T
-        #im = np.flip(im,0)
         im=im[:,:,None]
-        
+        return im
 
+
+    def find_centroid(self):
+        im = self.matrix_to_img(self.data)
         # Calculate centroids
 
         otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -174,7 +188,69 @@ class GridMap:
             #cv2.circle(im, (cx,cy), 2, (0,255,0), 1)
         if self.show_map:
             self.draw_clusters(clusters)
-        return clusters    
+        return clusters 
+
+  
+
+    def point_to_coord(self,point):
+        x=int((point[0]-self.min_x)/self.xy_resolution)
+        y=int((point[1]-self.min_y)/self.xy_resolution)
+        return (x,y)
+
+    def coord_to_point(self,coord):
+        x=coord[0]*self.xy_resolution+self.min_x
+        y=coord[1]*self.xy_resolution+self.min_y
+        return (x,y)    
+
+    def find_centroid_3(self,seeds):
+        cartesian_seed=[]
+        seed_id=1
+        for seed in seeds:
+            point=self.__robot.odometry.polar_to_abs_cartesian(seed)
+            coord=self.point_to_coord(point)
+            if coord[0]<self.x_w and coord[1]<self.y_w:
+                cartesian_seed.append(Seed(seed_id,coord))
+                seed_id+=1
+        map_cluster,alias=self.region_growing(cartesian_seed)
+        im=self.matrix_to_img(map_cluster)
+        cv2.imshow('',im)    
+        cv2.waitKey(0)
+        print(alias)    
+        return [self.coord_to_point(i.point) for i in cartesian_seed]        
+
+    def region_growing(self,seeds):
+        im = self.matrix_to_img(self.data)
+        otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        max_value = max([max(i_data) for i_data in self.data])
+        min_value = min([min(i_data) for i_data in self.data])
+        threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
+        alias=set()
+        seed_mark =  [[0 for _ in range(self.y_w)]
+                     for _ in range(self.x_w)]
+
+        seed_list=seeds
+        while len(seed_list)>0:
+            current=seed_list.pop(0)
+            current_mark=seed_mark[current.point[0]][current.point[1]]
+            if current_mark!=0 and current_mark!=current.label:
+                alias1=max(current_mark,current.label)
+                alias2=min(current_mark,current.label)
+                alias.add((alias1,alias2))
+            elif self.data[current.point[0]][current.point[1]]>threshold: # current_mark==0      
+                seed_mark[current.point[0]][current.point[1]]=current.label
+                for neighbour in self.neighbours(current):
+                    if self.check(neighbour) and self.data[neighbour.point[0]][neighbour.point[1]]>threshold and seed_mark[neighbour.point[0]][neighbour.point[1]]==0:
+                        seed_list.append(neighbour)
+    
+        return (seed_mark,alias)              
+
+
+    def neighbours(self,point):
+        l=[(-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0)]
+        return [Seed(point.label,(point.point[0]+x,point.point[1]+y)) for x,y in l]
+        
+    def check(self,point):
+        return 0<=point.point[0]<self.x_w and 0<=point.point[1]<self.y_w
 
 
     def find_clusters_2(self):
@@ -220,3 +296,12 @@ class GridMap:
                 min_samples=2,
                 eps=2.5)
         return None if len(clusters) == 0 else clusters[0]
+
+class Seed:
+    def __init__(self,label,point):
+        self.label=label
+        self.point=point
+
+    def __str__(self):
+        return "Label: {} - Point: {}".format(self.label,self.point)    
+

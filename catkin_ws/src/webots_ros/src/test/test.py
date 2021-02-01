@@ -30,6 +30,10 @@ def print_clusters(clusters):
     for cluster in clusters:
         print("Center: ({:.2f},{:.2f})\nArea: {:.2f}".format(cluster['center'][0],cluster['center'][1],cluster['area']))
 
+def print_point_list(clusters):
+    for cluster in clusters:
+        print("({:.2f},{:.2f})".format(cluster[0],cluster[1]),end=' ',flush=True)        
+
 def main():
     robot = Change()
     people_density = pd.GridMap(robot)
@@ -37,9 +41,13 @@ def main():
     for observation in data:
         robot.odometry.update(observation[0])
         clusters_targets=people_density.observation_update(observation[1])
-        print(observation[1])
-        print_clusters(clusters_targets)
-        people_density.draw_heat_map_inverted()
+        #print(robot.odometry.get_position())
+        #print_point_list(observation[1])
+        #print()
+        #print_point_list(clusters_targets)
+        #print()
+        #print_clusters(clusters_targets)
+        people_density.draw_heat_map_inverted_centroids(clusters_targets)
 
 if __name__ == '__main__':
    main()  
