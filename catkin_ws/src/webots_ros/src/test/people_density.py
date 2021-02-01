@@ -212,11 +212,31 @@ class GridMap:
                 cartesian_seed.append(Seed(seed_id,coord))
                 seed_id+=1
         map_cluster,alias=self.region_growing(cartesian_seed)
-        im=self.matrix_to_img(map_cluster)
-        cv2.imshow('',im)    
-        cv2.waitKey(0)
-        print(alias)    
-        return [self.coord_to_point(i.point) for i in cartesian_seed]        
+        centroids=self.get_centroids(map_cluster,alias,seed_id)
+        #im=self.matrix_to_img(map_cluster)
+        #cv2.imshow('',im)    
+        #cv2.waitKey(0)
+        #print(alias)
+        print([str(i) for i in centroids])    
+        return [self.coord_to_point(i.point) for i in centroids] 
+
+
+    def get_centroids(self,map_cluster,alias,seed_id):
+        dictionary={n: [self.x_w,0,self.y_w,0] for n in range(1,seed_id)}
+        alias_confirmed=set()
+        for x,row in enumerate(map_cluster):
+            for y,element in enumerate(row):
+                if element!=0:
+                    seed=element
+                    old=dictionary[seed]
+                    for a in alias:
+                        if a[1]==seed:
+                            seed=a[0]
+                            alias_confirmed.add(a[1])
+                            break
+                    dictionary[seed]=[min(old[0],x),max(old[1],x),min(old[2],y),max(old[3],y)]
+        return [Seed(key,((value[1]-value[0])/2,(value[3]-value[2])/2)) for key, value in dictionary.items() if key not in alias_confirmed]                   
+
 
     def region_growing(self,seeds):
         im = self.matrix_to_img(self.data)
