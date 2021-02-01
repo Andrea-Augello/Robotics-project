@@ -123,8 +123,20 @@ class GridMap:
             for iy in range(self.y_w):
                 self.data[ix][iy] += np.random.rand()*noise
         self.normalize_probability()
-        #return self.find_clusters_2()
-        return self.find_centroid_3(z)
+        '''
+        error_old=[min([utils.math_distance(p['center'],self.__robot.odometry.polar_to_abs_cartesian(i)) for i in z]) for p in self.find_centroid()]
+        error_new=[min([utils.math_distance(p,self.__robot.odometry.polar_to_abs_cartesian(i)) for i in z]) for p in self.find_centroid_region_growing(z)]
+        print("Real: {}\nOld: {}\nError Old: {}\nSum Error Old: {:.2f}\nNew: {}\nError New: {}\nSum Error New: {:.2f}\n{}\n".format(
+            [(round(self.__robot.odometry.polar_to_abs_cartesian(i)[0],2),round(self.__robot.odometry.polar_to_abs_cartesian(i)[1],2)) for i in z],
+            [(round(i['center'][0],2),round(i['center'][1],2)) for i in self.find_centroid()],
+            [round(i,2) for i in error_old],
+            sum(error_old),
+            [(round(i[0],2),round(i[1],2)) for i in self.find_centroid_region_growing(z)],
+            [round(i,2) for i in error_new],
+            sum(error_new),
+            100*"-"))
+        '''
+        return self.find_centroid_region_growing(z)
 
     def calc_gaussian_observation_pdf(self, z, iz, ix, iy):
         # predicted range
@@ -202,7 +214,7 @@ class GridMap:
         y=coord[1]*self.xy_resolution+self.min_y
         return (x,y)    
 
-    def find_centroid_3(self,seeds):
+    def find_centroid_region_growing(self,seeds):
         cartesian_seed=[]
         seed_id=1
         for seed in seeds:
@@ -212,13 +224,20 @@ class GridMap:
                 cartesian_seed.append(Seed(seed_id,coord))
                 seed_id+=1
         map_cluster,alias=self.region_growing(cartesian_seed)
+        alias=self.check_alias(alias,map_cluster)
         centroids=self.get_centroids(map_cluster,alias,seed_id)
-        #im=self.matrix_to_img(map_cluster)
-        #cv2.imshow('',im)    
-        #cv2.waitKey(0)
-        #print(alias)
-        print([str(i) for i in centroids])    
-        return [self.coord_to_point(i.point) for i in centroids] 
+        '''
+        for c in centroids:
+            map_cluster[c.point[0]][c.point[1]]=max([max(i_data) for i_data in map_cluster])+3
+        im=self.matrix_to_img(map_cluster)
+        cv2.imshow('',im)    
+        cv2.waitKey(0)
+        '''
+        return [self.coord_to_point(i.point) for i in centroids]
+
+    def check_alias(self,alias,map_cluster):
+        #Fast Clustering Tracking
+        return alias    
 
 
     def get_centroids(self,map_cluster,alias,seed_id):
@@ -228,14 +247,14 @@ class GridMap:
             for y,element in enumerate(row):
                 if element!=0:
                     seed=element
-                    old=dictionary[seed]
                     for a in alias:
                         if a[1]==seed:
                             seed=a[0]
                             alias_confirmed.add(a[1])
                             break
+                    old=dictionary[seed]        
                     dictionary[seed]=[min(old[0],x),max(old[1],x),min(old[2],y),max(old[3],y)]
-        return [Seed(key,((value[1]-value[0])/2,(value[3]-value[2])/2)) for key, value in dictionary.items() if key not in alias_confirmed]                   
+        return [Seed(key,(round((value[1]+value[0])/2),round((value[3]+value[2])/2))) for key, value in dictionary.items() if key not in alias_confirmed]                   
 
 
     def region_growing(self,seeds):
