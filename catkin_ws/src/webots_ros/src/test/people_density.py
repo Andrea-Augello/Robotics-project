@@ -236,7 +236,7 @@ class GridMap:
         return [self.coord_to_point(i.point) for i in centroids]
 
     def check_alias(self,alias,map_cluster):
-        #Fast Clustering Tracking
+        # TODO: remove false aliases with Fast Clustering Tracking
         return alias    
 
 
