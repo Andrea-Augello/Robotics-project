@@ -236,7 +236,8 @@ class GridMap:
         self.update_seed_dict(true_alias,false_alias)
         map_cluster=self.knn(map_cluster,false_alias)
         centroids=self.get_centroids(map_cluster,true_alias,self.next_label)
-        
+        for c in centroids:
+            self.seed_dict[c.label]=c.point
         '''
         for c in centroids:
             map_cluster[c.point[0]][c.point[1]]=max([max(i_data) for i_data in map_cluster])+3
@@ -263,6 +264,9 @@ class GridMap:
     def knn(self,map_cluster,false_alias):
         return map_cluster
 
+    def remove_seed(self,seed):
+        self.alias_dict={(a,b): self.alias_dict[(a,b)] for (a,b) in self.alias_dict if a!=seed and b!=seed}        
+        self.seed_dict.pop(seed)
 
     def check_alias(self,alias,map_cluster):
         # TODO: remove false aliases with Fast Clustering Tracking
@@ -319,6 +323,9 @@ class GridMap:
         seed_list=seeds
         while len(seed_list)>0:
             current=seed_list.pop(0)
+            if self.data[current.point[0]][current.point[1]]<threshold:
+                self.remove_seed(current.label)
+                continue
             current_mark=seed_mark[current.point[0]][current.point[1]]
             if current_mark!=0 and current_mark!=current.label:
                 alias1=max(current_mark,current.label)
