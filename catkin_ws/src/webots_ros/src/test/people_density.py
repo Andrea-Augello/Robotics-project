@@ -253,9 +253,8 @@ class GridMap:
             if self.alias_dict[a]<0.1:
                 self.alias_dict.pop(a)
         for a in true_alias:
-            if self.alias_dict[a]>0.9:
-                self.alias_dict.pop(a)
-                delete_list.add(a[0])         
+            self.alias_dict.pop(a)
+            delete_list.add(a[0])         
         self.alias_dict={(a,b): self.alias_dict[(a,b)] for (a,b) in self.alias_dict if a not in delete_list and b not in delete_list}        
         for s in delete_list:
             self.seed_dict.pop(s)
@@ -269,7 +268,6 @@ class GridMap:
         self.seed_dict.pop(seed)
 
     def check_alias(self,alias,map_cluster):
-        # TODO: remove false aliases with Fast Clustering Tracking
         true_alias=[]
         false_alias=[]
         for a in alias:
