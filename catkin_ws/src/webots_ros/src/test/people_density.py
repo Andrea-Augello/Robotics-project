@@ -252,6 +252,37 @@ class GridMap:
 
 
     def knn(self,map_cluster,false_alias):
+        connected_lists = []
+        # While some aliases haven't been associated to a cluster
+        while len(false_alias) > 0:
+            # Take the first unassociated tuple and set it as the starting
+            # point for the connected subgraph
+            a,b = false_alias.pop()
+            connected = set(a,b)
+            while(True):
+                prev_len = len(false_alias)
+                i = 0
+                # Loop through the list searching for nodes connected to the
+                # subgraph
+                while(i < len(false_alias)):
+                    a,b = false_alias[i]
+                    # If one element of the tuple belongs to the connected
+                    # graph, we have an arc to the other one and we can add it
+                    # to the subgraph, else we move to the next element in the
+                    # list
+                    if (a in connected or b in connected):
+                        connected.add(a)
+                        connected.add(b)
+                        false_alias.pop(i)
+                    else
+                        i+=1
+                # If an iteration though the list did not add any new node,
+                # then there are no more connected nodes and we can move to the
+                # next subgraph
+                if prev_len == len(false_alias):
+                    break
+            connected_lists.append(connected)
+
         return map_cluster
 
     def remove_seed(self,seed):
