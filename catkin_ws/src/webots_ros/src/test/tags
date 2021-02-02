@@ -1,0 +1,252 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Change	robot.py	/^class Change:$/;"	c
+Change	test.py	/^class Change:$/;"	c
+Controller	controller.py	/^class Controller:$/;"	c
+DT	target_refinement.py	/^DT = 0.1  # time tick [s]$/;"	v
+Display	tablet.py	/^class Display:$/;"	c
+EXTEND_AREA	target_refinement.py	/^EXTEND_AREA = 100.0  # [m] grid map extended length$/;"	v
+GridMap	people_density.py	/^class GridMap:$/;"	c
+GridMap	target_refinement.py	/^class GridMap:$/;"	c
+Hokuyo_URG_04LX_UG01_callback	sensors.py	/^    def Hokuyo_URG_04LX_UG01_callback(self, values):$/;"	m	class:Sensor
+Interaction	interaction.py	/^class Interaction:$/;"	c
+LidarSensor	sensors.py	/^class LidarSensor(Sensor):$/;"	c
+LinearMotor	motors.py	/^class LinearMotor(Motor):$/;"	c
+MAX_RANGE	target_refinement.py	/^MAX_RANGE = 5.59  # maximum observation range$/;"	v
+MAX_X	target_refinement.py	/^MAX_X = 100.0$/;"	v
+MAX_Y	target_refinement.py	/^MAX_Y = 100.0$/;"	v
+MIN_X	target_refinement.py	/^MIN_X = -50.0$/;"	v
+MIN_Y	target_refinement.py	/^MIN_Y = -50.0$/;"	v
+MOTION_STD	target_refinement.py	/^MOTION_STD = 0.0  # standard deviation for motion gaussian distribution$/;"	v
+Motor	motors.py	/^class Motor:$/;"	c
+Motor_Info	odometry_controller.py	/^class Motor_Info:$/;"	c
+Motors	motors.py	/^class Motors:$/;"	c
+Motors_Info	odometry_controller.py	/^class Motors_Info:$/;"	c
+Movement	movement.py	/^class Movement:$/;"	c
+MovementSensor	sensors.py	/^class MovementSensor(Sensor):$/;"	c
+NOISE_RANGE	target_refinement.py	/^NOISE_RANGE = 0.0  # [m] 1σ range noise parameter$/;"	v
+NOISE_SPEED	target_refinement.py	/^NOISE_SPEED = 0.0  # [m\/s] 1σ speed noise parameter$/;"	v
+Odometry	odometry.py	/^class Odometry:$/;"	c
+Odometry	odometry_controller.py	/^class Odometry:$/;"	c
+Path_planner	path_planning.py	/^class Path_planner:$/;"	c
+RANGE_STD	target_refinement.py	/^RANGE_STD = 1.0  # standard deviation for observation gaussian distribution$/;"	v
+RotationalMotor	motors.py	/^class RotationalMotor(Motor):$/;"	c
+SIM_TIME	target_refinement.py	/^SIM_TIME = 50.0  # simulation time [s]$/;"	v
+Scheduler	controller.py	/^class Scheduler:$/;"	c
+Seed	people_density.py	/^class Seed:$/;"	c
+Sensor	sensors.py	/^class Sensor:$/;"	c
+Sensors	sensors.py	/^class Sensors:$/;"	c
+Speaker	tablet.py	/^class Speaker:$/;"	c
+Tablet	tablet.py	/^class Tablet:$/;"	c
+Vector	sensors.py	/^class Vector:$/;"	c
+Vision	vision.py	/^class Vision:$/;"	c
+XY_RESOLUTION	target_refinement.py	/^XY_RESOLUTION = 0.25  # xy grid resolution$/;"	v
+__get_odometry_values	robot.py	/^    def __get_odometry_values(self):$/;"	m	class:Change	file:
+__get_sensor_value	odometry_controller.py	/^    def __get_sensor_value(self, topic, device, msg_type):$/;"	m	class:Odometry	file:
+__get_sensor_value	robot.py	/^    def __get_sensor_value(self, topic, device, msg_type):$/;"	m	class:Change	file:
+__get_sensors_values	odometry_controller.py	/^    def __get_sensors_values(self):$/;"	m	class:Odometry	file:
+__get_sensors_values	robot.py	/^    def __get_sensors_values(self):$/;"	m	class:Change	file:
+__init__	controller.py	/^    def __init__(self):$/;"	m	class:Scheduler
+__init__	controller.py	/^    def __init__(self, robot):$/;"	m	class:Controller
+__init__	interaction.py	/^    def __init__(self):$/;"	m	class:Interaction
+__init__	motors.py	/^    def __init__(self, name, sensor, robot):$/;"	m	class:Motor
+__init__	motors.py	/^    def __init__(self, name, sensor, robot, max_height, max_velocity):$/;"	m	class:LinearMotor
+__init__	motors.py	/^    def __init__(self, name, sensor, robot, min_position=None, max_position=None):$/;"	m	class:RotationalMotor
+__init__	motors.py	/^    def __init__(self,robot):     $/;"	m	class:Motors
+__init__	movement.py	/^    def __init__(self, robot):$/;"	m	class:Movement
+__init__	odometry.py	/^    def __init__(self):$/;"	m	class:Odometry
+__init__	odometry_controller.py	/^    def __init__(self):$/;"	m	class:Odometry
+__init__	odometry_controller.py	/^    def __init__(self, left=Motor_Info(), right=Motor_Info(), time=0):$/;"	m	class:Motors_Info
+__init__	odometry_controller.py	/^    def __init__(self,velocity=0):$/;"	m	class:Motor_Info
+__init__	path_planning.py	/^    def __init__(self, robot, resolution=1, radius=5):$/;"	m	class:Path_planner
+__init__	people_density.py	/^    def __init__(self, robot, xy_resolution = 0.20, min_x =-10, min_y = -10, max_x=10, max_y=10):$/;"	m	class:GridMap
+__init__	people_density.py	/^    def __init__(self,label,point):$/;"	m	class:Seed
+__init__	robot.py	/^    def __init__(self):$/;"	m	class:Change
+__init__	sensors.py	/^    def __init__(self, name, active, robot):                    $/;"	m	class:Sensor
+__init__	sensors.py	/^    def __init__(self, name, active, robot):$/;"	m	class:MovementSensor
+__init__	sensors.py	/^    def __init__(self, name, active, robot, fov, range_max):$/;"	m	class:LidarSensor
+__init__	sensors.py	/^    def __init__(self, robot):$/;"	m	class:Sensors
+__init__	sensors.py	/^    def __init__(self,x=0,y=0,z=0,t=0):$/;"	m	class:Vector
+__init__	tablet.py	/^    def __init__(self):$/;"	m	class:Tablet
+__init__	tablet.py	/^    def __init__(self,name='display'):              $/;"	m	class:Display
+__init__	tablet.py	/^    def __init__(self,name='speaker'):$/;"	m	class:Speaker
+__init__	target_refinement.py	/^    def __init__(self):$/;"	m	class:GridMap
+__init__	test.py	/^    def __init__(self):$/;"	m	class:Change
+__init__	vision.py	/^    def __init__(self):$/;"	m	class:Vision
+__str__	motors.py	/^    def __str__(self):$/;"	m	class:Motor	file:
+__str__	odometry.py	/^    def __str__(self):$/;"	m	class:Odometry	file:
+__str__	people_density.py	/^    def __str__(self):$/;"	m	class:Seed	file:
+__str__	robot.py	/^    def __str__(self):$/;"	m	class:Change	file:
+__str__	sensors.py	/^    def __str__(self):$/;"	m	class:Vector	file:
+abs_cartesian_to_polar	odometry.py	/^    def abs_cartesian_to_polar(self, p):$/;"	m	class:Odometry
+accelerometer_callback	sensors.py	/^    def accelerometer_callback(self, values):$/;"	m	class:MovementSensor
+ap	pedestrian_detection2.py	/^ap = argparse.ArgumentParser()$/;"	v
+arc_distance	clustering.py	/^def arc_distance(p1,p2):$/;"	f
+args	pedestrian_detection2.py	/^args = vars(ap.parse_args())$/;"	v
+attractive_field	path_planning.py	/^    def attractive_field(self,x,y):$/;"	m	class:Path_planner
+base_cover_link_callback	sensors.py	/^    def base_cover_link_callback(self, values):$/;"	m	class:Sensor
+bug_mode	controller.py	/^    def bug_mode(self):$/;"	m	class:Scheduler
+bug_movement	controller.py	/^    def bug_movement(self):$/;"	m	class:Controller
+bug_next_step	path_planning.py	/^    def bug_next_step(self):$/;"	m	class:Path_planner
+calc_gaussian_observation_pdf	people_density.py	/^    def calc_gaussian_observation_pdf(self, z, iz, ix, iy):$/;"	m	class:GridMap
+calc_grid_index	people_density.py	/^    def calc_grid_index(self):$/;"	m	class:GridMap
+calc_input	target_refinement.py	/^def calc_input():$/;"	f
+call_robot_service	interaction.py	/^    def call_robot_service(self,device_name,service_name,*args):$/;"	m	class:Interaction
+call_service	robot.py	/^    def call_service(self,device_name,service_name,*args):$/;"	m	class:Change
+call_service	utils.py	/^def call_service(robot_name,device_name,service_name,*args):$/;"	f
+camera_callback	sensors.py	/^    def camera_callback(self, values):$/;"	m	class:Sensor
+check	people_density.py	/^    def check(self,point):$/;"	m	class:GridMap
+check_alias	people_density.py	/^    def check_alias(self,alias,map_cluster):$/;"	m	class:GridMap
+check_loop	controller.py	/^    def check_loop(self):$/;"	m	class:Controller
+clear_saved_frames	vision.py	/^    def clear_saved_frames(self):$/;"	m	class:Vision
+clustering	clustering.py	/^def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):$/;"	f
+coord_to_point	people_density.py	/^    def coord_to_point(self,coord):$/;"	m	class:GridMap
+copy	odometry_controller.py	/^    def copy(self):$/;"	m	class:Motor_Info
+copy	odometry_controller.py	/^    def copy(self):$/;"	m	class:Motors_Info
+copy	sensors.py	/^    def copy(self):$/;"	m	class:Vector
+correction	vision.py	/^    def correction(self, x):$/;"	m	class:Vision
+debug	utils.py	/^def debug(text):$/;"	f
+display_callback	interaction.py	/^    def display_callback(self, values):$/;"	m	class:Interaction
+distance	utils.py	/^def distance(p1,p2):$/;"	f
+draw_bounding_boxes	object_recognition.py	/^def draw_bounding_boxes(image, boxes, confidences, classIDs, idxs, colors,labels):$/;"	f
+draw_clusters	people_density.py	/^    def draw_clusters(self,clusters):$/;"	m	class:GridMap
+draw_heat_map	people_density.py	/^    def draw_heat_map(self):$/;"	m	class:GridMap
+draw_heat_map	target_refinement.py	/^def draw_heat_map(data, mx, my):$/;"	f
+draw_heat_map_inverted	people_density.py	/^    def draw_heat_map_inverted(self):$/;"	m	class:GridMap
+draw_heat_map_inverted_centroids	people_density.py	/^    def draw_heat_map_inverted_centroids(self, centroids):$/;"	m	class:GridMap
+exploration	controller.py	/^    def exploration(self):$/;"	m	class:Controller
+exploration_mode	controller.py	/^    def exploration_mode(self):$/;"	m	class:Scheduler
+exploration_movement	controller.py	/^    def exploration_movement(self):$/;"	m	class:Controller
+exploration_next_step	path_planning.py	/^    def exploration_next_step(self):$/;"	m	class:Path_planner
+extract_boxes_confidences_classids	object_recognition.py	/^def extract_boxes_confidences_classids(outputs, confidence, width, height):$/;"	f
+filename	pedestrian_detection2.py	/^	filename = imagePath[imagePath.rfind("\/") + 1:]$/;"	v
+find_centroid	people_density.py	/^    def find_centroid(self):$/;"	m	class:GridMap
+find_centroid_region_growing	people_density.py	/^    def find_centroid_region_growing(self,seeds):$/;"	m	class:GridMap
+find_clusters	people_density.py	/^    def find_clusters(self, polar_coords):$/;"	m	class:GridMap
+find_clusters_2	people_density.py	/^    def find_clusters_2(self):$/;"	m	class:GridMap
+get_centroids	people_density.py	/^    def get_centroids(self,map_cluster,alias,seed_id):$/;"	m	class:GridMap
+get_data	test.py	/^def get_data():$/;"	f
+get_device_name	sensors.py	/^    def get_device_name(self, device):$/;"	m	class:Sensors
+get_mode	controller.py	/^    def get_mode(self):$/;"	m	class:Scheduler
+get_odometer	controller.py	/^    def get_odometer(self):$/;"	m	class:Controller
+get_position	odometry.py	/^    def get_position(self):$/;"	m	class:Odometry
+get_rois	object_recognition.py	/^def get_rois(image_list, show_images):$/;"	f
+go_to_gathering	controller.py	/^    def go_to_gathering(self):$/;"	m	class:Controller
+greetings	tablet.py	/^    def greetings(self):$/;"	m	class:Tablet
+gyro_callback	odometry_controller.py	/^    def gyro_callback(self, values):$/;"	m	class:Odometry
+gyro_callback	sensors.py	/^    def gyro_callback(self, values):$/;"	m	class:MovementSensor
+head_1_joint_sensor_callback	sensors.py	/^    def head_1_joint_sensor_callback(self, values):$/;"	m	class:Sensor
+head_2_joint_sensor_callback	sensors.py	/^    def head_2_joint_sensor_callback(self, values):$/;"	m	class:Sensor
+help	tablet.py	/^    def help(self):$/;"	m	class:Tablet
+histogram_filter_localization	target_refinement.py	/^def histogram_filter_localization(grid_map, u, z, yaw):$/;"	f
+hog	pedestrian_detection.py	/^hog = cv2.HOGDescriptor() $/;"	v
+hog	pedestrian_detection2.py	/^hog = cv2.HOGDescriptor()$/;"	v
+image	pedestrian_detection.py	/^image = cv2.imread('test_images\/img2.jpeg') $/;"	v
+image	pedestrian_detection.py	/^image = imutils.resize(image,width=min(400, image.shape[1])) $/;"	v
+image	pedestrian_detection2.py	/^	image = cv2.imread(imagePath)$/;"	v
+image	pedestrian_detection2.py	/^	image = imutils.resize(image, width=min(400, image.shape[1]))$/;"	v
+inertial_unit_callback	sensors.py	/^    def inertial_unit_callback(self, values):      $/;"	m	class:Sensor
+init	interaction.py	/^    def init(self):$/;"	m	class:Interaction
+init	motors.py	/^    def init(self):$/;"	m	class:Motor
+init	motors.py	/^    def init(self):$/;"	m	class:Motors
+init	odometry_controller.py	/^    def init(self):$/;"	m	class:Odometry
+init	robot.py	/^    def init(self):$/;"	m	class:Change
+init	sensors.py	/^    def init(self,time_step):$/;"	m	class:Sensor
+init	sensors.py	/^    def init(self,time_step):$/;"	m	class:Sensors
+is_arrived	controller.py	/^    def is_arrived(self, precision=1):$/;"	m	class:Controller
+is_obstacle	path_planning.py	/^    def is_obstacle(self, distance):$/;"	m	class:Path_planner
+is_speaking	interaction.py	/^    def is_speaking(self):$/;"	m	class:Interaction
+knn	people_density.py	/^    def knn(self,map_cluster,false_alias):$/;"	m	class:GridMap
+load_image	interaction.py	/^    def load_image(self,image):$/;"	m	class:Interaction
+load_image	tablet.py	/^    def load_image(self,image):$/;"	m	class:Display
+locate_targets	vision.py	/^    def locate_targets(self):$/;"	m	class:Vision
+logerr	utils.py	/^def logerr(text):$/;"	f
+loginfo	utils.py	/^def loginfo(text):$/;"	f
+main	target_refinement.py	/^def main():$/;"	f
+main	test.py	/^def main():$/;"	f
+make_prediction	object_recognition.py	/^def make_prediction(net, layer_names, labels, image, confidence, threshold):$/;"	f
+make_way	tablet.py	/^    def make_way(self):$/;"	m	class:Tablet
+map_shift	target_refinement.py	/^def map_shift(grid_map, x_shift, y_shift):$/;"	f
+math_distance	utils.py	/^def math_distance(p1,p2):$/;"	f
+matrix_to_img	people_density.py	/^    def matrix_to_img(self,matrix):$/;"	m	class:GridMap
+max_distance	path_planning.py	/^    def max_distance(self):$/;"	m	class:Path_planner
+motion_model	target_refinement.py	/^def motion_model(x, u):$/;"	f
+motor_sensor_callback	sensors.py	/^    def motor_sensor_callback(self, values):$/;"	m	class:Sensor
+move_forward	movement.py	/^    def move_forward(self, distance, precision=0.01):$/;"	m	class:Movement
+move_forward_accel	movement.py	/^    def move_forward_accel(self, distance, precision=0.01):$/;"	m	class:Movement
+movement_distance	path_planning.py	/^    def movement_distance(self):$/;"	m	class:Path_planner
+movement_history	odometry.py	/^    def movement_history(self):$/;"	m	class:Odometry
+neighbours	people_density.py	/^    def neighbours(self,point):$/;"	m	class:GridMap
+next_step_direction	path_planning.py	/^    def next_step_direction(self):$/;"	m	class:Path_planner
+normalize_probability	people_density.py	/^    def normalize_probability(self):$/;"	m	class:GridMap
+obj_dist_h	vision.py	/^    def obj_dist_h(self, p1, p2, real_height):$/;"	m	class:Vision
+obj_dist_w	vision.py	/^    def obj_dist_w(self, p1, p2, real_width):$/;"	m	class:Vision
+obj_height	vision.py	/^    def obj_height(self, p1, p2, real_distance):$/;"	m	class:Vision
+obj_width	vision.py	/^    def obj_width(self, p1, p2, real_distance):$/;"	m	class:Vision
+observation	target_refinement.py	/^def observation(xTrue, u, RFID):$/;"	f
+observation_update	people_density.py	/^    def observation_update(self, z):$/;"	m	class:GridMap
+odometry_callback	odometry.py	/^    def odometry_callback(self,values):$/;"	m	class:Odometry
+orig	pedestrian_detection2.py	/^	orig = image.copy()$/;"	v
+padding	pedestrian_detection2.py	/^		padding=(8, 8), scale=1.05)$/;"	v
+pick	pedestrian_detection.py	/^pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)$/;"	v
+pick	pedestrian_detection2.py	/^	pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)$/;"	v
+point_coords	vision.py	/^    def point_coords(self, p, rho):$/;"	m	class:Vision
+point_cylindrical_coords	vision.py	/^    def point_cylindrical_coords(self, p, distance):$/;"	m	class:Vision
+point_polar_coords	vision.py	/^    def point_polar_coords(self, p, rho):$/;"	m	class:Vision
+point_to_coord	people_density.py	/^    def point_to_coord(self,point):$/;"	m	class:GridMap
+polar_to_abs_cartesian	odometry.py	/^    def polar_to_abs_cartesian(self, p):$/;"	m	class:Odometry
+potential_field_mode	controller.py	/^    def potential_field_mode(self):$/;"	m	class:Scheduler
+potential_field_movement	controller.py	/^    def potential_field_movement(self):$/;"	m	class:Controller
+print_clusters	test.py	/^def print_clusters(clusters):$/;"	f
+print_info	robot.py	/^    def print_info(self):$/;"	m	class:Change
+print_point_list	test.py	/^def print_point_list(clusters):$/;"	f
+print_targets	controller.py	/^    def print_targets(self,targets):$/;"	m	class:Controller
+publish_interaction	utils.py	/^def publish_interaction(topic, message): $/;"	f
+publish_odometry	utils.py	/^def publish_odometry(topic, x, y, theta): $/;"	f
+rects	pedestrian_detection.py	/^rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])$/;"	v
+rects	pedestrian_detection2.py	/^	rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])$/;"	v
+region_growing	people_density.py	/^    def region_growing(self, new_seeds):$/;"	m	class:GridMap
+remove_seed	people_density.py	/^    def remove_seed(self,seed):$/;"	m	class:GridMap
+repulsive_field	path_planning.py	/^    def repulsive_field(self, obstacles):$/;"	m	class:Path_planner
+reset	people_density.py	/^    def reset(self):$/;"	m	class:GridMap
+resize_x	people_density.py	/^    def resize_x(self,i):$/;"	m	class:GridMap
+resize_y	people_density.py	/^    def resize_y(self,i):$/;"	m	class:GridMap
+roi_center	vision.py	/^    def roi_center(self, roi):$/;"	m	class:Vision
+rotate	movement.py	/^    def rotate(self,rotation, precision=1):$/;"	m	class:Movement
+save_frame	vision.py	/^    def save_frame(self,frame):$/;"	m	class:Vision
+scan	controller.py	/^    def scan(self):$/;"	m	class:Controller
+scan	movement.py	/^    def scan(self):$/;"	m	class:Movement
+schedule_movement	controller.py	/^    def schedule_movement(self):$/;"	m	class:Controller
+set_angular_velocity	movement.py	/^    def set_angular_velocity(self,angular_velocity):$/;"	m	class:Movement
+set_height	robot.py	/^    def set_height(self, height):$/;"	m	class:Change
+set_linear_velocity	movement.py	/^    def set_linear_velocity(self,linear_velocity):$/;"	m	class:Movement
+set_mode	controller.py	/^    def set_mode(self):$/;"	m	class:Controller
+set_pose	robot.py	/^    def set_pose(self,horizontal,vertical):$/;"	m	class:Change
+set_position	motors.py	/^    def set_position(self, position):$/;"	m	class:Motor
+set_target	path_planning.py	/^    def set_target(self, targets):$/;"	m	class:Path_planner
+set_velocity	motors.py	/^    def set_velocity(self, velocity):$/;"	m	class:Motor
+show_animation	target_refinement.py	/^show_animation = True$/;"	v
+slideshow	interaction.py	/^    def slideshow(self):$/;"	m	class:Interaction
+speak	interaction.py	/^    def speak(self,text,volume=1.0):$/;"	m	class:Interaction
+speak_polyglot	tablet.py	/^    def speak_polyglot(self,it_IT=None,en_US=None,de_DE=None,es_ES=None,fr_FR=None,en_UK=None):$/;"	m	class:Speaker
+speaker_callback	interaction.py	/^    def speaker_callback(self, values):$/;"	m	class:Interaction
+start	controller.py	/^    def start(self):$/;"	m	class:Controller
+start	odometry_controller.py	/^    def start(self):$/;"	m	class:Odometry
+stop	movement.py	/^    def stop(self, linear=False, speed=[0,0], prev_accel=[0,0], prev_stamp=0):$/;"	m	class:Movement
+target_angle	path_planning.py	/^    def target_angle(self):$/;"	m	class:Path_planner
+target_distance	path_planning.py	/^    def target_distance(self):$/;"	m	class:Path_planner
+toggle_roi	vision.py	/^    def toggle_roi(self):$/;"	m	class:Vision
+torso_lift_joint_sensor_callback	sensors.py	/^    def torso_lift_joint_sensor_callback(self, values):$/;"	m	class:Sensor
+update	odometry.py	/^    def update(self,data):$/;"	m	class:Odometry
+update_frame	vision.py	/^    def update_frame(self, current_frame):$/;"	m	class:Vision
+update_position	odometry.py	/^    def update_position(self):$/;"	m	class:Odometry
+update_position	odometry_controller.py	/^    def update_position(self):$/;"	m	class:Odometry
+update_seed_dict	people_density.py	/^    def update_seed_dict(self,true_alias,false_alias):$/;"	m	class:GridMap
+warning	robot.py	/^    def warning(self):$/;"	m	class:Change
+warning	tablet.py	/^    def warning(self):$/;"	m	class:Tablet
+wheel_left_joint_sensor_callback	sensors.py	/^    def wheel_left_joint_sensor_callback(self, values):$/;"	m	class:Sensor
+wheel_right_joint_sensor_callback	sensors.py	/^    def wheel_right_joint_sensor_callback(self, values):$/;"	m	class:Sensor

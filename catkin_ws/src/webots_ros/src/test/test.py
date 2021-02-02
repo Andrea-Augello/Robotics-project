@@ -44,8 +44,8 @@ def main():
         #print(robot.odometry.get_position())
         #print_point_list(observation[1])
         #print()
-        #print_point_list(clusters_targets)
-        #print()
+        print_point_list(clusters_targets)
+        print()
         #print_clusters(clusters_targets)
         people_density.draw_heat_map_inverted_centroids(clusters_targets)
 

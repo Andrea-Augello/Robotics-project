@@ -64,7 +64,7 @@ class GridMap:
         max_value = max([max(i_data) for i_data in self.data])
         fig,ax1 = plt.subplots(1,1)
         ax1.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
-        ax1.scatter(x,y)
+        ax1.scatter(x,y,color='y')
         ax1.invert_xaxis()
         plt.show()    
    
@@ -205,7 +205,6 @@ class GridMap:
             self.draw_clusters(clusters)
         return clusters 
 
-  
 
     def point_to_coord(self,point):
         x=int((point[0]-self.min_x)/self.xy_resolution)
@@ -218,15 +217,7 @@ class GridMap:
         return (x,y)    
 
     def find_centroid_region_growing(self,seeds):
-        cartesian_seed=[]
-        for seed in seeds:
-            point=self.__robot.odometry.polar_to_abs_cartesian(seed)
-            coord=self.point_to_coord(point)
-            if coord[0]<self.x_w and coord[1]<self.y_w:
-                cartesian_seed.append(Seed(self.next_label,coord))
-                self.next_label+=1
-        self.seed_dict.update({seed.label: seed.point for seed in cartesian_seed})        
-        map_cluster,alias=self.region_growing()
+        map_cluster,alias=self.region_growing(seeds)
 
         temp={a: None for a in alias}
         temp.update(self.alias_dict)
@@ -281,7 +272,7 @@ class GridMap:
             if a not in alias:
                 old_prob=self.alias_dict[a]
                 self.alias_dict[a]=(old_prob*0.2)/(old_prob*0.2+(1-old_prob)*0.9)
-            if self.alias_dict[a]>0.7:
+            if self.alias_dict[a]>0.9:
                 true_alias.append(a)
             else:
                 false_alias.append(a)    
@@ -306,7 +297,7 @@ class GridMap:
         return [Seed(key,(round((value[1]+value[0])/2),round((value[3]+value[2])/2))) for key, value in dictionary.items() if key not in alias_confirmed]                   
 
 
-    def region_growing(self):
+    def region_growing(self, new_seeds):
         seeds=[Seed(label,point) for label,point in self.seed_dict.items()]
         
         im = self.matrix_to_img(self.data)
@@ -334,7 +325,41 @@ class GridMap:
                 for neighbour in self.neighbours(current):
                     if self.check(neighbour) and self.data[neighbour.point[0]][neighbour.point[1]]>threshold and seed_mark[neighbour.point[0]][neighbour.point[1]]==0:
                         seed_list.append(neighbour)
+
+        # If there are high-probability areas that have not yet been assigned
+        # to a pre-existing seed, add to the seeds the new observations that
+        # lie in that region with the same algorithm used in the previous step
+        # (May be a good idea to refactor this code)
+        old_seeds = self.next_label-1
+        cartesian_seed=[]
+        for seed in new_seeds:
+            point=self.__robot.odometry.polar_to_abs_cartesian(seed)
+            coord=self.point_to_coord(point)
+            if coord[0]<self.x_w and coord[1]<self.y_w \
+                and self.data[coord[0]][coord[1]]>threshold \
+                and (seed_mark[coord[0]][coord[1]] == 0 or seed_mark[coord[0]][coord[1]] > old_seeds): # Point not assigned to an old seed
+                #print(seed_mark[coord[0]][coord[1]] > old_seeds)
+                #print(self.coord_to_point((coord[0],coord[1])))
+                cartesian_seed.append(Seed(self.next_label,coord))
+                self.next_label+=1
+                seed_list = [cartesian_seed[-1]]
+                while len(seed_list) > 0:
+                    current=seed_list.pop(0)
+                    if self.data[current.point[0]][current.point[1]]<threshold:
+                        self.remove_seed(current.label)
+                        continue
+                    current_mark=seed_mark[current.point[0]][current.point[1]]
+                    if current_mark!=0 and current_mark!=current.label:
+                        alias1=max(current_mark,current.label)
+                        alias2=min(current_mark,current.label)
+                        alias.add((alias1,alias2))
+                    elif self.data[current.point[0]][current.point[1]]>threshold: # current_mark==0      
+                        seed_mark[current.point[0]][current.point[1]]=current.label
+                        for neighbour in self.neighbours(current):
+                            if self.check(neighbour) and self.data[neighbour.point[0]][neighbour.point[1]]>threshold and seed_mark[neighbour.point[0]][neighbour.point[1]]==0:
+                                seed_list.append(neighbour)
     
+        self.seed_dict.update({seed.label: seed.point for seed in cartesian_seed})        
         return (seed_mark,alias)              
 
 
