@@ -26,6 +26,9 @@ class GridMap:
                      for _ in range(self.x_w)]
         self.normalize_probability()
         self.show_map=robot.debug_mode
+        self.next_label=1
+        self.seed_dict={}
+        self.alias_dict={}
 
     def reset(self):
         self.data =  [[1.0 for _ in range(self.y_w)]
@@ -216,16 +219,24 @@ class GridMap:
 
     def find_centroid_region_growing(self,seeds):
         cartesian_seed=[]
-        seed_id=1
         for seed in seeds:
             point=self.__robot.odometry.polar_to_abs_cartesian(seed)
             coord=self.point_to_coord(point)
             if coord[0]<self.x_w and coord[1]<self.y_w:
-                cartesian_seed.append(Seed(seed_id,coord))
-                seed_id+=1
-        map_cluster,alias=self.region_growing(cartesian_seed)
-        alias=self.check_alias(alias,map_cluster)
-        centroids=self.get_centroids(map_cluster,alias,seed_id)
+                cartesian_seed.append(Seed(self.next_label,coord))
+                self.next_label+=1
+        self.seed_dict.update({seed.label: seed.point for seed in cartesian_seed})        
+        map_cluster,alias=self.region_growing()
+
+        temp={a: None for a in alias}
+        temp.update(self.alias_dict)
+        self.alias_dict=temp
+
+        true_alias,false_alias=self.check_alias(alias,map_cluster)
+        self.update_seed_dict(true_alias,false_alias)
+        map_cluster=self.knn(map_cluster,false_alias)
+        centroids=self.get_centroids(map_cluster,true_alias,self.next_label)
+        
         '''
         for c in centroids:
             map_cluster[c.point[0]][c.point[1]]=max([max(i_data) for i_data in map_cluster])+3
@@ -235,21 +246,57 @@ class GridMap:
         '''
         return [self.coord_to_point(i.point) for i in centroids]
 
+    def update_seed_dict(self,true_alias,false_alias):
+        delete_list=set()
+        for a in false_alias:
+            if self.alias_dict[a]<0.1:
+                self.alias_dict.pop(a)
+        for a in true_alias:
+            if self.alias_dict[a]>0.9:
+                self.alias_dict.pop(a)
+                delete_list.add(a[0])         
+        self.alias_dict={(a,b): self.alias_dict[(a,b)] for (a,b) in self.alias_dict if a not in delete_list and b not in delete_list}        
+        for s in delete_list:
+            self.seed_dict.pop(s)
+
+
+    def knn(self,map_cluster,false_alias):
+        return map_cluster
+
+
     def check_alias(self,alias,map_cluster):
         # TODO: remove false aliases with Fast Clustering Tracking
-        return alias    
+        true_alias=[]
+        false_alias=[]
+        for a in alias:
+            old_prob=self.alias_dict[a]
+            if old_prob==None:
+                prob=math.exp(-utils.math_distance(self.seed_dict[a[0]],self.seed_dict[a[1]]))
+            else:
+                prob=(old_prob*0.8)/(old_prob*0.8+(1-old_prob)*0.1)
+            self.alias_dict[a]=prob
+        for a in self.alias_dict.keys():
+            if a not in alias:
+                old_prob=self.alias_dict[a]
+                self.alias_dict[a]=(old_prob*0.2)/(old_prob*0.2+(1-old_prob)*0.9)
+            if self.alias_dict[a]>0.7:
+                true_alias.append(a)
+            else:
+                false_alias.append(a)    
+           
+        return true_alias,false_alias    
 
 
     def get_centroids(self,map_cluster,alias,seed_id):
-        dictionary={n: [self.x_w,0,self.y_w,0] for n in range(1,seed_id)}
+        dictionary={n: [self.x_w,0,self.y_w,0] for n in self.seed_dict.keys()}
         alias_confirmed=set()
         for x,row in enumerate(map_cluster):
             for y,element in enumerate(row):
                 if element!=0:
                     seed=element
                     for a in alias:
-                        if a[1]==seed:
-                            seed=a[0]
+                        if a[0]==seed:
+                            seed=a[1]
                             alias_confirmed.add(a[1])
                             break
                     old=dictionary[seed]        
@@ -257,7 +304,9 @@ class GridMap:
         return [Seed(key,(round((value[1]+value[0])/2),round((value[3]+value[2])/2))) for key, value in dictionary.items() if key not in alias_confirmed]                   
 
 
-    def region_growing(self,seeds):
+    def region_growing(self):
+        seeds=[Seed(label,point) for label,point in self.seed_dict.items()]
+        
         im = self.matrix_to_img(self.data)
         otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         max_value = max([max(i_data) for i_data in self.data])
