@@ -350,20 +350,7 @@ class GridMap:
                     dictionary[seed]=[min(old[0],x),max(old[1],x),min(old[2],y),max(old[3],y)]
         return [Seed(key,(round((value[1]+value[0])/2),round((value[3]+value[2])/2))) for key, value in dictionary.items() if key not in alias_confirmed]                   
 
-
-    def region_growing(self, new_seeds):
-        seeds=[Seed(label,point) for label,point in self.seed_dict.items()]
-        
-        im = self.matrix_to_img(self.data)
-        otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        max_value = max([max(i_data) for i_data in self.data])
-        min_value = min([min(i_data) for i_data in self.data])
-        threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
-        alias=set()
-        seed_mark =  [[0 for _ in range(self.y_w)]
-                     for _ in range(self.x_w)]
-
-        seed_list=seeds
+    def region_growing_aux(self,seed_mark,seed_list,alias,threshold):
         while len(seed_list)>0:
             current=seed_list.pop(0)
             if self.data[current.point[0]][current.point[1]]<threshold:
@@ -379,11 +366,24 @@ class GridMap:
                 for neighbour in self.neighbours(current):
                     if self.check(neighbour) and self.data[neighbour.point[0]][neighbour.point[1]]>threshold and seed_mark[neighbour.point[0]][neighbour.point[1]]==0:
                         seed_list.append(neighbour)
+        return seed_mark,alias                
+
+    def region_growing(self, new_seeds):
+        seeds=[Seed(label,point) for label,point in self.seed_dict.items()]
+        
+        im = self.matrix_to_img(self.data)
+        otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        max_value = max([max(i_data) for i_data in self.data])
+        min_value = min([min(i_data) for i_data in self.data])
+        threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
+        alias=set()
+        seed_mark =  [[0 for _ in range(self.y_w)]
+                     for _ in range(self.x_w)]
+        seed_mark,alias=self.region_growing_aux(seed_mark,seeds,alias,threshold)
 
         # If there are high-probability areas that have not yet been assigned
         # to a pre-existing seed, add to the seeds the new observations that
         # lie in that region with the same algorithm used in the previous step
-        # (May be a good idea to refactor this code)
         old_seeds = self.next_label-1
         cartesian_seed=[]
         for seed in new_seeds:
@@ -396,22 +396,7 @@ class GridMap:
                 #print(self.coord_to_point((coord[0],coord[1])))
                 cartesian_seed.append(Seed(self.next_label,coord))
                 self.next_label+=1
-                seed_list = [cartesian_seed[-1]]
-                while len(seed_list) > 0:
-                    current=seed_list.pop(0)
-                    if self.data[current.point[0]][current.point[1]]<threshold:
-                        self.remove_seed(current.label)
-                        continue
-                    current_mark=seed_mark[current.point[0]][current.point[1]]
-                    if current_mark!=0 and current_mark!=current.label:
-                        alias1=max(current_mark,current.label)
-                        alias2=min(current_mark,current.label)
-                        alias.add((alias1,alias2))
-                    elif self.data[current.point[0]][current.point[1]]>threshold: # current_mark==0      
-                        seed_mark[current.point[0]][current.point[1]]=current.label
-                        for neighbour in self.neighbours(current):
-                            if self.check(neighbour) and self.data[neighbour.point[0]][neighbour.point[1]]>threshold and seed_mark[neighbour.point[0]][neighbour.point[1]]==0:
-                                seed_list.append(neighbour)
+                seed_mark,alias=self.region_growing_aux(seed_mark,[cartesian_seed[-1]],alias,threshold)
     
         self.seed_dict.update({seed.label: seed.point for seed in cartesian_seed})        
         return (seed_mark,alias)              
