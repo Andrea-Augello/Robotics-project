@@ -250,15 +250,16 @@ class GridMap:
         for s in delete_list:
             self.seed_dict.pop(s)
 
-
-    def knn(self,map_cluster,false_alias):
+    def merge_alias(self,false_alias):
         connected_lists = []
         # While some aliases haven't been associated to a cluster
         while len(false_alias) > 0:
             # Take the first unassociated tuple and set it as the starting
             # point for the connected subgraph
             a,b = false_alias.pop()
-            connected = set(a,b)
+            connected = set()
+            connected.add(a)
+            connected.add(b)
             while(True):
                 prev_len = len(false_alias)
                 i = 0
@@ -274,7 +275,7 @@ class GridMap:
                         connected.add(a)
                         connected.add(b)
                         false_alias.pop(i)
-                    else
+                    else:
                         i+=1
                 # If an iteration though the list did not add any new node,
                 # then there are no more connected nodes and we can move to the
@@ -282,6 +283,28 @@ class GridMap:
                 if prev_len == len(false_alias):
                     break
             connected_lists.append(connected)
+        return connected_lists
+
+    def search_alias(self,label,alias):
+        for alias_set in alias:
+            if label in alias_set:
+                return alias_set
+        return None               
+
+    def knn(self,map_cluster,false_alias):
+        connected_lists = self.merge_alias(false_alias)
+        for x,row in enumerate(map_cluster):
+            for y,element in enumerate(row):
+                alias=self.search_alias(element,connected_lists)
+                if alias!=None:
+                    min_label=None
+                    min_distance=float('inf')
+                    for label in alias:
+                        d=abs(x-self.seed_dict[label][0])+abs(y-self.seed_dict[label][1])
+                        if d<min_distance:
+                            min_distance=d
+                            min_label=label
+                    map_cluster[x][y]=min_label
 
         return map_cluster
 
