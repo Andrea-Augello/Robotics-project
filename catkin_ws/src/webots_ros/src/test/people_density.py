@@ -28,6 +28,7 @@ class GridMap:
         self.show_map=robot.debug_mode
         self.next_label=1
         self.seed_dict={}
+        self.seed_prob_dict={}
         self.alias_dict={}
 
     def reset(self):
@@ -249,6 +250,7 @@ class GridMap:
         self.alias_dict={(a,b): self.alias_dict[(a,b)] for (a,b) in self.alias_dict if a not in delete_list and b not in delete_list}        
         for s in delete_list:
             self.seed_dict.pop(s)
+            self.seed_prob_dict.pop(s)
 
     def merge_alias(self,false_alias):
         connected_lists = []
@@ -311,6 +313,7 @@ class GridMap:
     def remove_seed(self,seed):
         self.alias_dict={(a,b): self.alias_dict[(a,b)] for (a,b) in self.alias_dict if a!=seed and b!=seed}        
         self.seed_dict.pop(seed)
+        self.seed_prob_dict.pop(seed)
 
     def check_alias(self,alias,map_cluster):
         true_alias=[]
@@ -318,7 +321,7 @@ class GridMap:
         for a in alias:
             old_prob=self.alias_dict[a]
             if old_prob==None:
-                prob=math.exp(-utils.math_distance(self.seed_dict[a[0]],self.seed_dict[a[1]]))
+                prob=math.exp(-2*utils.math_distance(self.seed_dict[a[0]],self.seed_dict[a[1]]))
             else:
                 prob=(old_prob*0.8)/(old_prob*0.8+(1-old_prob)*0.1)
             self.alias_dict[a]=prob
@@ -335,7 +338,7 @@ class GridMap:
 
 
     def get_centroids(self,map_cluster,alias,seed_id):
-        dictionary={n: [self.x_w,0,self.y_w,0] for n in self.seed_dict.keys()}
+        dictionary={key: [value[0],value[0],value[1],value[1]] for key, value in self.seed_dict.items()}
         alias_confirmed=set()
         for x,row in enumerate(map_cluster):
             for y,element in enumerate(row):
@@ -350,12 +353,24 @@ class GridMap:
                     dictionary[seed]=[min(old[0],x),max(old[1],x),min(old[2],y),max(old[3],y)]
         return [Seed(key,(round((value[1]+value[0])/2),round((value[3]+value[2])/2))) for key, value in dictionary.items() if key not in alias_confirmed]                   
 
+    def update_seed_prob(self,seed,observed):
+        if seed in self.seed_prob_dict.keys() and not observed:
+            self.seed_prob_dict[seed]=(self.seed_prob_dict[seed]*0.1)/((self.seed_prob_dict[seed]*0.1)+(1-self.seed_prob_dict[seed])*0.7)
+        if observed:
+            self.seed_prob_dict[seed]=0.9
+
     def region_growing_aux(self,seed_mark,seed_list,alias,threshold):
         while len(seed_list)>0:
             current=seed_list.pop(0)
             if self.data[current.point[0]][current.point[1]]<threshold:
-                self.remove_seed(current.label)
-                continue
+                self.update_seed_prob(current.label,observed=False)
+                print(self.seed_prob_dict[current.label]) 
+                if self.seed_prob_dict[current.label]<0.5:
+                    self.remove_seed(current.label)
+                    continue
+            elif current.label not in self.seed_prob_dict.keys() or self.seed_prob_dict[current.label]<0.9:
+                self.update_seed_prob(current.label,observed=True)
+                print(self.seed_prob_dict[current.label])    
             current_mark=seed_mark[current.point[0]][current.point[1]]
             if current_mark!=0 and current_mark!=current.label:
                 alias1=max(current_mark,current.label)
