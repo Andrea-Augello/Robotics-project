@@ -92,7 +92,7 @@ class Controller:
         targets = self.__robot.vision.locate_targets()
         #people_target=self.people_density.find_clusters(targets)
         clusters_targets=self.people_density.observation_update(targets) 
-        self.print_targets(targets)
+        #self.print_targets(targets)
         valid_target = self.path_planner.set_target(clusters_targets)
         return valid_target
 
