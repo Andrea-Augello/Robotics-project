@@ -300,10 +300,11 @@ class GridMap:
                     min_label=None
                     min_distance=float('inf')
                     for label in alias:
-                        d=abs(x-self.seed_dict[label][0])+abs(y-self.seed_dict[label][1])
-                        if d<min_distance:
-                            min_distance=d
-                            min_label=label
+                        if label in self.seed_dict.keys():
+                            d=abs(x-self.seed_dict[label][0])+abs(y-self.seed_dict[label][1])
+                            if d<min_distance:
+                                min_distance=d
+                                min_label=label
                     map_cluster[x][y]=min_label
 
         return map_cluster
@@ -335,7 +336,7 @@ class GridMap:
 
 
     def get_centroids(self,map_cluster,alias,seed_id):
-        dictionary={n: [self.x_w,0,self.y_w,0] for n in self.seed_dict.keys()}
+        dictionary={key: [value[0],value[0],value[1],value[1]] for key, value in self.seed_dict.items()}
         alias_confirmed=set()
         for x,row in enumerate(map_cluster):
             for y,element in enumerate(row):
@@ -350,7 +351,8 @@ class GridMap:
                     dictionary[seed]=[min(old[0],x),max(old[1],x),min(old[2],y),max(old[3],y)]
         return [Seed(key,(round((value[1]+value[0])/2),round((value[3]+value[2])/2))) for key, value in dictionary.items() if key not in alias_confirmed]                   
 
-    def region_growing_aux(self,seed_mark,seed_list,alias,threshold):
+    def region_growing_aux(self,seed_mark,seed_list,alias,threshold,region_occupancy):
+        
         while len(seed_list)>0:
             current=seed_list.pop(0)
             if self.data[current.point[0]][current.point[1]]<threshold:
@@ -361,16 +363,20 @@ class GridMap:
                 alias1=max(current_mark,current.label)
                 alias2=min(current_mark,current.label)
                 alias.add((alias1,alias2))
+                if current_mark in region_occupancy.keys():
+                    region_occupancy[current_mark]+=1
+                   
             elif self.data[current.point[0]][current.point[1]]>threshold: # current_mark==0      
                 seed_mark[current.point[0]][current.point[1]]=current.label
+                region_occupancy[current_mark]=1
                 for neighbour in self.neighbours(current):
                     if self.check(neighbour) and self.data[neighbour.point[0]][neighbour.point[1]]>threshold and seed_mark[neighbour.point[0]][neighbour.point[1]]==0:
                         seed_list.append(neighbour)
-        return seed_mark,alias                
+        return seed_mark,alias,region_occupancy                
 
     def region_growing(self, new_seeds):
         seeds=[Seed(label,point) for label,point in self.seed_dict.items()]
-        
+        region_occupancy={}
         im = self.matrix_to_img(self.data)
         otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         max_value = max([max(i_data) for i_data in self.data])
@@ -379,7 +385,7 @@ class GridMap:
         alias=set()
         seed_mark =  [[0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]
-        seed_mark,alias=self.region_growing_aux(seed_mark,seeds,alias,threshold)
+        seed_mark,alias,region_occupancy=self.region_growing_aux(seed_mark,seeds,alias,threshold,region_occupancy)
 
         # If there are high-probability areas that have not yet been assigned
         # to a pre-existing seed, add to the seeds the new observations that
@@ -389,14 +395,17 @@ class GridMap:
         for seed in new_seeds:
             point=self.__robot.odometry.polar_to_abs_cartesian(seed)
             coord=self.point_to_coord(point)
-            if coord[0]<self.x_w and coord[1]<self.y_w \
-                and self.data[coord[0]][coord[1]]>threshold \
-                and (seed_mark[coord[0]][coord[1]] == 0 or seed_mark[coord[0]][coord[1]] > old_seeds): # Point not assigned to an old seed
-                #print(seed_mark[coord[0]][coord[1]] > old_seeds)
-                #print(self.coord_to_point((coord[0],coord[1])))
-                cartesian_seed.append(Seed(self.next_label,coord))
-                self.next_label+=1
-                seed_mark,alias=self.region_growing_aux(seed_mark,[cartesian_seed[-1]],alias,threshold)
+            if coord[0]<self.x_w and coord[1]<self.y_w and self.data[coord[0]][coord[1]]>threshold:
+                if (seed_mark[coord[0]][coord[1]] == 0 or seed_mark[coord[0]][coord[1]] > old_seeds): # Point not assigned to an old seed
+                    cartesian_seed.append(Seed(self.next_label,coord))
+                    self.next_label+=1
+                    seed_mark,alias,region_occupancy=self.region_growing_aux(seed_mark,[cartesian_seed[-1]],alias,threshold,region_occupancy)
+                elif seed_mark[coord[0]][coord[1]] in region_occupancy.keys() and region_occupancy[seed_mark[coord[0]][coord[1]]]>0:
+                    region_occupancy[seed_mark[coord[0]][coord[1]]]-=1
+                else:
+                    cartesian_seed.append(Seed(self.next_label,coord))
+                    #alias.add((self.next_label,seed_mark[coord[0]][coord[1]]))
+                    self.next_label+=1       
     
         self.seed_dict.update({seed.label: seed.point for seed in cartesian_seed})        
         return (seed_mark,alias)              
