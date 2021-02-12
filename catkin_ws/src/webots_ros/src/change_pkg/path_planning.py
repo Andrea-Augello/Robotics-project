@@ -41,6 +41,7 @@ class Path_planner:
 
         """
         target= None # targets[0]
+        targets.sort(key=lambda x:utils.math_distance(x['center'],(self.__robot.odometry.x,self.__robot.odometry.y)))
         for t in targets:
             if not self.valid_target and (
                     mpltPath.Path(self.perimeter_target).contains_points([t['center']])\

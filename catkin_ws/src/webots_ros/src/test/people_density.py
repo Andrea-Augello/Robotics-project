@@ -277,7 +277,7 @@ class GridMap:
         cv2.imshow('',im)    
         cv2.waitKey(0)
         '''
-        return [self.coord_to_point(i) for i in clusters]
+        return cluster_dict,[self.coord_to_point(i) for i in clusters]
 
     def update_seed_dict(self,true_alias,false_alias):
         delete_list=set()

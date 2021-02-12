@@ -5,6 +5,7 @@ import people_density as pd
 import odometry
 import controller
 import vision
+import path_planning
 
 class Change:
     def __init__(self):
@@ -15,7 +16,8 @@ class Change:
         self.footprint = 0.54
         self.vision = vision.Vision()
         self.odometry = odometry.Odometry()
-        self.controller = controller.Controller(self) 
+        self.controller = controller.Controller(self)
+        self.path_planner = path_planning.Path_planner(self) 
 
 def get_data():
     f = open(os.path.dirname(__file__)+"/test_positions/change_test.txt", "r")
@@ -40,13 +42,14 @@ def main():
     data=get_data()
     for observation in data:
         robot.odometry.update(observation[0])
-        clusters_targets=people_density.observation_update(observation[1])
+        cluster_dict,clusters_targets=people_density.observation_update(observation[1])
         #print(robot.odometry.get_position())
         #print_point_list(observation[1])
         #print()
-        print_point_list(clusters_targets)
-        print()
+        #print_point_list(clusters_targets)
+        #print()
         #print_clusters(clusters_targets)
+        robot.path_planner.set_target(cluster_dict)
         people_density.draw_heat_map_inverted_centroids(clusters_targets)
 
 if __name__ == '__main__':
