@@ -47,9 +47,10 @@ class Path_planner:
                             or mpltPath.Path(t['contour']).contains_points([self.target])):
                 continue
             else:
-                if target == None or t['area']>max(1.1304,target['area']):
-                    target=t
+                target=t
+                break
         if target == None:
+            self.valid_target=False
             return False
 
         self.target = target['center']
