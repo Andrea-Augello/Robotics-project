@@ -229,6 +229,11 @@ class GridMap:
         centroids=self.get_centroids(map_cluster,true_alias,self.next_label)
         for c in centroids:
             self.seed_dict[c.label]=c.point
+        l=[i.point for i in centroids]
+        clusters = clst.clustering(l, 
+                distance_measure=utils.math_distance,
+                min_samples=2,
+                eps=15)    
         '''
         for c in centroids:
             map_cluster[c.point[0]][c.point[1]]=max([max(i_data) for i_data in map_cluster])+3
@@ -236,7 +241,7 @@ class GridMap:
         cv2.imshow('',im)    
         cv2.waitKey(0)
         '''
-        return [self.coord_to_point(i.point) for i in centroids]
+        return [self.coord_to_point(i) for i in clusters]
 
     def update_seed_dict(self,true_alias,false_alias):
         delete_list=set()
