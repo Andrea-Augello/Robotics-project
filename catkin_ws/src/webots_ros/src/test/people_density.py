@@ -216,6 +216,41 @@ class GridMap:
         y=coord[1]*self.xy_resolution+self.min_y
         return (x,y)    
 
+    def cluster_to_dict(self,clusters_list,map_cluster):
+        clusters_list=[self.coord_to_point(i) for i in clusters_list]
+        for x,row in enumerate(map_cluster):
+            for y,element in enumerate(row):
+                if element>0:
+                    map_cluster[x][y]=1
+        im = self.matrix_to_img(map_cluster)
+        # Calculate centroids
+        contours, hierarchy = cv2.findContours(im, cv2.RETR_TREE, cv2.CHAIN_APPROX_TC89_L1)
+        #cv2.drawContours(im, contours, -1, (0,255,0), 3)
+        result=[]
+        
+        for cluster in clusters_list:
+            min_distance=float('inf')
+            min_cluster=None
+            
+            for c in contours:
+                M = cv2.moments(c)
+                if M['m00'] == 0:
+                    continue
+                mask = np.zeros(im.shape, np.uint8)
+                cv2.drawContours(mask, [c],0,255,-1)
+                min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(im,mask=mask)
+                cx = self.resize_x(max_loc[0])#int(M['m10']/M['m00']))
+                cy = self.resize_y(max_loc[1])#int(M['m01']/M['m00']))
+                contour_point=[(self.resize_x(x),self.resize_y(y)) for [[x,y]] in c]
+                d=utils.math_distance(cluster, (cx,cy))
+                if d<min_distance:
+                    min_distance=d
+                    min_cluster={'center':cluster,'area':M['m00']*self.xy_resolution**2,'contour':contour_point}
+            result.append(min_cluster)
+        if self.show_map:
+            self.draw_clusters(result)
+        return result         
+
     def find_centroid_region_growing(self,seeds):
         map_cluster,alias=self.region_growing(seeds)
 
@@ -233,7 +268,8 @@ class GridMap:
         clusters = clst.clustering(l, 
                 distance_measure=utils.math_distance,
                 min_samples=2,
-                eps=15)    
+                eps=15)
+        cluster_dict=self.cluster_to_dict(clusters,map_cluster)            
         '''
         for c in centroids:
             map_cluster[c.point[0]][c.point[1]]=max([max(i_data) for i_data in map_cluster])+3
