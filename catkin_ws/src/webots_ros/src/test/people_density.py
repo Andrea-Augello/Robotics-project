@@ -1,4 +1,5 @@
 import copy
+import time
 import math
 import cv2
 import utils as utils
@@ -393,9 +394,9 @@ class GridMap:
         return [Seed(key,(round((value[1]+value[0])/2),round((value[3]+value[2])/2))) for key, value in dictionary.items() if key not in alias_confirmed]                   
 
     def region_growing_aux(self,seed_mark,seed_list,alias,threshold,region_occupancy):
-        
+        seed_list=set(seed_list)
         while len(seed_list)>0:
-            current=seed_list.pop(0)
+            current=seed_list.pop()
             if self.data[current.point[0]][current.point[1]]<threshold:
                 self.remove_seed(current.label)
                 continue
@@ -412,22 +413,37 @@ class GridMap:
                 region_occupancy[current_mark]=1
                 for neighbour in self.neighbours(current):
                     if self.check(neighbour) and self.data[neighbour.point[0]][neighbour.point[1]]>threshold and seed_mark[neighbour.point[0]][neighbour.point[1]]==0:
-                        seed_list.append(neighbour)
+                        seed_list.add(neighbour)
         return seed_mark,alias,region_occupancy                
 
-    def region_growing(self, new_seeds):
+    def print_map_cluster(self,map_cluster,centroids=[]):
+        for c in centroids:
+            map_cluster[c.point[0]][c.point[1]]=max([max(i_data) for i_data in map_cluster])+3
+        im=self.matrix_to_img(map_cluster)
+        img_rotate_180 = cv2.rotate(im, cv2.ROTATE_180)
+        dim = (700, 700)
+
+        # resize image
+        resized = cv2.resize(img_rotate_180, dim, interpolation = cv2.INTER_AREA)
+        cv2.namedWindow("map",cv2.WINDOW_AUTOSIZE)
+        cv2.imshow('map',resized)    
+        cv2.waitKey(0)
+
+    def region_growing(self, new_seeds,l=[]):
+        if len(l)>0:
+            self.data=l
         seeds=[Seed(label,point) for label,point in self.seed_dict.items()]
         region_occupancy={}
         im = self.matrix_to_img(self.data)
         otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         max_value = max([max(i_data) for i_data in self.data])
         min_value = min([min(i_data) for i_data in self.data])
-        threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
+        t=(otsu_threshold*(max_value-min_value)/255)+min_value
+        threshold=t*0.9
         alias=set()
         seed_mark =  [[0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]
         seed_mark,alias,region_occupancy=self.region_growing_aux(seed_mark,seeds,alias,threshold,region_occupancy)
-
         # If there are high-probability areas that have not yet been assigned
         # to a pre-existing seed, add to the seeds the new observations that
         # lie in that region with the same algorithm used in the previous step
@@ -442,12 +458,12 @@ class GridMap:
                     self.next_label+=1
                     seed_mark,alias,region_occupancy=self.region_growing_aux(seed_mark,[cartesian_seed[-1]],alias,threshold,region_occupancy)
                 elif seed_mark[coord[0]][coord[1]] in region_occupancy.keys() and region_occupancy[seed_mark[coord[0]][coord[1]]]>0:
-                    region_occupancy[seed_mark[coord[0]][coord[1]]]-=1
+                    region_occupancy[seed_mark[coord[0]][coord[1]]]-=1   
                 else:
                     cartesian_seed.append(Seed(self.next_label,coord))
                     #alias.add((self.next_label,seed_mark[coord[0]][coord[1]]))
-                    self.next_label+=1       
-    
+                    self.next_label+=1
+
         self.seed_dict.update({seed.label: seed.point for seed in cartesian_seed})        
         return (seed_mark,alias)              
 
@@ -512,3 +528,7 @@ class Seed:
     def __str__(self):
         return "Label: {} - Point: {}".format(self.label,self.point)    
 
+    def __eq__(self, other):
+        return ((self.point[0] == other.point[0]) and (self.point[1] == other.point[1]))
+    def __hash__(self):
+        return hash(str(self.point))
