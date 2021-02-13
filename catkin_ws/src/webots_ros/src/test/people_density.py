@@ -1,5 +1,4 @@
 import copy
-import time
 import math
 import cv2
 import utils as utils
@@ -112,7 +111,7 @@ class GridMap:
 
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
-        noise = 0.2/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
+        noise = 0.1/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
         self.data = gaussian_filter(self.data, sigma=3)
         if len(z):
             for ix in range(self.x_w):
@@ -438,8 +437,7 @@ class GridMap:
         otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         max_value = max([max(i_data) for i_data in self.data])
         min_value = min([min(i_data) for i_data in self.data])
-        t=(otsu_threshold*(max_value-min_value)/255)+min_value
-        threshold=t*0.9
+        threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
         alias=set()
         seed_mark =  [[0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]
@@ -463,7 +461,11 @@ class GridMap:
                     cartesian_seed.append(Seed(self.next_label,coord))
                     #alias.add((self.next_label,seed_mark[coord[0]][coord[1]]))
                     self.next_label+=1
-
+                    
+                    
+                     
+                          
+    
         self.seed_dict.update({seed.label: seed.point for seed in cartesian_seed})        
         return (seed_mark,alias)              
 
