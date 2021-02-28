@@ -64,7 +64,7 @@ class Odometry:
         :returns:       Cartesian coordinates
 
         """
-        angle=p[1]-self.theta
+        angle=p[1]+self.theta
         return (self.x+p[0]*math.sin(math.pi*angle/180),
                 self.y+p[0]*math.cos(math.pi*angle/180))
 
