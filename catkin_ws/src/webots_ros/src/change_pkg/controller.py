@@ -51,7 +51,7 @@ class Controller:
             for p in [(2.5,2.5),(-2.5,2.5),(-2.5,-2.5),(2.5,-2.5)]:
                 self.scan()
                 with open('{}/robot_position.txt'.format(path), 'w') as f:
-                    f.write("1,{},{}\n".format(-p[1],p[0]))
+                    f.write("1,{},{}\n".format(p[1],-p[0]))
                     f.close()
                     self.__robot.odometry.x=p[0]
                     self.__robot.odometry.y=p[1]
