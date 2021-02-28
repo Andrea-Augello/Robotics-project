@@ -10,8 +10,8 @@ class Pedestrian (Supervisor):
         Supervisor.__init__(self)
 
     def run(self):
-        x_room=20
-        y_room=20
+        x_room=10
+        y_room=10
         height=1.27
         x=random.random()*(x_room-1)+0.5-x_room/2
         y=random.random()*(y_room-1)+0.5-y_room/2

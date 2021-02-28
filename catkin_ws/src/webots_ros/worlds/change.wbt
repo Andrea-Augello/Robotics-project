@@ -13,7 +13,7 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 20 20
+  floorSize 10 10
   floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
