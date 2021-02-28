@@ -8,8 +8,8 @@ import change_pkg.utils as utils
 
 class Odometry:
     def __init__(self):
-        self.x=2 
-        self.y=-2.55
+        self.x=2.5 
+        self.y=-2.5
         self.history=[((self.x,self.y),0)]
         self.theta=0
 

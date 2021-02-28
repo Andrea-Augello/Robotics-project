@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5826747497865349 0.5692568275986294 0.5800317234372129 4.180521290839918
-  position 0.4684056732179264 28.699898840922835 0.043292201291026226
+  orientation 0.5798096836507681 0.572866871555117 0.5793481494053894 4.182739131646028
+  position 0.929121041996448 47.34899760982927 0.04057330387264946
   follow "change"
   followType "None"
 }
@@ -13,7 +13,7 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 10 10
+  floorSize 17 17
   floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
@@ -29,18 +29,9 @@ Pedestrian {
   ]
 }
 Pedestrian {
-  translation -2.21311e-05 1.27 -2.83
+  translation 0 1.27 -7
   rotation 0 1 0 -5.307179586466759e-06
   name "pedestrian(4)"
-  controllerArgs [
-    ""
-  ]
-  shirtColor 0 0.448768 0
-}
-Pedestrian {
-  translation 2.25998 1.27 -2.73
-  rotation 0 1 0 -5.307179586466759e-06
-  name "pedestrian(9)"
   controllerArgs [
     ""
   ]
@@ -72,54 +63,9 @@ Pedestrian {
   ]
 }
 Pedestrian {
-  translation -2.06 1.27 1.06
+  translation -5 1.27 7
   rotation 0 1 0 3.14159
   name "pedestrian(2)"
-  controllerArgs [
-    ""
-  ]
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation -3.24 1.27 4.02
-  rotation 0 1 0 3.14159
-  name "pedestrian(8)"
-  controllerArgs [
-    ""
-  ]
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation -1.96 1.27 3.92
-  rotation 0 1 0 3.14159
-  name "pedestrian(3)"
-  controllerArgs [
-    ""
-  ]
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation 0.59 1.27 3.92
-  rotation 0 1 0 3.14159
-  name "pedestrian(1)"
   controllerArgs [
     ""
   ]
@@ -142,8 +88,108 @@ Pedestrian {
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
 }
+Sofa {
+  translation -7.88569 0 -0.061064
+  color 0.3 0.04 0.0005
+  physics Physics {
+    density 100
+  }
+}
+Armchair {
+  translation -6.58 0 -2.1
+  rotation 0 1 0 -1.5707953071795862
+  color 0.3 0.04 0.0005
+}
+Armchair {
+  translation -6.58 0 2
+  rotation 0 1 0 1.5708
+  name "armchair(1)"
+  color 0.3 0.04 0.0005
+}
+PottedTree {
+  translation -7.69 0 -7.94
+}
+PottedTree {
+  translation -7.69 0 7.98
+  name "potted tree(1)"
+}
+Table {
+  translation -5.2 -0.3 0
+  rotation 0 1 0 -1.5707953071795862
+}
+LandscapePainting {
+  translation -1.12243e-05 1.61 8.5
+  rotation 0 1 0 3.14159
+}
+Clock {
+  translation -8.47 2.03 1.81093e-05
+  rotation 0 1 0 1.5708
+}
+Television {
+  translation -4.87 0.76 1.27474e-06
+  rotation 0 1 0 -1.5707953071795862
+}
+RoundTable {
+}
+Solid {
+  translation 0 0.87 0.8
+  children [
+    DEF Sanitizer_shape Shape {
+      appearance DEF Sanitizer_appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.2
+        radius 0.05
+      }
+    }
+    Solid {
+      translation 0 0.1 0
+      children [
+        DEF Ejection_tube_shape Shape {
+          appearance USE Sanitizer_appearance
+          geometry Cylinder {
+            height 0.07
+            radius 0.01
+          }
+        }
+        Solid {
+          translation 0 0.04 0.05
+          rotation 1 0 0 -1.5707953071795862
+          children [
+            DEF Ejection_tube_oriz_shape Shape {
+              appearance USE Sanitizer_appearance
+              geometry Cylinder {
+                height 0.15
+                radius 0.01
+              }
+            }
+          ]
+          boundingObject USE Ejection_tube_oriz_shape
+        }
+      ]
+    }
+  ]
+  boundingObject DEF Sanitizer_shape Shape {
+    appearance DEF Sanitizer_appearance PBRAppearance {
+      metalness 0
+    }
+    geometry Cylinder {
+      height 0.2
+      radius 0.05
+    }
+  }
+  physics Physics {
+  }
+}
+FruitBowl {
+  translation 0 0.759803 0
+}
+Apple {
+  translation 0 0.819508 0
+}
 TiagoIron {
-  translation -2.5 0.095 -2.5
+  translation -2.55 0.095 -2
   rotation 0.9997397762563311 0.015803042241100698 0.01645125000924864 -1.5711437638017518
   name "change"
   controller "ros"
@@ -237,4 +283,43 @@ TiagoIron {
       }
     }
   ]
+}
+Solid {
+  translation -5.2 0.2 0
+  rotation 0 1 0 1.5707996938995747
+  children [
+    DEF Tablecloth_shape Shape {
+      appearance DEF Tablecloth_appearance PBRAppearance {
+        baseColor 0.05 0.38 0.05
+        transparency 0.3
+        metalness 0
+      }
+      geometry Box {
+        size 1.83 0.5 1.03
+      }
+    }
+  ]
+  name "solid(2)"
+  boundingObject USE Tablecloth_shape
+}
+Solid {
+  translation 0 0.42 0
+  children [
+    DEF Cylinder_shape Shape {
+      appearance USE Tablecloth_appearance
+      geometry Cylinder {
+        height 0.7
+        radius 1.01
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE Cylinder_shape
+}
+Radiator {
+  translation -4.1 0.61 -8.37
+  rotation 0 1 0 -1.5707953071795862
+}
+Door {
+  translation 2.36 0 -8.69
 }
