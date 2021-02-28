@@ -37,13 +37,14 @@ class Controller:
             self.__robot.vision.save_frame(self.__robot.sensors.camera.value)
             utils.loginfo(self.__robot.vision.locate_targets())
             time.sleep(3)
-        while True:
+        if True:
             # distance estimation
             for i in range(3):
                 self.scan()
                 self.__robot.movement.move_forward(5)
-                self.__robot.movement.rotate(83)  
-        while False:
+                self.__robot.movement.rotate(84)
+            exit(0)      
+        while False:   
             self.exploration()
             self.go_to_gathering()
             self.__robot.warning()
