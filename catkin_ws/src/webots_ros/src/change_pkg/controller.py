@@ -27,6 +27,10 @@ class Controller:
         self.TARGET_DISTANCE = 1.5
         self.SCAN_RATE = 10
 
+    def close_webots(self):
+        pid=int(check_output(["pidof","-s","webots-bin"]))
+        os.kill(pid, signal.SIGUSR1)
+
     def start(self):
         #supervisor=Supervisor()
         while False:
@@ -42,14 +46,16 @@ class Controller:
             utils.loginfo(self.__robot.vision.locate_targets())
             time.sleep(3)
         if True:
-            pid=int(check_output(["pidof","-s","webots-bin"]))
-            os.kill(pid, signal.SIGUSR1)  
             # distance estimation
+            path="../../src/change_pkg/robot_position"
             for p in [(2.5,-2.5),(2.5,2.5),(-2.5,2.5)]:
                 self.scan()
-                #supervisor.getFromDevice("Robot").getField("translation").setSFVec3f([p[0],0.095,p[1]])
-                self.__robot.movement.move_forward(5)
-                self.__robot.movement.rotate(85)
+                with open('{}/robot_position.txt'.format(path), 'w') as f:
+                    f.write("1,{},{}\n".format(p[0],p[1]))
+                    f.close()
+                #self.__robot.movement.move_forward(5)
+                #self.__robot.movement.rotate(85)
+            self.close_webots()     
               
                  
         while False:   
