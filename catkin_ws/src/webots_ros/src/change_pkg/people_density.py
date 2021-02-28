@@ -74,6 +74,7 @@ class GridMap:
         y=[]
         x_contour=[]
         y_contour=[]
+        centroids.append[self.__robot.odometry(x),self.__robot.odometry(y)]
         x_c=[i[0] for i in centroids]
         y_c=[i[1] for i in centroids]
         for cluster in clusters:
