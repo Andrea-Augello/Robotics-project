@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5826747497865349 0.5692568275986294 0.5800317234372129 4.180521290839918
-  position 0.4684056732179264 28.699898840922835 0.043292201291026226
+  orientation 0.5831355744004646 0.5675740013054845 0.5812165301423575 4.176896243766008
+  position 0.8238370712198914 24.57788039263303 0.028528208990944923
   follow "change"
   followType "None"
 }
@@ -90,36 +90,6 @@ Pedestrian {
   translation -3.24 1.27 4.02
   rotation 0 1 0 3.14159
   name "pedestrian(8)"
-  controllerArgs [
-    ""
-  ]
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation -1.96 1.27 3.92
-  rotation 0 1 0 3.14159
-  name "pedestrian(3)"
-  controllerArgs [
-    ""
-  ]
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-Pedestrian {
-  translation 0.59 1.27 3.92
-  rotation 0 1 0 3.14159
-  name "pedestrian(1)"
   controllerArgs [
     ""
   ]
