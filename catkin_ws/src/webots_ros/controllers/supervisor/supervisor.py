@@ -12,7 +12,7 @@ class Referee (Supervisor):
             with open('{}/robot_position.txt'.format(self.path), 'r') as f:
                 [flag,x,y]=f.readline().split(",")
             if int(flag):    
-                self.root_node_ref = self.getFromDevice("Robot")
+                self.root_node_ref = self.getFromDef("TiagoIron")
                 self.root_translation_field = self.root_node_ref.getField("translation")
                 self.root_translation_field.setSFVec3f([float(x),0.095,float(y)])
                 f.close()
