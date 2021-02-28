@@ -27,7 +27,7 @@ class Controller:
         self.SCAN_RATE = 10
 
     def start(self):
-        supervisor=Supervisor()
+        #supervisor=Supervisor()
         while False:
             for i in range(10):
                 self.__robot.movement.move_forward(10-0.5*i)
