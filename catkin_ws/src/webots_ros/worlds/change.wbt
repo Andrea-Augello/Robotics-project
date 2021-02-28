@@ -4,7 +4,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.5831355744004646 0.5675740013054845 0.5812165301423575 4.176896243766008
-  position 1.1147095663579378 36.822907044392004 0.027569394718343822
+  position 0.45440906997511554 34.08365754724382 5.7298198928019275
   follow "change"
   followType "None"
 }
@@ -13,7 +13,7 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 10 10
+  floorSize 20 20
   floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
@@ -209,14 +209,15 @@ DEF ROBOT TiagoIron {
   ]
 }
 Pedestrian {
-  translation 3.09999 1.27 10.67
+  translation 2.54999 3.55 11.18
   rotation 0 1 0 -1.5708053071795867
   name "pedestrian(1)"
   controller "supervisor"
   controllerArgs [
     ""
   ]
-  shirtColor 0.739193 0 0.0918135
+  shirtColor 1 0.999969 0.999985
+  pantsColor 1 0.999969 0.999985
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
 }

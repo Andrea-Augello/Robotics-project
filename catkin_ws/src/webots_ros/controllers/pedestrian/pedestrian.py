@@ -10,14 +10,14 @@ class Pedestrian (Supervisor):
         Supervisor.__init__(self)
 
     def run(self):
-        x_room=10
-        y_room=10
+        x_room=20
+        y_room=20
         height=1.27
-        x=random.random()*(x_room-1)-4.5
-        y=random.random()*(y_room-1)-4.5
+        x=random.random()*(x_room-1)+0.5-x_room/2
+        y=random.random()*(y_room-1)+0.5-y_room/2
         while self.in_trajectory(x,y):
-            x=random.random()*(x_room-1)-4.5
-            y=random.random()*(y_room-1)-4.5
+            x=random.random()*(x_room-1)+0.5-x_room/2
+        y=random.random()*(y_room-1)+0.5-y_room/2
         opt_parser = optparse.OptionParser()
         opt_parser.add_option("--step", type=int, help="Specify time step (otherwise world time step is used)")
         options, args = opt_parser.parse_args()
@@ -36,7 +36,7 @@ class Pedestrian (Supervisor):
 
     def in_trajectory(self,x,y):
         r=2.5
-        t=1
+        t=1.2
         return not self.in_square(r-t,x,y) and self.in_square(r+t,x,y)
 
     def in_square(self,p,x,y):
