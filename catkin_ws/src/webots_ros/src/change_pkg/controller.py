@@ -48,8 +48,7 @@ class Controller:
         if True:
             # distance estimation
             path="/home/frank/git/Robotics-project/catkin_ws/src/webots_ros/src/change_pkg/robot_position"
-            self.scan()
-            for p in [(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]:
+            for p in [(2.5,2.5),(-2.5,2.5),(-2.5,-2.5),(2.5,-2.5)]:
                 self.scan()
                 with open('{}/robot_position.txt'.format(path), 'w') as f:
                     f.write("1,{},{}\n".format(p[1],-p[0]))
