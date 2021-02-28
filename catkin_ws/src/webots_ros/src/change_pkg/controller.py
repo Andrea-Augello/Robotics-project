@@ -10,6 +10,7 @@ import matplotlib.path as mpltPath
 import time
 import os
 import signal
+from subprocess import check_output
 #from controller import Supervisor
 
 class Controller:
@@ -41,7 +42,8 @@ class Controller:
             utils.loginfo(self.__robot.vision.locate_targets())
             time.sleep(3)
         if True:
-            os.kill(os.getpid(), signal.SIGUSR1)  
+            pid=int(check_output(["pidof","-s","webots-bin"]))
+            os.kill(pid, signal.SIGUSR1)  
             # distance estimation
             for p in [(2.5,-2.5),(2.5,2.5),(-2.5,2.5)]:
                 self.scan()
