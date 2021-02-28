@@ -8,6 +8,7 @@ import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 from scipy.stats import multivariate_normal
 from scipy.spatial import distance
+import os
 
 class GridMap:
 
@@ -249,7 +250,7 @@ class GridMap:
                     min_cluster={'center':cluster,'area':M['m00']*self.xy_resolution**2,'contour':contour_point}
             result.append(min_cluster)
         if self.show_map:
-            self.draw_clusters(result, [self.coord_to_point(i) for i in point_list]) 
+            self.draw_clusters(result, point_list) 
         return result         
     
     def print_map_cluster(self,map_cluster,centroids=[]):
@@ -287,6 +288,44 @@ class GridMap:
         file.write("\n---\n")
         file.close()
 
+    # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
+    # i_RUN = SEEDS - OBSERVATIONS - CLUSTER  
+    def log(self,observations,cluster_dict,seeds):
+        path="/home/frank/git/Robotics-project/catkin_ws/src/webots_ros/src/change_pkg"
+        directory = path+"/positions"
+        output=path+"/log/log.txt"
+        observations=[self.__robot.odometry.polar_to_abs_cartesian(seed) for seed in observations] # polar to cartesian
+        seeds=[self.coord_to_point(i) for i in seeds] # index to cartesian 
+        
+        cluster_list=[d['center'] for d in cluster_dict]
+        with open(output, 'a') as f:
+            if self.__robot.odometry.x>0 and self.__robot.odometry.y<0: #First
+                ground_truth=[]
+                for filename in os.listdir(directory):
+                    if filename.endswith(".txt") and filename.startswith("pedestrian"):
+                        file_path=os.path.join(directory, filename)
+                        with open(file_path, 'r') as x:
+                            ground_truth.append("("+x.readline()+")")
+                            x.close()
+                    else:
+                        continue 
+                    f.write(ground_truth)
+                    f.write("|")
+
+            f.write(seeds)
+            f.write("-")
+            f.write(observations)
+            f.write("-")
+            f.write(cluster_list)
+
+            if self.__robot.odometry.x<0 and self.__robot.odometry.y<0: #Last
+                f.write("\n")
+            else:
+                f.write("|")
+            f.close()       
+        
+             
+
     def find_centroid_region_growing(self,seeds):
         map_cluster, alias= self.region_growing(seeds) 
         #self.print_data(seeds)
@@ -298,7 +337,7 @@ class GridMap:
         true_alias,false_alias=self.check_alias(alias,map_cluster)
         self.update_seed_dict(true_alias,false_alias)
         map_cluster=self.knn(map_cluster,false_alias)
-        centroids=self.get_centroids(map_cluster,true_alias,self.next_label)
+        centroids=self.get_centroids(map_cluster,true_alias)
         for c in centroids:
             self.seed_dict[c.label]=c.point
         l=[i.point for i in centroids]
@@ -306,7 +345,8 @@ class GridMap:
                 distance_measure=utils.math_distance,
                 min_samples=2,
                 eps=15)
-        cluster_dict=self.cluster_to_dict(clusters,map_cluster,l)               
+        cluster_dict=self.cluster_to_dict(clusters,map_cluster,l)
+        self.log(seeds,cluster_dict,l)               
         return cluster_dict
 
     def update_seed_dict(self,true_alias,false_alias):
@@ -406,7 +446,7 @@ class GridMap:
         return true_alias,false_alias    
 
 
-    def get_centroids(self,map_cluster,alias,seed_id):
+    def get_centroids(self,map_cluster,alias):
         dictionary={key: [value[0],value[0],value[1],value[1]] for key, value in self.seed_dict.items()}
         alias_confirmed=set()
         for x,row in enumerate(map_cluster):
