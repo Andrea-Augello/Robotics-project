@@ -112,7 +112,7 @@ Pedestrian {
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
 }
-TiagoIron {
+DEF Robot TiagoIron {
   translation -2.5 0.095 -2.5
   rotation 0.9997397762563311 0.015803042241100698 0.01645125000924864 -1.5711437638017518
   name "change"

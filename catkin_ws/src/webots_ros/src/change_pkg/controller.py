@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 import matplotlib.path as mpltPath
 import time
 import os
+import signal
+from controller import Supervisor
 
 class Controller:
     def __init__(self, robot):
@@ -25,6 +27,7 @@ class Controller:
         self.SCAN_RATE = 10
 
     def start(self):
+        supervisor=Supervisor()
         while False:
             for i in range(10):
                 self.__robot.movement.move_forward(10-0.5*i)
@@ -39,11 +42,13 @@ class Controller:
             time.sleep(3)
         if True:
             # distance estimation
-            for i in range(3):
+            for p in [(2.5,-2.5),(2.5,2.5),(-2.5,2.5)]:
                 self.scan()
-                self.__robot.movement.move_forward(5)
-                self.__robot.movement.rotate(84)
-            exit(0)      
+                supervisor.getFromDevice("Robot").getField("translation").setSFVec3f([p[0],0.095,p[1]])
+                #self.__robot.movement.move_forward(5)
+                #self.__robot.movement.rotate(85)
+            os.kill(os.getpid(), signal.CTRL_C_EVENT)    
+                 
         while False:   
             self.exploration()
             self.go_to_gathering()
