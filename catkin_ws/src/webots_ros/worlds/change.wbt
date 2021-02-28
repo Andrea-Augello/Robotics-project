@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5831355744004646 0.5675740013054845 0.5812165301423575 4.176896243766008
-  position 0.45440906997511554 34.08365754724382 5.7298198928019275
+  orientation 0.5872194842748072 0.556030220324154 0.5882207675476123 4.155068429967731
+  position 3.9564703174743734 71.620137933278 3.769647795191773
   follow "change"
   followType "None"
 }
@@ -209,7 +209,7 @@ DEF ROBOT TiagoIron {
   ]
 }
 Pedestrian {
-  translation 2.54999 3.55 11.18
+  translation 2.54999 1.76 11.18
   rotation 0 1 0 -1.5708053071795867
   name "pedestrian(1)"
   controller "supervisor"
