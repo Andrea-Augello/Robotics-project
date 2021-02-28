@@ -473,9 +473,9 @@ class GridMap:
                     seed_mark,alias,region_occupancy=self.region_growing_aux(seed_mark,[cartesian_seed[-1]],alias,threshold,region_occupancy)
                 elif seed_mark[coord[0]][coord[1]] in region_occupancy.keys() and region_occupancy[seed_mark[coord[0]][coord[1]]]>0:
                     region_occupancy[seed_mark[coord[0]][coord[1]]]-=1
-                else:
+                elif False:
                     cartesian_seed.append(Seed(self.next_label,coord))
-                    #alias.add((self.next_label,seed_mark[coord[0]][coord[1]]))
+                    alias.add((self.next_label,seed_mark[coord[0]][coord[1]]))
                     self.next_label+=1       
     
         self.seed_dict.update({seed.label: seed.point for seed in cartesian_seed})        
@@ -531,7 +531,7 @@ class GridMap:
         clusters = clst.clustering(cartesian_coords, 
                 distance_measure=utils.math_distance,
                 min_samples=2,
-                eps=2.5)
+                eps=2.0)
         return None if len(clusters) == 0 else clusters[0]
 
 class Seed:

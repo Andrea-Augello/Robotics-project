@@ -17,7 +17,7 @@ class Pedestrian (Supervisor):
         y=random.random()*(y_room-1)+0.5-y_room/2
         while self.in_trajectory(x,y):
             x=random.random()*(x_room-1)+0.5-x_room/2
-        y=random.random()*(y_room-1)+0.5-y_room/2
+            y=random.random()*(y_room-1)+0.5-y_room/2
         opt_parser = optparse.OptionParser()
         opt_parser.add_option("--step", type=int, help="Specify time step (otherwise world time step is used)")
         options, args = opt_parser.parse_args()
