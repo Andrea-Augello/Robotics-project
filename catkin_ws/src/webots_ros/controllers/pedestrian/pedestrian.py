@@ -15,6 +15,9 @@ class Pedestrian (Supervisor):
         height=1.27
         x=random.random()*(x_room-1)-4.5
         y=random.random()*(y_room-1)-4.5
+        while self.in_trajectory(x,y):
+            x=random.random()*(x_room-1)-4.5
+            y=random.random()*(y_room-1)-4.5
         opt_parser = optparse.OptionParser()
         opt_parser.add_option("--step", type=int, help="Specify time step (otherwise world time step is used)")
         options, args = opt_parser.parse_args()
@@ -31,7 +34,13 @@ class Pedestrian (Supervisor):
                 f.write("{},{}".format(-position[2],position[0]))
             
 
+    def in_trajectory(self,x,y):
+        r=2.5
+        t=0.4
+        return not self.in_square(r-t,x,y) and self.in_square(r+t,x,y)
 
+    def in_square(self,p,x,y):
+        return -p<x<p and -p<y<p    
 
 controller = Pedestrian()
 controller.run()
