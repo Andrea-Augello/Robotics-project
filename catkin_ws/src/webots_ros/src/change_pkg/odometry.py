@@ -15,8 +15,9 @@ class Odometry:
 
 
     def odometry_callback(self,values):
-        self.x=values.pose.pose.position.x
-        self.y=values.pose.pose.position.y
+        if False:
+            self.x=values.pose.pose.position.x
+            self.y=values.pose.pose.position.y
         self.theta=values.pose.pose.position.z      
         
 
