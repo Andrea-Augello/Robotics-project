@@ -38,6 +38,11 @@ class Controller:
             utils.loginfo(self.__robot.vision.locate_targets())
             time.sleep(3)
         while True:
+            # distance estimation
+            for i in range(4):
+                self.__robot.movement.move_forward(5)
+                self.__robot.movement.rotate(-90)  
+        while False:
             self.exploration()
             self.go_to_gathering()
             self.__robot.warning()

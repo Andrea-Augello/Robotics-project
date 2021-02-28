@@ -13,8 +13,8 @@ class Pedestrian (Supervisor):
         x_room=10
         y_room=10
         height=1.27
-        x=random.random()*(x_room-1)+4.5
-        y=random.random()*(y_room-1)+4.5
+        x=random.random()*(x_room-1)-4.5
+        y=random.random()*(y_room-1)-4.5
         opt_parser = optparse.OptionParser()
         opt_parser.add_option("--step", type=int, help="Specify time step (otherwise world time step is used)")
         options, args = opt_parser.parse_args()
