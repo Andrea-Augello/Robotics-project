@@ -42,7 +42,7 @@ class Controller:
             for i in range(3):
                 self.scan()
                 self.__robot.movement.move_forward(5)
-                self.__robot.movement.rotate(80)  
+                self.__robot.movement.rotate(83)  
         while False:
             self.exploration()
             self.go_to_gathering()
