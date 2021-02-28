@@ -41,13 +41,14 @@ class Controller:
             utils.loginfo(self.__robot.vision.locate_targets())
             time.sleep(3)
         if True:
+            os.kill(os.getpid(), signal.SIGUSR1)  
             # distance estimation
             for p in [(2.5,-2.5),(2.5,2.5),(-2.5,2.5)]:
                 self.scan()
                 #supervisor.getFromDevice("Robot").getField("translation").setSFVec3f([p[0],0.095,p[1]])
                 self.__robot.movement.move_forward(5)
                 self.__robot.movement.rotate(85)
-            os.kill(os.getpid(), signal.CTRL_C_EVENT)    
+              
                  
         while False:   
             self.exploration()
