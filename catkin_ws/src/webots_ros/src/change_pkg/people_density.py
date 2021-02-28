@@ -437,7 +437,7 @@ class GridMap:
                 if current_mark in region_occupancy.keys():
                     region_occupancy[current_mark]+=1
                    
-            elif self.data[current.point[0]][current.point[1]]>threshold: # current_mark==0      
+            elif self.data[current.point[0]][current.point[1]]>=threshold and current_mark==0: # current_mark==0      
                 seed_mark[current.point[0]][current.point[1]]=current.label
                 region_occupancy[current_mark]=1
                 for neighbour in self.neighbours(current):
