@@ -24,23 +24,35 @@ RectangleArena {
 Pedestrian {
   translation 2 1.29 4
   rotation 0 -1 0 -1.5707953071795862
+  controllerArgs [
+    ""
+  ]
 }
 Pedestrian {
   translation 0 1.27 -7
   rotation 0 1 0 -5.307179586466759e-06
   name "pedestrian(4)"
+  controllerArgs [
+    ""
+  ]
   shirtColor 0 0.448768 0
 }
 Pedestrian {
   translation -4 1.27 -4
   rotation 0 -1 0 6.13667e-07
   name "pedestrian(5)"
+  controllerArgs [
+    ""
+  ]
   shirtColor 0 0.850233 0.855879
 }
 Pedestrian {
   translation -4 1.27 -3
   rotation 0 1 0 3.14159
   name "pedestrian(6)"
+  controllerArgs [
+    ""
+  ]
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
@@ -54,6 +66,9 @@ Pedestrian {
   translation -5 1.27 7
   rotation 0 1 0 3.14159
   name "pedestrian(2)"
+  controllerArgs [
+    ""
+  ]
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
   leftHandSlot [
@@ -66,6 +81,9 @@ Pedestrian {
   translation 3 1.27 4
   rotation 0 1 0 -1.5708053071795867
   name "pedestrian(7)"
+  controllerArgs [
+    ""
+  ]
   shirtColor 0.739193 0 0.0918135
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
