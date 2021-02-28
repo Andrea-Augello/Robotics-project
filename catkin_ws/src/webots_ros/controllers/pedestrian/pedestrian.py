@@ -36,7 +36,7 @@ class Pedestrian (Supervisor):
 
     def in_trajectory(self,x,y):
         r=2.5
-        t=0.4
+        t=0.5
         return not self.in_square(r-t,x,y) and self.in_square(r+t,x,y)
 
     def in_square(self,p,x,y):
