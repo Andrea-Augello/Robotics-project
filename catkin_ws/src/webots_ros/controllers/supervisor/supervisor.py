@@ -8,6 +8,9 @@ class Referee (Supervisor):
         Supervisor.__init__(self)
 
     def run(self):
+        with open('{}/robot_position.txt'.format(self.path), 'w') as f:
+            f.write("0,-2.5,2.5\n")
+            f.close()
         while not self.step(self.time_step) == -1:
             with open('{}/robot_position.txt'.format(self.path), 'r') as f:
                 [flag,x,y]=f.readline().split(",")
