@@ -10,7 +10,7 @@ import matplotlib.path as mpltPath
 import time
 import os
 import signal
-from controller import Supervisor
+#from controller import Supervisor
 
 class Controller:
     def __init__(self, robot):
@@ -44,9 +44,9 @@ class Controller:
             # distance estimation
             for p in [(2.5,-2.5),(2.5,2.5),(-2.5,2.5)]:
                 self.scan()
-                supervisor.getFromDevice("Robot").getField("translation").setSFVec3f([p[0],0.095,p[1]])
-                #self.__robot.movement.move_forward(5)
-                #self.__robot.movement.rotate(85)
+                #supervisor.getFromDevice("Robot").getField("translation").setSFVec3f([p[0],0.095,p[1]])
+                self.__robot.movement.move_forward(5)
+                self.__robot.movement.rotate(85)
             os.kill(os.getpid(), signal.CTRL_C_EVENT)    
                  
         while False:   
