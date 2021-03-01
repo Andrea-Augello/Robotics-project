@@ -305,7 +305,10 @@ class GridMap:
                     if filename.endswith(".txt") and filename.startswith("pedestrian"):
                         file_path=os.path.join(directory, filename)
                         with open(file_path, 'r') as x:
-                            ground_truth.append("("+x.readline()+")")
+                            a,b=x.readline().split(",")
+                            a=float(a)
+                            b=float(b)
+                            ground_truth.append((a,b))
                             x.close()
                     else:
                         continue 
