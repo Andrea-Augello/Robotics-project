@@ -250,7 +250,7 @@ class GridMap:
                     min_cluster={'center':cluster,'area':M['m00']*self.xy_resolution**2,'contour':contour_point}
             result.append(min_cluster)
         if self.show_map:
-            self.draw_clusters(result, point_list) 
+            self.draw_clusters(result, [self.coord_to_point(i) for i in point_list]) 
         return result         
     
     def print_map_cluster(self,map_cluster,centroids=[]):
