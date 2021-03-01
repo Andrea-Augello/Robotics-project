@@ -312,8 +312,8 @@ class GridMap:
                             x.close()
                     else:
                         continue 
-                    f.write(str(ground_truth))
-                    f.write("|")
+                f.write(str(ground_truth))
+                f.write("|")
 
             f.write(str(seeds))
             f.write("-")

@@ -17,7 +17,7 @@ import rosservice
 class Change:
     def __init__(self):
         self.name = 'change'
-        self.debug_mode = True
+        self.debug_mode = False
         self.time_step = 16
         self.wheel_diameter = 0.20
         self.footprint = 0.54
