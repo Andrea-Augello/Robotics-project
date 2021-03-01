@@ -289,7 +289,7 @@ class GridMap:
         file.close()
 
     # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
-    # i_RUN = SEEDS - OBSERVATIONS - CLUSTER  
+    # i_RUN = SEEDS # OBSERVATIONS # CLUSTER  
     def log(self,observations,cluster_dict,seeds):
         path="/home/frank/git/Robotics-project/catkin_ws/src/webots_ros/src/change_pkg"
         directory = path+"/positions"
@@ -317,9 +317,9 @@ class GridMap:
 
             seeds=[ (round(i[0],2),round(i[1],2)) for i in seeds]
             f.write(str(seeds))
-            f.write("-")
+            f.write("#")
             f.write(str(observations))
-            f.write("-")
+            f.write("#")
             f.write(str(cluster_list))
 
             if self.__robot.odometry.x<0 and self.__robot.odometry.y<0: #Last
