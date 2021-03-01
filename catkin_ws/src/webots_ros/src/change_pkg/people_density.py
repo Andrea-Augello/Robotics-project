@@ -219,7 +219,7 @@ class GridMap:
         return (x,y)    
 
     def cluster_to_dict(self,clusters_list,map_cluster,point_list):
-        clusters_list=[self.coord_to_point(i) for i in clusters_list]
+        #clusters_list=[self.coord_to_point(i) for i in clusters_list]
         for x,row in enumerate(map_cluster):
             for y,element in enumerate(row):
                 if element>0:

@@ -19,23 +19,31 @@ def main():
                 seed,observation,cluster = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
                 observations[i+1]=ast.literal_eval(observation)
-                clusters[i+1]=ast.literal_eval(cluster)
+                #clusters[i+1]=ast.literal_eval(cluster)
+                clusters[i+1]=clst.clustering(seeds[i+1], 
+                    distance_measure=clst.math_distance,
+                    min_samples=2,
+                    eps=2) 
+                draw_clusters(seeds[i+1],ast.literal_eval(cluster),"Ground Truth")           
 
             clusters_ground_truth = clst.clustering(ground_truth, 
                     distance_measure=clst.math_distance,
                     min_samples=2,
-                    eps=1.5)
+                    eps=2)
+            
+            """
+            draw_clusters(ground_truth,clusters_ground_truth,"Ground Truth")
+            i=2
+            draw_clusters(seeds[i],clusters[i],"Run "+str(i))"""
 
-            draw_clusters(ground_truth,clusters_ground_truth)
-
-def draw_clusters(observations,centroids):
+def draw_clusters(observations,centroids,title):
         x_o=[i[0] for i in observations]
         y_o=[i[1] for i in observations]
         x_c=[i[0] for i in centroids]
         y_c=[i[1] for i in centroids]
 
         fig, ax1 = plt.subplots(1, 1, figsize=(5, 5))
-        fig.suptitle('People recognition')
+        fig.suptitle(title)
         ax1.axis("equal")
         ax1.set_xlabel('Position (m)')
         ax1.set_ylabel('Position (m)')
