@@ -309,14 +309,14 @@ class GridMap:
                             x.close()
                     else:
                         continue 
-                    f.write(ground_truth)
+                    f.write(str(ground_truth))
                     f.write("|")
 
-            f.write(seeds)
+            f.write(str(seeds))
             f.write("-")
-            f.write(observations)
+            f.write(str(observations))
             f.write("-")
-            f.write(cluster_list)
+            f.write(str(cluster_list))
 
             if self.__robot.odometry.x<0 and self.__robot.odometry.y<0: #Last
                 f.write("\n")
