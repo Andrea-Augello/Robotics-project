@@ -1,6 +1,8 @@
 #!/bin/bash
+cd ~/git/Robotics-project/catkin_ws;
+source devel/setup.bash;
 for i in {0..100}
 do
-  change_launch
+	roslaunch webots_ros change.launch;
 done
 
