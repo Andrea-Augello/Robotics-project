@@ -250,7 +250,7 @@ class GridMap:
                     min_cluster={'center':cluster,'area':M['m00']*self.xy_resolution**2,'contour':contour_point}
             result.append(min_cluster)
         if self.show_map:
-            self.draw_clusters(result, [self.coord_to_point(i) for i in point_list]) 
+            self.draw_clusters(result, point_list) 
         return result         
     
     def print_map_cluster(self,map_cluster,centroids=[]):
@@ -295,7 +295,7 @@ class GridMap:
         directory = path+"/positions"
         output=path+"/log/log.txt"
         observations=[self.__robot.odometry.polar_to_abs_cartesian(seed) for seed in observations] # polar to cartesian
-        seeds=[self.coord_to_point(i) for i in seeds] # index to cartesian 
+        #seeds=[self.coord_to_point(i) for i in seeds] # index to cartesian 
         
         cluster_list=[d['center'] for d in cluster_dict]
         with open(output, 'a') as f:
@@ -344,11 +344,11 @@ class GridMap:
         centroids=self.get_centroids(map_cluster,true_alias)
         for c in centroids:
             self.seed_dict[c.label]=c.point
-        l=[i.point for i in centroids]
+        l=[self.coord_to_point(i.point) for i in centroids]
         clusters = clst.clustering(l, 
                 distance_measure=utils.math_distance,
                 min_samples=2,
-                eps=15)
+                eps=1.5)
         cluster_dict=self.cluster_to_dict(clusters,map_cluster,l)
         self.log(seeds,cluster_dict,l)               
         return cluster_dict
