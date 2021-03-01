@@ -315,6 +315,7 @@ class GridMap:
                 f.write(str(ground_truth))
                 f.write("|")
 
+            seeds=[ (round(i[0],2),round(i[1],2)) for i in seeds]
             f.write(str(seeds))
             f.write("-")
             f.write(str(observations))
