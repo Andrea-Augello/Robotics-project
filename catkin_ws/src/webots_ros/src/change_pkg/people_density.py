@@ -348,7 +348,7 @@ class GridMap:
         clusters = clst.clustering(l, 
                 distance_measure=utils.math_distance,
                 min_samples=2,
-                eps=1.5)
+                eps=2)
         cluster_dict=self.cluster_to_dict(clusters,map_cluster,l)
         self.log(seeds,cluster_dict,l)               
         return cluster_dict
