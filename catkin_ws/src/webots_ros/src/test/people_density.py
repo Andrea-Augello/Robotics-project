@@ -112,7 +112,7 @@ class GridMap:
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
         noise = 0.1/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
-        self.data = gaussian_filter(self.data, sigma=1)
+        self.data = gaussian_filter(self.data, sigma=3)
         if len(z):
             for ix in range(self.x_w):
                 for iy in range(self.y_w):

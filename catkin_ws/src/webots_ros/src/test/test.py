@@ -8,6 +8,7 @@ import vision
 import path_planning
 import clustering as clst
 import matplotlib.pyplot as plt
+from statistics import mean
 
 class Change:
     def __init__(self):
@@ -61,19 +62,24 @@ def main():
     false_negative={1:0,2:0,3:0,4:0}
     true_negative={1:0,2:0,3:0,4:0}
     false_negative_yolo={1:0,2:0,3:0,4:0}
+    error_distance={1:[],2:[],3:[],4:[]}
     data=get_data()
     positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
     for execution in data:
         seeds={}
         clusters={}
+        observations_cartesian={}
         clusters_ground_truth=execution['cluster_ground_truth']
+        ground_truth=execution['ground_truth']
         robot = Change()
         people_density = pd.GridMap(robot)
         for run,observation in execution['observations'].items():
             robot.odometry.update((positions[run-1][0],positions[run-1][1],0))
             #observation=[robot.odometry.abs_cartesian_to_polar(i) for i in observation]
+            observations_cartesian[run]=[robot.odometry.polar_to_abs_cartesian(i) for i in observation]
             cluster_dict,clusters_targets,s=people_density.observation_update(observation)
             seeds[run]=s
+            error_distance[run]+=[distance(j,ground_truth)for j in seeds[run]]
             clusters[run]=clst.clustering(seeds[run], 
                     distance_measure=clst.math_distance,
                     min_samples=2,
@@ -95,8 +101,8 @@ def main():
 
             #robot.path_planner.set_target(cluster_dict)
             #people_density.draw_heat_map_inverted_centroids(clusters_targets)
-        #draw_clusters_all_run(execution['ground_truth'],clusters_ground_truth,seeds,clusters)
-    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative)
+        draw_clusters_all_run(execution['ground_truth'],observations_cartesian,clusters_ground_truth,seeds,clusters)
+    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance)
 
 def has_near(point,point_list,tollerance=1):
     for p in point_list:
@@ -105,25 +111,27 @@ def has_near(point,point_list,tollerance=1):
     return False
 
 
-def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative):
+def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance):
     print("False positive: {}".format({k:round(v,2) for k,v in false_positive.items()}))        
     print("False negative: {}".format({k:round(v,2) for k,v in false_negative.items()}))
     print("False negative for YOLO: {}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
     print("True positive: {}".format({k:round(v,2) for k,v in true_positive.items()}))
     print("True negative: {}".format({k:round(v,2) for k,v in true_negative.items()}))
-
     accuracy={i:round((true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]),2) for i in range(1,5)}
     precision={i:round(true_positive[i]/(true_positive[i]+false_positive[i]),2) for i in range(1,5)}
     recall={i:round(true_positive[i]/(true_positive[i]+false_negative[i]),2) for i in range(1,5)}
     recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative[i]-false_negative_yolo[i]),2) for i in range(1,5)}
+    print()
     print("Precision: {}".format(precision))
     print("Accuracy: {}".format(accuracy))
     print("Recall: {}".format(recall))
     print("Recall YOLO: {}".format(recall_yolo))
+    print()
+    print("Distance error: {}".format({k:round(mean(v),2) for k,v in error_distance.items()}))
 
-def draw_clusters_all_run(observations,centroid_ground_truth,seeds,centroids,title="Analysis"):
-    x_o=[i[0] for i in observations]
-    y_o=[i[1] for i in observations]
+def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,centroids,title="Analysis"):
+    x_g=[i[0] for i in ground_truth]
+    y_g=[i[1] for i in ground_truth]
     x_c_g=[i[0] for i in centroid_ground_truth]
     y_c_g=[i[1] for i in centroid_ground_truth]
     fig, ax = plt.subplots(2, 2, figsize=(8, 8))
@@ -132,6 +140,8 @@ def draw_clusters_all_run(observations,centroid_ground_truth,seeds,centroids,tit
     for i, values in seeds.items():
         x_c=[k[0] for k in centroids[i]]
         y_c=[k[1] for k in centroids[i]]
+        x_o=[k[0] for k in observations[i]]
+        y_o=[k[1] for k in observations[i]]
         x_s=[i[0] for i in values]
         y_s=[i[1] for i in values]
         kx,ky=positions[i]
@@ -141,12 +151,15 @@ def draw_clusters_all_run(observations,centroid_ground_truth,seeds,centroids,tit
         ax[kx,ky].scatter(x_c_g,y_c_g, color="y", s=100)
         ax[kx,ky].scatter(x_c,y_c, color="r", s=70)
         ax[kx,ky].scatter(x_s,y_s, color="g", s=50)
-        ax[kx,ky].scatter(x_o,y_o, color="b", s=30)
+        ax[kx,ky].scatter(x_g,y_g, color="b", s=30)
+        ax[kx,ky].scatter(x_o,y_o, color="k", s=20)
         
         ax[kx,ky].invert_xaxis()
-    ax[1,1].legend(('Ground Truth centroids', 'Centroids', 'Seeds','Ground Truth'),bbox_to_anchor=(0.5, 0.5))    
+    ax[1,1].legend(('Ground Truth centroids', 'Centroids', 'Seeds','Ground Truth','Observations'),bbox_to_anchor=(0.5, 0.5))    
     plt.show()    
 
+def distance(point,point_list):
+    return min([clst.math_distance(point,i) for i in point_list])
 
 if __name__ == '__main__':
    main()  
