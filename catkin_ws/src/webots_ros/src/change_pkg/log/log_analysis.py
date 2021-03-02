@@ -10,6 +10,14 @@ def main():
     false_negative={1:0,2:0,3:0,4:0}
     true_negative={1:0,2:0,3:0,4:0}
     false_negative_yolo={1:0,2:0,3:0,4:0}
+
+    true_positive_old={1:0,2:0,3:0,4:0}
+    false_positive_old={1:0,2:0,3:0,4:0}
+    false_negative_old={1:0,2:0,3:0,4:0}
+    true_negative_old={1:0,2:0,3:0,4:0}
+    false_negative_yolo_old={1:0,2:0,3:0,4:0}
+
+
     with open(path, 'r') as f:
         for line in f:
             seeds={}
@@ -44,32 +52,55 @@ def main():
                         false_positive[i+1]+=1
                 for p in seeds[i+1]:
                     if not has_near(p,clusters_ground_truth) and not has_near(p,clusters[i+1]):
-                        true_negative[i+1]+=1                    
+                        true_negative[i+1]+=1 
+
+
+                #OLD METHOD
+                observations[i+1]=clst.clustering(observations[i+1], 
+                    distance_measure=clst.math_distance,
+                    min_samples=2,
+                    eps=2) 
+                for p in clusters_ground_truth:
+                    if not has_near(p,observations[i+1]):
+                        false_negative_old[i+1]+=1
+                        if has_near(p,seeds[i+1]):
+                            false_negative_yolo_old[i+1]+=1
+                for p in observations[i+1]:
+                    if has_near(p,clusters_ground_truth):
+                        true_positive_old[i+1]+=1
+                    else:
+                        false_positive_old[i+1]+=1
+                for p in seeds[i+1]:
+                    if not has_near(p,clusters_ground_truth) and not has_near(p,observations[i+1]):
+                        true_negative_old[i+1]+=1                            
 
             
-            #draw_clusters_all_run(ground_truth,clusters_ground_truth,seeds,clusters)
-    print("False positive: {}".format(false_positive))        
-    print("False negative: {}".format(false_negative))
-    print("False negative for YOLO: {}".format(false_negative_yolo))  
-    print("True positive: {}".format(true_positive))
-    print("True negative: {}".format(true_negative))
-
-    accuracy={i:(true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]) for i in range(1,5)}
-    precision={i:true_positive[i]/(true_positive[i]+false_positive[i]) for i in range(1,5)}
-    recall={i:true_positive[i]/(true_positive[i]+false_negative[i]) for i in range(1,5)}
-    recall_yolo={i:true_positive[i]/(true_positive[i]+false_negative[i]-false_negative_yolo[i]) for i in range(1,5)}
-    print("Precision: {}".format(precision))
-    print("Accuracy: {}".format(accuracy))
-    print("Recall: {}".format(recall))
-    print("Recall YOLO: {}".format(recall_yolo))
-
+            #draw_clusters_all_run(ground_truth,clusters_ground_truth,seeds,observations)
+    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative)
+    print("\nOLD METHOD\n")
+    report(false_positive_old,false_negative_old,false_negative_yolo_old,true_positive_old,true_negative_old)
 
 def has_near(point,point_list,tollerance=1):
     for p in point_list:
         if clst.math_distance(p,point)<tollerance:
             return True
-    return False    
+    return False
 
+def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative):
+    print("False positive: {}".format({k:round(v,2) for k,v in false_positive.items()}))        
+    print("False negative: {}".format({k:round(v,2) for k,v in false_negative.items()}))
+    print("False negative for YOLO: {}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
+    print("True positive: {}".format({k:round(v,2) for k,v in true_positive.items()}))
+    print("True negative: {}".format({k:round(v,2) for k,v in true_negative.items()}))
+
+    accuracy={i:round((true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]),2) for i in range(1,5)}
+    precision={i:round(true_positive[i]/(true_positive[i]+false_positive[i]),2) for i in range(1,5)}
+    recall={i:round(true_positive[i]/(true_positive[i]+false_negative[i]),2) for i in range(1,5)}
+    recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative[i]-false_negative_yolo[i]),2) for i in range(1,5)}
+    print("Precision: {}".format(precision))
+    print("Accuracy: {}".format(accuracy))
+    print("Recall: {}".format(recall))
+    print("Recall YOLO: {}".format(recall_yolo))
 
 def draw_clusters(observations,centroids,title):
         x_o=[i[0] for i in observations]
