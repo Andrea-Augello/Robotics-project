@@ -6,6 +6,9 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 
 
+def math_distance(p1,p2):
+    return math.hypot(p1[0]-p2[0],p1[1]-p2[1])
+
 def arc_distance(p1,p2):
     angle_diff = (p1[1]-p2[1])%360
     angle_diff = angle_diff if angle_diff < 180 else abs(angle_diff-360)

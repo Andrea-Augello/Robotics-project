@@ -112,7 +112,7 @@ class GridMap:
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
         noise = 0.1/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
-        self.data = gaussian_filter(self.data, sigma=3)
+        self.data = gaussian_filter(self.data, sigma=1)
         if len(z):
             for ix in range(self.x_w):
                 for iy in range(self.y_w):
@@ -264,11 +264,11 @@ class GridMap:
         centroids=self.get_centroids(map_cluster,true_alias,self.next_label)
         for c in centroids:
             self.seed_dict[c.label]=c.point
-        l=[i.point for i in centroids]
+        l=[self.coord_to_point(i.point) for i in centroids]
         clusters = clst.clustering(l, 
                 distance_measure=utils.math_distance,
                 min_samples=2,
-                eps=15)
+                eps=2.0)
         cluster_dict=self.cluster_to_dict(clusters,map_cluster)            
         '''
         for c in centroids:
@@ -277,7 +277,7 @@ class GridMap:
         cv2.imshow('',im)    
         cv2.waitKey(0)
         '''
-        return cluster_dict,[self.coord_to_point(i) for i in clusters]
+        return cluster_dict,clusters,l
 
     def update_seed_dict(self,true_alias,false_alias):
         delete_list=set()
@@ -407,7 +407,7 @@ class GridMap:
                 if current_mark in region_occupancy.keys():
                     region_occupancy[current_mark]+=1
                    
-            elif self.data[current.point[0]][current.point[1]]>threshold: # current_mark==0      
+            elif self.data[current.point[0]][current.point[1]]>=threshold and current_mark==0:       
                 seed_mark[current.point[0]][current.point[1]]=current.label
                 region_occupancy[current_mark]=1
                 for neighbour in self.neighbours(current):
@@ -457,9 +457,9 @@ class GridMap:
                     seed_mark,alias,region_occupancy=self.region_growing_aux(seed_mark,[cartesian_seed[-1]],alias,threshold,region_occupancy)
                 elif seed_mark[coord[0]][coord[1]] in region_occupancy.keys() and region_occupancy[seed_mark[coord[0]][coord[1]]]>0:
                     region_occupancy[seed_mark[coord[0]][coord[1]]]-=1   
-                else:
+                elif False:
                     cartesian_seed.append(Seed(self.next_label,coord))
-                    #alias.add((self.next_label,seed_mark[coord[0]][coord[1]]))
+                    alias.add((self.next_label,seed_mark[coord[0]][coord[1]]))
                     self.next_label+=1
                     
                     

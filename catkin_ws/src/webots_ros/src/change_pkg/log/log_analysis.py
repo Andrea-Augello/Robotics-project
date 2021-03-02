@@ -1,10 +1,11 @@
 import ast
 import clustering as clst
 import matplotlib.pyplot as plt
+import math
 
 def main():
     path_to_repo="/Users/marco/GitHub/Robotics-project"
-    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log.txt"
+    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation.txt"
     true_positive={1:0,2:0,3:0,4:0}
     false_positive={1:0,2:0,3:0,4:0}
     false_negative={1:0,2:0,3:0,4:0}
@@ -16,7 +17,7 @@ def main():
     false_negative_old={1:0,2:0,3:0,4:0}
     true_negative_old={1:0,2:0,3:0,4:0}
     false_negative_yolo_old={1:0,2:0,3:0,4:0}
-
+    positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
 
     with open(path, 'r') as f:
         for line in f:
@@ -35,6 +36,7 @@ def main():
                 seed,observation,cluster = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
                 observations[i+1]=ast.literal_eval(observation)
+                observations[i+1]=[polar_to_abs_cartesian(j,positions[i],0) for j in observations[i+1]]
                 #clusters[i+1]=ast.literal_eval(cluster)
                 clusters[i+1]=clst.clustering(seeds[i+1], 
                     distance_measure=clst.math_distance,
@@ -75,7 +77,8 @@ def main():
                         true_negative_old[i+1]+=1                            
 
             
-            #draw_clusters_all_run(ground_truth,clusters_ground_truth,seeds,observations)
+            #draw_clusters_all_run(ground_truth,clusters_ground_truth,seeds,clusters)
+    print("NEW METHOD\n")
     report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative)
     print("\nOLD METHOD\n")
     report(false_positive_old,false_negative_old,false_negative_yolo_old,true_positive_old,true_negative_old)
@@ -144,6 +147,19 @@ def draw_clusters_all_run(observations,centroid_ground_truth,seeds,centroids,tit
     ax[1,1].legend(('Ground Truth centroids', 'Centroids', 'Seeds','Ground Truth'),bbox_to_anchor=(0.5, 0.5))    
     plt.show()    
 
+def polar_to_abs_cartesian(p, coord,theta):
+        """Accepts a point given in polar coordinates relative to the robot
+        frame of reference and converts it to cartesian coordinates in a wolrd
+        frame of reference based on the current position estimate
+
+        :p:   Polar coordinates in the (Rho, Theta) format
+        :returns:       Cartesian coordinates
+
+        """
+        x,y=coord
+        angle=p[1]-theta
+        return (x+p[0]*math.sin(math.pi*angle/180),
+                y+p[0]*math.cos(math.pi*angle/180))
 
 def coord_to_point(coord):
     xy_resolution=0.2

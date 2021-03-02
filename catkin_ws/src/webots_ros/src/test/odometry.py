@@ -56,7 +56,7 @@ class Odometry:
         y = p[1] - self.y
         angle = -180/math.pi*math.atan2(x,y)-self.theta
         angle = angle if angle < 180 else angle -360
-        return (np.hypot(x,y), angle)
+        return (math.hypot(x,y), angle)
 
 
     def polar_to_abs_cartesian(self, p):
