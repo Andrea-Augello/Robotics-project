@@ -69,13 +69,12 @@ class GridMap:
         plt.show()    
    
 
-    def draw_clusters(self,clusters,centroids=[]):
+    def draw_clusters(self,clusters):
         x=[]
         y=[]
         x_contour=[]
         y_contour=[]
-        x_c=[i[0] for i in centroids]
-        y_c=[i[1] for i in centroids]
+
         for cluster in clusters:
             x.append(cluster['center'][0])
             y.append(cluster['center'][1])
@@ -91,7 +90,6 @@ class GridMap:
         ax1.axis("equal")
         ax1.set_xlabel('Position (m)')
         ax1.set_ylabel('Position (m)')
-        ax1.scatter(x_c,y_c, color="y")
         ax2.scatter(x, y, s=20)
         ax2.scatter(x_contour, y_contour, s=10)
         ax2.set_xlabel('Position (m)')
@@ -108,11 +106,12 @@ class GridMap:
                         slice(self.min_y - self.xy_resolution / 2.0,
                                 self.max_y + self.xy_resolution / 2.0,
                                 self.xy_resolution)]
+
         return mx, my
 
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
-        noise = 0.1/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
+        noise = 0.2/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
         self.data = gaussian_filter(self.data, sigma=3)
         if len(z):
             for ix in range(self.x_w):
@@ -217,7 +216,7 @@ class GridMap:
         y=coord[1]*self.xy_resolution+self.min_y
         return (x,y)    
 
-    def cluster_to_dict(self,clusters_list,map_cluster,point_list):
+    def cluster_to_dict(self,clusters_list,map_cluster):
         clusters_list=[self.coord_to_point(i) for i in clusters_list]
         for x,row in enumerate(map_cluster):
             for y,element in enumerate(row):
@@ -249,48 +248,13 @@ class GridMap:
                     min_cluster={'center':cluster,'area':M['m00']*self.xy_resolution**2,'contour':contour_point}
             result.append(min_cluster)
         if self.show_map:
-            self.draw_clusters(result, [self.coord_to_point(i) for i in point_list]) 
+            self.draw_clusters(result)
         return result         
     
-    def print_map_cluster(self,map_cluster,centroids=[]):
-        for c in centroids:
-            map_cluster[c.point[0]][c.point[1]]=max([max(i_data) for i_data in map_cluster])+3
-        im=self.matrix_to_img(map_cluster)
-        img_rotate_180 = cv2.rotate(im, cv2.ROTATE_180)
-        dim = (700, 700)
-
-        # resize image
-        resized = cv2.resize(img_rotate_180, dim, interpolation = cv2.INTER_AREA)
-        cv2.namedWindow("map",cv2.WINDOW_AUTOSIZE)
-        cv2.imshow('map',resized)    
-        cv2.waitKey(0)
-
-    def print_data(self,seeds):
-        file = open("/home/frank/Desktop/Data/test.txt","a")
-        string = "["
-        for x,r in enumerate(self.data):
-            row = [str(round(i,5)) for i in r]
-            string += "["
-            string += ",".join(row)
-            if x == len(self.data)-1:
-                string += "]"
-            else:
-                string += "],"
-        string += "]"    
-        file.write(string)
-        file.write("\n---\n")
-        file.write(str(self.seed_dict))
-        file.write("\n---\n")
-        file.write(str(seeds))
-        file.write("\n---\n")
-        file.write(str(self.__robot.odometry.get_position()))
-        file.write("\n---\n")
-        file.close()
 
     def find_centroid_region_growing(self,seeds):
-        map_cluster, alias= self.region_growing(seeds) 
-        #self.print_data(seeds)
-        #self.print_map_cluster(map_cluster)
+        map_cluster,alias=self.region_growing(seeds)
+
         temp={a: None for a in alias}
         temp.update(self.alias_dict)
         self.alias_dict=temp
@@ -306,7 +270,14 @@ class GridMap:
                 distance_measure=utils.math_distance,
                 min_samples=2,
                 eps=15)
-        cluster_dict=self.cluster_to_dict(clusters,map_cluster,l)               
+        cluster_dict=self.cluster_to_dict(clusters,map_cluster)               
+        '''
+        for c in centroids:
+            map_cluster[c.point[0]][c.point[1]]=max([max(i_data) for i_data in map_cluster])+3
+        im=self.matrix_to_img(map_cluster)
+        cv2.imshow('',im)    
+        cv2.waitKey(0)
+        '''
         return cluster_dict
 
     def update_seed_dict(self,true_alias,false_alias):
@@ -423,9 +394,9 @@ class GridMap:
         return [Seed(key,(round((value[1]+value[0])/2),round((value[3]+value[2])/2))) for key, value in dictionary.items() if key not in alias_confirmed]                   
 
     def region_growing_aux(self,seed_mark,seed_list,alias,threshold,region_occupancy):
-        seed_list=set(seed_list) 
+        
         while len(seed_list)>0:
-            current=seed_list.pop()
+            current=seed_list.pop(0)
             if self.data[current.point[0]][current.point[1]]<threshold:
                 self.remove_seed(current.label)
                 continue
@@ -442,7 +413,7 @@ class GridMap:
                 region_occupancy[current_mark]=1
                 for neighbour in self.neighbours(current):
                     if self.check(neighbour) and self.data[neighbour.point[0]][neighbour.point[1]]>threshold and seed_mark[neighbour.point[0]][neighbour.point[1]]==0:
-                        seed_list.add(neighbour)
+                        seed_list.append(neighbour)
         return seed_mark,alias,region_occupancy                
 
     def region_growing(self, new_seeds):
@@ -453,7 +424,6 @@ class GridMap:
         max_value = max([max(i_data) for i_data in self.data])
         min_value = min([min(i_data) for i_data in self.data])
         threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
-        threshold *= 0.7
         alias=set()
         seed_mark =  [[0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]
@@ -543,8 +513,3 @@ class Seed:
     def __str__(self):
         return "Label: {} - Point: {}".format(self.label,self.point)    
 
-    def __eq__(self, other):
-        return ((self.point[0] == other.point[0]) and (self.point[1] == other.point[1]))
-
-    def __hash__(self):
-        return hash(str(self.point))
