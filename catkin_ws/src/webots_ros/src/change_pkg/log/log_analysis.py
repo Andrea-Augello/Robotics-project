@@ -40,9 +40,9 @@ def main():
                     eps=2)
             for i,r in enumerate([run_1,run_2,run_3,run_4]):
                 # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
-                seed,observation,cluster,odometry = r.split("#")
+                seed,observation,cluster,odometry_str = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
-                odometry[i+1]=ast.literal_eval(odometry)
+                odometry[i+1]=ast.literal_eval(odometry_str)
                 observations[i+1]=ast.literal_eval(observation)
                 observations[i+1]=[polar_to_abs_cartesian(j,odometry[i+1]) for j in observations[i+1]]
                 error_distance[i+1]+=[distance(j,ground_truth)for j in seeds[i+1]]
