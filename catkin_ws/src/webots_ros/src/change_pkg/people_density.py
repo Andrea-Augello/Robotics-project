@@ -12,7 +12,7 @@ import os
 
 class GridMap:
 
-    def __init__(self, robot, xy_resolution = 0.20, min_x =-10, min_y = -10, max_x=10, max_y=10):
+    def __init__(self, robot, xy_resolution = 0.10, min_x =-5, min_y = -5, max_x=5, max_y=5):
         self.__robot = robot
         self.xy_resolution = xy_resolution
         self.min_x = min_x
@@ -113,14 +113,14 @@ class GridMap:
 
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
-        noise = 0.1/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
-        self.data = gaussian_filter(self.data, sigma=3)
+        noise = 0.00001/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
+        self.data = gaussian_filter(self.data, sigma=2.5)
         if len(z):
             for ix in range(self.x_w):
                 for iy in range(self.y_w):
-                    prob = 0
+                    prob = 1
                     for iz in range(len(z)):
-                        prob += self.calc_gaussian_observation_pdf(
+                        prob *= self.calc_gaussian_observation_pdf(
                             z, iz, ix, iy)
                     self.data[ix][iy] *= prob
         # adds noise
@@ -157,12 +157,7 @@ class GridMap:
         # likelihood
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
-        return ( 0 if p_distance < 0.5 or abs(angle_diff-180)<45 \
-                # else 1/(1+distance.mahalanobis( 
-                    # [(o_distance-p_distance),(angle_diff)],
-                    # [0,0], IV)**4)) +0.05
-                else 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/16)**4)) \
-                + 0.05 
+        return max( 0.2, 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/16)**4))
 
     def matrix_to_img(self,matrix):
         im = np.array(matrix)
@@ -289,12 +284,12 @@ class GridMap:
         file.close()
 
     # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
-    # i_RUN = SEEDS # OBSERVATIONS # CLUSTER  
+    # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
     def log(self,observations,cluster_dict,seeds):
         path="/home/frank/git/Robotics-project/catkin_ws/src/webots_ros/src/change_pkg"
         directory = path+"/positions"
         output=path+"/log/log.txt"
-        observations=[self.__robot.odometry.polar_to_abs_cartesian(seed) for seed in observations] # polar to cartesian
+        #observations=[self.__robot.odometry.polar_to_abs_cartesian(seed) for seed in observations] # polar to cartesian
         #seeds=[self.coord_to_point(i) for i in seeds] # index to cartesian 
         
         cluster_list=[d['center'] for d in cluster_dict]
@@ -321,6 +316,8 @@ class GridMap:
             f.write(str(observations))
             f.write("#")
             f.write(str(cluster_list))
+            f.write("#")
+            f.write(str(self.__robot.odometry.get_position()))
 
             if self.__robot.odometry.x<0 and self.__robot.odometry.y<0: #Last
                 f.write("\n")
@@ -492,11 +489,12 @@ class GridMap:
     def region_growing(self, new_seeds):
         seeds=[Seed(label,point) for label,point in self.seed_dict.items()]
         region_occupancy={}
-        im = self.matrix_to_img(self.data)
-        otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        max_value = max([max(i_data) for i_data in self.data])
-        min_value = min([min(i_data) for i_data in self.data])
-        threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
+        #im = self.matrix_to_img(self.data)
+        #otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        #max_value = max([max(i_data) for i_data in self.data])
+        #min_value = min([min(i_data) for i_data in self.data])
+        #threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
+        threshold=1.1/(self.y_w*self.x_w)
         alias=set()
         seed_mark =  [[0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]

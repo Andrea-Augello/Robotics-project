@@ -29,6 +29,7 @@ def main():
             observations={}
             observations_cluster={}
             clusters={}
+            odometry={}
             # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
             [ground_truth,run_1,run_2,run_3,run_4]=line.split("|")
             ground_truth=ast.literal_eval(ground_truth)
@@ -38,11 +39,12 @@ def main():
                     min_samples=2,
                     eps=2)
             for i,r in enumerate([run_1,run_2,run_3,run_4]):
-                # i_RUN = SEEDS # OBSERVATIONS # CLUSTER 
-                seed,observation,cluster = r.split("#")
+                # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
+                seed,observation,cluster,odometry = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
+                odometry[i+1]=ast.literal_eval(odometry)
                 observations[i+1]=ast.literal_eval(observation)
-                observations[i+1]=[polar_to_abs_cartesian(j,positions[i],0) for j in observations[i+1]]
+                observations[i+1]=[polar_to_abs_cartesian(j,odometry[i+1]) for j in observations[i+1]]
                 error_distance[i+1]+=[distance(j,ground_truth)for j in seeds[i+1]]
                 counter_observation[i+1]+=len(observations[i+1])
                 #clusters[i+1]=ast.literal_eval(cluster)
@@ -85,13 +87,13 @@ def main():
                         true_negative_old[i+1]+=1                            
 
             
-            #draw_clusters_all_run(ground_truth,observations,clusters_ground_truth,seeds,clusters)
+            draw_clusters_all_run(ground_truth,observations,clusters_ground_truth,seeds,clusters)
     print("NEW METHOD\n")
     report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth)
     print("\nOLD METHOD\n")
     report(false_positive_old,false_negative_old,false_negative_yolo_old,true_positive_old,true_negative_old,error_distance,counter_observation,counter_ground_truth)
 
-def has_near(point,point_list,tollerance=1.5):
+def has_near(point,point_list,tollerance=1):
     for p in point_list:
         if clst.math_distance(p,point)<tollerance:
             return True
@@ -162,7 +164,7 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
     plt.show()    
    
 
-def polar_to_abs_cartesian(p, coord,theta):
+def polar_to_abs_cartesian(p, coord):
         """Accepts a point given in polar coordinates relative to the robot
         frame of reference and converts it to cartesian coordinates in a wolrd
         frame of reference based on the current position estimate
@@ -171,15 +173,15 @@ def polar_to_abs_cartesian(p, coord,theta):
         :returns:       Cartesian coordinates
 
         """
-        x,y=coord
+        x,y,theta=coord
         angle=p[1]-theta
         return (x+p[0]*math.sin(math.pi*angle/180),
                 y+p[0]*math.cos(math.pi*angle/180))
 
 def coord_to_point(coord):
-    xy_resolution=0.2
-    min_x=-10
-    min_y=-10
+    xy_resolution=0.1
+    min_x=-5
+    min_y=-5
     x=coord[0]*xy_resolution+min_x
     y=coord[1]*xy_resolution+min_y
     return (x,y)

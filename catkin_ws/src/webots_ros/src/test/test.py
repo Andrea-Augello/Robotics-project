@@ -38,10 +38,10 @@ def get_data():
                     min_samples=2,
                     eps=2)
             for i,r in enumerate([run_1,run_2,run_3,run_4]):
-                # i_RUN = SEEDS # OBSERVATIONS # CLUSTER 
-                seed,observation,cluster = r.split("#")
+                # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
+                seed,observation,cluster,odometry = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
-                observations[i+1]=ast.literal_eval(observation)
+                observations[i+1]=(ast.literal_eval(odometry),ast.literal_eval(observation))
                 #clusters[i+1]=ast.literal_eval(cluster)
             result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
 
@@ -66,7 +66,7 @@ def main():
     counter_ground_truth=0
     error_distance={1:[],2:[],3:[],4:[]}
     data=get_data()
-    positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
+    #positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
     for execution in data:
         seeds={}
         clusters={}
@@ -76,9 +76,9 @@ def main():
         counter_ground_truth+=len(ground_truth)
         robot = Change()
         people_density = pd.GridMap(robot)
-        for run,observation in execution['observations'].items():
+        for run,(odometry,observation) in execution['observations'].items():
             counter_observation[run]+=len(observation)
-            robot.odometry.update((positions[run-1][0],positions[run-1][1],0))
+            robot.odometry.update(odometry)
             #observation=[robot.odometry.abs_cartesian_to_polar(i) for i in observation]
             observation=[i for i in observation if in_room(robot.odometry.polar_to_abs_cartesian(i))]
             observations_cartesian[run]=[robot.odometry.polar_to_abs_cartesian(i) for i in observation]
