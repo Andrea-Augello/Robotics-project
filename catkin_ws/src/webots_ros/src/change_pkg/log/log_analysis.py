@@ -18,6 +18,8 @@ def main():
     false_negative_old={1:0,2:0,3:0,4:0}
     true_negative_old={1:0,2:0,3:0,4:0}
     false_negative_yolo_old={1:0,2:0,3:0,4:0}
+    counter_observation={1:0,2:0,3:0,4:0}
+    counter_ground_truth=0
     positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
 
     error_distance={1:[],2:[],3:[],4:[]}
@@ -30,6 +32,7 @@ def main():
             # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
             [ground_truth,run_1,run_2,run_3,run_4]=line.split("|")
             ground_truth=ast.literal_eval(ground_truth)
+            counter_ground_truth+=len(ground_truth)
             clusters_ground_truth = clst.clustering(ground_truth, 
                     distance_measure=clst.math_distance,
                     min_samples=2,
@@ -41,6 +44,7 @@ def main():
                 observations[i+1]=ast.literal_eval(observation)
                 observations[i+1]=[polar_to_abs_cartesian(j,positions[i],0) for j in observations[i+1]]
                 error_distance[i+1]+=[distance(j,ground_truth)for j in seeds[i+1]]
+                counter_observation[i+1]+=len(observations[i+1])
                 #clusters[i+1]=ast.literal_eval(cluster)
                 clusters[i+1]=clst.clustering(seeds[i+1], 
                     distance_measure=clst.math_distance,
@@ -83,17 +87,17 @@ def main():
             
             #draw_clusters_all_run(ground_truth,observations,clusters_ground_truth,seeds,clusters)
     print("NEW METHOD\n")
-    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance)
+    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth)
     print("\nOLD METHOD\n")
-    report(false_positive_old,false_negative_old,false_negative_yolo_old,true_positive_old,true_negative_old,error_distance)
+    report(false_positive_old,false_negative_old,false_negative_yolo_old,true_positive_old,true_negative_old,error_distance,counter_observation,counter_ground_truth)
 
-def has_near(point,point_list,tollerance=1):
+def has_near(point,point_list,tollerance=1.5):
     for p in point_list:
         if clst.math_distance(p,point)<tollerance:
             return True
     return False
 
-def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance):
+def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth):
     print("False positive: {}".format({k:round(v,2) for k,v in false_positive.items()}))        
     print("False negative: {}".format({k:round(v,2) for k,v in false_negative.items()}))
     print("False negative for YOLO: {}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
@@ -109,7 +113,8 @@ def report(false_positive,false_negative,false_negative_yolo,true_positive,true_
     print("Recall: {}".format(recall))
     print("Recall YOLO: {}".format(recall_yolo))
     print()
-    print("Distance error: {}".format({k:round(mean(v),2) for k,v in error_distance.items()}))
+    print("Distance error: {}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
+    print("Observation percentage: {}".format({k:round(v/counter_ground_truth,2) for k,v in counter_observation.items()}))
 
 def draw_clusters(observations,centroids=[],title="Graph"):
         x_o=[i[0] for i in observations]

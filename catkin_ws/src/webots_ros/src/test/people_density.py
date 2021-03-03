@@ -11,7 +11,7 @@ from scipy.spatial import distance
 
 class GridMap:
 
-    def __init__(self, robot, xy_resolution = 0.20, min_x =-10, min_y = -10, max_x=10, max_y=10):
+    def __init__(self, robot, xy_resolution = 0.10, min_x =-5, min_y = -5, max_x=5, max_y=5):
         self.__robot = robot
         self.xy_resolution = xy_resolution
         self.min_x = min_x
@@ -111,14 +111,14 @@ class GridMap:
 
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
-        noise = 0.1/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
-        self.data = gaussian_filter(self.data, sigma=3)
+        noise = 0.00001/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
+        self.data = gaussian_filter(self.data, sigma=2.5)
         if len(z):
             for ix in range(self.x_w):
                 for iy in range(self.y_w):
-                    prob = 0
+                    prob = 1
                     for iz in range(len(z)):
-                        prob *= self.calc_gaussian_observation_pdf(
+                        prob *=self.calc_gaussian_observation_pdf(
                             z, iz, ix, iy)
                     self.data[ix][iy] *= prob
         # adds noise
@@ -429,11 +429,12 @@ class GridMap:
             self.data=l
         seeds=[Seed(label,point) for label,point in self.seed_dict.items()]
         region_occupancy={}
-        im = self.matrix_to_img(self.data)
-        otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        max_value = max([max(i_data) for i_data in self.data])
-        min_value = min([min(i_data) for i_data in self.data])
-        threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
+        #im = self.matrix_to_img(self.data)
+        #otsu_threshold, thresh = cv2.threshold( im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        #max_value = max([max(i_data) for i_data in self.data])
+        #min_value = min([min(i_data) for i_data in self.data])
+        #threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
+        threshold=1.1/(self.y_w*self.x_w)
         alias=set()
         seed_mark =  [[0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]

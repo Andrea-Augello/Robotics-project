@@ -62,6 +62,8 @@ def main():
     false_negative={1:0,2:0,3:0,4:0}
     true_negative={1:0,2:0,3:0,4:0}
     false_negative_yolo={1:0,2:0,3:0,4:0}
+    counter_observation={1:0,2:0,3:0,4:0}
+    counter_ground_truth=0
     error_distance={1:[],2:[],3:[],4:[]}
     data=get_data()
     positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
@@ -71,11 +73,14 @@ def main():
         observations_cartesian={}
         clusters_ground_truth=execution['cluster_ground_truth']
         ground_truth=execution['ground_truth']
+        counter_ground_truth+=len(ground_truth)
         robot = Change()
         people_density = pd.GridMap(robot)
         for run,observation in execution['observations'].items():
+            counter_observation[run]+=len(observation)
             robot.odometry.update((positions[run-1][0],positions[run-1][1],0))
             #observation=[robot.odometry.abs_cartesian_to_polar(i) for i in observation]
+            observation=[i for i in observation if in_room(robot.odometry.polar_to_abs_cartesian(i))]
             observations_cartesian[run]=[robot.odometry.polar_to_abs_cartesian(i) for i in observation]
             cluster_dict,clusters_targets,s=people_density.observation_update(observation)
             seeds[run]=s
@@ -101,8 +106,8 @@ def main():
 
             #robot.path_planner.set_target(cluster_dict)
             #people_density.draw_heat_map_inverted_centroids(clusters_targets)
-        draw_clusters_all_run(execution['ground_truth'],observations_cartesian,clusters_ground_truth,seeds,clusters)
-    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance)
+        #draw_clusters_all_run(execution['ground_truth'],observations_cartesian,clusters_ground_truth,seeds,clusters)
+    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth)
 
 def has_near(point,point_list,tollerance=1):
     for p in point_list:
@@ -110,8 +115,14 @@ def has_near(point,point_list,tollerance=1):
             return True
     return False
 
+def in_room(point):
+    x_inf=-5
+    x_sup=5
+    y_inf=-5
+    y_sup=5
+    return x_inf<=point[0]<=x_sup and y_inf<=point[1]<=y_sup
 
-def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance):
+def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth):
     print("False positive: {}".format({k:round(v,2) for k,v in false_positive.items()}))        
     print("False negative: {}".format({k:round(v,2) for k,v in false_negative.items()}))
     print("False negative for YOLO: {}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
@@ -127,7 +138,8 @@ def report(false_positive,false_negative,false_negative_yolo,true_positive,true_
     print("Recall: {}".format(recall))
     print("Recall YOLO: {}".format(recall_yolo))
     print()
-    print("Distance error: {}".format({k:round(mean(v),2) for k,v in error_distance.items()}))
+    print("Distance error: {}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
+    print("Observation percentage: {}".format({k:round(v/counter_ground_truth,2) for k,v in counter_observation.items()}))
 
 def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,centroids,title="Analysis"):
     x_g=[i[0] for i in ground_truth]
