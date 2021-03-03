@@ -118,7 +118,7 @@ class GridMap:
                 for iy in range(self.y_w):
                     prob = 0
                     for iz in range(len(z)):
-                        prob += self.calc_gaussian_observation_pdf(
+                        prob *= self.calc_gaussian_observation_pdf(
                             z, iz, ix, iy)
                     self.data[ix][iy] *= prob
         # adds noise
@@ -155,12 +155,8 @@ class GridMap:
         # likelihood
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
-        return ( 0 if p_distance < 0.5 or abs(angle_diff-180)<45 \
-                # else 1/(1+distance.mahalanobis( 
-                    # [(o_distance-p_distance),(angle_diff)],
-                    # [0,0], IV)**4)) +0.05
-                else 1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/16)**4)) \
-                + 0.05 
+        return max( 0.2, 
+                1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/16)**4))
 
     def matrix_to_img(self,matrix):
         im = np.array(matrix)
