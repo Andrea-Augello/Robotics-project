@@ -26,17 +26,24 @@ def get_data():
     path_to_repo="/Users/marco/GitHub/Robotics-project"
     path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation.txt"
     result=[]
+    size_cluster_ground_truth=0
+    counter_cluster_ground_truth=0
+    execution_number=0
     with open(path, 'r') as f:
         for line in f:
+            execution_number+=1
             seeds={}
             observations={}
             # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
             [ground_truth,run_1,run_2,run_3,run_4]=line.split("|")
             ground_truth=ast.literal_eval(ground_truth)
-            clusters_ground_truth = clst.clustering(ground_truth, 
+            clusters_ground_truth,list_of_dimension = clst.clustering(ground_truth, 
                     distance_measure=clst.math_distance,
                     min_samples=2,
-                    eps=2)
+                    eps=2, 
+                    dimensions=True)
+            size_cluster_ground_truth+=sum(list_of_dimension)
+            counter_cluster_ground_truth+=len(list_of_dimension)        
             for i,r in enumerate([run_1,run_2,run_3,run_4]):
                 # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
                 seed,observation,cluster,odometry = r.split("#")
@@ -44,8 +51,9 @@ def get_data():
                 observations[i+1]=(ast.literal_eval(odometry),ast.literal_eval(observation))
                 #clusters[i+1]=ast.literal_eval(cluster)
             result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
-
-    return result
+        average_cluster_size=size_cluster_ground_truth/counter_cluster_ground_truth
+        average_cluster_number=counter_cluster_ground_truth/execution_number
+    return result,average_cluster_size,average_cluster_number
  
 
 def print_clusters(clusters):
@@ -65,7 +73,7 @@ def main():
     counter_observation={1:0,2:0,3:0,4:0}
     counter_ground_truth=0
     error_distance={1:[],2:[],3:[],4:[]}
-    data=get_data()
+    data,average_cluster_size,average_cluster_number=get_data()
     #positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
     for execution in data:
         seeds={}
@@ -107,7 +115,8 @@ def main():
             #robot.path_planner.set_target(cluster_dict)
             #people_density.draw_heat_map_inverted_centroids(clusters_targets)
         #draw_clusters_all_run(execution['ground_truth'],observations_cartesian,clusters_ground_truth,seeds,clusters)
-    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth)
+    
+    report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
 
 def has_near(point,point_list,tollerance=1):
     for p in point_list:
@@ -122,7 +131,7 @@ def in_room(point):
     y_sup=5
     return x_inf<=point[0]<=x_sup and y_inf<=point[1]<=y_sup
 
-def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth):
+def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number):
     print("False positive: \t{}".format({k:round(v,2) for k,v in false_positive.items()}))        
     print("False negative: \t{}".format({k:round(v,2) for k,v in false_negative.items()}))
     print("False negative YOLO: \t{}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
@@ -140,6 +149,8 @@ def report(false_positive,false_negative,false_negative_yolo,true_positive,true_
     print()
     print("Distance error: \t{}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
     print("Observation percentage: {}".format({k:round(v/counter_ground_truth,2) for k,v in counter_observation.items()}))
+    print("Avarage cluster size: {:.2f}".format(average_cluster_size))
+    print("Avarage cluster number: {:.2f}".format(average_cluster_number))
 
 
 def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,centroids,title="Analysis"):

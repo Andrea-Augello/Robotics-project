@@ -4,7 +4,7 @@ from sklearn.cluster import DBSCAN
 from sklearn import metrics
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
-
+from collections import Counter
 
 def arc_distance(p1,p2):
     angle_diff = (p1[1]-p2[1])%360
@@ -18,7 +18,7 @@ def arc_distance(p1,p2):
 def math_distance(p1,p2):
     return math.hypot(p1[0]-p2[0],p1[1]-p2[1])
 
-def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
+def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5, dimensions=False):
         if not len(points):
             return []
         scaler = StandardScaler().fit(points)
@@ -28,7 +28,7 @@ def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
         core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
         core_samples_mask[db.core_sample_indices_] = True
         labels = db.labels_
-
+        
         # Number of clusters in labels, ignoring noise if present.
         n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
          
@@ -45,5 +45,9 @@ def clustering(points, distance_measure=arc_distance, min_samples=1, eps=0.5):
                 newpoint.append(point)
                 newpoint.append(clustered_centers_angle_median[counter])
                 output.append(newpoint)
-                counter+=1      
-        return output
+                counter+=1
+        if dimensions:
+            c=Counter(labels)            
+            return output,[c[i] for i in c.keys() if i >=0]
+        else:    
+            return output
