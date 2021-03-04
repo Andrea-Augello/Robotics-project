@@ -434,7 +434,7 @@ class GridMap:
         #max_value = max([max(i_data) for i_data in self.data])
         #min_value = min([min(i_data) for i_data in self.data])
         #threshold=(otsu_threshold*(max_value-min_value)/255)+min_value
-        threshold=1.1/(self.y_w*self.x_w)
+        threshold=1.2/(self.y_w*self.x_w)
         alias=set()
         seed_mark =  [[0 for _ in range(self.y_w)]
                      for _ in range(self.x_w)]

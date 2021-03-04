@@ -87,7 +87,7 @@ def main():
                         true_negative_old[i+1]+=1                            
 
             
-            draw_clusters_all_run(ground_truth,observations,clusters_ground_truth,seeds,clusters)
+            #draw_clusters_all_run(ground_truth,observations,clusters_ground_truth,seeds,clusters)
     print("NEW METHOD\n")
     report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth)
     print("\nOLD METHOD\n")
@@ -100,22 +100,22 @@ def has_near(point,point_list,tollerance=1):
     return False
 
 def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth):
-    print("False positive: {}".format({k:round(v,2) for k,v in false_positive.items()}))        
-    print("False negative: {}".format({k:round(v,2) for k,v in false_negative.items()}))
-    print("False negative for YOLO: {}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
-    print("True positive: {}".format({k:round(v,2) for k,v in true_positive.items()}))
-    print("True negative: {}".format({k:round(v,2) for k,v in true_negative.items()}))
+    print("False positive: \t{}".format({k:round(v,2) for k,v in false_positive.items()}))        
+    print("False negative: \t{}".format({k:round(v,2) for k,v in false_negative.items()}))
+    print("False negative YOLO: \t{}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
+    print("True positive: \t\t{}".format({k:round(v,2) for k,v in true_positive.items()}))
+    print("True negative: \t\t{}".format({k:round(v,2) for k,v in true_negative.items()}))
     accuracy={i:round((true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]),2) for i in range(1,5)}
     precision={i:round(true_positive[i]/(true_positive[i]+false_positive[i]),2) for i in range(1,5)}
     recall={i:round(true_positive[i]/(true_positive[i]+false_negative[i]),2) for i in range(1,5)}
     recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative[i]-false_negative_yolo[i]),2) for i in range(1,5)}
     print()
-    print("Precision: {}".format(precision))
-    print("Accuracy: {}".format(accuracy))
-    print("Recall: {}".format(recall))
-    print("Recall YOLO: {}".format(recall_yolo))
+    print("Precision: \t{} \t- Mean: {:.2f}".format(precision,mean([i for i in precision.values()])))
+    print("Accuracy: \t{} \t- Mean: {:.2f}".format(accuracy,mean([i for i in accuracy.values()])))
+    print("Recall: \t{} \t- Mean: {:.2f}".format(recall,mean([i for i in recall.values()])))
+    print("Recall YOLO: \t{} \t- Mean: {:.2f}".format(recall_yolo,mean([i for i in recall_yolo.values()])))
     print()
-    print("Distance error: {}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
+    print("Distance error: \t{}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
     print("Observation percentage: {}".format({k:round(v/counter_ground_truth,2) for k,v in counter_observation.items()}))
 
 def draw_clusters(observations,centroids=[],title="Graph"):
