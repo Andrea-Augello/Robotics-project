@@ -118,7 +118,7 @@ def main():
     
     report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
 
-def has_near(point,point_list,tollerance=1):
+def has_near(point,point_list,tollerance=1.1):
     for p in point_list:
         if clst.math_distance(p,point)<tollerance:
             return True
@@ -140,7 +140,7 @@ def report(false_positive,false_negative,false_negative_yolo,true_positive,true_
     accuracy={i:round((true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]),2) for i in range(1,5)}
     precision={i:round(true_positive[i]/(true_positive[i]+false_positive[i]),2) for i in range(1,5)}
     recall={i:round(true_positive[i]/(true_positive[i]+false_negative[i]),2) for i in range(1,5)}
-    recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative[i]-false_negative_yolo[i]),2) for i in range(1,5)}
+    recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative_yolo[i]),2) for i in range(1,5)}
     print()
     print("Precision: \t{} \t- Mean: {:.2f}".format(precision,mean([i for i in precision.values()])))
     print("Accuracy: \t{} \t- Mean: {:.2f}".format(accuracy,mean([i for i in accuracy.values()])))
