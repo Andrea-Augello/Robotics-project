@@ -6,7 +6,7 @@ from statistics import mean
 
 def main():
     path_to_repo="/Users/marco/GitHub/Robotics-project"
-    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation.txt"
+    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation_dark.txt"
     true_positive={1:0,2:0,3:0,4:0}
     false_positive={1:0,2:0,3:0,4:0}
     false_negative={1:0,2:0,3:0,4:0}
@@ -102,7 +102,7 @@ def main():
     print("\nOLD METHOD\n")
     report(false_positive_old,false_negative_old,false_negative_yolo_old,true_positive_old,true_negative_old,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
 
-def has_near(point,point_list,tollerance=1.1):
+def has_near(point,point_list,tollerance=1):
     for p in point_list:
         if clst.math_distance(p,point)<tollerance:
             return True

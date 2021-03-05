@@ -24,7 +24,7 @@ class Change:
 
 def get_data():
     path_to_repo="/Users/marco/GitHub/Robotics-project"
-    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation.txt"
+    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation_dark.txt"
     result=[]
     size_cluster_ground_truth=0
     counter_cluster_ground_truth=0
@@ -118,7 +118,7 @@ def main():
     
     report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
 
-def has_near(point,point_list,tollerance=1.1):
+def has_near(point,point_list,tollerance=1):
     for p in point_list:
         if clst.math_distance(p,point)<tollerance:
             return True
