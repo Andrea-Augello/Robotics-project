@@ -23,7 +23,7 @@ def main():
     size_cluster_ground_truth=0
     counter_cluster_ground_truth=0
     positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
-
+    error_distance_old={1:[],2:[],3:[],4:[]}
     error_distance={1:[],2:[],3:[],4:[]}
     execution_number=0
     with open(path, 'r') as f:
@@ -53,6 +53,7 @@ def main():
                 observations[i+1]=ast.literal_eval(observation)
                 observations[i+1]=[polar_to_abs_cartesian(j,odometry[i+1]) for j in observations[i+1]]
                 error_distance[i+1]+=[distance(j,ground_truth)for j in seeds[i+1]]
+                error_distance_old[i+1]+=[distance(j,ground_truth)for j in observations[i+1]]
                 counter_observation[i+1]+=len(observations[i+1])
                 #clusters[i+1]=ast.literal_eval(cluster)
                 clusters[i+1]=clst.clustering(seeds[i+1], 
@@ -100,7 +101,7 @@ def main():
     print("NEW METHOD\n")
     report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
     print("\nOLD METHOD\n")
-    report(false_positive_old,false_negative_old,false_negative_yolo_old,true_positive_old,true_negative_old,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
+    report(false_positive_old,false_negative_old,false_negative_yolo_old,true_positive_old,true_negative_old,error_distance_old,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
 
 def has_near(point,point_list,tollerance=1):
     for p in point_list:
