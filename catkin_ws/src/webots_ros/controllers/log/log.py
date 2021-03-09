@@ -35,18 +35,19 @@ class Logger (Supervisor):
             self.translation.setSFVec3f([y,self.robot_height,x])    
             for axis_angle in angle_list:
                 if self.step(self.time_step) == -1:
-                    quit()
-                  
+                    quit()  
                 #self.rotation.setSFRotation(axis_angle)
                 rois=[]
                 with open('{}/robot_position.txt'.format(self.path), 'r') as f:
                     for line in f.readlines():
                         roi=self.parse_roi(line)
-                        rois.append(roi)              
+                        rois.append(roi)
+                # LOG LOG LOG                      
             
             
 
     def parse_roi(self,string_roi):
+        #TODO to do
         return string_roi
 
     def set_pedestrians(self,number_of_pedestrians,total_number_of_pedestrians,trajectory):
@@ -84,6 +85,7 @@ class Logger (Supervisor):
         os.kill(pid, signal.SIGUSR1)
 
     def get_trajectory(self):
+        #TODO to do more trajectories
         return [(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]   
 
     def get_angles(self):
