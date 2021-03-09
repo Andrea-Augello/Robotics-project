@@ -7,6 +7,9 @@ import os
 import signal
 from subprocess import check_output
 import math
+from random import choice
+import matplotlib.pyplot as plt
+from numpy.random import random_sample
 
 
 class Logger (Supervisor):
@@ -84,9 +87,52 @@ class Logger (Supervisor):
         pid=int(check_output(["pidof","-s","webots-bin"]))
         os.kill(pid, signal.SIGUSR1)
 
+    def getRandomTrajectory(self):
+        num=random.randint(0,2)
+        if num == 0:
+            return "Square"
+        elif num == 1:
+            return "Circle"
+        elif num == 2:
+            return "Random"
+
     def get_trajectory(self,number_of_points=4):
-        #TODO to do more trajectories
-        return [(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]   
+        trajectory=self.getRandomTrajectory()
+        coordinates=[]
+        if trajectory == "Square":
+            a = 2.5
+            b = -2.5
+
+            plt.xlim((b,a))
+            plt.ylim((b,a))
+
+            for i in range(number_of_points):
+                r = (b - a) * random_sample() + a
+                random_point = choice([(choice([a,b]), r),(r, choice([a,b]))])
+                coordinates.append((random_point[0],random_point[1]))
+        
+            return coordinates 
+        elif trajectory == "Random":
+            for i in range(number_of_points):
+                x=random.uniform(-2.5,2.5)
+                y=random.uniform(-2.5,2.5)
+                coordinates.append((x,y))
+                
+            return coordinates 
+        elif trajectory == "Circle":
+            # radius of the circle
+            circle_r = 2.5
+            # center of the circle (x, y)
+            circle_x = 0
+            circle_y = 0
+
+            for i in range(number_of_points):
+                # random angle
+                alpha = 2 * math.pi * random.random()
+                x = circle_r * math.cos(alpha) + circle_x
+                y = circle_r * math.sin(alpha) + circle_y
+                coordinates.append((x,y))
+            return coordinates
 
     def get_angles(self):
         HORIZONTAL_FOV = 57.29578

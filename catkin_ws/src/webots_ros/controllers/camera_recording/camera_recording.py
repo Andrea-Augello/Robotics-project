@@ -13,7 +13,6 @@ def main():
         objects=[RecognitionObject(i.get_id(),i.get_position(),i.get_orientation(),i.get_size(),i.get_position_on_image(),i.get_size_on_image(),i.get_number_of_colors(),i.get_colors(),i.get_model()) for i in objects]
         for o in objects:
             positions.append(get_seed_from_object(o))
-        print(positions)
         write(positions)
         
 def get_seed_from_object(recognition_object):
