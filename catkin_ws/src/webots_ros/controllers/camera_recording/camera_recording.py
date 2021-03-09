@@ -12,22 +12,22 @@ def main():
     while robot.step(TIME_STEP) != -1:
         objects=camera.getRecognitionObjects()
         objects=[RecognitionObject(i.get_id(),i.get_position(),i.get_orientation(),i.get_size(),i.get_position_on_image(),i.get_size_on_image(),i.get_number_of_colors(),i.get_colors(),i.get_model()) for i in objects]
-        rois=[self.get_roi_from_object(o) for o in objects]
-        seeds=self.rois_to_seeds(rois)
-        self.write(seeds)
+        rois=[get_roi_from_object(o) for o in objects]
+        seeds=rois_to_seeds(rois)
+        write(seeds)
         
-def get_roi_from_object(self,recognition_object):
+def get_roi_from_object(recognition_object):
     #TODO to do
     return recognition_object.position  
 
-def write(self,seeds):
+def write(seeds):
     path="../../src/change_pkg/ROI"
     with open('{}/ROI.txt'.format(path), 'w') as f:
         for seed in seeds:
             f.write(seed)
                   
 
-def rois_to_seeds(self,rois):
+def rois_to_seeds(rois):
     #TODO to do
     pass                  
 
