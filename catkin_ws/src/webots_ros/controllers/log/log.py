@@ -84,7 +84,7 @@ class Logger (Supervisor):
         pid=int(check_output(["pidof","-s","webots-bin"]))
         os.kill(pid, signal.SIGUSR1)
 
-    def get_trajectory(self):
+    def get_trajectory(self,number_of_points=4):
         #TODO to do more trajectories
         return [(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]   
 
