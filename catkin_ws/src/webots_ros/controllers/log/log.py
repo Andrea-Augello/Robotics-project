@@ -42,7 +42,7 @@ class Logger (Supervisor):
                     for line in f.readlines():
                         roi=self.parse_roi(line)
                         rois.append(roi)
-                # LOG LOG LOG                      
+                #TODO to do but Marco will do it                    
             
             
 
