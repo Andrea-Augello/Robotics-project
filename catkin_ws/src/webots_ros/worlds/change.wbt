@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5872194842748072 0.556030220324154 0.5882207675476123 4.155068429967731
-  position 3.9564703174743734 71.620137933278 3.769647795191773
+  orientation 0.5798204981634455 0.5771903779462281 0.575029962276562 4.1957491332516526
+  position 0.240094655333968 23.78090619990756 -2.1445118777824086
   follow "change"
   followType "None"
 }
@@ -21,47 +21,62 @@ RectangleArena {
   wallThickness 0.3
   wallHeight 3
 }
-Pedestrian {
+DEF pedestrian(1) Pedestrian {
   translation 2 1.29 4
   rotation 0 -1 0 -1.5707953071795862
-  controllerArgs [
-    ""
-  ]
+  name "pedestrian(1)"
 }
-Pedestrian {
-  translation -2.21311e-05 1.27 -2.83
+DEF pedestrian(2) Pedestrian {
+  translation 2.1 1.29 2.09
+  rotation 0 -1 0 -1.5707953071795862
+  name "pedestrian(2)"
+}
+DEF pedestrian(3) Pedestrian {
+  translation -1.95308e-05 1.27 -3.32
   rotation 0 1 0 -5.307179586466759e-06
-  name "pedestrian(4)"
-  controllerArgs [
-    ""
-  ]
+  name "pedestrian(3)"
   shirtColor 0 0.448768 0
 }
-Pedestrian {
+DEF pedestrian(4) Pedestrian {
   translation 2.25998 1.27 -2.73
   rotation 0 1 0 -5.307179586466759e-06
-  name "pedestrian(9)"
-  controllerArgs [
-    ""
-  ]
+  name "pedestrian(4)"
   shirtColor 0 0.448768 0
 }
-Pedestrian {
+DEF pedestrian(5) Pedestrian {
   translation -4 1.27 -4
   rotation 0 -1 0 6.13667e-07
   name "pedestrian(5)"
-  controllerArgs [
-    ""
-  ]
   shirtColor 0 0.850233 0.855879
 }
-Pedestrian {
+DEF pedestrian(6) Pedestrian {
+  translation -3.9 1.27 -3.9
+  rotation 0 -1 0 6.13667e-07
+  name "pedestrian(6)"
+  shirtColor 0 0.850233 0.855879
+}
+DEF pedestrian(7) Pedestrian {
+  translation -3.8 1.27 -3.8
+  rotation 0 -1 0 6.13667e-07
+  name "pedestrian(7)"
+  shirtColor 0 0.850233 0.855879
+}
+DEF pedestrian(8) Pedestrian {
+  translation -3.6999999999999997 1.27 -3.6999999999999997
+  rotation 0 -1 0 6.13667e-07
+  name "pedestrian(8)"
+  shirtColor 0 0.850233 0.855879
+}
+DEF pedestrian(9) Pedestrian {
+  translation -3.5999999999999996 1.27 -3.5999999999999996
+  rotation 0 -1 0 6.13667e-07
+  name "pedestrian(9)"
+  shirtColor 0 0.850233 0.855879
+}
+DEF pedestrian(10) Pedestrian {
   translation -4 1.27 -3
   rotation 0 1 0 3.14159
-  name "pedestrian(6)"
-  controllerArgs [
-    ""
-  ]
+  name "pedestrian(10)"
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
@@ -71,13 +86,62 @@ Pedestrian {
     }
   ]
 }
-Pedestrian {
+DEF pedestrian(11) Pedestrian {
+  translation -3.9 1.27 -2.9
+  rotation 0 1 0 3.14159
+  name "pedestrian(11)"
+  shirtColor 0.671351 0 0.652461
+  pantsColor 0.130205 0.135622 0.26186
+  shoesColor 1 0.85745 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+DEF pedestrian(12) Pedestrian {
+  translation -3.8 1.27 -2.8
+  rotation 0 1 0 3.14159
+  name "pedestrian(12)"
+  shirtColor 0.671351 0 0.652461
+  pantsColor 0.130205 0.135622 0.26186
+  shoesColor 1 0.85745 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+DEF pedestrian(13) Pedestrian {
+  translation -3.6999999999999997 1.27 -2.6999999999999997
+  rotation 0 1 0 3.14159
+  name "pedestrian(13)"
+  shirtColor 0.671351 0 0.652461
+  pantsColor 0.130205 0.135622 0.26186
+  shoesColor 1 0.85745 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+DEF pedestrian(14) Pedestrian {
+  translation -3.5999999999999996 1.27 -2.5999999999999996
+  rotation 0 1 0 3.14159
+  name "pedestrian(14)"
+  shirtColor 0.671351 0 0.652461
+  pantsColor 0.130205 0.135622 0.26186
+  shoesColor 1 0.85745 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+DEF pedestrian(15) Pedestrian {
   translation -2.06 1.27 1.06
   rotation 0 1 0 3.14159
-  name "pedestrian(2)"
-  controllerArgs [
-    ""
-  ]
+  name "pedestrian(15)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
   leftHandSlot [
@@ -86,13 +150,34 @@ Pedestrian {
     }
   ]
 }
-Pedestrian {
+DEF pedestrian(16) Pedestrian {
+  translation -1.96 1.27 2.08
+  rotation 0 1 0 3.14159
+  name "pedestrian(16)"
+  shirtColor 0.788479 0.967712 0.084123
+  pantsColor 0 0 0
+  leftHandSlot [
+    BeerBottle {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+DEF pedestrian(17) Pedestrian {
+  translation -1.8599999999999999 1.27 1.2600000000000002
+  rotation 0 1 0 3.14159
+  name "pedestrian(17)"
+  shirtColor 0.788479 0.967712 0.084123
+  pantsColor 0 0 0
+  leftHandSlot [
+    BeerBottle {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+DEF pedestrian(18) Pedestrian {
   translation -3.24 1.27 4.02
   rotation 0 1 0 3.14159
-  name "pedestrian(8)"
-  controllerArgs [
-    ""
-  ]
+  name "pedestrian(18)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
   leftHandSlot [
@@ -101,22 +186,40 @@ Pedestrian {
     }
   ]
 }
-Pedestrian {
+DEF pedestrian(19) Pedestrian {
   translation 3 1.27 4
   rotation 0 1 0 -1.5708053071795867
-  name "pedestrian(7)"
+  name "pedestrian(19)"
+  shirtColor 0.739193 0 0.0918135
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
+DEF pedestrian(20) Pedestrian {
+  translation 2.75001 1.27 0.18
+  rotation 0 1 0 -1.5708053071795867
+  name "pedestrian(20)"
+  shirtColor 0.739193 0 0.0918135
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
+DEF GOD Pedestrian {
+  translation 2.7501 1.27 -10.9
+  rotation 0 1 0 -1.5708053071795867
+  name "god"
+  controller "log"
   controllerArgs [
     ""
   ]
-  shirtColor 0.739193 0 0.0918135
+  shirtColor 1 0.999969 0.999985
+  pantsColor 1 0.999969 0.999985
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
 }
 DEF ROBOT TiagoIron {
   translation -2.5 0.095 -2.5
-  rotation 0.9997397762563311 0.015803042241100698 0.01645125000924864 -1.5711437638017518
+  rotation -0.9351339294067424 -0.25056798108462386 -0.25047998109126696 1.63816
   name "change"
-  controller "ros"
+  controller "camera_recording"
   controllerArgs [
     "--name=change"
     "--clock"
@@ -187,7 +290,7 @@ DEF ROBOT TiagoIron {
     }
   ]
   cameraSlot [
-    Camera {
+    DEF CAMERA Camera {
       rotation 0 1 0 -1.5707996938995747
       fieldOfView 1
       width 640
@@ -207,17 +310,4 @@ DEF ROBOT TiagoIron {
       }
     }
   ]
-}
-Pedestrian {
-  translation 2.54999 1.76 11.18
-  rotation 0 1 0 -1.5708053071795867
-  name "pedestrian(1)"
-  controller "supervisor"
-  controllerArgs [
-    ""
-  ]
-  shirtColor 1 0.999969 0.999985
-  pantsColor 1 0.999969 0.999985
-  shoesColor 1 0.999969 0.999985
-  skinColor 0.389014 0.297383 0.280034
 }

@@ -1,0 +1,223 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.5872194842748072 0.556030220324154 0.5882207675476123 4.155068429967731
+  position 3.9564703174743734 71.620137933278 3.769647795191773
+  follow "change"
+  followType "None"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 10 10
+  floorTileSize 2 2
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallThickness 0.3
+  wallHeight 3
+}
+Pedestrian {
+  translation 2 1.29 4
+  rotation 0 -1 0 -1.5707953071795862
+  controllerArgs [
+    ""
+  ]
+}
+Pedestrian {
+  translation -2.21311e-05 1.27 -2.83
+  rotation 0 1 0 -5.307179586466759e-06
+  name "pedestrian(4)"
+  controllerArgs [
+    ""
+  ]
+  shirtColor 0 0.448768 0
+}
+Pedestrian {
+  translation 2.25998 1.27 -2.73
+  rotation 0 1 0 -5.307179586466759e-06
+  name "pedestrian(9)"
+  controllerArgs [
+    ""
+  ]
+  shirtColor 0 0.448768 0
+}
+Pedestrian {
+  translation -4 1.27 -4
+  rotation 0 -1 0 6.13667e-07
+  name "pedestrian(5)"
+  controllerArgs [
+    ""
+  ]
+  shirtColor 0 0.850233 0.855879
+}
+Pedestrian {
+  translation -4 1.27 -3
+  rotation 0 1 0 3.14159
+  name "pedestrian(6)"
+  controllerArgs [
+    ""
+  ]
+  shirtColor 0.671351 0 0.652461
+  pantsColor 0.130205 0.135622 0.26186
+  shoesColor 1 0.85745 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation -2.06 1.27 1.06
+  rotation 0 1 0 3.14159
+  name "pedestrian(2)"
+  controllerArgs [
+    ""
+  ]
+  shirtColor 0.788479 0.967712 0.084123
+  pantsColor 0 0 0
+  leftHandSlot [
+    BeerBottle {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation -3.24 1.27 4.02
+  rotation 0 1 0 3.14159
+  name "pedestrian(8)"
+  controllerArgs [
+    ""
+  ]
+  shirtColor 0.788479 0.967712 0.084123
+  pantsColor 0 0 0
+  leftHandSlot [
+    BeerBottle {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation 3 1.27 4
+  rotation 0 1 0 -1.5708053071795867
+  name "pedestrian(7)"
+  controllerArgs [
+    ""
+  ]
+  shirtColor 0.739193 0 0.0918135
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
+DEF ROBOT TiagoIron {
+  translation -2.5 0.095 -2.5
+  rotation 0.9997397762563311 0.015803042241100698 0.01645125000924864 -1.5711437638017518
+  name "change"
+  controller "ros"
+  controllerArgs [
+    "--name=change"
+    "--clock"
+    "--use-sim-time"
+  ]
+  displaySlot [
+    Solid {
+      translation 0.1 0 -0.25
+      rotation 0.6353159295275 -0.5360478155388282 -0.5559014383365626 1.98
+      children [
+        Speaker {
+        }
+        Display {
+          translation 0.00183016 0.0237368 -0.0641422
+          rotation 0.7071067811865475 -0.7071067811865475 0 0.2617996938995747
+          children [
+            DEF display_shape Shape {
+              appearance Appearance {
+                material Material {
+                  emissiveColor 1 1 1
+                }
+                texture ImageTexture {
+                  filtering 0
+                }
+              }
+              geometry Box {
+                size 0.24 0.135 0.01
+              }
+            }
+          ]
+          boundingObject Box {
+            size 0.24 0.135 0.02
+          }
+          physics Physics {
+          }
+          width 720
+          height 405
+        }
+        DEF G0 Group {
+          children [
+            Shape {
+              appearance Plaster {
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.05
+              }
+            }
+            Transform {
+              translation 0 0.0219067 -0.0544829
+              rotation 0.7071067811865475 -0.7071067811865475 0 0.261799
+              children [
+                Shape {
+                  appearance Plaster {
+                  }
+                  geometry Box {
+                    size 0.24 0.135 0.01
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      boundingObject USE G0
+      physics Physics {
+      }
+    }
+  ]
+  cameraSlot [
+    Camera {
+      rotation 0 1 0 -1.5707996938995747
+      fieldOfView 1
+      width 640
+      height 480
+      near 0.003
+      noise 0.007
+      lens Lens {
+      }
+      focus Focus {
+        focalLength 0.0036
+        maxFocalDistance 1000000
+        minFocalDistance 1
+      }
+      zoom Zoom {
+      }
+      recognition Recognition {
+      }
+    }
+  ]
+}
+Pedestrian {
+  translation 2.54999 1.76 11.18
+  rotation 0 1 0 -1.5708053071795867
+  name "pedestrian(1)"
+  controller "supervisor"
+  controllerArgs [
+    ""
+  ]
+  shirtColor 1 0.999969 0.999985
+  pantsColor 1 0.999969 0.999985
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
