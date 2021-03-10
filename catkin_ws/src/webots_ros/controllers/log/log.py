@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import ast
 from controller import Supervisor
 from controller import Robot
@@ -25,7 +25,6 @@ class Logger (Supervisor):
     def run(self):
         # Init
         self.trajectory=self.get_trajectory(number_of_points=8,trajectory="Rectangular")
-        self.angle_list=self.get_angles()
         total_number_of_pedestrians=20
         min_number_of_pedestrian=5
         number_of_pedestrian=int(random.random()*(total_number_of_pedestrians-min_number_of_pedestrian))+min_number_of_pedestrian
@@ -34,6 +33,7 @@ class Logger (Supervisor):
         self.robot = self.getFromDef("ROBOT")
         self.translation = self.robot.getField("translation")
         self.rotation = self.robot.getField("rotation")
+        self.angle_list=self.get_angles()
         self.log()
         self.close_webots()
 
@@ -41,7 +41,7 @@ class Logger (Supervisor):
         HORIZONTAL_FOV = 57.29578
         #vector is the vector to be rotated
         vector = self.rotation.getSFRotation()
-        return [(self.to_axis_angle(i*HORIZONTAL_FOV,[0, 0, 1],vector),i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
+        return [(self.to_axis_angle(HORIZONTAL_FOV,[0, 0, 1],vector),i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
 
     # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
     # i_RUN = 1_SCAN @ 2_SCAN @ 3_SCAN @ ... @ 7_SCAN
@@ -63,7 +63,7 @@ class Logger (Supervisor):
                         for line in f.readlines():
                             observation=ast.literal_eval(line)
                             observations.append(observation)
-                    #TODO to do but Marco will do it
+
                     out.write(str(observations))
                     out.write("#")
                     x_odom,_,y_odom=self.translation.getSFVec3f() 
