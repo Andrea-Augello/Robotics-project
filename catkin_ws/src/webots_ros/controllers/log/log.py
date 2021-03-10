@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/env python
+import ast
 from controller import Supervisor
 from controller import Robot
 import random
@@ -8,7 +8,6 @@ import signal
 from subprocess import check_output
 import math
 from random import choice
-import matplotlib.pyplot as plt
 from numpy.random import random_sample
 
 
@@ -18,63 +17,81 @@ class Logger (Supervisor):
         self.time_step=1000
         self.sampling_period=2000
         self.robot_height=0.095
-        self.path="../../src/change_pkg/robot_position"
+        self.path="../../src/change_pkg/observations"
         Supervisor.__init__(self)
 
     def run(self):
         # Init
-        trajectory=self.get_trajectory()
-        angle_list=self.get_angles()
+        self.trajectory=self.get_trajectory(number_of_points=8,trajectory="Rectangular")
+        self.angle_list=self.get_angles()
         total_number_of_pedestrians=20
         min_number_of_pedestrian=5
         number_of_pedestrian=int(random.random()*(total_number_of_pedestrians-min_number_of_pedestrian))+min_number_of_pedestrian
         if not self.step(self.time_step) == -1:
-            self.set_pedestrians(number_of_pedestrian,total_number_of_pedestrians,trajectory)
+            self.pedestrian_list=self.set_pedestrians(number_of_pedestrian,total_number_of_pedestrians)
         self.robot = self.getFromDef("ROBOT")
         self.translation = self.robot.getField("translation")
         self.rotation = self.robot.getField("rotation")
+        self.log()
+        self.close_webots()
 
-        for x,y in trajectory:
-            self.translation.setSFVec3f([y,self.robot_height,x])    
-            for axis_angle in angle_list:
-                if self.step(self.time_step) == -1:
-                    quit()  
-                #self.rotation.setSFRotation(axis_angle)
-                rois=[]
-                with open('{}/robot_position.txt'.format(self.path), 'r') as f:
-                    for line in f.readlines():
-                        roi=self.parse_roi(line)
-                        rois.append(roi)
-                #TODO to do but Marco will do it                    
+    # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
+    # i_RUN = 1_SCAN @ 2_SCAN @ 3_SCAN @ ... @ 7_SCAN
+    # i_SCAN = OBSERVATIONS # ODOMETRY
+    def log(self):
+        with open('{}/output.txt'.format(self.path), 'a') as out:
+            ground_truth=self.pedestrian_list
+            out.write(str(ground_truth))
+
+            for x,y in self.trajectory:
+                out.write("|")
+                self.translation.setSFVec3f([x,self.robot_height,y])    
+                for i,(axis_angle,degree) in enumerate(self.angle_list):
+                    if self.step(self.time_step) == -1:
+                        quit()  
+                    #self.rotation.setSFRotation(axis_angle)
+                    observations=[]
+                    with open('{}/observations.txt'.format(self.path), 'r') as f:
+                        for line in f.readlines():
+                            observation=ast.literal_eval(line)
+                            observations.append(observation)
+                    #TODO to do but Marco will do it
+                    out.write(str(observations))
+                    out.write("#")
+                    x_odom,_,y_odom=self.translation.getSFVec3f() 
+                    out.write(str((x_odom,y_odom,degree)))
+                    if i!=len(self.angle_list)-1:
+                        out.write("@")
+            out.write("\n")
+
+                         
             
-            
 
-    def parse_roi(self,string_roi):
-        #TODO to do
-        return string_roi
 
-    def set_pedestrians(self,number_of_pedestrians,total_number_of_pedestrians,trajectory):
+    def set_pedestrians(self,number_of_pedestrians,total_number_of_pedestrians):
         x_room=10
         y_room=10
         pedestrian_list=[]
         for i in range(1,number_of_pedestrians+1):
             x=random.random()*(x_room-1)+0.5-x_room/2
             y=random.random()*(y_room-1)+0.5-y_room/2
-            while self.near(x,y,pedestrian_list+trajectory):
+            while self.near(x,y,pedestrian_list+self.trajectory):
                 x=random.random()*(x_room-1)+0.5-x_room/2
                 y=random.random()*(y_room-1)+0.5-y_room/2
             self.set_pedestrian_position(x,y,i)
+            pedestrian_list.append((x,y))
         for i in range(number_of_pedestrians+1,total_number_of_pedestrians+1):
             x=x_room+i+1
             y=y_room+i+1
-            self.set_pedestrian_position(x,y,i)   
+            self.set_pedestrian_position(x,y,i)
+        return pedestrian_list       
 
     def set_pedestrian_position(self,x,y,number):
         height=1.27
         name="pedestrian("+str(number)+")"
         node_ref = self.getFromDef(name)
         translation = node_ref.getField("translation")
-        translation.setSFVec3f([y,height,x])    
+        translation.setSFVec3f([x,height,y])    
             
 
     def near(self,x,y,pedestrian_list,tollerance=1):
@@ -88,45 +105,61 @@ class Logger (Supervisor):
         os.kill(pid, signal.SIGUSR1)
 
     def getRandomTrajectory(self):
-        num=random.randint(0,2)
-        if num == 0:
-            return "Square"
-        elif num == 1:
-            return "Circle"
-        elif num == 2:
-            return "Random"
+        trajectories=["Rectangular","Circle","Random"]
+        return random.choice(trajectories)
 
-    def get_trajectory(self,number_of_points=4):
-        trajectory=self.getRandomTrajectory()
+    def get_trajectory(self,x=2.5,y=-2.5,number_of_points=4,trajectory=None):
+        #TODO to fix square case
+        if trajectory==None:
+            trajectory=self.getRandomTrajectory()
         coordinates=[]
-        if trajectory == "Square":
-            a = 2.5
-            b = -2.5
+        if trajectory == "Rectangular":
+            #For starting bottom-right
+            x=abs(x)
+            y=-abs(y)  
+            h=2*x
+            w=2*abs(y)
+            perimeter=2*(h+w)
+            step=perimeter/number_of_points
+            x_current=x
+            y_current=y
 
-            plt.xlim((b,a))
-            plt.ylim((b,a))
+            while y_current<=-y:
+                coordinates.append((y_current,-x_current))
+                y_current+=step
+            x_current-=y_current+y
+            y_current=abs(y)    
+            while x_current>=-x:
+                coordinates.append((y_current,-x_current))
+                x_current-=step
+            y_current+=x_current+x
+            x_current=-x
+            while y_current>=y:
+                coordinates.append((y_current,-x_current))
+                y_current-=step
+            x_current-=y_current-y
+            y_current=y
+            while x_current<x:
+                coordinates.append((y_current,-x_current))
+                x_current+=step        
 
-            for i in range(number_of_points):
-                r = (b - a) * random_sample() + a
-                random_point = choice([(choice([a,b]), r),(r, choice([a,b]))])
-                coordinates.append((random_point[0],random_point[1]))
-        
             return coordinates 
         elif trajectory == "Random":
-            for i in range(number_of_points):
-                x=random.uniform(-2.5,2.5)
-                y=random.uniform(-2.5,2.5)
+            x_room=10
+            y_room=10
+            for _ in range(number_of_points):
+                x=random.random()*(x_room-1)+0.5-x_room/2
+                y=random.random()*(y_room-1)+0.5-y_room/2
                 coordinates.append((x,y))
-                
             return coordinates 
         elif trajectory == "Circle":
             # radius of the circle
-            circle_r = 2.5
+            circle_r = math.hypot(x,y)
             # center of the circle (x, y)
             circle_x = 0
             circle_y = 0
 
-            for i in range(number_of_points):
+            for _ in range(number_of_points):
                 # random angle
                 alpha = 2 * math.pi * random.random()
                 x = circle_r * math.cos(alpha) + circle_x
@@ -136,7 +169,7 @@ class Logger (Supervisor):
 
     def get_angles(self):
         HORIZONTAL_FOV = 57.29578
-        return [self.to_axis_angle(i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
+        return [(self.to_axis_angle(i*HORIZONTAL_FOV),i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
 
     def to_axis_angle(self,theta):
         #TODO to do

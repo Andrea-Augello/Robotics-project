@@ -22,7 +22,7 @@ class Change:
         self.controller = controller.Controller(self)
         self.path_planner = path_planning.Path_planner(self) 
 
-def get_data():
+def get_data_old():
     path_to_repo="/Users/marco/GitHub/Robotics-project"
     path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation_dark.txt"
     result=[]
@@ -35,7 +35,9 @@ def get_data():
             seeds={}
             observations={}
             # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
-            [ground_truth,run_1,run_2,run_3,run_4]=line.split("|")
+            run_list=line.split("|")
+            ground_truth=run_list.pop(0)
+            number_of_run=len(run_list)
             ground_truth=ast.literal_eval(ground_truth)
             clusters_ground_truth,list_of_dimension = clst.clustering(ground_truth, 
                     distance_measure=clst.math_distance,
@@ -44,7 +46,7 @@ def get_data():
                     dimensions=True)
             size_cluster_ground_truth+=sum(list_of_dimension)
             counter_cluster_ground_truth+=len(list_of_dimension)        
-            for i,r in enumerate([run_1,run_2,run_3,run_4]):
+            for i,r in enumerate(run_list):
                 # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
                 seed,observation,cluster,odometry = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
@@ -53,8 +55,51 @@ def get_data():
             result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
         average_cluster_size=size_cluster_ground_truth/counter_cluster_ground_truth
         average_cluster_number=counter_cluster_ground_truth/execution_number
-    return result,average_cluster_size,average_cluster_number
- 
+    return result,average_cluster_size,average_cluster_number,number_of_run
+
+def get_data():
+    path_to_repo="/Users/marco/GitHub/Robotics-project"
+    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/observations/output.txt"
+    result=[]
+    size_cluster_ground_truth=0
+    counter_cluster_ground_truth=0
+    execution_number=0
+    with open(path, 'r') as f:
+        for line in f:
+            execution_number+=1
+            observations={}
+            # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
+            run_list=line.split("|")
+            ground_truth=run_list.pop(0)
+            number_of_run=len(run_list)
+            ground_truth=ast.literal_eval(ground_truth)
+            clusters_ground_truth,list_of_dimension = clst.clustering(ground_truth, 
+                    distance_measure=clst.math_distance,
+                    min_samples=2,
+                    eps=2, 
+                    dimensions=True)
+            size_cluster_ground_truth+=sum(list_of_dimension)
+            counter_cluster_ground_truth+=len(list_of_dimension)        
+            for i,r in enumerate(run_list):
+                # i_RUN = 1_SCAN @ 2_SCAN @ 3_SCAN @ ... @ 7_SCAN
+                scan_list=r.split("@")
+                for j,s in enumerate(scan_list):
+                    # i_SCAN = OBSERVATIONS # ODOMETRY
+                    observation,odometry = s.split("#")
+                    if j==0:
+                        odom=ast.literal_eval(odometry)
+                        obs=ast.literal_eval(observation)
+                    else:
+                        obs+=(change_ref(ast.literal_eval(observation),ast.literal_eval(odometry),odom))    
+                observations[i+1]=(odom,obs)
+            result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
+        average_cluster_size=size_cluster_ground_truth/counter_cluster_ground_truth
+        average_cluster_number=counter_cluster_ground_truth/execution_number
+    return result,average_cluster_size,average_cluster_number,number_of_run
+
+def change_ref(point_list,center_initial,center_final):
+    #TODO function for trasform polar coordinates based on center_initial into polar coordinates based on center_final
+    return point_list 
 
 def print_clusters(clusters):
     for cluster in clusters:
@@ -65,15 +110,15 @@ def print_point_list(clusters):
         print("({:.2f},{:.2f})".format(cluster[0],cluster[1]),end=' ',flush=True)        
 
 def main():
-    true_positive={1:0,2:0,3:0,4:0}
-    false_positive={1:0,2:0,3:0,4:0}
-    false_negative={1:0,2:0,3:0,4:0}
-    true_negative={1:0,2:0,3:0,4:0}
-    false_negative_yolo={1:0,2:0,3:0,4:0}
-    counter_observation={1:0,2:0,3:0,4:0}
+    data,average_cluster_size,average_cluster_number,number_of_run=get_data()
+    true_positive={i+1:0 for i in range(number_of_run)}
+    false_positive={i+1:0 for i in range(number_of_run)}
+    false_negative={i+1:0 for i in range(number_of_run)}
+    true_negative={i+1:0 for i in range(number_of_run)}
+    false_negative_yolo={i+1:0 for i in range(number_of_run)}
+    counter_observation={i+1:0 for i in range(number_of_run)}
     counter_ground_truth=0
-    error_distance={1:[],2:[],3:[],4:[]}
-    data,average_cluster_size,average_cluster_number=get_data()
+    error_distance={i+1:[] for i in range(number_of_run)}
     #positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
     for execution in data:
         seeds={}
