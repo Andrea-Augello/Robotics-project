@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import ast
+import math
 import people_density as pd
 import odometry
 import controller
@@ -97,9 +98,10 @@ def get_data():
         average_cluster_number=counter_cluster_ground_truth/execution_number
     return result,average_cluster_size,average_cluster_number,number_of_run
 
-def change_ref(point_list,center_initial,center_final):
+def change_ref(point_list,point_initial,point_final):
     #TODO function for trasform polar coordinates based on center_initial into polar coordinates based on center_final
-    return point_list 
+
+    return [ abs_cartesian_to_polar( polar_to_abs_cartesian(p,point_initial),point_final) for p in point_list] 
 
 def print_clusters(clusters):
     for cluster in clusters:
@@ -229,6 +231,37 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
 
 def distance(point,point_list):
     return min([clst.math_distance(point,i) for i in point_list])
+
+
+def abs_cartesian_to_polar(p, odom):
+    """Accepts a point given in cartesian coordinates relative to the world
+    frame of reference and converts it to polar coordinates in the robot
+    frame of reference based on the current position estimate
+
+    :p:   Cartesian coordinates in the (x, y) format
+    :returns:  Cartesian coordinates in the (Rho, Theta) format
+
+    """
+    x = p[0] - odom[0]
+    y = p[1] - odom[1]
+    angle = -180/math.pi*math.atan2(x,y)-odom[2]
+    angle = angle if angle < 180 else angle -360
+    return (math.hypot(x,y), angle)
+
+
+def polar_to_abs_cartesian(p, odom):
+    """Accepts a point given in polar coordinates relative to the robot
+    frame of reference and converts it to cartesian coordinates in a wolrd
+    frame of reference based on the current position estimate
+
+    :p:   Polar coordinates in the (Rho, Theta) format
+    :returns:       Cartesian coordinates
+
+    """
+    angle=p[1]-odom[2]
+    return (odom[0]+p[0]*math.sin(math.pi*angle/180),
+            odom[1]+p[0]*math.cos(math.pi*angle/180))
+
 
 if __name__ == '__main__':
    main()  
