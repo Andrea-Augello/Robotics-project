@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.5798204981634455 0.5771903779462281 0.575029962276562 4.1957491332516526
-  position 0.240094655333968 23.78090619990756 -2.1445118777824086
+  orientation 0.5776567755050862 0.5771969549958951 0.5771969549958951 4.189249903239789
+  position 3.0591730397383713e-15 47.38081344516367 -8.260133111985155e-15
   follow "change"
   followType "None"
 }
@@ -13,7 +13,7 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 10 10
+  floorSize 17 17
   floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
@@ -21,205 +21,185 @@ RectangleArena {
   wallThickness 0.3
   wallHeight 3
 }
-DEF pedestrian(1) Pedestrian {
-  translation 2 1.29 4
+Pedestrian {
+  translation 1.92676 1.29 3.86683
   rotation 0 -1 0 -1.5707953071795862
-  name "pedestrian(1)"
 }
-DEF pedestrian(2) Pedestrian {
-  translation 2.1 1.29 2.09
-  rotation 0 -1 0 -1.5707953071795862
-  name "pedestrian(2)"
-}
-DEF pedestrian(3) Pedestrian {
-  translation -1.95308e-05 1.27 -3.32
-  rotation 0 1 0 -5.307179586466759e-06
-  name "pedestrian(3)"
-  shirtColor 0 0.448768 0
-}
-DEF pedestrian(4) Pedestrian {
-  translation 2.25998 1.27 -2.73
+Pedestrian {
+  translation -0.306239 1.27 -7.4404
   rotation 0 1 0 -5.307179586466759e-06
   name "pedestrian(4)"
   shirtColor 0 0.448768 0
 }
-DEF pedestrian(5) Pedestrian {
-  translation -4 1.27 -4
+Pedestrian {
+  translation -4.58 1.27 -4.60729
   rotation 0 -1 0 6.13667e-07
   name "pedestrian(5)"
   shirtColor 0 0.850233 0.855879
 }
-DEF pedestrian(6) Pedestrian {
-  translation -3.9 1.27 -3.9
-  rotation 0 -1 0 6.13667e-07
-  name "pedestrian(6)"
-  shirtColor 0 0.850233 0.855879
-}
-DEF pedestrian(7) Pedestrian {
-  translation -3.8 1.27 -3.8
-  rotation 0 -1 0 6.13667e-07
-  name "pedestrian(7)"
-  shirtColor 0 0.850233 0.855879
-}
-DEF pedestrian(8) Pedestrian {
-  translation -3.6999999999999997 1.27 -3.6999999999999997
-  rotation 0 -1 0 6.13667e-07
-  name "pedestrian(8)"
-  shirtColor 0 0.850233 0.855879
-}
-DEF pedestrian(9) Pedestrian {
-  translation -3.5999999999999996 1.27 -3.5999999999999996
-  rotation 0 -1 0 6.13667e-07
-  name "pedestrian(9)"
-  shirtColor 0 0.850233 0.855879
-}
-DEF pedestrian(10) Pedestrian {
-  translation -4 1.27 -3
-  rotation 0 1 0 3.14159
-  name "pedestrian(10)"
-  shirtColor 0.671351 0 0.652461
-  pantsColor 0.130205 0.135622 0.26186
-  shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(11) Pedestrian {
-  translation -3.9 1.27 -2.9
-  rotation 0 1 0 3.14159
-  name "pedestrian(11)"
-  shirtColor 0.671351 0 0.652461
-  pantsColor 0.130205 0.135622 0.26186
-  shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(12) Pedestrian {
-  translation -3.8 1.27 -2.8
-  rotation 0 1 0 3.14159
-  name "pedestrian(12)"
-  shirtColor 0.671351 0 0.652461
-  pantsColor 0.130205 0.135622 0.26186
-  shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(13) Pedestrian {
-  translation -3.6999999999999997 1.27 -2.6999999999999997
-  rotation 0 1 0 3.14159
-  name "pedestrian(13)"
-  shirtColor 0.671351 0 0.652461
-  pantsColor 0.130205 0.135622 0.26186
-  shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(14) Pedestrian {
-  translation -3.5999999999999996 1.27 -2.5999999999999996
-  rotation 0 1 0 3.14159
-  name "pedestrian(14)"
-  shirtColor 0.671351 0 0.652461
-  pantsColor 0.130205 0.135622 0.26186
-  shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(15) Pedestrian {
-  translation -2.06 1.27 1.06
-  rotation 0 1 0 3.14159
-  name "pedestrian(15)"
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(16) Pedestrian {
-  translation -1.96 1.27 2.08
-  rotation 0 1 0 3.14159
-  name "pedestrian(16)"
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(17) Pedestrian {
-  translation -1.8599999999999999 1.27 1.2600000000000002
-  rotation 0 1 0 3.14159
-  name "pedestrian(17)"
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(18) Pedestrian {
-  translation -3.24 1.27 4.02
-  rotation 0 1 0 3.14159
-  name "pedestrian(18)"
-  shirtColor 0.788479 0.967712 0.084123
-  pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
-}
-DEF pedestrian(19) Pedestrian {
-  translation 3 1.27 4
-  rotation 0 1 0 -1.5708053071795867
-  name "pedestrian(19)"
-  shirtColor 0.739193 0 0.0918135
-  shoesColor 1 0.999969 0.999985
-  skinColor 0.389014 0.297383 0.280034
-}
-DEF pedestrian(20) Pedestrian {
-  translation 2.75001 1.27 0.18
-  rotation 0 1 0 -1.5708053071795867
-  name "pedestrian(20)"
-  shirtColor 0.739193 0 0.0918135
-  shoesColor 1 0.999969 0.999985
-  skinColor 0.389014 0.297383 0.280034
-}
-DEF GOD Pedestrian {
-  translation 2.7501 1.27 -10.9
-  rotation 0 1 0 -1.5708053071795867
-  name "god"
-  controller "log"
+Pedestrian {
+  translation 5 1.27 -6
+  rotation 0 -1 0 6.53316937918704e-06
+  name "pedestrian(3)"
   controllerArgs [
-    ""
+    "--speed=0.4"
+    "--trajectory=5 -6,  5 5"
   ]
-  shirtColor 1 0.999969 0.999985
-  pantsColor 1 0.999969 0.999985
+  shirtColor 1 1 1
+  pantsColor 0.2 0.2 0.2
+  shoesColor 0 0 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation -4.63 1.27 -3.56477
+  rotation 0 1 0 3.14159
+  name "pedestrian(6)"
+  shirtColor 0.671351 0 0.652461
+  pantsColor 0.130205 0.135622 0.26186
+  shoesColor 1 0.85745 0
+  rightHandSlot [
+    Can {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation -4.66027 1.27 7.05799
+  rotation 0 1 0 3.14159
+  name "pedestrian(2)"
+  shirtColor 0.788479 0.967712 0.084123
+  pantsColor 0 0 0
+  leftHandSlot [
+    BeerBottle {
+      rotation 1 0 0 1.5708
+    }
+  ]
+}
+Pedestrian {
+  translation 7.10683 1.27 7.91489
+  rotation 0 1 0 -2.3561953071795863
+  name "pedestrian(1)"
+  shirtColor 0.972793 0.592737 0
   shoesColor 1 0.999969 0.999985
   skinColor 0.389014 0.297383 0.280034
 }
-DEF ROBOT TiagoIron {
-  translation -2.5 0.095 -2.5
-  rotation -0.9351339294067424 -0.25056798108462386 -0.25047998109126696 1.63816
+Pedestrian {
+  translation 2.9718 1.27 3.85621
+  rotation 0 1 0 -1.5708053071795867
+  name "pedestrian(7)"
+  shirtColor 0.739193 0 0.0918135
+  shoesColor 1 0.999969 0.999985
+  skinColor 0.389014 0.297383 0.280034
+}
+Sofa {
+  translation -7.88569 0 -0.061064
+  color 0.3 0.04 0.0005
+  physics Physics {
+    density 100
+  }
+}
+Armchair {
+  translation -6.58 0 -2.1
+  rotation 0 1 0 -1.5707953071795862
+  color 0.3 0.04 0.0005
+}
+Armchair {
+  translation -6.58 0 2
+  rotation 0 1 0 1.5708
+  name "armchair(1)"
+  color 0.3 0.04 0.0005
+}
+PottedTree {
+  translation -7.69 0 -7.94
+}
+PottedTree {
+  translation -7.69 0 7.98
+  name "potted tree(1)"
+}
+Table {
+  translation -5.2 -0.3 0
+  rotation 0 1 0 -1.5707953071795862
+}
+LandscapePainting {
+  translation -1.12243e-05 1.61 8.5
+  rotation 0 1 0 3.14159
+}
+Clock {
+  translation -8.47 2.03 1.81093e-05
+  rotation 0 1 0 1.5708
+}
+Television {
+  translation -4.87 0.76 1.27474e-06
+  rotation 0 1 0 -1.5707953071795862
+}
+RoundTable {
+}
+Solid {
+  translation 0 0.87 0.8
+  children [
+    DEF Sanitizer_shape Shape {
+      appearance DEF Sanitizer_appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.2
+        radius 0.05
+      }
+    }
+    Solid {
+      translation 0 0.1 0
+      children [
+        DEF Ejection_tube_shape Shape {
+          appearance USE Sanitizer_appearance
+          geometry Cylinder {
+            height 0.07
+            radius 0.01
+          }
+        }
+        Solid {
+          translation 0 0.04 0.05
+          rotation 1 0 0 -1.5707953071795862
+          children [
+            DEF Ejection_tube_oriz_shape Shape {
+              appearance USE Sanitizer_appearance
+              geometry Cylinder {
+                height 0.15
+                radius 0.01
+              }
+            }
+          ]
+          boundingObject USE Ejection_tube_oriz_shape
+        }
+      ]
+    }
+  ]
+  boundingObject DEF Sanitizer_shape Shape {
+    appearance DEF Sanitizer_appearance PBRAppearance {
+      metalness 0
+    }
+    geometry Cylinder {
+      height 0.2
+      radius 0.05
+    }
+  }
+  physics Physics {
+  }
+}
+FruitBowl {
+  translation 0 0.759803 0
+}
+Apple {
+  translation 0 0.819508 0
+}
+TiagoIron {
+  translation -2.55 0.095 -2
+  rotation 0.9997397762563311 0.015803042241100698 0.01645125000924864 -1.5711437638017518
   name "change"
-  controller "camera_recording"
+  controller "ros"
   controllerArgs [
     "--name=change"
     "--clock"
@@ -290,7 +270,7 @@ DEF ROBOT TiagoIron {
     }
   ]
   cameraSlot [
-    DEF CAMERA Camera {
+    Camera {
       rotation 0 1 0 -1.5707996938995747
       fieldOfView 1
       width 640
@@ -310,4 +290,43 @@ DEF ROBOT TiagoIron {
       }
     }
   ]
+}
+Solid {
+  translation -5.2 0.2 0
+  rotation 0 1 0 1.5707996938995747
+  children [
+    DEF Tablecloth_shape Shape {
+      appearance DEF Tablecloth_appearance PBRAppearance {
+        baseColor 0.05 0.38 0.05
+        transparency 0.3
+        metalness 0
+      }
+      geometry Box {
+        size 1.83 0.5 1.03
+      }
+    }
+  ]
+  name "solid(2)"
+  boundingObject USE Tablecloth_shape
+}
+Solid {
+  translation 0 0.42 0
+  children [
+    DEF Cylinder_shape Shape {
+      appearance USE Tablecloth_appearance
+      geometry Cylinder {
+        height 0.7
+        radius 1.01
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE Cylinder_shape
+}
+Radiator {
+  translation -4.1 0.61 -8.37
+  rotation 0 1 0 -1.5707953071795862
+}
+Door {
+  translation 2.36 0 -8.69
 }
