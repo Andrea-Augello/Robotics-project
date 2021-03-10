@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import ast
 from controller import Supervisor
 from controller import Robot
@@ -36,6 +36,12 @@ class Logger (Supervisor):
         self.rotation = self.robot.getField("rotation")
         self.log()
         self.close_webots()
+
+    def get_angles(self):
+        HORIZONTAL_FOV = 57.29578
+        #vector is the vector to be rotated
+        vector = self.rotation.getSFRotation()
+        return [(self.to_axis_angle(i*HORIZONTAL_FOV,[0, 0, 1],vector),i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
 
     # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
     # i_RUN = 1_SCAN @ 2_SCAN @ 3_SCAN @ ... @ 7_SCAN
@@ -168,11 +174,6 @@ class Logger (Supervisor):
                 y = circle_r * math.sin(alpha) + circle_y
                 coordinates.append((x,y))
             return coordinates
-
-    def get_angles(self):
-        HORIZONTAL_FOV = 57.29578
-        #vector is the vector to be rotated
-        return [(self.to_axis_angle(i*HORIZONTAL_FOV,[0, 0, 1],vector),i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
     
     def rotation_matrix(self,axis,theta):
         """
