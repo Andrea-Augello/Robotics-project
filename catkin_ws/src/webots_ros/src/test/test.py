@@ -99,8 +99,6 @@ def get_data():
     return result,average_cluster_size,average_cluster_number,number_of_run
 
 def change_ref(point_list,point_initial,point_final):
-    #TODO function for trasform polar coordinates based on center_initial into polar coordinates based on center_final
-
     return [ abs_cartesian_to_polar( polar_to_abs_cartesian(p,point_initial),point_final) for p in point_list] 
 
 def print_clusters(clusters):
