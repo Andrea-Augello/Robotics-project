@@ -6,9 +6,11 @@ import random
 import os
 import signal
 from subprocess import check_output
-import math
 from random import choice
 from numpy.random import random_sample
+import numpy as np
+import math
+
 
 
 class Logger (Supervisor):
@@ -169,15 +171,30 @@ class Logger (Supervisor):
 
     def get_angles(self):
         HORIZONTAL_FOV = 57.29578
-        return [(self.to_axis_angle(i*HORIZONTAL_FOV),i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
+        #vector is the vector to be rotated
+        return [(self.to_axis_angle(i*HORIZONTAL_FOV,[0, 0, 1],vector),i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
+    
+    def rotation_matrix(self,axis,theta):
+        """
+        Return the rotation matrix associated with counterclockwise rotation about
+        the given axis by theta radians.
+        """
+        axis = np.asarray(axis)
+        axis = axis / math.sqrt(np.dot(axis, axis))
+        a = math.cos(theta / 2.0)
+        b, c, d = -axis * math.sin(theta / 2.0)
+        aa, bb, cc, dd = a * a, b * b, c * c, d * d
+        bc, ad, ac, ab, bd, cd = b * c, a * d, a * c, a * b, b * d, c * d
+        return np.array([[aa + bb - cc - dd, 2 * (bc + ad), 2 * (bd - ac)],
+                        [2 * (bc - ad), aa + cc - bb - dd, 2 * (cd + ab)],
+                        [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc]])
 
-    def to_axis_angle(self,theta):
-        #TODO to do
-        x=0
-        y=0
-        z=0
-        angle=1
-        return (x,y,z,angle)
+    def to_axis_angle(self,theta,axis,vector):
+        # We transform theta into radians
+        rad_theta=math.radians(theta / math.pi)
+        rotated_vector = np.dot(self.rotation_matrix(axis, rad_theta), vector)
+        # It returns the rotated vector
+        return rotated_vector
 
     
 controller = Logger()
