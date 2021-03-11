@@ -80,11 +80,6 @@ DEF pedestrian(10) Pedestrian {
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(11) Pedestrian {
   translation -3.9 1.27 -2.9
@@ -93,11 +88,6 @@ DEF pedestrian(11) Pedestrian {
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(12) Pedestrian {
   translation -3.8 1.27 -2.8
@@ -106,11 +96,6 @@ DEF pedestrian(12) Pedestrian {
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(13) Pedestrian {
   translation -3.6999999999999997 1.27 -2.6999999999999997
@@ -119,11 +104,6 @@ DEF pedestrian(13) Pedestrian {
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(14) Pedestrian {
   translation -3.5999999999999996 1.27 -2.5999999999999996
@@ -132,11 +112,6 @@ DEF pedestrian(14) Pedestrian {
   shirtColor 0.671351 0 0.652461
   pantsColor 0.130205 0.135622 0.26186
   shoesColor 1 0.85745 0
-  rightHandSlot [
-    Can {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(15) Pedestrian {
   translation -2.06 1.27 1.06
@@ -144,11 +119,6 @@ DEF pedestrian(15) Pedestrian {
   name "pedestrian(15)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(16) Pedestrian {
   translation -1.96 1.27 2.08
@@ -156,11 +126,6 @@ DEF pedestrian(16) Pedestrian {
   name "pedestrian(16)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(17) Pedestrian {
   translation -1.8599999999999999 1.27 1.2600000000000002
@@ -168,11 +133,6 @@ DEF pedestrian(17) Pedestrian {
   name "pedestrian(17)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(18) Pedestrian {
   translation -3.24 1.27 4.02
@@ -180,11 +140,6 @@ DEF pedestrian(18) Pedestrian {
   name "pedestrian(18)"
   shirtColor 0.788479 0.967712 0.084123
   pantsColor 0 0 0
-  leftHandSlot [
-    BeerBottle {
-      rotation 1 0 0 1.5708
-    }
-  ]
 }
 DEF pedestrian(19) Pedestrian {
   translation 3 1.27 4
@@ -195,7 +150,7 @@ DEF pedestrian(19) Pedestrian {
   skinColor 0.389014 0.297383 0.280034
 }
 DEF pedestrian(20) Pedestrian {
-  translation 2.75001 1.27 0.18
+  translation 2.68001 1.27 0.18
   rotation 0 1 0 -1.5708053071795867
   name "pedestrian(20)"
   shirtColor 0.739193 0 0.0918135
