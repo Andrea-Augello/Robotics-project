@@ -40,8 +40,8 @@ class Logger (Supervisor):
     def get_angles(self):
         HORIZONTAL_FOV = 57.29578
         #vector is the vector to be rotated
-        vector = self.rotation.getSFRotation()
-        return [(self.to_axis_angle(HORIZONTAL_FOV,[0, 0, 1],vector),i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
+        positions=[[0.999739,0.0159636,0.0163143,-1.57115],[0.751273,0.469033,0.464324,-1.85722],[0.334565,0.667315,0.6654,-2.50393],[-0.0187401,0.70677,0.707196,3.09461],[0.376469,-0.653616,-0.656549,-2.41382],[0.776892,-0.442587,-0.447834,-1.81736],[0.999336,-0.0221419,-0.0289468,-1.57169]]
+        return [(positions[i],i*HORIZONTAL_FOV) for i in range(int(math.ceil(360/HORIZONTAL_FOV)))]
 
     # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
     # i_RUN = 1_SCAN @ 2_SCAN @ 3_SCAN @ ... @ 7_SCAN
@@ -57,7 +57,7 @@ class Logger (Supervisor):
                 for i,(axis_angle,degree) in enumerate(self.angle_list):
                     if self.step(self.time_step) == -1:
                         quit()  
-                    #self.rotation.setSFRotation(axis_angle)
+                    self.rotation.setSFRotation(axis_angle)
                     observations=[]
                     with open('{}/observations.txt'.format(self.path), 'r') as f:
                         for line in f.readlines():
@@ -174,28 +174,6 @@ class Logger (Supervisor):
                 y = circle_r * math.sin(alpha) + circle_y
                 coordinates.append((x,y))
             return coordinates
-    
-    def rotation_matrix(self,axis,theta):
-        """
-        Return the rotation matrix associated with counterclockwise rotation about
-        the given axis by theta radians.
-        """
-        axis = np.asarray(axis)
-        axis = axis / math.sqrt(np.dot(axis, axis))
-        a = math.cos(theta / 2.0)
-        b, c, d = -axis * math.sin(theta / 2.0)
-        aa, bb, cc, dd = a * a, b * b, c * c, d * d
-        bc, ad, ac, ab, bd, cd = b * c, a * d, a * c, a * b, b * d, c * d
-        return np.array([[aa + bb - cc - dd, 2 * (bc + ad), 2 * (bd - ac)],
-                        [2 * (bc - ad), aa + cc - bb - dd, 2 * (cd + ab)],
-                        [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc]])
-
-    def to_axis_angle(self,theta,axis,vector):
-        # We transform theta into radians
-        rad_theta=math.radians(theta / math.pi)
-        rotated_vector = np.dot(self.rotation_matrix(axis, rad_theta), vector)
-        # It returns the rotated vector
-        return rotated_vector
 
     
 controller = Logger()
