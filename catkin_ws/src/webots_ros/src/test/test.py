@@ -67,6 +67,7 @@ def get_data():
     execution_number=0
     with open(path, 'r') as f:
         for line in f:
+            line=line[:-1]
             execution_number+=1
             observations={}
             # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
@@ -91,7 +92,7 @@ def get_data():
                         odom=ast.literal_eval(odometry)
                         obs=ast.literal_eval(observation)
                     else:
-                        obs+=(change_ref(ast.literal_eval(observation),ast.literal_eval(odometry),odom))    
+                        obs+=change_ref(ast.literal_eval(observation),ast.literal_eval(odometry),odom)   
                 observations[i+1]=(odom,obs)
             result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
         average_cluster_size=size_cluster_ground_truth/counter_cluster_ground_truth
@@ -99,7 +100,7 @@ def get_data():
     return result,average_cluster_size,average_cluster_number,number_of_run
 
 def change_ref(point_list,point_initial,point_final):
-    return [ abs_cartesian_to_polar( polar_to_abs_cartesian(p,point_initial),point_final) for p in point_list] 
+    return [ (p[0],-p[1]+point_initial[2]%360) for p in point_list] 
 
 def print_clusters(clusters):
     for cluster in clusters:
@@ -159,7 +160,7 @@ def main():
 
             #robot.path_planner.set_target(cluster_dict)
             #people_density.draw_heat_map_inverted_centroids(clusters_targets)
-        #draw_clusters_all_run(execution['ground_truth'],observations_cartesian,clusters_ground_truth,seeds,clusters)
+        draw_clusters_all_run(execution['ground_truth'],observations_cartesian,clusters_ground_truth,seeds,clusters)
     
     report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
 
@@ -203,9 +204,11 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
     y_g=[i[1] for i in ground_truth]
     x_c_g=[i[0] for i in centroid_ground_truth]
     y_c_g=[i[1] for i in centroid_ground_truth]
-    fig, ax = plt.subplots(2, 2, figsize=(8, 8))
+    a=3
+    b=3
+    fig, ax = plt.subplots(a, b, figsize=(8, 8))
     fig.suptitle(title)
-    positions=[[],[0,0],[0,1],[1,0],[1,1]]
+    positions=[[],[0,0],[0,1],[1,0],[1,1],[2,0],[2,1],[1,2],[2,2]]
     for i, values in seeds.items():
         x_c=[k[0] for k in centroids[i]]
         y_c=[k[1] for k in centroids[i]]
