@@ -208,7 +208,7 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
     b=3
     fig, ax = plt.subplots(a, b, figsize=(8, 8))
     fig.suptitle(title)
-    positions=[[],[0,0],[0,1],[1,0],[1,1],[2,0],[2,1],[1,2],[2,2]]
+    positions=[[],[2,0],[1,0],[0,0],[0,1],[0,2],[1,2],[2,2],[2,1]]
     for i, values in seeds.items():
         x_c=[k[0] for k in centroids[i]]
         y_c=[k[1] for k in centroids[i]]
@@ -225,7 +225,6 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
         ax[kx,ky].scatter(x_s,y_s, color="g", s=50)
         ax[kx,ky].scatter(x_g,y_g, color="b", s=30)
         ax[kx,ky].scatter(x_o,y_o, color="k", s=20)
-        
         ax[kx,ky].invert_xaxis()
     ax[1,1].legend(('Ground Truth centroids', 'Centroids', 'Seeds','Ground Truth','Observations'),bbox_to_anchor=(0.5, 0.5))    
     plt.show()    
