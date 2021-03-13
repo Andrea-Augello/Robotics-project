@@ -13,6 +13,10 @@ from statistics import mean
 
 show_map=False
 show_points=True
+webots_characterization=True
+path_to_repo="/Users/marco/GitHub/Robotics-project"
+path_to_folder=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/observations"
+path=path_to_folder+"/output.txt"
 
 class Change:
     def __init__(self):
@@ -27,8 +31,6 @@ class Change:
         self.path_planner = path_planning.Path_planner(self) 
 
 def get_data_old():
-    path_to_repo="/Users/marco/GitHub/Robotics-project"
-    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation_dark.txt"
     result=[]
     size_cluster_ground_truth=0
     counter_cluster_ground_truth=0
@@ -62,8 +64,6 @@ def get_data_old():
     return result,average_cluster_size,average_cluster_number,number_of_run
 
 def get_data():
-    path_to_repo="/Users/marco/GitHub/Robotics-project"
-    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/observations/output.txt"
     result=[]
     size_cluster_ground_truth=0
     counter_cluster_ground_truth=0
@@ -144,6 +144,27 @@ def main():
         counter_ground_truth+=len(ground_truth)
         robot = Change()
         people_density = pd.GridMap(robot)
+
+        #WEBOTS CHARACTERIZATION
+        if webots_characterization:
+            path_webots_characterization=path_to_folder+"/webots_characterization.txt"
+            with open(path_webots_characterization, 'w') as f:
+                for (odometry,observation) in execution['observations'].values():
+                    for o in observation:
+                        distance_observed=o[0]
+                        observation_cartesian=polar_to_abs_cartesian(o,odometry)
+                        gt=ground_truth[0]
+                        
+                        min_dist=clst.math_distance(gt,observation_cartesian)
+                        for g in ground_truth:
+                            d=clst.math_distance(g,observation_cartesian)
+                            if d<min_dist:
+                                min_dist=d
+                                gt=g       
+                        distance_ground_truth=clst.math_distance((odometry[0],odometry[1]),gt)
+                        f.write("{:.8f}\t{:.8f}\n".format(distance_observed,distance_ground_truth))
+
+
         for run,(odometry,observation) in execution['observations'].items():
             counter_observation[run]+=len(observation)
             robot.odometry.update(odometry)
