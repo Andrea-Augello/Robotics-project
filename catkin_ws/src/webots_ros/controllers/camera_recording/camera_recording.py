@@ -3,7 +3,7 @@ from controller import Robot, Camera
 import math 
 
 def main():
-    TIME_STEP = 32
+    TIME_STEP = 16
     robot = Robot()
     camera = robot.getCamera("camera")
     camera.enable(TIME_STEP)

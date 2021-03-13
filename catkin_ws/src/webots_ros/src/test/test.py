@@ -11,6 +11,9 @@ import clustering as clst
 import matplotlib.pyplot as plt
 from statistics import mean
 
+show_map=False
+show_points=False
+
 class Change:
     def __init__(self):
         self.name = 'change'
@@ -64,6 +67,8 @@ def get_data():
     result=[]
     size_cluster_ground_truth=0
     counter_cluster_ground_truth=0
+    average_cluster_size=0
+    average_cluster_number=0
     execution_number=0
     with open(path, 'r') as f:
         for line in f:
@@ -75,6 +80,7 @@ def get_data():
             ground_truth=run_list.pop(0)
             number_of_run=len(run_list)
             ground_truth=ast.literal_eval(ground_truth)
+            ground_truth=[(gt[1],gt[0]) for gt in ground_truth]
             clusters_ground_truth,list_of_dimension = clst.clustering(ground_truth, 
                     distance_measure=clst.math_distance,
                     min_samples=2,
@@ -92,11 +98,13 @@ def get_data():
                         odom=ast.literal_eval(odometry)
                         obs=ast.literal_eval(observation)
                     else:
-                        obs+=change_ref(ast.literal_eval(observation),ast.literal_eval(odometry),odom)   
+                        obs+=change_ref(ast.literal_eval(observation),ast.literal_eval(odometry),odom)
                 observations[i+1]=(odom,obs)
             result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
-        average_cluster_size=size_cluster_ground_truth/counter_cluster_ground_truth
-        average_cluster_number=counter_cluster_ground_truth/execution_number
+        if counter_cluster_ground_truth>0:    
+            average_cluster_size=size_cluster_ground_truth/counter_cluster_ground_truth
+        if execution_number>0:    
+            average_cluster_number=counter_cluster_ground_truth/execution_number
     return result,average_cluster_size,average_cluster_number,number_of_run
 
 def change_ref(point_list,point_initial,point_final):
@@ -134,8 +142,10 @@ def main():
             counter_observation[run]+=len(observation)
             robot.odometry.update(odometry)
             #observation=[robot.odometry.abs_cartesian_to_polar(i) for i in observation]
-            observation=[i for i in observation if in_room(robot.odometry.polar_to_abs_cartesian(i))]
-            observations_cartesian[run]=[robot.odometry.polar_to_abs_cartesian(i) for i in observation]
+            #observation=[in_room(robot.odometry.polar_to_abs_cartesian(i)) for i in observation]
+            
+            observation=[i for i in observation if in_room(polar_to_abs_cartesian(i,odometry))]
+            observations_cartesian[run]=[polar_to_abs_cartesian(i,odometry) for i in observation]
             cluster_dict,clusters_targets,s=people_density.observation_update(observation)
             seeds[run]=s
             error_distance[run]+=[distance(j,ground_truth)for j in seeds[run]]
@@ -159,8 +169,10 @@ def main():
                     true_negative[run]+=1 
 
             #robot.path_planner.set_target(cluster_dict)
-            #people_density.draw_heat_map_inverted_centroids(clusters_targets)
-        draw_clusters_all_run(execution['ground_truth'],observations_cartesian,clusters_ground_truth,seeds,clusters)
+            if show_map:
+                people_density.draw_heat_map_inverted_centroids(clusters_targets) 
+        if show_points:
+            draw_clusters_all_run(execution['ground_truth'],observations_cartesian,clusters_ground_truth,seeds,clusters)
     
     report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number)
 
@@ -169,6 +181,13 @@ def has_near(point,point_list,tollerance=1):
         if clst.math_distance(p,point)<tollerance:
             return True
     return False
+
+def only_in_room(point):
+    x_inf=-5
+    x_sup=5
+    y_inf=-5
+    y_sup=5
+    return (min(max(x_inf,point[0]),x_sup),min(max(y_inf,point[1]),y_sup))
 
 def in_room(point):
     x_inf=-5
@@ -206,7 +225,7 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
     y_c_g=[i[1] for i in centroid_ground_truth]
     a=3
     b=3
-    fig, ax = plt.subplots(a, b, figsize=(8, 8))
+    fig, ax = plt.subplots(a, b, figsize=(9, 9))
     fig.suptitle(title)
     positions=[[],[2,0],[1,0],[0,0],[0,1],[0,2],[1,2],[2,2],[2,1]]
     for i, values in seeds.items():
@@ -218,6 +237,8 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
         y_s=[i[1] for i in values]
         kx,ky=positions[i]
         ax[kx,ky].axis("equal")
+        ax[kx,ky].set_xlim(-5,5)
+        ax[kx,ky].set_ylim(-5,5)
         ax[kx,ky].set_xlabel('Position (m)')
         ax[kx,ky].set_ylabel('Position (m)')
         ax[kx,ky].scatter(x_c_g,y_c_g, color="y", s=100)
@@ -225,7 +246,7 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
         ax[kx,ky].scatter(x_s,y_s, color="g", s=50)
         ax[kx,ky].scatter(x_g,y_g, color="b", s=30)
         ax[kx,ky].scatter(x_o,y_o, color="k", s=20)
-        ax[kx,ky].invert_xaxis()
+        #ax[kx,ky].invert_xaxis()
     ax[1,1].legend(('Ground Truth centroids', 'Centroids', 'Seeds','Ground Truth','Observations'),bbox_to_anchor=(0.5, 0.5))    
     plt.show()    
 
@@ -259,8 +280,8 @@ def polar_to_abs_cartesian(p, odom):
 
     """
     angle=p[1]-odom[2]
-    return (odom[0]+p[0]*math.sin(math.pi*angle/180),
-            odom[1]+p[0]*math.cos(math.pi*angle/180))
+    return (odom[1]+p[0]*math.sin(math.pi*angle/180),
+            odom[0]+p[0]*math.cos(math.pi*angle/180))
 
 
 if __name__ == '__main__':

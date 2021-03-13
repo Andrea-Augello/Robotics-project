@@ -10,6 +10,7 @@ from random import choice
 from numpy.random import random_sample
 import numpy as np
 import math
+import time
 
 
 
@@ -26,8 +27,9 @@ class Logger (Supervisor):
         # Init
         self.trajectory=self.get_trajectory(number_of_points=8,trajectory="Rectangular")
         total_number_of_pedestrians=20
-        min_number_of_pedestrian=5
-        number_of_pedestrian=int(random.random()*(total_number_of_pedestrians-min_number_of_pedestrian))+min_number_of_pedestrian
+        max_number_of_pedestrian=10
+        min_number_of_pedestrian=4
+        number_of_pedestrian=int(random.random()*(max_number_of_pedestrian-min_number_of_pedestrian))+min_number_of_pedestrian
         if not self.step(self.time_step) == -1:
             self.pedestrian_list=self.set_pedestrians(number_of_pedestrian,total_number_of_pedestrians)
         self.robot = self.getFromDef("ROBOT")
@@ -55,15 +57,16 @@ class Logger (Supervisor):
                 out.write("|")
                 self.translation.setSFVec3f([x,self.robot_height,y])    
                 for i,(axis_angle,degree) in enumerate(self.angle_list):
-                    if self.step(self.time_step) == -1:
-                        quit()  
                     self.rotation.setSFRotation(axis_angle)
+                    if self.step(self.time_step) == -1:
+                        quit()
+                    time.sleep(0.5)
                     observations=[]
                     with open('{}/observations.txt'.format(self.path), 'r') as f:
                         for line in f.readlines():
                             observation=ast.literal_eval(line)
                             observations.append(observation)
-
+                    time.sleep(0.5)        
                     out.write(str(observations))
                     out.write("#")
                     x_odom,_,y_odom=self.translation.getSFVec3f() 

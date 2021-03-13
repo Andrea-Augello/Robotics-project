@@ -69,8 +69,8 @@ class Odometry:
 
         """
         angle=p[1]-self.theta
-        return (self.x+p[0]*math.sin(math.pi*angle/180),
-                self.y+p[0]*math.cos(math.pi*angle/180))
+        return (self.y+p[0]*math.sin(math.pi*angle/180),
+                self.x+p[0]*math.cos(math.pi*angle/180))
 
 
     def __str__(self):
