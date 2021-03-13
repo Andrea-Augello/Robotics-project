@@ -97,7 +97,6 @@ def get_data():
                     data_pedestrian,odometry = s.split("#")
                     data_pedestrian=ast.literal_eval(data_pedestrian)
                     odometry=ast.literal_eval(odometry)
-                    print(data_pedestrian)
                     observation=[i[1] for i in data_pedestrian if i[0] not in ids]
                     for k in data_pedestrian:
                         ids.add(k[0]) 
