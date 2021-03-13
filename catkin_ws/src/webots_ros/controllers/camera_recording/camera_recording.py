@@ -11,8 +11,8 @@ def main():
     while robot.step(TIME_STEP) != -1:
         objects=camera.getRecognitionObjects() 
         objects=[RecognitionObject(i.get_id(),i.get_position(),i.get_orientation(),i.get_size(),i.get_position_on_image(),i.get_size_on_image(),i.get_number_of_colors(),i.get_colors(),str(i.get_model())) for i in objects]
-        positions=[get_seed_from_object(o) for o in objects if "pedestrian" in o.model] #if o.model=="pedestrian"
-        polar_positions=[abs_cartesian_to_polar(p) for p in positions]
+        positions=[(o.id_object,o.position) for o in objects if "pedestrian" in o.model] #if o.model=="pedestrian"
+        polar_positions=[(i,abs_cartesian_to_polar(p)) for (i,p) in positions]
         write(polar_positions)
         
 def get_seed_from_object(recognition_object):
@@ -41,8 +41,8 @@ def abs_cartesian_to_polar(p):
                     
 
 class RecognitionObject():
-    def __init__(self,id,position,orientation,size,position_on_image,size_on_image,number_of_colors,colors,model):
-        self.id=id
+    def __init__(self,id_object,position,orientation,size,position_on_image,size_on_image,number_of_colors,colors,model):
+        self.id_object=id_object
         self.position=position
         self.orientation=orientation
         self.size=size

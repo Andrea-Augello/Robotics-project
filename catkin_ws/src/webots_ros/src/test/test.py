@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from statistics import mean
 
 show_map=False
-show_points=False
+show_points=True
 
 class Change:
     def __init__(self):
@@ -91,14 +91,21 @@ def get_data():
             for i,r in enumerate(run_list):
                 # i_RUN = 1_SCAN @ 2_SCAN @ 3_SCAN @ ... @ 7_SCAN
                 scan_list=r.split("@")
+                ids=set()
                 for j,s in enumerate(scan_list):
                     # i_SCAN = OBSERVATIONS # ODOMETRY
-                    observation,odometry = s.split("#")
+                    data_pedestrian,odometry = s.split("#")
+                    data_pedestrian=ast.literal_eval(data_pedestrian)
+                    odometry=ast.literal_eval(odometry)
+                    print(data_pedestrian)
+                    observation=[i[1] for i in data_pedestrian if i[0] not in ids]
+                    for k in data_pedestrian:
+                        ids.add(k[0]) 
                     if j==0:
-                        odom=ast.literal_eval(odometry)
-                        obs=ast.literal_eval(observation)
+                        odom=odometry
+                        obs=observation
                     else:
-                        obs+=change_ref(ast.literal_eval(observation),ast.literal_eval(odometry),odom)
+                        obs+=change_ref(observation,odometry,odom)
                 observations[i+1]=(odom,obs)
             result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
         if counter_cluster_ground_truth>0:    
