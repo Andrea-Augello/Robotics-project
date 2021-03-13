@@ -111,7 +111,7 @@ class GridMap:
 
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
-        noise = 0.00001/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
+        noise = 0.0000005/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
         self.data = gaussian_filter(self.data, sigma=2.5)
         if len(z):
             for ix in range(self.x_w):
@@ -156,7 +156,7 @@ class GridMap:
         #var = multivariate_normal(mean=[o_distance,0], cov=[[2,0],[0,10]])
         #return (var.pdf([p_distance,(o_angle-p_angle)%360]))
         return max( 0.2, 
-                1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/16)**4))
+                1/(1+math.hypot( (o_distance-p_distance)/1.0, (angle_diff*o_distance)/24)**4))
 
     def matrix_to_img(self,matrix):
         im = np.array(matrix)
