@@ -14,6 +14,7 @@ from statistics import mean
 show_map=False
 show_points=False
 webots_characterization=False
+print_percentage=True
 path_to_repo="/Users/marco/GitHub/Robotics-project"
 path_to_folder=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/observations"
 path=path_to_folder+"/output.txt"
@@ -142,6 +143,11 @@ def main():
     counter_ground_truth=0
     error_distance={i+1:[] for i in range(number_of_run)}
     error_distance_old={i+1:[] for i in range(number_of_run)}
+    percentage=0
+    path_webots_characterization=path_to_folder+"/webots_characterization.csv"
+    if webots_characterization:    
+        with open(path_webots_characterization, 'w') as f:
+            f.write("detected,\tground_truth\n")
     #positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
     for execution in data:
         seeds={}
@@ -153,11 +159,13 @@ def main():
         counter_ground_truth+=len(ground_truth)
         robot = Change()
         people_density = pd.GridMap(robot)
+        if print_percentage:
+            print("{:.2f}%".format(percentage))
+            percentage+=100/len(data)
 
         #WEBOTS CHARACTERIZATION
         if webots_characterization:
-            path_webots_characterization=path_to_folder+"/webots_characterization.txt"
-            with open(path_webots_characterization, 'w') as f:
+            with open(path_webots_characterization, 'a') as f:
                 for (odometry,observation) in execution['observations'].values():
                     for o in observation:
                         distance_observed=o[0]
@@ -171,7 +179,7 @@ def main():
                                 min_dist=d
                                 gt=g       
                         distance_ground_truth=clst.math_distance((odometry[0],odometry[1]),gt)
-                        f.write("{:.8f}\t{:.8f}\n".format(distance_observed,distance_ground_truth))
+                        f.write("{:.8f},\t{:.8f}\n".format(distance_observed,distance_ground_truth))
 
 
         for run,(odometry,observation) in execution['observations'].items():
