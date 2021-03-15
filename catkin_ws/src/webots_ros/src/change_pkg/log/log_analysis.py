@@ -22,7 +22,6 @@ def main():
     counter_ground_truth=0
     size_cluster_ground_truth=0
     counter_cluster_ground_truth=0
-    positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
     error_distance_old={1:[],2:[],3:[],4:[]}
     error_distance={1:[],2:[],3:[],4:[]}
     execution_number=0
