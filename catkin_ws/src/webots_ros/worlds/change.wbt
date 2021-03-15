@@ -142,7 +142,7 @@ DEF pedestrian(18) Pedestrian {
   pantsColor 0 0 0
 }
 DEF pedestrian(19) Pedestrian {
-  translation 3 1.27 4
+  translation 3.07 1.27 4
   rotation 0 1 0 -1.5708053071795867
   name "pedestrian(19)"
   shirtColor 0.739193 0 0.0918135
@@ -161,7 +161,7 @@ DEF GOD Pedestrian {
   translation 2.7501 1.27 -10.9
   rotation 0 1 0 -1.5708053071795867
   name "god"
-  controller "log"
+  controller "supervisor"
   controllerArgs [
     ""
   ]
@@ -174,7 +174,7 @@ DEF ROBOT TiagoIron {
   translation -2.5 0.095 2.5
   rotation -1 0 0 1.5708
   name "change"
-  controller "camera_recording"
+  controller "ros"
   controllerArgs [
     "--name=change"
     "--clock"
