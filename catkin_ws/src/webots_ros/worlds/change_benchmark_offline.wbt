@@ -13,7 +13,7 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 17 17
+  floorSize 10 10
   floorTileSize 2 2
   floorAppearance Parquetry {
     type "light strip"
@@ -32,7 +32,7 @@ DEF pedestrian(2) Pedestrian {
   name "pedestrian(2)"
 }
 DEF pedestrian(3) Pedestrian {
-  translation -1.97962e-05 1.27 -3.27
+  translation -1.95308e-05 1.27 -3.32
   rotation 0 1 0 -5.307179586466759e-06
   name "pedestrian(3)"
   shirtColor 0 0.448768 0
@@ -161,7 +161,7 @@ DEF GOD Pedestrian {
   translation 2.7501 1.27 -10.9
   rotation 0 1 0 -1.5708053071795867
   name "god"
-  controller "supervisor"
+  controller "log"
   controllerArgs [
     ""
   ]
@@ -174,7 +174,7 @@ DEF ROBOT TiagoIron {
   translation -2.5 0.095 -2.5
   rotation -0.9351339294067424 -0.25056798108462386 -0.25047998109126696 1.63816
   name "change"
-  controller "ros"
+  controller "camera_recording"
   controllerArgs [
     "--name=change"
     "--clock"
