@@ -39,7 +39,6 @@ class Logger (Supervisor):
 
         with open('{}/robot_position_{}_{}.txt'.format(self.path,t,len(self.trajectory)), 'w') as f:
             f.write("0,-2.5,2.5\n")
-            f.write(t+"\n")
             f.close()
         while not self.step(self.time_step) == -1:
             with open('{}/robot_position_{}_{}.txt'.format(self.path,t,len(self.trajectory)), 'r') as f:
@@ -51,7 +50,6 @@ class Logger (Supervisor):
                 f.close()
                 with open('{}/robot_position_{}_{}.txt'.format(self.path,t,len(self.trajectory)), 'w') as f:
                     f.write("0,{},{}\n".format(x,y))
-                    f.write(t+"\n")
                     f.close()    
             
 
