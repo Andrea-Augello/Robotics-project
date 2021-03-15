@@ -65,7 +65,7 @@ class GridMap:
         fig,ax1 = plt.subplots(1,1)
         ax1.pcolor(mx, my, self.data,vmax=max_value,cmap=plt.cm.get_cmap("Blues"))
         ax1.scatter(x,y,color='y')
-        ax1.invert_xaxis()
+        #ax1.invert_xaxis()
         plt.show()    
    
 
@@ -111,15 +111,17 @@ class GridMap:
 
     def observation_update(self, z):
         utils.loginfo("UPDATING MAP")
-        noise = 0.0000005/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
+        noise = 0.1/((self.max_x - self.min_x)*(self.max_y - self.min_y)/ self.xy_resolution**2)
         self.data = gaussian_filter(self.data, sigma=2.5)
         if len(z):
             for ix in range(self.x_w):
                 for iy in range(self.y_w):
-                    prob = 1
+                    prob = 0
                     for iz in range(len(z)):
-                        prob *=self.calc_gaussian_observation_pdf(
-                            z, iz, ix, iy)
+                        prob=max(prob,self.calc_gaussian_observation_pdf(
+                            z, iz, ix, iy))
+                        #prob *=self.calc_gaussian_observation_pdf(
+                            #z, iz, ix, iy)
                     self.data[ix][iy] *= prob
         # adds noise
         for ix in range(self.x_w):

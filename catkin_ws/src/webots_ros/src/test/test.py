@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 from statistics import mean
 
 show_map=False
-show_points=False
-webots_characterization=False
+show_points=True
+webots_characterization=True
 print_percentage=True
 path_to_repo="/Users/marco/GitHub/Robotics-project"
 path_to_folder=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/observations"
@@ -92,20 +92,20 @@ def get_data():
             for i,r in enumerate(run_list):
                 # i_RUN = 1_SCAN @ 2_SCAN @ 3_SCAN @ ... @ 7_SCAN
                 scan_list=r.split("@")
-                ids=set()
+                alias_dict={}
                 for j,s in enumerate(scan_list):
                     # i_SCAN = OBSERVATIONS # ODOMETRY
                     data_pedestrian,odometry = s.split("#")
                     data_pedestrian=ast.literal_eval(data_pedestrian)
                     odometry=ast.literal_eval(odometry)
-                    observation=[i[1] for i in data_pedestrian if i[0] not in ids]
                     for k in data_pedestrian:
-                        ids.add(k[0]) 
+                        if k[0] not in alias_dict.keys():
+                            alias_dict[k[0]]=[(distance(polar_to_abs_cartesian(k[1],odometry),ground_truth),k[1],odometry)]
+                        else:
+                            alias_dict[k[0]]+=[(distance(polar_to_abs_cartesian(k[1],odometry),ground_truth),k[1],odometry)]    
                     if j==0:
-                        odom=odometry
-                        obs=observation
-                    else:
-                        obs+=change_ref(observation,odometry,odom)
+                        odom=odometry      
+                obs=[change_ref(min(list_ped,key=lambda x:x[0])[1],min(list_ped,key=lambda x:x[0])[2],odom) for id_ped,list_ped in alias_dict.items()]
                 observations[i+1]=(odom,obs)
             result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
         if counter_cluster_ground_truth>0:    
@@ -114,8 +114,9 @@ def get_data():
             average_cluster_number=counter_cluster_ground_truth/execution_number
     return result,average_cluster_size,average_cluster_number,number_of_run
 
-def change_ref(point_list,point_initial,point_final):
-    return [ (p[0],-p[1]+point_initial[2]%360) for p in point_list] 
+
+def change_ref(p,point_initial,point_final):
+    return (p[0],-p[1]+point_initial[2]%360)
 
 def print_clusters(clusters):
     for cluster in clusters:
@@ -172,13 +173,14 @@ def main():
                         observation_cartesian=polar_to_abs_cartesian(o,odometry)
                         gt=ground_truth[0]
                         
+                        
                         min_dist=clst.math_distance(gt,observation_cartesian)
                         for g in ground_truth:
                             d=clst.math_distance(g,observation_cartesian)
                             if d<min_dist:
                                 min_dist=d
                                 gt=g       
-                        distance_ground_truth=clst.math_distance((odometry[0],odometry[1]),gt)
+                        distance_ground_truth=clst.math_distance((odometry[1],odometry[0]),gt)
                         f.write("{:.8f},\t{:.8f}\n".format(distance_observed,distance_ground_truth))
 
 
