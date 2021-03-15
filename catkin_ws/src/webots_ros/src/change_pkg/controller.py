@@ -59,7 +59,7 @@ class Controller:
                         f.close()
                         self.__robot.odometry.x=p[0]
                         self.__robot.odometry.y=p[1]
-                        time.sleep(1)
+                        time.sleep(0.5)
                     self.scan()    
                     #self.__robot.movement.move_forward(5)
                     #self.__robot.movement.rotate(85)
