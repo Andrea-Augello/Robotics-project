@@ -2,39 +2,58 @@ import ast
 import clustering as clst
 import matplotlib.pyplot as plt
 import math
+import os
 from statistics import mean
 
 def main():
-    path_to_repo="/Users/marco/GitHub/Robotics-project"
-    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation_dark.txt"
-    true_positive={1:0,2:0,3:0,4:0}
-    false_positive={1:0,2:0,3:0,4:0}
-    false_negative={1:0,2:0,3:0,4:0}
-    true_negative={1:0,2:0,3:0,4:0}
-    false_negative_yolo={1:0,2:0,3:0,4:0}
+    show_points=True
+    print_percentage=True
+    number_of_run=8
 
-    true_positive_old={1:0,2:0,3:0,4:0}
-    false_positive_old={1:0,2:0,3:0,4:0}
-    false_negative_old={1:0,2:0,3:0,4:0}
-    true_negative_old={1:0,2:0,3:0,4:0}
-    false_negative_yolo_old={1:0,2:0,3:0,4:0}
-    counter_observation={1:0,2:0,3:0,4:0}
+    path_to_repo="/Users/marco/GitHub/Robotics-project"
+    path_to_folder=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg"
+    path=path_to_folder+"/log/log.txt"
+
+    true_positive={i+1:0 for i in range(number_of_run)}
+    false_positive={i+1:0 for i in range(number_of_run)}
+    false_negative={i+1:0 for i in range(number_of_run)}
+    true_negative={i+1:0 for i in range(number_of_run)}
+    false_negative_yolo={i+1:0 for i in range(number_of_run)}
+
+    true_positive_old={i+1:0 for i in range(number_of_run)}
+    false_positive_old={i+1:0 for i in range(number_of_run)}
+    false_negative_old={i+1:0 for i in range(number_of_run)}
+    true_negative_old={i+1:0 for i in range(number_of_run)}
+    false_negative_yolo_old={i+1:0 for i in range(number_of_run)}
+
+    counter_observation={i+1:0 for i in range(number_of_run)}
     counter_ground_truth=0
+    error_distance={i+1:[] for i in range(number_of_run)}
+    error_distance_old={i+1:[] for i in range(number_of_run)}
+
+    percentage=0
     size_cluster_ground_truth=0
     counter_cluster_ground_truth=0
-    error_distance_old={1:[],2:[],3:[],4:[]}
-    error_distance={1:[],2:[],3:[],4:[]}
+    number_of_rows=0
+    with open(path, 'r') as f:
+        for line in f.readlines():
+            number_of_rows+=1
     execution_number=0
     with open(path, 'r') as f:
-        for line in f:
+        for line in f.readlines():
             execution_number+=1
+            if print_percentage:
+                print("{:.2f}%".format(percentage))
+                percentage+=100/number_of_rows
             seeds={}
             observations={}
             observations_cluster={}
             clusters={}
             odometry={}
-            # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
-            [ground_truth,run_1,run_2,run_3,run_4]=line.split("|")
+            # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
+            run_list=line.split("|")
+            ground_truth=run_list.pop(0)
+
             ground_truth=ast.literal_eval(ground_truth)
             counter_ground_truth+=len(ground_truth)
             clusters_ground_truth,list_of_dimension = clst.clustering(ground_truth, 
@@ -44,7 +63,8 @@ def main():
                     dimensions=True)
             size_cluster_ground_truth+=sum(list_of_dimension)
             counter_cluster_ground_truth+=len(list_of_dimension)      
-            for i,r in enumerate([run_1,run_2,run_3,run_4]):
+            for i,r in enumerate(run_list):
+                print(run_list)
                 # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
                 seed,observation,cluster,odometry_str = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
@@ -93,8 +113,8 @@ def main():
                     if not has_near(p,clusters_ground_truth) and not has_near(p,observations_cluster[i+1]):
                         true_negative_old[i+1]+=1                            
 
-            
-            #draw_clusters_all_run(ground_truth,observations,clusters_ground_truth,seeds,clusters)
+            if show_points:
+                draw_clusters_all_run(ground_truth,observations,clusters_ground_truth,seeds,clusters)
     average_cluster_size=size_cluster_ground_truth/counter_cluster_ground_truth
     average_cluster_number=counter_cluster_ground_truth/execution_number
     print("NEW METHOD\n")
@@ -109,20 +129,21 @@ def has_near(point,point_list,tollerance=1):
     return False
 
 def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number):
+    n=true_positive.keys()
     print("False positive: \t{}".format({k:round(v,2) for k,v in false_positive.items()}))        
     print("False negative: \t{}".format({k:round(v,2) for k,v in false_negative.items()}))
-    print("False negative YOLO: \t{}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
+    #print("False negative YOLO: \t{}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
     print("True positive: \t\t{}".format({k:round(v,2) for k,v in true_positive.items()}))
     print("True negative: \t\t{}".format({k:round(v,2) for k,v in true_negative.items()}))
-    accuracy={i:round((true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]),2) for i in range(1,5)}
-    precision={i:round(true_positive[i]/(true_positive[i]+false_positive[i]),2) for i in range(1,5)}
-    recall={i:round(true_positive[i]/(true_positive[i]+false_negative[i]),2) for i in range(1,5)}
-    recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative_yolo[i]),2) for i in range(1,5)}
+    accuracy={i:round((true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]),2) for i in n}
+    precision={i:round(true_positive[i]/(true_positive[i]+false_positive[i]),2) for i in n}
+    recall={i:round(true_positive[i]/(true_positive[i]+false_negative[i]),2) for i in n}
+    #recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative_yolo[i]),2) for i in n}
     print()
     print("Precision: \t{} \t- Mean: {:.2f}".format(precision,mean([i for i in precision.values()])))
     print("Accuracy: \t{} \t- Mean: {:.2f}".format(accuracy,mean([i for i in accuracy.values()])))
     print("Recall: \t{} \t- Mean: {:.2f}".format(recall,mean([i for i in recall.values()])))
-    print("Recall YOLO: \t{} \t- Mean: {:.2f}".format(recall_yolo,mean([i for i in recall_yolo.values()])))
+    #print("Recall YOLO: \t{} \t- Mean: {:.2f}".format(recall_yolo,mean([i for i in recall_yolo.values()])))
     print()
     print("Distance error: \t{}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
     print("Observation percentage: {}".format({k:round(v/counter_ground_truth,2) for k,v in counter_observation.items()}))
