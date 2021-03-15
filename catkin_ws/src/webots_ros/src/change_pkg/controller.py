@@ -55,7 +55,7 @@ class Controller:
                 trajectory=ast.literal_eval(lines[0].strip())
                 for p in trajectory:
                     self.scan()
-                    with open('{}/robot_position_{}_{}.txt'.format(path,trajectory_type,str(len(trajectory))), 'w') as f:
+                    with open('{}/robot_position_{}.txt'.format(path,str(len(trajectory))), 'w') as f:
                         f.write("1,{},{}\n".format(p[1],-p[0]))
                         f.close()
                         self.__robot.odometry.x=p[0]

@@ -37,18 +37,18 @@ class Logger (Supervisor):
         self.translation = self.robot.getField("translation")
 
 
-        with open('{}/robot_position_{}_{}.txt'.format(self.path,t,len(self.trajectory)), 'w') as f:
+        with open('{}/robot_position_{}.txt'.format(self.path,len(self.trajectory)), 'w') as f:
             f.write("0,-2.5,2.5\n")
             f.close()
         while not self.step(self.time_step) == -1:
-            with open('{}/robot_position_{}_{}.txt'.format(self.path,t,len(self.trajectory)), 'r') as f:
+            with open('{}/robot_position_{}.txt'.format(self.path,len(self.trajectory)), 'r') as f:
                 [flag,x,y]=f.readline().split(",")
             if int(flag):    
                 self.root_node_ref = self.getFromDef("ROBOT")
                 self.root_translation_field = self.root_node_ref.getField("translation")
                 self.root_translation_field.setSFVec3f([float(x),0.095,float(y)])
                 f.close()
-                with open('{}/robot_position_{}_{}.txt'.format(self.path,t,len(self.trajectory)), 'w') as f:
+                with open('{}/robot_position_{}.txt'.format(self.path,len(self.trajectory)), 'w') as f:
                     f.write("0,{},{}\n".format(x,y))
                     f.close()    
             
