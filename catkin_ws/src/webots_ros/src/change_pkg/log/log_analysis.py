@@ -6,7 +6,7 @@ import os
 from statistics import mean
 
 def main():
-    show_points=True
+    show_points=False
     print_percentage=True
     number_of_run=8
 
@@ -52,7 +52,7 @@ def main():
             odometry={}
             # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
             run_list=line.split("|")
-            ground_truth=run_list.pop(0)
+            ground_truth=run_list.pop(1)
 
             ground_truth=ast.literal_eval(ground_truth)
             counter_ground_truth+=len(ground_truth)
@@ -64,7 +64,6 @@ def main():
             size_cluster_ground_truth+=sum(list_of_dimension)
             counter_cluster_ground_truth+=len(list_of_dimension)      
             for i,r in enumerate(run_list):
-                print(run_list)
                 # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
                 seed,observation,cluster,odometry_str = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
@@ -166,14 +165,17 @@ def draw_clusters(observations,centroids=[],title="Graph"):
         ax1.invert_xaxis()
         plt.show()
 
+
 def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,centroids,title="Analysis"):
     x_g=[i[0] for i in ground_truth]
     y_g=[i[1] for i in ground_truth]
     x_c_g=[i[0] for i in centroid_ground_truth]
     y_c_g=[i[1] for i in centroid_ground_truth]
-    fig, ax = plt.subplots(2, 2, figsize=(8, 8))
+    a=3
+    b=3
+    fig, ax = plt.subplots(a, b, figsize=(9, 9))
     fig.suptitle(title)
-    positions=[[],[0,0],[0,1],[1,0],[1,1]]
+    positions=[[],[2,0],[1,0],[0,0],[0,1],[0,2],[1,2],[2,2],[2,1]]
     for i, values in seeds.items():
         x_c=[k[0] for k in centroids[i]]
         y_c=[k[1] for k in centroids[i]]
@@ -183,6 +185,8 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
         y_s=[i[1] for i in values]
         kx,ky=positions[i]
         ax[kx,ky].axis("equal")
+        ax[kx,ky].set_xlim(-5,5)
+        ax[kx,ky].set_ylim(-5,5)
         ax[kx,ky].set_xlabel('Position (m)')
         ax[kx,ky].set_ylabel('Position (m)')
         ax[kx,ky].scatter(x_c_g,y_c_g, color="y", s=100)
@@ -190,10 +194,10 @@ def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,
         ax[kx,ky].scatter(x_s,y_s, color="g", s=50)
         ax[kx,ky].scatter(x_g,y_g, color="b", s=30)
         ax[kx,ky].scatter(x_o,y_o, color="k", s=20)
-        
         ax[kx,ky].invert_xaxis()
     ax[1,1].legend(('Ground Truth centroids', 'Centroids', 'Seeds','Ground Truth','Observations'),bbox_to_anchor=(0.5, 0.5))    
-    plt.show()    
+    plt.show()            
+
    
 
 def polar_to_abs_cartesian(p, coord):
