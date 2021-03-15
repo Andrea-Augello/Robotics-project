@@ -54,13 +54,13 @@ class Controller:
                 lines=f.readlines()
                 trajectory=ast.literal_eval(lines[0].strip())
                 for p in trajectory:
-                    self.scan()
                     with open('{}/robot_position_{}.txt'.format(path,str(len(trajectory))), 'w') as f:
                         f.write("1,{},{}\n".format(p[1],-p[0]))
                         f.close()
                         self.__robot.odometry.x=p[0]
                         self.__robot.odometry.y=p[1]
                         time.sleep(1)
+                    self.scan()    
                     #self.__robot.movement.move_forward(5)
                     #self.__robot.movement.rotate(85)
             self.close_webots()     
