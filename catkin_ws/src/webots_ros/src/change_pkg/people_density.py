@@ -295,7 +295,7 @@ class GridMap:
         #seeds=[self.coord_to_point(i) for i in seeds] # index to cartesian 
         
         cluster_list=[d['center'] for d in cluster_dict]
-        with open(path_traject,"w") as traject:
+        with open(path_traject,"r") as traject:
             trajectory=ast.literal_eval(traject.readline())
         with open(output, 'a') as f:
             if self.near(trajectory[0],(self.__robot.odometry.x,self.__robot.odometry.y)): #First
