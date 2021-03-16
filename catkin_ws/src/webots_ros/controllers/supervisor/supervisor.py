@@ -33,6 +33,8 @@ class Logger (Supervisor):
         number_of_pedestrian=int(random.random()*(max_number_of_pedestrian-min_number_of_pedestrian))+min_number_of_pedestrian
         if not self.step(self.time_step) == -1:
             self.pedestrian_list=self.set_pedestrians(number_of_pedestrian,total_number_of_pedestrians)
+            with open("{}/pedestrians.txt".format(self.path),"w") as f:
+                f.write(str(self.pedestrian_list))
         self.robot = self.getFromDef("ROBOT")
         self.translation = self.robot.getField("translation")
 

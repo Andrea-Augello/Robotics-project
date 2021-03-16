@@ -6,7 +6,7 @@ import os
 from statistics import mean
 
 def main():
-    show_points=False
+    show_points=True
     print_percentage=True
     number_of_run=8
 

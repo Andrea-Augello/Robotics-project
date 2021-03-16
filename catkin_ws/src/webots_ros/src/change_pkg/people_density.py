@@ -5,6 +5,7 @@ import change_pkg.utils as utils
 import change_pkg.clustering as clst
 import matplotlib.pyplot as plt
 import numpy as np
+import ast
 from scipy.ndimage.filters import gaussian_filter
 from scipy.stats import multivariate_normal
 from scipy.spatial import distance
@@ -287,26 +288,20 @@ class GridMap:
     # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
     def log(self,observations,cluster_dict,seeds):
         path="/home/frank/git/Robotics-project/catkin_ws/src/webots_ros/src/change_pkg"
-        directory = path+"/positions"
+        path_ped = path+"/robot_position/pedestrians.txt"
+        path_traject= path+"/robot_position/trajectory.txt"
         output=path+"/log/log.txt"
         #observations=[self.__robot.odometry.polar_to_abs_cartesian(seed) for seed in observations] # polar to cartesian
         #seeds=[self.coord_to_point(i) for i in seeds] # index to cartesian 
         
         cluster_list=[d['center'] for d in cluster_dict]
+        with open(path_traject,"w") as traject:
+            trajectory=ast.literal_eval(traject.readline())
         with open(output, 'a') as f:
-            if self.__robot.odometry.x>0 and self.__robot.odometry.y<0: #First
+            if self.near(trajectory[0],(self.__robot.odometry.x,self.__robot.odometry.y)): #First
                 ground_truth=[]
-                for filename in os.listdir(directory):
-                    if filename.endswith(".txt") and filename.startswith("pedestrian"):
-                        file_path=os.path.join(directory, filename)
-                        with open(file_path, 'r') as x:
-                            a,b=x.readline().split(",")
-                            a=float(a)
-                            b=float(b)
-                            ground_truth.append((a,b))
-                            x.close()
-                    else:
-                        continue 
+                with open(path_ped,"r") as ped_file:
+                    ground_truth=ast.literal_eval(ped_file.readline)
                 f.write(str(ground_truth))
                 f.write("|")
 
@@ -319,13 +314,14 @@ class GridMap:
             f.write("#")
             f.write(str(self.__robot.odometry.get_position()))
 
-            if self.__robot.odometry.x<0 and self.__robot.odometry.y<0: #Last
+            if self.near(trajectory[-1],(self.__robot.odometry.x,self.__robot.odometry.y)): #Last
                 f.write("\n")
             else:
                 f.write("|")
             f.close()       
         
-             
+    def near(self,a,b,tollerance=0.5):
+        return b[0]-tollerance<a[0]<b[0]+tollerance and b[1]-tollerance<a[1]<b[1]+tollerance   
 
     def find_centroid_region_growing(self,seeds):
         map_cluster, alias= self.region_growing(seeds) 
