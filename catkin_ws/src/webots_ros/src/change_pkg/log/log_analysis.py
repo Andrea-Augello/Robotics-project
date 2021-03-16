@@ -6,7 +6,7 @@ import os
 from statistics import mean
 
 def main():
-    show_points=True
+    show_points=False
     print_percentage=True
     number_of_run=8
 
@@ -55,6 +55,7 @@ def main():
             ground_truth=run_list.pop(0)
 
             ground_truth=ast.literal_eval(ground_truth)
+            ground_truth=[(-y,x) for (x,y) in ground_truth]
             counter_ground_truth+=len(ground_truth)
             clusters_ground_truth,list_of_dimension = clst.clustering(ground_truth, 
                     distance_measure=clst.math_distance,
