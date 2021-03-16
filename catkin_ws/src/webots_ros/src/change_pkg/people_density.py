@@ -301,7 +301,7 @@ class GridMap:
             if self.near(trajectory[0],(self.__robot.odometry.x,self.__robot.odometry.y)): #First
                 ground_truth=[]
                 with open(path_ped,"r") as ped_file:
-                    ground_truth=ast.literal_eval(ped_file.readline)
+                    ground_truth=ast.literal_eval(ped_file.readline())
                 f.write(str(ground_truth))
                 f.write("|")
 
