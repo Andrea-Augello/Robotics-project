@@ -52,7 +52,7 @@ def main():
             odometry={}
             # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
             run_list=line.split("|")
-            ground_truth=run_list.pop(1)
+            ground_truth=run_list.pop(0)
 
             ground_truth=ast.literal_eval(ground_truth)
             counter_ground_truth+=len(ground_truth)
