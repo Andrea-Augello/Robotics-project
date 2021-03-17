@@ -320,7 +320,7 @@ class GridMap:
                 f.write("|")
             f.close()       
         
-    def near(self,a,b,tollerance=0.5):
+    def near(self,a,b,tollerance=0.2):
         return b[0]-tollerance<a[0]<b[0]+tollerance and b[1]-tollerance<a[1]<b[1]+tollerance   
 
     def find_centroid_region_growing(self,seeds):
