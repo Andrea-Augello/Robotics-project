@@ -10,6 +10,9 @@ import clustering as clst
 import matplotlib.pyplot as plt
 from statistics import mean
 
+alternate=False
+double=False
+
 class Change:
     def __init__(self):
         self.name = 'change'
@@ -48,12 +51,15 @@ def get_data():
                     eps=2, 
                     dimensions=True)
             size_cluster_ground_truth+=sum(list_of_dimension)
-            counter_cluster_ground_truth+=len(list_of_dimension)      
+            counter_cluster_ground_truth+=len(list_of_dimension)
+            if double:
+                run_list*=2      
             for i,r in enumerate(run_list):
-                if i % 2==0:
-                    i/=2
-                else:
-                    continue     
+                if alternate:
+                    if i % 2==0:
+                        i/=2
+                    else:
+                        continue     
                 # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
                 seed,observation,cluster,odometry_str = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
@@ -75,7 +81,11 @@ def print_point_list(clusters):
 
 def main():
     print_percentage=True
-    number_of_run=4
+    number_of_run=8
+    if alternate:
+        number_of_run=int(number_of_run/2)
+    elif double:
+        number_of_run*=2    
     true_positive={i+1:0 for i in range(number_of_run)}
     false_positive={i+1:0 for i in range(number_of_run)}
     false_negative={i+1:0 for i in range(number_of_run)}
@@ -166,8 +176,8 @@ def report(false_positive,false_negative,false_negative_yolo,true_positive,true_
     print()
     print("Distance error: \t{}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
     print("Observation percentage: {}".format({k:round(v/counter_ground_truth,2) for k,v in counter_observation.items()}))
-    print("Avarage cluster size: {:.2f}".format(average_cluster_size))
-    print("Avarage cluster number: {:.2f}".format(average_cluster_number))
+    print("Average cluster size: {:.2f}".format(average_cluster_size))
+    print("Average cluster number: {:.2f}".format(average_cluster_number))
 
 
 def draw_clusters_all_run(ground_truth,observations,centroid_ground_truth,seeds,centroids,title="Analysis"):

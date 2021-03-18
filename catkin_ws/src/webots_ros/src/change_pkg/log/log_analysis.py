@@ -12,7 +12,7 @@ def main():
 
     path_to_repo="/Users/marco/GitHub/Robotics-project"
     path_to_folder=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg"
-    path=path_to_folder+"/log/log.txt"
+    path=path_to_folder+"/log/log_quadrato_8.txt"
 
     true_positive={i+1:0 for i in range(number_of_run)}
     false_positive={i+1:0 for i in range(number_of_run)}
@@ -147,8 +147,8 @@ def report(false_positive,false_negative,false_negative_yolo,true_positive,true_
     print()
     print("Distance error: \t{}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
     print("Observation percentage: {}".format({k:round(v/counter_ground_truth,2) for k,v in counter_observation.items()}))
-    print("Avarage cluster size: {:.2f}".format(average_cluster_size))
-    print("Avarage cluster number: {:.2f}".format(average_cluster_number))
+    print("Average cluster size: {:.2f}".format(average_cluster_size))
+    print("Average cluster number: {:.2f}".format(average_cluster_number))
 
 def draw_clusters(observations,centroids=[],title="Graph"):
         x_o=[i[0] for i in observations]
