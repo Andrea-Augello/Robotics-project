@@ -24,31 +24,40 @@ class Change:
 
 def get_data():
     path_to_repo="/Users/marco/GitHub/Robotics-project"
-    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_polar_observation_dark.txt"
+    path=path_to_repo+"/catkin_ws/src/webots_ros/src/change_pkg/log/log_quadrato_8.txt"
     result=[]
     size_cluster_ground_truth=0
     counter_cluster_ground_truth=0
+    counter_ground_truth=0
     execution_number=0
     with open(path, 'r') as f:
         for line in f:
             execution_number+=1
             seeds={}
             observations={}
-            # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | 4_RUN
-            [ground_truth,run_1,run_2,run_3,run_4]=line.split("|")
+            
+            # GROUND_TRUTH | 1_RUN | 2_RUN | 3_RUN | ... | i_RUN
+            run_list=line.split("|")
+            ground_truth=run_list.pop(0)
             ground_truth=ast.literal_eval(ground_truth)
+            ground_truth=[(-y,x) for (x,y) in ground_truth]
+            counter_ground_truth+=len(ground_truth)
             clusters_ground_truth,list_of_dimension = clst.clustering(ground_truth, 
                     distance_measure=clst.math_distance,
                     min_samples=2,
                     eps=2, 
                     dimensions=True)
             size_cluster_ground_truth+=sum(list_of_dimension)
-            counter_cluster_ground_truth+=len(list_of_dimension)        
-            for i,r in enumerate([run_1,run_2,run_3,run_4]):
+            counter_cluster_ground_truth+=len(list_of_dimension)      
+            for i,r in enumerate(run_list):
+                if i % 2==0:
+                    i/=2
+                else:
+                    continue     
                 # i_RUN = SEEDS # OBSERVATIONS # CLUSTER # ODOMETRY
-                seed,observation,cluster,odometry = r.split("#")
+                seed,observation,cluster,odometry_str = r.split("#")
                 seeds[i+1]=ast.literal_eval(seed)
-                observations[i+1]=(ast.literal_eval(odometry),ast.literal_eval(observation))
+                observations[i+1]=(ast.literal_eval(odometry_str),ast.literal_eval(observation))
                 #clusters[i+1]=ast.literal_eval(cluster)
             result.append({'ground_truth':ground_truth,'cluster_ground_truth':clusters_ground_truth,'observations':observations})
         average_cluster_size=size_cluster_ground_truth/counter_cluster_ground_truth
@@ -65,17 +74,23 @@ def print_point_list(clusters):
         print("({:.2f},{:.2f})".format(cluster[0],cluster[1]),end=' ',flush=True)        
 
 def main():
-    true_positive={1:0,2:0,3:0,4:0}
-    false_positive={1:0,2:0,3:0,4:0}
-    false_negative={1:0,2:0,3:0,4:0}
-    true_negative={1:0,2:0,3:0,4:0}
-    false_negative_yolo={1:0,2:0,3:0,4:0}
-    counter_observation={1:0,2:0,3:0,4:0}
+    print_percentage=True
+    number_of_run=4
+    true_positive={i+1:0 for i in range(number_of_run)}
+    false_positive={i+1:0 for i in range(number_of_run)}
+    false_negative={i+1:0 for i in range(number_of_run)}
+    true_negative={i+1:0 for i in range(number_of_run)}
+    false_negative_yolo={i+1:0 for i in range(number_of_run)}
+
+    counter_observation={i+1:0 for i in range(number_of_run)}
     counter_ground_truth=0
-    error_distance={1:[],2:[],3:[],4:[]}
+    percentage=0
+    error_distance={i+1:[] for i in range(number_of_run)}
     data,average_cluster_size,average_cluster_number=get_data()
-    #positions=[(2.5,-2.5),(2.5,2.5),(-2.5,2.5),(-2.5,-2.5)]
     for execution in data:
+        if print_percentage:
+                print("{:.2f}%".format(percentage))
+                percentage+=100/len(data)
         seeds={}
         clusters={}
         observations_cartesian={}
@@ -131,21 +146,23 @@ def in_room(point):
     y_sup=5
     return x_inf<=point[0]<=x_sup and y_inf<=point[1]<=y_sup
 
+
 def report(false_positive,false_negative,false_negative_yolo,true_positive,true_negative,error_distance,counter_observation,counter_ground_truth,average_cluster_size,average_cluster_number):
+    n=true_positive.keys()
     print("False positive: \t{}".format({k:round(v,2) for k,v in false_positive.items()}))        
     print("False negative: \t{}".format({k:round(v,2) for k,v in false_negative.items()}))
-    print("False negative YOLO: \t{}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
+    #print("False negative YOLO: \t{}".format({k:round(v,2) for k,v in false_negative_yolo.items()}))  
     print("True positive: \t\t{}".format({k:round(v,2) for k,v in true_positive.items()}))
     print("True negative: \t\t{}".format({k:round(v,2) for k,v in true_negative.items()}))
-    accuracy={i:round((true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]),2) for i in range(1,5)}
-    precision={i:round(true_positive[i]/(true_positive[i]+false_positive[i]),2) for i in range(1,5)}
-    recall={i:round(true_positive[i]/(true_positive[i]+false_negative[i]),2) for i in range(1,5)}
-    recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative_yolo[i]),2) for i in range(1,5)}
+    accuracy={i:round((true_positive[i]+true_negative[i])/(true_positive[i]+false_positive[i]+true_negative[i]+false_negative[i]),2) for i in n}
+    precision={i:round(true_positive[i]/(true_positive[i]+false_positive[i]),2) for i in n}
+    recall={i:round(true_positive[i]/(true_positive[i]+false_negative[i]),2) for i in n}
+    #recall_yolo={i:round(true_positive[i]/(true_positive[i]+false_negative_yolo[i]),2) for i in n}
     print()
     print("Precision: \t{} \t- Mean: {:.2f}".format(precision,mean([i for i in precision.values()])))
     print("Accuracy: \t{} \t- Mean: {:.2f}".format(accuracy,mean([i for i in accuracy.values()])))
     print("Recall: \t{} \t- Mean: {:.2f}".format(recall,mean([i for i in recall.values()])))
-    print("Recall YOLO: \t{} \t- Mean: {:.2f}".format(recall_yolo,mean([i for i in recall_yolo.values()])))
+    #print("Recall YOLO: \t{} \t- Mean: {:.2f}".format(recall_yolo,mean([i for i in recall_yolo.values()])))
     print()
     print("Distance error: \t{}".format({k:round(mean([i for i in v if i<2]),2) for k,v in error_distance.items()}))
     print("Observation percentage: {}".format({k:round(v/counter_ground_truth,2) for k,v in counter_observation.items()}))
